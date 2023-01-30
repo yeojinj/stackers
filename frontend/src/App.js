@@ -1,7 +1,7 @@
-import React from 'react';
-import RecordRoom from './pages/record_room/RecordRoom';
-import testRoom from './pages/record_room/testRoom';
-import { Link, Route, Routes } from 'react-router-dom';
+import React from 'react'
+import MainRoom from './pages/main_room/MainRoom'
+import RecordRoom from './pages/record_room/RecordRoom'
+import { Link, Route, Routes } from 'react-router-dom'
 
 function App() {
   return (
