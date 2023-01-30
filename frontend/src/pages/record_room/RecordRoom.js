@@ -21,7 +21,7 @@ function RecordRoom() {
         <div className="stack">
           <p></p>
           <p></p>
-          <div className="container">
+          <div className="box">
             <button className="box">취소</button>
             <button className="box">업로드</button>
           </div>
