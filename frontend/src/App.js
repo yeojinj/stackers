@@ -1,19 +1,23 @@
 import React from 'react'
-import logo from './logo.svg'
-import './App.css'
+import MainRoom from './pages/main_room/MainRoom'
+import RecordRoom from './pages/record_room/RecordRoom'
+import { Link, Route, Routes } from 'react-router-dom'
 
-function App () {
+function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-          Learn React
-        </a>
-      </header>
+      <ul>
+        <li>
+          <Link to="/MainRoom">Main</Link>
+        </li>
+        <li>
+          <Link to="/RecordRoom">Record Room</Link>
+        </li>
+      </ul>
+      <Routes>
+        <Route path="/MainRoom" element={<MainRoom />} />
+        <Route path="/RecordRoom" element={<RecordRoom />} />
+      </Routes>
     </div>
   )
 }
