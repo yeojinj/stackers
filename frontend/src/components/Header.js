@@ -1,7 +1,7 @@
-import React from 'react'
-import logo from '../assets/logo.png'
-import SearchIcon from '@mui/icons-material/Search'
-import '../styles/header.css'
+import React from 'react';
+import logo from '../assets/logo.png';
+import SearchIcon from '@mui/icons-material/Search';
+import '../styles/header.css';
 
 function Header() {
   return (
@@ -22,7 +22,7 @@ function Header() {
         <button className="login-btn">로그인</button>
       </div>
     </header>
-  )
+  );
 }
 
-export default Header
+export default Header;

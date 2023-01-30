@@ -5,10 +5,54 @@
   width: 100%;
   height: 76px;
   background-color: rgba(251, 251, 251, 1);
-
+  border-bottom: 1px solid rgba(0, 0, 0, 0.22);
 }
 
 .header-container {
   display: flex;
   justify-content: space-around;
+}
+
+.logo-img {
+  width: 234px;
+  height: 62px;
+  margin-top: 15px;
+}
+
+.header-search {
+  margin-top: 14px;
+  width: 511px;
+  height: 49px;
+  border: 0px;
+  border-radius: 30px;
+  background-color: rgba(243, 243, 243, 1);
+  padding-left: 19px;
+}
+
+.search-input {
+  width: 458px;
+  height: 49px;
+  border: 0px;
+  /* border-radius: 30px; */
+  padding: 0px;
+  background-color: rgba(243, 243, 243, 1);
+  outline: none;
+}
+
+.search-img {
+  width: 17.49px;
+  height: 17.49px;
+  padding-top: 5px;
+}
+
+.login-btn {
+  width: 111px;
+  height: 45px;
+  margin-top: 16px;
+  border: 0px;
+  border-radius: 10px;
+  font-size: medium;
+  font-weight: bold;
+  color: white;
+  background-color: rgba(42, 32, 150, 1);
 }
