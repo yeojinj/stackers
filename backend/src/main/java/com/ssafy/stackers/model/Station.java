@@ -5,16 +5,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 public class Station {
     @Id
@@ -38,14 +38,18 @@ public class Station {
     @Column(name = "remain_depth")
     @ColumnDefault("4")
     private int remainDepth;
-    @Column(name = "is_public")
+
+    @Column(name = "is_public")     // default value 설정
     private boolean isPublic;
+
     @Column(name = "is_complete")
     private boolean isComplete;
+
     @Column(name = "is_delete")
     private boolean isDelete;
-    
-    @OneToOne           // 스테이션 당 무조건 1개
+
+    @ManyToOne    // 스테이션 당 무조건 1명의 writer 만 가짐, column 이름은 어떻게?
+    @JoinColumn(name = "writer", referencedColumnName = "id")
     private Member member;
 
     @OneToOne           // Video는 스테이션 당 무조건 1개
