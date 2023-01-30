@@ -4,10 +4,10 @@ function Record(props) {
   return (
     <div className="stack">
       <div className="record">RECORD</div>
-      <div className="box">
-        <div className="item">timer</div>
-        <div className="item">stream</div>
-        <div className="item">time</div>
+      <div className="container">
+        <div className="box">timer</div>
+        <div className="box">stream</div>
+        <div className="box">time</div>
       </div>
       <button>start record</button>
     </div>

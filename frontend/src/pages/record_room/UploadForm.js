@@ -13,7 +13,7 @@ function UploadForm() {
         <div className="infoForm">설명</div>
         <div className="thumbnailForm">썸네일</div>
         <div className="tagForm">태그</div>
-        <div className="box">
+        <div className="container">
           <div className="left">
             <div className="instForm">연주 악기</div>
           </div>

@@ -9,13 +9,16 @@
   display: flex;
   padding: auto;
   margin: auto;
+  flex-wrap: wrap;
 }
 div {
   border: 1px solid blue;
+  margin: 1%;
   text-align: center;
 }
 .container {
   display: flex;
+  margin: auto;
 }
 .left {
   width: 50%;
@@ -27,4 +30,7 @@ div {
   display: grid;
   grid-template-columns: 9fr 1fr;
   text-align: center;
+}
+.modalBox {
+  border: 2px solid yellowgreen;
 }
