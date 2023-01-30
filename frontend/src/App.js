@@ -1,24 +1,23 @@
 import React from 'react';
-import RecordRoom from './pages/record_room/RecordRoom';
-import testRoom from './pages/record_room/testRoom';
-import { Link, Route, Routes } from 'react-router-dom';
+import logo from './logo.svg';
+import './App.css';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <ul>
-          <li>
-            <Link to="/RecordRoom">Record Room</Link>
-          </li>
-          <li>
-            <Link to="/testRoom">testRoom</Link>
-          </li>
-        </ul>
-        <Routes>
-          <Route path="/RecordRoom" element={<RecordRoom />} />
-          <Route path="/testRoom" element={<testRoom />} />
-        </Routes>
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
       </header>
     </div>
   );
