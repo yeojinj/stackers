@@ -20,7 +20,7 @@ public class Station {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private int id;
+    private Long id;
 
     @Column(name = "content", length = 300, nullable = false)
     private String content;
@@ -52,6 +52,6 @@ public class Station {
     @JoinColumn(name = "writer", referencedColumnName = "id")
     private Member member;
 
-    @OneToOne           // Video는 스테이션 당 무조건 1개
+    @OneToOne     // Video는 스테이션 당 무조건 1개
     private Video video;
 }
