@@ -24,6 +24,12 @@ public class Video {
     @Column(name = "video_path", nullable = false)
     private String videoPath;
 
-    @Column(name = "thumbnail_path", nullable = false)
+    @Column(name = "video_name", nullable = false)
+    private String videoName;
+
+    @Column(name = "video_ori_name", nullable = false)
+    private String videoOriName;
+
+    @Column(name = "thumbnail_path")
     private String thumbnailPath;
 }
