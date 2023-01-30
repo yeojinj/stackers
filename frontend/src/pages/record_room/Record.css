@@ -1,0 +1,14 @@
+.record {
+  height: 70%;
+  background-color: aqua;
+}
+.box {
+  display: flex;
+  grid-template-columns: 1 1 1;
+  border: 2px solid yellowgreen;
+  padding: auto;
+  margin: auto;
+}
+.item {
+  border: 1px solid blue;
+}
