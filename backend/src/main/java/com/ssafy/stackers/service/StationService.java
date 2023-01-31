@@ -17,7 +17,7 @@ public class StationService {
     @Transactional
     public void saveWithMember(Station station, Video video) {
         Station s = Station.builder().content(station.getContent()).music(station.getMusic())
-            .regTime(station.getRegTime()).remainDepth(3).isPublic(true).video(video).member(new Member()).build();
+            .regTime(station.getRegTime()).remainDepth(3).isPublic(true).video(video).build();
 
         stationRepository.save(s);
     }
