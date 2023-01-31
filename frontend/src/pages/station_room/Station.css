@@ -23,7 +23,7 @@
 }
 
 .videoBox {
-  height: auto;
+  height: 100%;
   width: 90%;
   /* backgroundColor: white; */
   color: black;
@@ -50,18 +50,18 @@
 
 .information {
   height: 40%;
-  border: 1px black solid;
+  /* border: 1px black solid; */
 }
 
 .comment {
   height: 50%;
   border: 1px black solid;
-  background-color: 'rgba(245; 245; 245; 1)';
+  background-color: rgba(245, 245, 245, 1);
 }
 
 .createComment {
   height: 6%;
-  border: 1px black solid;
+  /* border: 1px black solid; */
   display: flex;
   justify-content: space-between;
   padding: 2%;
@@ -72,14 +72,14 @@
 }
 
 .station-information {
-  border: 1px black solid;
+  /* border: 1px black solid; */
   height: 50%;
   margin: 5%;
 }
 
 .station-profile {
   display: flex;
-  border: 1px black solid;
+  /* border: 1px black solid; */
 }
 
 .station-profile-name_nickname {
@@ -113,5 +113,5 @@
 
 .comment-list {
   margin: 10px;
-  border: 1px black solid;
+  /* border: 1px black solid; */
 }
