@@ -1,32 +1,22 @@
 package com.ssafy.stackers.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 @ToString
 public class Station {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
 
     @Column(name = "content", length = 300, nullable = false)
@@ -56,11 +46,12 @@ public class Station {
     @Column(name = "is_delete", columnDefinition = "tinyint(1) default 0")
     private boolean isDelete = false;
 
-    @ManyToOne    // 스테이션 당 무조건 1명의 writer 만 가짐, column 이름은 어떻게?
-    @JoinColumn(name = "writer_id")
-    private Member member;
+//    @ManyToOne    // 스테이션 당 무조건 1명의 writer 만 가짐, column 이름은 어떻게?
+//    @JoinColumn(name = "writer_id")
+//    private Member member;
 
-    @OneToOne     // Video는 스테이션 당 무조건 1개
+    @OneToOne(cascade= CascadeType.ALL)   // Video는 스테이션 당 무조건 1개
+    @JoinColumn(name = "video_id")
     private Video video;
 
     @Builder
@@ -76,7 +67,7 @@ public class Station {
         this.isPublic = isPublic;
         this.isComplete = isComplete;
         this.isDelete = isDelete;
-        this.member = member;
+//        this.member = member;
         this.video = video;
     }
 }
