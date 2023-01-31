@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.time.LocalDateTime;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -47,4 +48,21 @@ public class Member {
 
     @Column(name = "is_resign")
     private boolean isResign;
+
+    @Builder
+    public Member(Long id, String password, String nickname, String roles, String username,
+        String email, String bio, LocalDateTime regDate, LocalDateTime lastLogin, String imgPath,
+        boolean isResign) {
+        this.id = id;
+        this.password = password;
+        this.nickname = nickname;
+        this.roles = roles;
+        this.username = username;
+        this.email = email;
+        this.bio = bio;
+        this.regDate = regDate;
+        this.lastLogin = lastLogin;
+        this.imgPath = imgPath;
+        this.isResign = isResign;
+    }
 }
