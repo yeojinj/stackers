@@ -9,17 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 public class VideoService {
+
     @Autowired
     VideoRepository videoRepository;
 
     @Transactional
-    public void save(Video video){
-        Video v = new Video();
-
-        v.setVideoPath(video.getVideoPath());
-        v.setVideoOriName(video.getVideoOriName());
-        v.setVideoName(video.getVideoName());
-
+    public void save(Video video) {
+        Video v = Video.builder().videoName(video.getVideoName())
+            .videoOriName(video.getVideoOriName()).videoPath(video.getVideoPath()).build();
         videoRepository.save(v);
     }
 }
