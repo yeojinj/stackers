@@ -1,68 +1,117 @@
 .total {
-  display: 'flex';
+  display: flex;
 }
 
 .LeftStyle {
   background-image: url('./assets/Rectangle.png');
-  width: '50%';
-  height: '720px';
-  color: 'white';
-  display: 'flex';
+  width: 50%;
+  height: 720px;
+  color: white;
+  display: flex;
 }
 
 .RightStyle {
-  width: '50%';
-  height: '720px';
+  width: 50%;
+  height: 720px;
 }
 
 .contentBox {
-  margin: '10% auto 10% 15%';
-  /* border: "white 1px solid"; */
-  display: 'flex';
-  /* width: "60%"; */
+  margin: 10% auto 10% 15%;
+  /* border: white 1px solid; */
+  display: flex;
+  /* width: 60%; */
 }
 
 .videoBox {
-  height: 'auto';
-  width: '90%';
-  /* backgroundColor: "white"; */
-  color: 'black';
+  height: auto;
+  width: 90%;
+  /* backgroundColor: white; */
+  color: black;
 }
 
 .stationControlButton {
-  height: '180px';
-  width: '5%';
-  /* border: "#00F5FF 1px solid"; */
-  margin: 'auto auto 0 10px';
-  display: 'flex';
-  flex-direction: 'column';
-  justify-content: 'space-around';
+  height: 180px;
+  width: 5%;
+  /* border: #00F5FF 1px solid; */
+  margin: auto auto 0 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 
 .prevnextbutton {
-  margin-top: 'auto';
-  margin-bottom: 'auto';
-  margin-left: 'auto';
-  margin-right: '10px';
-  display: 'flex';
-  flex-direction: 'column';
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: auto;
+  margin-right: 10px;
+  display: flex;
+  flex-direction: column;
 }
 
 .information {
-  height: '40%';
-  border: '1px black solid';
+  height: 40%;
+  border: 1px black solid;
 }
 
 .comment {
-  height: '50%';
-  border: '1px black solid';
+  height: 50%;
+  border: 1px black solid;
   background-color: 'rgba(245; 245; 245; 1)';
 }
 
 .createComment {
-  height: '6%';
-  border: '1px black solid';
-  display: 'flex';
-  justify-content: 'space-between';
-  padding: '2%';
+  height: 6%;
+  border: 1px black solid;
+  display: flex;
+  justify-content: space-between;
+  padding: 2%;
+}
+
+.stationOutButton {
+  margin: 10px 0px 0px 10px;
+}
+
+.station-information {
+  border: 1px black solid;
+  height: 50%;
+  margin: 5%;
+}
+
+.station-profile {
+  display: flex;
+  border: 1px black solid;
+}
+
+.station-profile-name_nickname {
+  display: flex;
+  flex-direction: column;
+}
+
+.station-profile-id {
+  margin: 5px 0 0 5px;
+}
+
+.station-profile-nickname {
+  margin: 0 0 0 10px;
+}
+
+.station-follow {
+  margin: auto 10px auto auto;
+}
+
+.station-usercontent {
+  white-space: pre-wrap;
+}
+
+.station-Participant {
+  height: 40%;
+  width: 40%;
+  border: 1px black solid;
+  margin-top: auto;
+  margin-left: auto;
+}
+
+.comment-list {
+  margin: 10px;
+  border: 1px black solid;
 }

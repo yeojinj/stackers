@@ -34,6 +34,9 @@ public class MemberController {
 
     @PostMapping("join")
     public String join(@RequestBody Member member) {
+        if (memberRepository.existsByUsername(member.getUsername())) {
+            return "회원가입 실패";
+        }
         member.setPassword(bCryptPasswordEncoder.encode(member.getPassword()));
         member.setRoles("ROLE_USER"); // 롤은 기본으로 설정해줍니다.
         memberRepository.save(member);
@@ -44,7 +47,7 @@ public class MemberController {
     @GetMapping("/api/v1/user")
     public String user(Authentication authentication) {
         PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
-        return "user";
+        return principal.getUsername();
     }
 
     // admin 권한만 접근 가능
