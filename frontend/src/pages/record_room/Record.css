@@ -13,7 +13,6 @@
 }
 div {
   border: 1px solid blue;
-  margin: 1%;
   text-align: center;
 }
 .container {
@@ -33,4 +32,11 @@ div {
 }
 .modalBox {
   border: 2px solid yellowgreen;
+}
+VideoPreview {
+  width: 300px;
+  height: 300px;
+}
+.modalBox {
+  background-color: white;
 }
