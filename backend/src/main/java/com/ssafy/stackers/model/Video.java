@@ -5,15 +5,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import lombok.Data;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 public class Video {
     @Id
@@ -32,4 +29,14 @@ public class Video {
 
     @Column(name = "thumbnail_path")
     private String thumbnailPath;
+
+    @Builder
+    public Video(Long id, String videoPath, String videoName, String videoOriName,
+        String thumbnailPath) {
+        this.id = id;
+        this.videoPath = videoPath;
+        this.videoName = videoName;
+        this.videoOriName = videoOriName;
+        this.thumbnailPath = thumbnailPath;
+    }
 }
