@@ -1,7 +1,7 @@
-import React from 'react';
-import logo from '../assets/logo.svg';
-import github from '../assets/github.svg';
-import '../styles/footer.css';
+import React from 'react'
+import logo from '../assets/logo.svg'
+import github from '../assets/github.svg'
+import '../styles/footer.css'
 
 function Footer() {
   return (
@@ -9,7 +9,9 @@ function Footer() {
       <div className="footer-container">
         <div className="footer-logo">
           <img className="footer-logo-img" src={logo}></img>
-          <p className="footer-version">버전 <b>1.0.0</b></p>
+          <p className="footer-version">
+            버전 <b>1.0.0</b>
+          </p>
         </div>
         <div className="team-colors">
           <div className="team-color-turquoise"></div>
@@ -30,7 +32,7 @@ function Footer() {
         </div>
       </div>
     </footer>
-  );
+  )
 }
 
-export default Footer;
+export default Footer

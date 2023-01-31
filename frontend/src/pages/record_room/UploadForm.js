@@ -1,6 +1,6 @@
-import Video from '../../components/Video.js';
-import './Record';
-import React from 'react';
+import Video from '../../components/Video.js'
+import './Record'
+import React from 'react'
 
 function UploadForm() {
   return (
@@ -24,6 +24,6 @@ function UploadForm() {
         </div>
       </div>
     </div>
-  );
+  )
 }
-export default UploadForm;
+export default UploadForm
