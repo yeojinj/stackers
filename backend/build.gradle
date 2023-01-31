@@ -34,6 +34,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     implementation 'com.auth0:java-jwt:4.2.1'
+    // https://mvnrepository.com/artifact/net.bramp.ffmpeg/ffmpeg
+    implementation group: 'net.bramp.ffmpeg', name: 'ffmpeg', version: '0.1'
 
 }
 
