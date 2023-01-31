@@ -1,9 +1,28 @@
 .main-room {
-  padding-top: 144px;
   background-color: white;
+  position: relative;
 }
 
 .main {
   width: 1280px;
+  margin-top: 66px;
+  margin-bottom: 271px;
+  margin-left: auto;
+  margin-right: auto;
   min-height: calc(100vh - 180px);
+  display: flex;
+  flex-direction: column;
+}
+
+.station-center {
+  width: 1079px;
+  height: 375px;
+  margin-left: 92px;
+  margin-bottom: 100px;
+}
+
+.list-title {
+  margin: 0px 0px 18px 0px;
+  font-size: 24px;
+  font-weight: bold;
 }
