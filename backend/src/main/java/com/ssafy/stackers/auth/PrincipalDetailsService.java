@@ -20,6 +20,9 @@ public class PrincipalDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("[PrincipalDetailsService] loadUserByUsername {}", username);
         Member memberEntity = memberRepository.findByUsername(username);
+        if (memberEntity == null) {
+            throw new UsernameNotFoundException("Unauthorized");
+        }
         return new PrincipalDetails(memberEntity);
     }
 
