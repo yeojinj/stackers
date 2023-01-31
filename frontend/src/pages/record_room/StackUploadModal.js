@@ -1,7 +1,7 @@
-import UploadForm from './UploadForm';
-import './Record';
-import React from 'react';
-import CloseIcon from '@mui/icons-material/Close';
+import UploadForm from './UploadForm'
+import './Record'
+import React from 'react'
+import CloseIcon from '@mui/icons-material/Close'
 
 function StackUploadModal() {
   return (
@@ -12,6 +12,6 @@ function StackUploadModal() {
       </div>
       <UploadForm />
     </div>
-  );
+  )
 }
-export default StackUploadModal;
+export default StackUploadModal

@@ -1,5 +1,5 @@
-import React from 'react';
-import './Record.css';
+import React from 'react'
+import './Record.css'
 function Record(props) {
   return (
     <div className="stack">
@@ -11,7 +11,7 @@ function Record(props) {
       </div>
       <button>start record</button>
     </div>
-  );
+  )
 }
 
-export default Record;
+export default Record
