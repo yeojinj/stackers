@@ -12,13 +12,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
-    @Autowired
-    private CorsConfig corsConfig;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -48,12 +48,25 @@ public class SecurityConfig {
         public void configure(HttpSecurity http) throws Exception {
             AuthenticationManager authenticationManager = http.getSharedObject(
                 AuthenticationManager.class);
-            http.addFilter(corsConfig.corsFilter()) // @CrossOrigin(인증x), 시큐리티 필터에 등록 인증(o)
+            http.addFilter(corsFilter()) // @CrossOrigin(인증x), 시큐리티 필터에 등록 인증(o)
                 .addFilter(new JwtAuthenticationFilter(authenticationManager))
                 .addFilter(new JwtAuthorizationFilter(authenticationManager, memberRepository));
         }
 
     }
 
+    @Bean
+    public CorsFilter corsFilter() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true); // 내 서버가 응답을 할 때 json을 자바스크립트에서 처리할 수 있게 할지를 설정하는 것
+        config.addAllowedOrigin("*"); // 모든 ip에 응답을 허용하겠다.
+        config.addAllowedHeader("*"); // 모든 header에 응답을 허용하겠다.
+        config.addAllowedMethod("*"); // 모든 post, get, put, delete, patch 요청을 허용하겠다.
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/api/**", config);
+        return new CorsFilter(source);
+    }
+    
 }
 
