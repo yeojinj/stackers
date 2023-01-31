@@ -1,5 +1,6 @@
 import React from 'react';
-import logo from '../assets/logo.png';
+import logo from '../assets/logo.svg';
+import search from '../assets/search.svg';
 import SearchIcon from '@mui/icons-material/Search';
 import '../styles/header.css';
 
@@ -14,8 +15,8 @@ function Header() {
             <input
               className="search-input"
               placeholder="검색어를 입력해주세요."
-            ></input>
-            <SearchIcon />
+            />
+            <img className="search-icon" src={search} />
           </div>
         </div>
         {/* 로그인버튼 or 업로드버튼 + 프로필사진 */}

@@ -1,7 +1,9 @@
 .main-room {
-  padding-top: 80px;
+  padding-top: 144px;
+  background-color: white;
 }
 
 .main {
+  width: 1280px;
   min-height: calc(100vh - 180px);
 }
