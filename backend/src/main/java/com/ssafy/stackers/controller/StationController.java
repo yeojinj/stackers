@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,14 +33,14 @@ public class StationController {
 
     @Secured("ROLE_USER")
     @PostMapping("/upload")
-    public String uploadStation(@RequestPart Station station,
-        @RequestPart(required = true) MultipartFile video) throws IOException {
+    public ResponseEntity<?> uploadStation(@RequestPart Station station,
+                                        @RequestPart(required = true) MultipartFile video) throws IOException {
 
-        Video uploadVideo = uploadVideo(video);
+        Video saveVideo = uploadVideo(video);     // 비디오 저장
+        // 로그인 되어 있는 유저 정보 가져오기 -> 로그인 되어 있지 않다면 오류 반환
+        stationService.saveWithMember(station, saveVideo); // 스테이션 저장
 
-//        stationService.saveWithMember(station, uploadVideo);
-
-        return "SUCCESS";
+        return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
     }
 
     public Video uploadVideo(MultipartFile file) throws IOException {
@@ -48,7 +50,8 @@ public class StationController {
 
         File destinationFile;
         String destinationFileName;
-        String videoPath = "C:\\stackers\\videos\\";          // 비디오 저장 폴더를 프로젝트 외부로 꺼내기
+//        String videoPath = "C:\\stackers\\videos\\";          // 비디오 저장 폴더를 프로젝트 외부로 꺼내기
+        String videoPath = "/Users/sennie/stackers/videos";
 
         do {
             destinationFileName =
@@ -61,9 +64,6 @@ public class StationController {
 
         Video video = Video.builder().videoName(destinationFileName).videoOriName(sourceVideoName)
             .videoPath(videoPath).build();
-
-        log.info("[비디오 경로] {}{}", video.getVideoPath(), video.getVideoName());
-        videoService.save(video);
 
         return video;
     }
