@@ -1,9 +1,9 @@
-import Record from './Record.js';
-import React from 'react';
-import StackUploadModal from './StackUploadModal';
-import LightIcon from '@mui/icons-material/Light';
-import PhotoCameraFrontIcon from '@mui/icons-material/PhotoCameraFront';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import Record from './Record.js'
+import React from 'react'
+import StackUploadModal from './StackUploadModal'
+import LightIcon from '@mui/icons-material/Light'
+import PhotoCameraFrontIcon from '@mui/icons-material/PhotoCameraFront'
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 
 function RecordRoom() {
   return (
@@ -29,6 +29,6 @@ function RecordRoom() {
       </div>
       <StackUploadModal />
     </div>
-  );
+  )
 }
-export default RecordRoom;
+export default RecordRoom

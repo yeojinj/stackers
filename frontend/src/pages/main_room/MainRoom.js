@@ -1,8 +1,8 @@
-import React from 'react';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
-import StationList from '../../components/station/StationList';
-import '../../styles/mainroom.css';
+import React from 'react'
+import Header from '../../components/Header'
+import Footer from '../../components/Footer'
+import StationList from '../../components/station/StationList'
+import '../../styles/mainroom.css'
 
 function MainRoom() {
   return (
@@ -20,7 +20,7 @@ function MainRoom() {
       </div>
       <Footer />
     </div>
-  );
+  )
 }
 
-export default MainRoom;
+export default MainRoom
