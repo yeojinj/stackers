@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    password: root
+    username: root
+    url: jdbc:mysql://localhost/stackers
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: 'true'
+    properties:
+      hibernate:
+        format_sql: 'true'
+  http:
+    multipart:
+      maxFileSize: 500MB
+logging:
+  level:
+    org:
+      springframework: INFO
+    com:
+      ssafy: INFO
+server:
+  port: '5000'
