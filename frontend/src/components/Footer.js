@@ -1,7 +1,7 @@
-import React from 'react';
-import logo from '../assets/logo.png';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import '../styles/footer.css';
+import React from 'react'
+import logo from '../assets/logo.svg'
+import github from '../assets/github.svg'
+import '../styles/footer.css'
 
 function Footer() {
   return (
@@ -9,7 +9,9 @@ function Footer() {
       <div className="footer-container">
         <div className="footer-logo">
           <img className="footer-logo-img" src={logo}></img>
-          <p className="footer-version">버전 1.0.0</p>
+          <p className="footer-version">
+            버전 <b>1.0.0</b>
+          </p>
         </div>
         <div className="team-colors">
           <div className="team-color-turquoise"></div>
@@ -20,15 +22,17 @@ function Footer() {
           <div className="team-color-lapis"></div>
         </div>
         <div className="github">
-          <GitHubIcon fontSize="large" />
+          <img src={github} />
           <div className="github-info">
-            <h3 className='github-h3'>SSAFY 8기 공통 프로젝트</h3>
-            <h3 className='github-h3'>TENTEN</h3>
+            <p className="github-h3">SSAFY 8기 공통 프로젝트</p>
+            <b>
+              <p className="github-h3">TENTEN</p>
+            </b>
           </div>
         </div>
       </div>
     </footer>
-  );
+  )
 }
 
-export default Footer;
+export default Footer
