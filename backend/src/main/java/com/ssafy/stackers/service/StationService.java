@@ -29,4 +29,9 @@ public class StationService {
 
         stationRepository.save(s);
     }
+
+    public Station findById(Long id) {
+        return stationRepository.findById(id).get();
+    }
+
 }
