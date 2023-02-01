@@ -15,7 +15,7 @@ function StationListItem({ isRanking }) {
 
   const IsRanking = () => {
     if (isRanking) {
-      return undefined
+      return null
     } else {
       return (
         <>
