@@ -18,4 +18,8 @@ public class InstrumentService {
         instrumentRepository.save(i);
     }
 
+    public Instrument findById(Long id){
+        return instrumentRepository.findById(id).get();
+    }
+
 }

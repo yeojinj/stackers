@@ -51,9 +51,13 @@ public class Station {
     @JoinColumn(name = "video_id")
     private Video video;
 
+    @OneToOne
+    @JoinColumn(name = "instrument_id")
+    private Instrument instrument;
+
     @Builder
     public Station(String content, String music, int heartCnt, int remainDepth, boolean isPublic,
-        boolean isComplete, boolean isDelete, Member member, Video video) {
+        boolean isComplete, boolean isDelete, Member member, Video video, Instrument instrument) {
         this.content = content;
         this.music = music;
         this.heartCnt = heartCnt;
@@ -63,5 +67,6 @@ public class Station {
         this.isDelete = isDelete;
         this.member = member;
         this.video = video;
+        this.instrument = instrument;
     }
 }

@@ -1,8 +1,10 @@
 package com.ssafy.stackers.service;
 
+import com.ssafy.stackers.model.Instrument;
 import com.ssafy.stackers.model.Member;
 import com.ssafy.stackers.model.Station;
 import com.ssafy.stackers.model.Video;
+import com.ssafy.stackers.model.dto.StationDto;
 import com.ssafy.stackers.repository.StationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +18,7 @@ public class StationService {
     private StationRepository stationRepository;
 
     @Transactional
-    public void saveWithMemberAndVideo(Station station, Video video, Member member) {
+    public void save(StationDto station, Video video, Member member, Instrument instrument) {
         Station s = Station.builder()
             .content(station.getContent())
             .music(station.getMusic())
@@ -25,8 +27,14 @@ public class StationService {
             .isPublic(true)
             .member(member)
             .video(video)
+            .instrument(instrument)
             .build();
 
         stationRepository.save(s);
     }
+
+    public Station findById(Long id) {
+        return stationRepository.findById(id).get();
+    }
+
 }
