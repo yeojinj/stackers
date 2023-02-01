@@ -4,14 +4,18 @@ import com.ssafy.stackers.model.Video;
 import com.ssafy.stackers.repository.VideoRepository;
 import java.io.File;
 import java.io.IOException;
+import lombok.extern.slf4j.Slf4j;
 import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.FFmpegExecutor;
 import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
+import net.bramp.ffmpeg.builder.FFmpegBuilder.Strict;
+import net.bramp.ffmpeg.probe.FFmpegProbeResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 public class VideoService {
@@ -50,5 +54,28 @@ public class VideoService {
         FFmpegExecutor executor = new FFmpegExecutor(ffmpeg,
             ffprobe);        // FFmpeg 명령어 실행을 위한 FFmpegExecutor 객체 생성
         executor.createJob(builder).run();                                    // one-pass encodes
+    }
+
+    /**
+     * 동영상 메타데이터 추출
+     */
+    public void getMetaData() throws IOException {
+        // 영상 파일 경로
+        String videoPath = "C:\\test\\videos\\test.mp4";
+
+        // ffmpeg 설치 파일 경로
+        String ffmpegPath = "C:\\Program Files\\ffmpeg\\bin\\";
+        FFmpeg ffmpeg = new FFmpeg(ffmpegPath + "ffmpeg");
+        FFprobe ffprobe = new FFprobe(ffmpegPath + "ffprobe");
+
+        FFmpegProbeResult probeResult = ffprobe.probe(videoPath);
+
+        log.info("===== Video Meta Data =====");
+        log.info("duration: " + probeResult.getStreams().get(0).duration);
+        log.info("codec name: " + probeResult.getStreams().get(0).codec_name);
+        log.info("width: " + probeResult.getStreams().get(0).width);
+        log.info("height: " + probeResult.getStreams().get(0).height);
+        log.info("bit_rate: " + probeResult.getStreams().get(0).bit_rate);
+
     }
 }
