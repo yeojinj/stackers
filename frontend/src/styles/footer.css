@@ -1,6 +1,6 @@
 .footer {
-  display: flex;
-  justify-content: center;
+  /* display: flex;
+  justify-content: center; */
   width: 100%;
   height: 190px;
   margin-top: auto;
@@ -13,14 +13,15 @@
 .footer-container {
   display: flex;
   flex-direction: row;
-  /* justify-content: space-between; */
+  justify-content: space-between;
   /* margin-left: 67px; */
-  margin-right: 67px;
+  /* margin-right: 67px; */
 }
 
 .footer-logo {
   background-color: rgba(251, 251, 251, 1);
   margin-top: 41px;
+  margin-left: 68px;
 }
 
 .footer-logo-img {
@@ -37,7 +38,7 @@
   display: flex;
   flex-direction: row;
   margin-top: 64px;
-  margin-left: 163px;
+  margin-left: 80px;
 }
 
 .team-color-turquoise {
@@ -93,7 +94,7 @@
   display: flex;
   flex-direction: row;
   margin-top: 111px;
-  margin-left: 107px;
+  margin-right: 180px;
 }
 
 .github-h3 {
