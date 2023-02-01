@@ -5,13 +5,11 @@ import com.ssafy.stackers.model.Comment;
 import com.ssafy.stackers.model.Member;
 import com.ssafy.stackers.model.Station;
 import com.ssafy.stackers.model.Video;
-import com.ssafy.stackers.repository.CommentRepository;
 import com.ssafy.stackers.repository.MemberRepository;
-import com.ssafy.stackers.repository.StationRepository;
+import com.ssafy.stackers.service.CommentService;
 import com.ssafy.stackers.service.StationService;
 import com.ssafy.stackers.service.VideoService;
 import java.io.IOException;
-import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,12 +30,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class StationController {
 
     @Autowired
-    private CommentRepository commentRepository;
-
-    @Autowired
-    private StationRepository stationRepository;
-
-    @Autowired
     private MemberRepository memberRepository;
 
     @Autowired
@@ -45,6 +37,9 @@ public class StationController {
 
     @Autowired
     private VideoService videoService;
+
+    @Autowired
+    private CommentService commentService;
 
     @Secured("ROLE_USER")
     @PostMapping("/upload")
@@ -63,13 +58,13 @@ public class StationController {
     @PostMapping("/{stationid}/comment")
     public ResponseEntity<?> writeComment(@PathVariable("stationid") int stationId,
         @RequestBody Comment comment, Authentication authentication) {
-        Optional<Station> station = stationRepository.findById((long) stationId);
+        Station station = stationService.findById((long) stationId);
 
-        Comment saveComment = Comment.builder().content(comment.getContent()).station(station.get())
+        Comment saveComment = Comment.builder().content(comment.getContent()).station(station)
             .member(testForLoginMember(authentication)).build();
-        commentRepository.save(saveComment);
+        commentService.save(saveComment);
 
-        log.info("[['{}' 스테이션에 댓글 작성] : {}", station.get().getContent(), comment.getContent());
+        log.info("[['{}' 스테이션에 댓글 작성] : {}", station.getContent(), comment.getContent());
         return new ResponseEntity<>("댓글 작성 성공", HttpStatus.OK);
     }
 
