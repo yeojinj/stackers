@@ -1,0 +1,24 @@
+.search-page {
+  background-color: white;
+  position: relative;
+}
+
+.result {
+  width: 1280px;
+  margin-top: 0px;
+  margin-bottom: 271px;
+  margin-left: auto;
+  margin-right: auto;
+  min-height: calc(100vh - 180px);
+  display: flex;
+  flex-direction: column;
+}
+
+.result-tap {
+  width: 1280px;
+  height: 76px;
+  display: flex;
+  /* align-items: flex-end; */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+

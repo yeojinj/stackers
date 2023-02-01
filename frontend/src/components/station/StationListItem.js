@@ -1,11 +1,29 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import '../../styles/stationlistitem.css'
 
-function StationListItem() {
+StationListItem.propTypes = {
+  isRanking: PropTypes.bool
+}
+
+function StationListItem({ isRanking }) {
   const stationInfo = {
     video_url: '...',
     video_description: '비디오 설명이에요 비디오 설명이에요 비디오 설명이에요',
-    video_tags: ['#disco', '#music', '#dance', '#music', '#guitar'],
+    video_tags: ['#disco', '#music', '#dance', '#music', '#guitar']
+  }
+
+  const IsRanking = () => {
+    if (isRanking) {
+      return null
+    } else {
+      return (
+        <>
+          <p className="station-description">{stationInfo.video_description}</p>
+          <div className="station-tag">{stationInfo.video_tags}</div>
+        </>
+      )
+    }
   }
 
   return (
@@ -21,8 +39,7 @@ function StationListItem() {
         width="197"
         style={{ borderRadius: '10px' }}
       ></video>
-      <p className="station-description">{stationInfo.video_description}</p>
-      <div className="station-tag">{stationInfo.video_tags}</div>
+      <IsRanking />
     </div>
   )
 }
