@@ -18,7 +18,7 @@ public class StationService {
     private StationRepository stationRepository;
 
     @Transactional
-    public void save(StationDto station, Video video, Member member, Instrument instrument) {
+    public Long save(StationDto station, Video video, Member member, Instrument instrument) {
         Station s = Station.builder()
             .content(station.getContent())
             .music(station.getMusic())
@@ -31,6 +31,7 @@ public class StationService {
             .build();
 
         stationRepository.save(s);
+        return s.getId();
     }
 
     public Station findById(Long id) {
