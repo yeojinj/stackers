@@ -2,11 +2,14 @@ package com.ssafy.stackers.controller;
 
 import com.ssafy.stackers.auth.PrincipalDetails;
 import com.ssafy.stackers.model.Comment;
+import com.ssafy.stackers.model.Instrument;
 import com.ssafy.stackers.model.Member;
 import com.ssafy.stackers.model.Station;
 import com.ssafy.stackers.model.Video;
+import com.ssafy.stackers.model.dto.StationDto;
 import com.ssafy.stackers.repository.MemberRepository;
 import com.ssafy.stackers.service.CommentService;
+import com.ssafy.stackers.service.InstrumentService;
 import com.ssafy.stackers.service.StationService;
 import com.ssafy.stackers.service.VideoService;
 import java.io.IOException;
@@ -41,17 +44,21 @@ public class StationController {
     @Autowired
     private CommentService commentService;
 
+    @Autowired
+    private InstrumentService instrumentService;
+
     @Secured("ROLE_USER")
     @PostMapping("/upload")
-    public ResponseEntity<?> uploadStation(@RequestPart Station station,
-        @RequestPart(required = true) MultipartFile video, Authentication authentication)
+    public ResponseEntity<?> uploadStation(@RequestPart StationDto stationDto,
+        @RequestPart(required = true) MultipartFile file, Authentication authentication)
         throws IOException {
 
         // 로그인 되어 있는 유저 정보 가져오기 -> 로그인 되어 있지 않다면 오류 반환
         Member loginMember = testForLoginMember(authentication);
-        Video saveVideo = videoService.uploadVideo(video);    // 비디오 저장
+        Video video = videoService.uploadVideo(file);    // 비디오 저장
+        Instrument instrument = instrumentService.findById(stationDto.getInstrumentId());
 
-        stationService.saveWithMemberAndVideo(station, saveVideo, loginMember);      // 스테이션 저장
+        stationService.save(stationDto, video, loginMember, instrument);      // 스테이션 저장
         return new ResponseEntity<>("스테이션 업로드 성공", HttpStatus.OK);
     }
 
