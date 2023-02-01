@@ -55,8 +55,13 @@
 
 .comment {
   height: 50%;
-  border: 1px black solid;
+  /* border: 1px black solid; */
   background-color: rgba(245, 245, 245, 1);
+  overflow: auto;
+}
+
+.comment::-webkit-scrollbar {
+  display: none;
 }
 
 .createComment {
@@ -103,10 +108,10 @@
   white-space: pre-wrap;
 }
 
-.station-Participant {
+.station-Participants {
   height: 40%;
   width: 40%;
-  border: 1px black solid;
+  /* border: 1px black solid; */
   margin-top: auto;
   margin-left: auto;
 }
@@ -114,4 +119,27 @@
 .comment-list {
   margin: 10px;
   /* border: 1px black solid; */
+}
+
+.station-Participant {
+  height: 100%;
+  margin: 0 2px 0 2px;
+}
+
+.station-writer {
+  width: 60px;
+  height: 60px;
+  margin: auto;
+}
+
+.station-user {
+  width: 50px;
+  height: 50px;
+  margin: auto;
+  margin-top: 10px;
+}
+
+.station-Participant-name {
+  margin-bottom: 10px;
+  text-align: center;
 }

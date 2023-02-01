@@ -19,7 +19,7 @@ function MainRoom() {
         </div>
         <div className="station-center">
           <p className="list-title">지금 가장 뜨거운 영상🔥</p>
-          <StationList isRanking="true"/>
+          <StationList isRanking={true} />
         </div>
       </div>
       <Footer />

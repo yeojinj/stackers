@@ -6,7 +6,6 @@ import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined'
 import ArrowCircleUpOutlinedIcon from '@mui/icons-material/ArrowCircleUpOutlined'
 import ArrowCircleDownOutlinedIcon from '@mui/icons-material/ArrowCircleDownOutlined'
 import '../Station.css'
-
 function StationView() {
   return (
     <div className="LeftStyle">
