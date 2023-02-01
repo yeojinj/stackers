@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -60,4 +61,11 @@ public class Member {
         return new ArrayList<>();
     }
 
+    @Builder
+    public Member(Long id, String password, String roles, String username) {
+        this.id = id;
+        this.password = password;
+        this.roles = roles;
+        this.username = username;
+    }
 }
