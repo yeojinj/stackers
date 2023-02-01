@@ -55,7 +55,7 @@ function Comments(props) {
               width: '100%',
               display: 'flex',
               justifyContent: 'space-between',
-              alignItems: 'center',
+              alignItems: 'center'
             }}
           >
             <div>
@@ -64,7 +64,7 @@ function Comments(props) {
               <p
                 style={{
                   color: 'gray',
-                  margin: '0 0 0 10px',
+                  margin: '0 0 0 10px'
                 }}
               >
                 {release_date}
@@ -87,22 +87,43 @@ function CommentList() {
       username: 'HelloSsafy',
       content: '만나서 반갑습니다.',
       release_date: '2023.01.19',
-      profilePicture: { profilePicture1 },
+      profilePicture: { profilePicture1 }
     },
     {
       id: 2,
       username: 'flamingo_fly',
       content: 'You have great talent! Love it!!!',
       release_date: '2023.01.19',
-      profilePicture: '../assets/profilePicture2',
+      profilePicture: '../assets/profilePicture2'
     },
     {
       id: 3,
       username: 'toughcooooookie',
       content: '아이 러브 레게',
       release_date: '2023.01.19',
-      profilePicture: '../assets/profilePicture3',
+      profilePicture: '../assets/profilePicture3'
     },
+    {
+      id: 4,
+      username: 'pink',
+      content: '젬베 야무지시네요',
+      release_date: '2023.01.19'
+      // profilePicture: { profilePicture1 }
+    },
+    {
+      id: 5,
+      username: 'Hi Hello',
+      content: 'Wow.. awosome!!!!!!!!',
+      release_date: '2023.01.19'
+      // profilePicture: '../assets/profilePicture2'
+    },
+    {
+      id: 6,
+      username: 'toughcooooookie',
+      content: '아이 러브 레게',
+      release_date: '2023.01.19'
+      // profilePicture: '../assets/profilePicture3'
+    }
   ]
   return (
     <div className="comment">
