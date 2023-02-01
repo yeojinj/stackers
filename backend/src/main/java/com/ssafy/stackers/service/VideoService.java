@@ -50,7 +50,6 @@ public class VideoService {
         FFmpegBuilder builder = new FFmpegBuilder()
             .setInput(videoPath)                // 영상 파일 경로
             .overrideOutputFiles(true)          // 썸네일 파일 존재할 경우 덮어쓰기
-            .setInput(videoPath)                // 영상 파일 경로
             .addOutput(thumbnailPath + "thumb.png")   // 썸네일 추출 절대 경로
             .addExtraArgs("-ss", "00:00:01")            // 썸네일 추출 시작점 ([영상 길이 / 10]으로 10개 뽑을 예정)
             .setFrames(1)
@@ -82,5 +81,45 @@ public class VideoService {
         log.info("height: " + probeResult.getStreams().get(0).height);
         log.info("bit_rate: " + probeResult.getStreams().get(0).bit_rate);
 
+    }
+
+
+    /**
+     * 동영상 인코딩
+     */
+    public void videoEncoding() throws IOException {
+        // 영상 파일 경로
+        String videoPath = "C:\\test\\videos\\";
+
+        // 인코딩 파일 추출 절대 경로
+        String encodingPath = "C:\\test\\videos\\";
+
+        // ffmpeg 설치 파일 경로
+        String ffmpegPath = "C:\\Program Files\\ffmpeg\\bin\\";
+        FFmpeg ffmpeg = new FFmpeg(ffmpegPath + "ffmpeg");
+        FFprobe ffprobe = new FFprobe(ffmpegPath + "ffprobe");
+
+        // 동영상 인코딩 명령어
+        FFmpegBuilder builder = new FFmpegBuilder()
+            .setInput(videoPath + "test.mp4")                       // 영상 파일 경로
+            .overrideOutputFiles(true)                              // 인코딩 파일 존재할 경우 덮어쓰기
+            .addOutput(encodingPath + "encoding-test.mp4")     // 인코딩 파일 경로
+            .setFormat("mp4")               // 인코딩 파일 형식
+//            .setTargetSize(2130_000)        // 인코딩 목표 용량 (KB)
+            .disableSubtitle()              // 자막 없음
+            .setAudioChannels(1)            // mono audio
+            .setAudioCodec("aac")           // 오디오 코덱
+            .setAudioSampleRate(48_000)     // 48KHz : 오디오 샘플 레이트
+            .setAudioBitRate(32768)         // 32kbit/s : 오디오 비트 레이트 (오디오 품질, 높을수록 좋음)
+            .setVideoCodec("libx264")       // 비디오 코덱
+            .setVideoFrameRate(24, 1)    // 24 frames per second
+            .setVideoResolution(640, 480)
+            .setStrict(Strict.EXPERIMENTAL)
+            .done();
+
+        FFmpegExecutor executor = new FFmpegExecutor(ffmpeg, ffprobe);
+
+        // one-pass encode
+        executor.createJob(builder).run();
     }
 }
