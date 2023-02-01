@@ -13,7 +13,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class Station {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -68,5 +67,9 @@ public class Station {
         this.member = member;
         this.video = video;
         this.instrument = instrument;
+    }
+
+    public void updateHeart(int heartCnt){
+        this.heartCnt = heartCnt;
     }
 }
