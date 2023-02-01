@@ -1,5 +1,6 @@
 package com.ssafy.stackers.model.dto;
 
+import java.util.List;
 import lombok.Getter;
 
 @Getter
@@ -12,6 +13,5 @@ public class StationDto {
     private boolean isPublic;
     private boolean isComplete;
     private boolean isDelete;
-
-
+    private List<String> tags;
 }
