@@ -30,6 +30,10 @@ public class VideoService {
         videoRepository.save(v);
     }
 
+    /**
+     * 동영상 썸네일 추출
+     * 동영상 파일 경로, 썸네일 추출 경로 (프로젝트 외부) 절대 경로로 지정함
+     */
     public void exportThumbnail() throws IOException {
         // 영상 파일 경로
         String videoPath = "C:\\test\\videos\\test.mp4";
@@ -38,12 +42,13 @@ public class VideoService {
         String thumbnailPath = "C:\\test\\thumbs\\";
 
         // ffmpeg 설치 파일 경로
-        String ffmpegPath = "C:\\Program Files\\ffmpeg\\bin\\";
+        String ffmpegPath = "C:\\Program Files\\ffmpeg\\bin\\";     // ffmpeg 설치 파일도 서버에 올려야 하는지?
         FFmpeg ffmpeg = new FFmpeg(ffmpegPath + "ffmpeg");
         FFprobe ffprobe = new FFprobe(ffmpegPath + "ffprobe");
 
         // 썸네일 추출 명령어
         FFmpegBuilder builder = new FFmpegBuilder()
+            .setInput(videoPath)                // 영상 파일 경로
             .overrideOutputFiles(true)          // 썸네일 파일 존재할 경우 덮어쓰기
             .setInput(videoPath)                // 영상 파일 경로
             .addOutput(thumbnailPath + "thumb.png")   // 썸네일 추출 절대 경로
