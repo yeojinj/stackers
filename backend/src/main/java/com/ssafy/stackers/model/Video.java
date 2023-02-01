@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class Video {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -31,9 +32,8 @@ public class Video {
     private String thumbnailPath;
 
     @Builder
-    public Video(Long id, String videoPath, String videoName, String videoOriName,
+    public Video(String videoPath, String videoName, String videoOriName,
         String thumbnailPath) {
-        this.id = id;
         this.videoPath = videoPath;
         this.videoName = videoName;
         this.videoOriName = videoOriName;
