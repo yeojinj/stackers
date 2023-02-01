@@ -24,12 +24,10 @@ function RecordRoom() {
   }
   const setNoneStack = () => {}
   const showToolTip = () => {}
-  const getVideo = (src) => {
-    console.log('record Room setURL')
-    setStack((preSrc) => {
+  async function getVideo(src) {
+    await setStack((preSrc) => {
       return { ...preSrc, src }
     })
-    console.log(stack)
   }
   return (
     <div>
