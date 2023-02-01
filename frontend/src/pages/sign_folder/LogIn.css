@@ -1,0 +1,23 @@
+.LogIn {
+  border: 1px solid black;
+  width: 490px;
+  height: 705px;
+}
+
+.LogIn-logo {
+  width: 200px;
+  height: 57px;
+  margin-left: 145px;
+  margin-top: 57px;
+}
+
+.LogIn-inputBox {
+  width: 390px;
+  margin-bottom: 10px;
+}
+
+.find-password-div {
+  width: 390px;
+  margin: 0 auto 30px auto;
+  display: flex;
+}
