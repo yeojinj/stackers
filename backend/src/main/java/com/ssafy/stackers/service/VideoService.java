@@ -9,11 +9,14 @@ import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.FFmpegExecutor;
 import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import net.bramp.ffmpeg.builder.FFmpegBuilder.Strict;
 import net.bramp.ffmpeg.probe.FFmpegProbeResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Service
@@ -21,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class VideoService {
 
     @Autowired
-    VideoRepository videoRepository;
+    private VideoRepository videoRepository;
 
     @Transactional
     public void save(Video video) {
@@ -29,6 +32,38 @@ public class VideoService {
             .videoOriName(video.getVideoOriName()).videoPath(video.getVideoPath()).build();
         videoRepository.save(v);
     }
+
+    /**
+     * 데이터베이스에 비디오 업로드
+     * */
+    public Video uploadVideo(MultipartFile file) throws IOException {
+        String sourceVideoName = file.getOriginalFilename();
+        String sourceVideoNameExtension = FilenameUtils.getExtension(sourceVideoName).toLowerCase();
+        FilenameUtils.removeExtension(sourceVideoName);
+
+        File destinationFile;
+        String destinationFileName;
+        String videoPath = "C:\\stackers\\videos\\";
+//        String videoPath = "/Users/sennie/stackers/videos";
+
+        do {
+            destinationFileName =
+                RandomStringUtils.randomAlphanumeric(64) + "." + sourceVideoNameExtension;
+            destinationFile = new File(videoPath + destinationFileName);
+        } while (destinationFile.exists());
+
+        destinationFile.getParentFile().mkdirs();
+        file.transferTo(destinationFile);
+
+        Video video = Video.builder().videoName(destinationFileName).videoOriName(sourceVideoName)
+            .videoPath(videoPath).build();
+
+        return video;
+    }
+
+    /**
+     * 썸네일 추출 함수
+     */
 
     /**
      * 동영상 썸네일 추출
