@@ -14,6 +14,7 @@ function RecordRoom() {
     // navigate(-1)
   }
   const [open, setOpen] = useState(false)
+  const [stack, setStack] = useState({ src: null })
   const handleOpen = () => {
     setOpen(true)
   }
@@ -23,6 +24,13 @@ function RecordRoom() {
   }
   const setNoneStack = () => {}
   const showToolTip = () => {}
+  const getVideo = (src) => {
+    console.log('record Room setURL')
+    setStack((preSrc) => {
+      return { ...preSrc, src }
+    })
+    console.log(stack)
+  }
   return (
     <div>
       <LightIcon></LightIcon>
@@ -36,7 +44,7 @@ function RecordRoom() {
           <InfoOutlinedIcon className="box" onClick={showToolTip} />
         </div>
         <div className="box">
-          <Record />
+          <Record stack={getVideo} />
         </div>
         <div className="stack">
           <p></p>
@@ -45,9 +53,15 @@ function RecordRoom() {
             <button className="box" onClick={goBack}>
               취소
             </button>
-            <button onClick={handleOpen}>업로드</button>
+            <button
+              onClick={() => {
+                handleOpen()
+              }}
+            >
+              업로드
+            </button>
             <Modal open={open} onClose={handleClose}>
-              <StackUploadModal />
+              <StackUploadModal handle={handleClose} src={stack} />
             </Modal>
           </div>
         </div>

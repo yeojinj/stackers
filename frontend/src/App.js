@@ -2,6 +2,7 @@ import React from 'react'
 import MainRoom from './pages/main_room/MainRoom'
 import RecordRoom from './pages/record_room/RecordRoom'
 import StationRoom from './pages/station_room/stationview/StationRoom'
+import SearchView from './pages/searchview/SearchView'
 import { Link, Route, Routes } from 'react-router-dom'
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route path="/MainRoom" element={<MainRoom />} />
         <Route path="/RecordRoom" element={<RecordRoom />} />
         <Route path="/StationRoom" element={<StationRoom />} />
+        <Route path="/SearchView" element={<SearchView />} />
       </Routes>
     </div>
   )
