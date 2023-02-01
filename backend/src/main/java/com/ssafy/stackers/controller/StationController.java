@@ -2,6 +2,7 @@ package com.ssafy.stackers.controller;
 
 import com.ssafy.stackers.auth.PrincipalDetails;
 import com.ssafy.stackers.model.Comment;
+import com.ssafy.stackers.model.Heart;
 import com.ssafy.stackers.model.Instrument;
 import com.ssafy.stackers.model.Member;
 import com.ssafy.stackers.model.Station;
@@ -9,11 +10,13 @@ import com.ssafy.stackers.model.Video;
 import com.ssafy.stackers.model.dto.StationDto;
 import com.ssafy.stackers.repository.MemberRepository;
 import com.ssafy.stackers.service.CommentService;
+import com.ssafy.stackers.service.HeartService;
 import com.ssafy.stackers.service.InstrumentService;
 import com.ssafy.stackers.service.StationService;
 import com.ssafy.stackers.service.VideoService;
 import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +50,9 @@ public class StationController {
     @Autowired
     private InstrumentService instrumentService;
 
+    @Autowired
+    private HeartService heartService;
+
     @Secured("ROLE_USER")
     @PostMapping("/upload")
     public ResponseEntity<?> uploadStation(@RequestPart StationDto stationDto,
@@ -73,6 +79,22 @@ public class StationController {
 
         log.info("[['{}' 스테이션에 댓글 작성] : {}", station.getContent(), comment.getContent());
         return new ResponseEntity<>("댓글 작성 성공", HttpStatus.OK);
+    }
+
+    @PostMapping("/{stationid}/heart")
+    public ResponseEntity<?> writeHeart(@PathVariable("stationid") int stationId,
+        Authentication authentication) {
+        Station station = stationService.findById((long) stationId);
+
+        Heart saveHeart = Heart.builder().station(station)
+            .member(testForLoginMember(authentication)).build();
+
+        heartService.save(saveHeart);
+
+        // station 좋아요 cnt 업데이트
+        heartService.update((long) stationId, station.getHeartCnt());
+
+        return new ResponseEntity<>("좋아요 작성 성공", HttpStatus.OK);
     }
 
     public Member testForLoginMember(Authentication authentication) {
