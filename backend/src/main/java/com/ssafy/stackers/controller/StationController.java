@@ -13,8 +13,10 @@ import com.ssafy.stackers.service.CommentService;
 import com.ssafy.stackers.service.HeartService;
 import com.ssafy.stackers.service.InstrumentService;
 import com.ssafy.stackers.service.StationService;
+import com.ssafy.stackers.service.TagService;
 import com.ssafy.stackers.service.VideoService;
 import java.io.IOException;
+import java.util.Arrays;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,18 +55,31 @@ public class StationController {
     @Autowired
     private HeartService heartService;
 
+    @Autowired
+    private TagService tagService;
+
     @Secured("ROLE_USER")
     @PostMapping("/upload")
     public ResponseEntity<?> uploadStation(@RequestPart StationDto stationDto,
         @RequestPart(required = true) MultipartFile file, Authentication authentication)
         throws IOException {
 
+        log.info("[태그 리스트] {}", stationDto.getTags());
+
         // 로그인 되어 있는 유저 정보 가져오기 -> 로그인 되어 있지 않다면 오류 반환
         Member loginMember = testForLoginMember(authentication);
         Video video = videoService.uploadVideo(file);    // 비디오 저장
         Instrument instrument = instrumentService.findById(stationDto.getInstrumentId());
 
-        stationService.save(stationDto, video, loginMember, instrument);      // 스테이션 저장
+        // 기존에 존재하지 않는 경우만 넣어주고 존재하는 경우는 넣어주지 않음
+        tagService.save(stationDto.getTags());
+
+        // 스테이션 저장
+        Long lastId = stationService.save(stationDto, video, loginMember, instrument);
+
+        // 태그 리스트 저장
+        log.info("Long id : {}", lastId);
+
         return new ResponseEntity<>("스테이션 업로드 성공", HttpStatus.OK);
     }
 
