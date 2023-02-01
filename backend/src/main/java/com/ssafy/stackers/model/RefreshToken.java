@@ -22,9 +22,14 @@ public class RefreshToken {
     private String userId;
     private String token;
 
-
     private RefreshToken(String id, String token) {
         userId = id;
+        this.token = token;
+    }
+
+    public RefreshToken(Long id, String userId, String token) {
+        this.id = id;
+       this.userId = userId;
         this.token = token;
     }
 

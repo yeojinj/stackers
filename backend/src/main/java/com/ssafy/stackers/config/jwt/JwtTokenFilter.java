@@ -15,20 +15,17 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Slf4j
 public class JwtTokenFilter extends OncePerRequestFilter {
 
-    public static final String AUTHORIZATION_HEADER = "Authorization";
-    public static final String REFRESH_HEADER = "Refresh";
-
     private JwtTokenProvider jwtTokenProvider;
 
     public JwtTokenFilter(JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
         FilterChain filterChain) throws ServletException, IOException {
-        String jwt = resolveToken(request, AUTHORIZATION_HEADER);
+
+        String jwt = resolveToken(request, JwtProperties.AUTHORIZATION_HEADER);
 
         if (jwt != null && jwtTokenProvider.validateToken(jwt) == JwtCode.ACCESS) {
             Authentication authentication = jwtTokenProvider.getAuthentication(jwt);
@@ -36,17 +33,17 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             log.info("set Authentication to security context for '{}', uri: {}",
                 authentication.getName(), request.getRequestURI());
         } else if (jwt != null && jwtTokenProvider.validateToken(jwt) == JwtCode.EXPIRED) {
-            String refresh = resolveToken(request, REFRESH_HEADER);
+            String refresh = resolveToken(request, JwtProperties.REFRESH_HEADER);
             // refresh token을 확인해서 재발급해준다
             if (refresh != null && jwtTokenProvider.validateToken(refresh) == JwtCode.ACCESS) {
                 String newRefresh = jwtTokenProvider.reissueRefreshToken(refresh);
                 if (newRefresh != null) {
-                    response.setHeader(REFRESH_HEADER, "Bearer-" + newRefresh);
+                    response.setHeader(JwtProperties.REFRESH_HEADER, JwtProperties.TOKEN_PREFIX + newRefresh);
 
                     // access token 생성
-                    Authentication authentication = jwtTokenProvider.getAuthentication(refresh);
-                    response.setHeader(AUTHORIZATION_HEADER,
-                        "Bearer-" + jwtTokenProvider.createAccessToken(authentication));
+                    Authentication authentication = jwtTokenProvider.getAuthenticationWithNoAuth(refresh);
+                    response.setHeader(JwtProperties.AUTHORIZATION_HEADER,
+                        JwtProperties.TOKEN_PREFIX + jwtTokenProvider.createAccessToken(authentication));
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                     log.info("reissue refresh Token & access Token");
                 }
@@ -60,8 +57,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     private String resolveToken(HttpServletRequest request, String header) {
         String bearerToken = request.getHeader(header);
-        if (bearerToken != null && bearerToken.startsWith("Bearer-")) {
-            return bearerToken.substring(7);
+        if (bearerToken != null && bearerToken.startsWith(JwtProperties.TOKEN_PREFIX)) {
+            return bearerToken.substring(JwtProperties.TOKEN_PREFIX.length());
         }
         return null;
     }

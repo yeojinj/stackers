@@ -1,10 +1,11 @@
 package com.ssafy.stackers.service;
 
+import com.ssafy.stackers.config.jwt.JwtProperties;
 import com.ssafy.stackers.config.jwt.JwtTokenProvider;
 import com.ssafy.stackers.exception.CustomException;
 import com.ssafy.stackers.model.Member;
 import com.ssafy.stackers.model.RefreshToken;
-import com.ssafy.stackers.model.TokenInfo;
+import com.ssafy.stackers.model.dto.TokenDto;
 import com.ssafy.stackers.repository.MemberRepository;
 import com.ssafy.stackers.repository.RefreshTokenRepository;
 import com.ssafy.stackers.utils.error.ErrorCode;
@@ -28,29 +29,8 @@ public class MemberService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder = null;
     @Autowired
     private final JwtTokenProvider jwtTokenProvider = null;
-
     @Autowired
     private final BCryptPasswordEncoder bCryptPasswordEncoder = null;
-
-    @Transactional
-    public TokenInfo login(String memberId, String password) {
-        // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
-        // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-            memberId, password);
-
-        // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
-        // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
-        Authentication authentication = authenticationManagerBuilder.getObject()
-            .authenticate(authenticationToken);
-
-        // 3. 인증 정보를 기반으로 JWT 토큰 생성
-        TokenInfo tokenInfo = new TokenInfo("Bearer",
-            jwtTokenProvider.createAccessToken(authentication),
-            jwtTokenProvider.issueRefreshToken(authentication));
-
-        return tokenInfo;
-    }
 
     @Transactional
     public void userJoin(Member member) {
@@ -68,49 +48,61 @@ public class MemberService {
         }
     }
 
+    @Transactional
+    public TokenDto login(String memberId, String password) {
+        // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
+        // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
+        UsernamePasswordAuthenticationToken authenticationToken =
+            new UsernamePasswordAuthenticationToken(memberId, password);
 
-    @Transactional(readOnly = true)
-    public TokenInfo reissueAccessToken(String token) {
+        // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
+        // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
+        Authentication authentication = authenticationManagerBuilder.getObject()
+            .authenticate(authenticationToken);
 
-        //token 앞에 "Bearer-" 제거
+        // 3. 인증 정보를 기반으로 JWT 토큰 생성
+        TokenDto tokenDto = new TokenDto(
+            JwtProperties.TOKEN_PREFIX + jwtTokenProvider.createAccessToken(authentication),
+            JwtProperties.TOKEN_PREFIX + jwtTokenProvider.issueRefreshToken(authentication));
+
+        return tokenDto;
+    }
+
+    @Transactional
+    public TokenDto reissueAccessToken(String token) {
         String resolveToken = resolveToken(token);
 
         //토큰 검증 메서드
         //실패시 jwtTokenProvider.validateToken(resolveToken) 에서 exception을 리턴함
         jwtTokenProvider.validateToken(resolveToken);
 
-        Authentication authentication = jwtTokenProvider.getAuthentication(resolveToken);
+        Authentication authentication = jwtTokenProvider.getAuthenticationWithNoAuth(resolveToken);
         // 디비에 있는게 맞는지 확인
         RefreshToken refreshToken = refreshTokenRepository.findByUserId(
             authentication.getName()).get();
-        System.out.println(refreshToken);
 
         // 토큰이 같은지 확인
         if (!resolveToken.equals(refreshToken.getToken())) {
-            throw new RuntimeException("not equals refresh token");
+            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
 
         // 재발행해서 저장
         String newToken = jwtTokenProvider.createRefreshToken(authentication);
-        RefreshToken newRefreshToken = RefreshToken.createToken(authentication.getName(),
-            newToken);
-        refreshTokenRepository.save(newRefreshToken);
+        refreshToken.changeToken(newToken);
+        refreshTokenRepository.save(refreshToken);
 
-        // accessToken과 refreshToken 모두 재발행
-        // 3. 인증 정보를 기반으로 JWT 토큰 생성
-        TokenInfo tokenInfo = new TokenInfo("Bearer",
-            jwtTokenProvider.createAccessToken(authentication),
-            jwtTokenProvider.issueRefreshToken(authentication));
+        // 3. 인증 정보를 기반으로 JWT 토큰
+        TokenDto tokenDto = new TokenDto(
+            JwtProperties.TOKEN_PREFIX + jwtTokenProvider.createAccessToken(authentication),
+            JwtProperties.TOKEN_PREFIX + newToken);
 
-        return tokenInfo;
+        return tokenDto;
     }
 
-    //token 앞에 "Bearer-" 제거
     private String resolveToken(String token) {
-        System.out.println(token);
-        if (token.startsWith("Bearer-")) {
-            return token.substring(7);
+        if (token.startsWith(JwtProperties.TOKEN_PREFIX)) {
+            return token.substring(JwtProperties.TOKEN_PREFIX.length());
         }
-        throw new RuntimeException("not valid refresh token !!");
+        throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
     }
 }

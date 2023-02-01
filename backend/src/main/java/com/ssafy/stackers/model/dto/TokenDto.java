@@ -1,4 +1,4 @@
-package com.ssafy.stackers.model;
+package com.ssafy.stackers.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,9 +7,8 @@ import lombok.Data;
 @Builder
 @Data
 @AllArgsConstructor
-public class TokenInfo {
+public class TokenDto {
 
-    private String grantType;
     private String accessToken;
     private String refreshToken;
 

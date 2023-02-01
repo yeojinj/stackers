@@ -2,8 +2,9 @@ package com.ssafy.stackers.controller;
 
 import com.ssafy.stackers.auth.PrincipalDetails;
 import com.ssafy.stackers.model.Member;
-import com.ssafy.stackers.model.TokenInfo;
+import com.ssafy.stackers.model.dto.TokenDto;
 import com.ssafy.stackers.service.MemberService;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,11 +23,11 @@ public class MemberController {
     private MemberService memberService;
 
     @PostMapping("/login")
-    public TokenInfo login(@RequestBody Member member) {
+    public TokenDto login(@RequestBody Member member) {
         String memberId = member.getUsername();
         String password = member.getPassword();
-        TokenInfo tokenInfo = memberService.login(memberId, password);
-        return tokenInfo;
+        TokenDto tokenDto = memberService.login(memberId, password);
+        return tokenDto;
     }
 
     @PostMapping("join")
@@ -37,10 +38,10 @@ public class MemberController {
         return new ResponseEntity<>("회원가입 완료", HttpStatus.OK);
     }
 
-    @PostMapping("/api/v1/accessToken")
-    public TokenInfo reissueAccessToken(@RequestBody String token) {
-        TokenInfo tokenInfo = memberService.reissueAccessToken(token);
-        return tokenInfo;
+    @PostMapping("accessToken")
+    public TokenDto reissueAccessToken(@RequestBody Map<String, String> map) {
+        TokenDto tokenDto = memberService.reissueAccessToken(map.get("token"));
+        return tokenDto;
     }
 
     // user 권한만 접근 가능
