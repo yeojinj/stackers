@@ -42,8 +42,8 @@ public class VideoService {
         FFmpegBuilder builder = new FFmpegBuilder()
             .overrideOutputFiles(true)          // 썸네일 파일 존재할 경우 덮어쓰기
             .setInput(videoPath)                // 영상 파일 경로
-            .addOutput(thumbnailPath + "thumb.png")     // 썸네일 추출 절대 경로
-
+            .addOutput(thumbnailPath + "thumb.png")   // 썸네일 추출 절대 경로
+            .addExtraArgs("-ss", "00:00:01")            // 썸네일 추출 시작점 ([영상 길이 / 10]으로 10개 뽑을 예정)
             .setFrames(1)
             .done();
 
