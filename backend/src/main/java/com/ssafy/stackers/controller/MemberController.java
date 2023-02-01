@@ -2,6 +2,7 @@ package com.ssafy.stackers.controller;
 
 import com.ssafy.stackers.auth.PrincipalDetails;
 import com.ssafy.stackers.model.Member;
+import com.ssafy.stackers.model.TokenInfo;
 import com.ssafy.stackers.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +21,26 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
+    @PostMapping("/login")
+    public TokenInfo login(@RequestBody Member member) {
+        String memberId = member.getUsername();
+        String password = member.getPassword();
+        TokenInfo tokenInfo = memberService.login(memberId, password);
+        return tokenInfo;
+    }
+
     @PostMapping("join")
     public ResponseEntity<String> join(@RequestBody Member member) {
         memberService.checkUsernameDuplication(member);
 
         memberService.userJoin(member);
         return new ResponseEntity<>("회원가입 완료", HttpStatus.OK);
+    }
+
+    @PostMapping("/api/v1/accessToken")
+    public TokenInfo reissueAccessToken(@RequestBody String token) {
+        TokenInfo tokenInfo = memberService.reissueAccessToken(token);
+        return tokenInfo;
     }
 
     // user 권한만 접근 가능

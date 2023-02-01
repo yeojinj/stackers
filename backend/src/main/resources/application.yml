@@ -18,6 +18,10 @@ spring:
   http:
     multipart:
       maxFileSize: 500MB
+jwt:
+  secret-key: secret-key-lalala-lululu-fucking-error-WeakKeyException-not-secure-enough
+  token-validity-in-sec: 10 # 1??
+  refresh-token-validity-in-sec: 604800  # ???
 logging:
   level:
     org:
