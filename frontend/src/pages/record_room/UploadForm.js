@@ -31,7 +31,7 @@ function UploadForm(props) {
   return (
     <div className="container">
       <form className="left stack" onSubmit={handleSubmit}>
-        <video className="stackVideo" src={props.src} />
+        <video className="stackVideo" src={props.src.src} controls />
         <div className="item">노래 제목</div>
         <input
           type="text"

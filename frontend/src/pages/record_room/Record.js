@@ -25,9 +25,9 @@ function Record(props) {
   return (
     <div className="record">
       <ReactMediaRecorder
-        onStop={(blobUrl, blob) => {
-          console.log(blobUrl + blob)
-          setStack(blob)
+        onStop={async (blobUrl, blob) => {
+          let objectURL = await URL.createObjectURL(blob)
+          setStack(objectURL)
         }}
         video
         blobPropertyBag={{
@@ -55,20 +55,6 @@ function Record(props) {
                 <button
                   onClick={() => {
                     stopRecording()
-                    // const mediaBlob = fetch(mediaBlobUrl).then((r) => r.blob())
-                    // const url = URL.createObjectURL(mediaBlob)
-
-                    // const title = Date.now()
-                    // const myFile = new File([mediaBlob], { title } + '.mp4', {
-                    //   type: 'video/mp4',
-                    // })
-                    // const formData = new FormData() // preparing to send to the server
-
-                    // formData.append('file', myFile) // preparing to send to the server
-
-                    // console.log('after buttond')
-                    // console.log(formData)
-                    // setStack(formData)
                   }}
                 >
                   Stop Recording

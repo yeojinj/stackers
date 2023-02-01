@@ -10,7 +10,6 @@ const Tag = () => {
       const updatedTagList = [...tagList]
       updatedTagList.push(tagItem)
       setTagList(updatedTagList)
-      console.log('2' + tagList)
       setTagItem('')
     }
   }
