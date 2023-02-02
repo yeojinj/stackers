@@ -47,9 +47,7 @@ public class MemberService {
             .imgPath("path")
             .isResign(false)
             .build();
-        System.out.println(m);
         memberRepository.save(m);
-        System.out.println("@");
     }
 
     @Transactional(readOnly = true)

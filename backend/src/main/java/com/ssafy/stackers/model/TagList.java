@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -23,4 +24,10 @@ public class TagList {
     @ManyToOne
     @JoinColumn(name = "station_id")
     private Station station;
+
+    @Builder
+    public TagList(Tag tag, Station station) {
+        this.tag = tag;
+        this.station = station;
+    }
 }
