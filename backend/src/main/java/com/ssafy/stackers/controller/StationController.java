@@ -123,7 +123,8 @@ public class StationController {
         String loginUsername = principal.getUsername();
 
         // 로그인 되어 있는 유저 정보 가져오기 -> 로그인 되어 있지 않다면 오류 반환
-        Member loginMember = memberRepository.findByUsername(loginUsername);
+        Member loginMember = memberRepository.findByUsername(loginUsername)
+            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         return loginMember;
     }
 

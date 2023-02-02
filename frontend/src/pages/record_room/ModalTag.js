@@ -4,14 +4,9 @@ const Tag = () => {
   const [tagItem, setTagItem] = useState('')
   const [tagList, setTagList] = useState([])
 
-  const onKeyPress = (e) => {
-    console.log(tagList)
-    if (e.target.value.length !== 0 && e.key === 'Enter') {
-      const updatedTagList = [...tagList]
-      updatedTagList.push(tagItem)
-      setTagList(updatedTagList)
-      setTagItem('')
-    }
+  const uploadTagHandler = () => {
+    setTagList((tagList) => [...tagList, tagItem])
+    setTagItem('')
   }
 
   const deleteTagItem = (e) => {
@@ -21,6 +16,7 @@ const Tag = () => {
     )
     setTagList(filteredTagList)
   }
+
   return (
     <div>
       <div>
@@ -30,8 +26,17 @@ const Tag = () => {
           tabIndex={2}
           onChange={(e) => setTagItem(e.target.value)}
           value={tagItem}
-          onKeyUp={onKeyPress}
         />
+        {/* onKeyDown이 이슈가 많아서 버튼 이벤트와 함께 사용 & 하지만, 보이지는 않게 설정함 */}
+        <button
+          style={{ display: 'none' }}
+          onClick={(e) => {
+            e.preventDefault()
+            uploadTagHandler()
+          }}
+        >
+          upload!
+        </button>
         {tagList.map((tagItem, index) => {
           return (
             <div key={index}>
