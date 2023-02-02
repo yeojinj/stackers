@@ -38,8 +38,6 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
-    // https://mvnrepository.com/artifact/net.bramp.ffmpeg/ffmpeg
-    implementation group: 'net.bramp.ffmpeg', name: 'ffmpeg', version: '0.1'
 
 }
 

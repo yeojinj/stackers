@@ -1,6 +1,7 @@
 package com.ssafy.stackers.controller;
 
 import com.ssafy.stackers.auth.PrincipalDetails;
+import com.ssafy.stackers.exception.CustomException;
 import com.ssafy.stackers.model.Comment;
 import com.ssafy.stackers.model.Heart;
 import com.ssafy.stackers.model.Instrument;
@@ -15,10 +16,9 @@ import com.ssafy.stackers.service.InstrumentService;
 import com.ssafy.stackers.service.StationService;
 import com.ssafy.stackers.service.TagService;
 import com.ssafy.stackers.service.VideoService;
+import com.ssafy.stackers.utils.error.ErrorCode;
 import java.io.IOException;
-import java.util.Arrays;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -117,7 +117,8 @@ public class StationController {
         String loginUsername = principal.getUsername();
 
         // 로그인 되어 있는 유저 정보 가져오기 -> 로그인 되어 있지 않다면 오류 반환
-        Member loginMember = memberRepository.findByUsername(loginUsername);
+        Member loginMember = memberRepository.findByUsername(loginUsername)
+            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         return loginMember;
     }
 
