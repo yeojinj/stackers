@@ -1,57 +1,54 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import '../../styles/searchview.css'
 import StationListItem from '../../components/station/StationListItem'
 
-const TabMenu = styled.ul`
-  color: rgb(232, 234, 237);
-  font-weight: bold;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  list-style: none;
-
-  .submenu {
-    // 기본 Tabmenu 에 대한 CSS를 구현
-    display: flex;
-    /* justify-content: space-between;
-    width: 380px;
-    heigth: 30px; */
-    width: calc(100% / 3);
-    padding: 10px 10px 0px 10px;
-    font-size: 21px;
-    transition: 0.5s;
-  }
-
-  .focused {
-    //선택된 Tabmenu 에만 적용되는 CSS를 구현
-    background-color: rgb(255, 255, 255);
-    color: rgb(21, 20, 20);
-  }
-
-  & div.desc {
-    text-align: center;
-  }
-`
-
-const Desc = styled.div`
-  text-align: center;
-  margin-top: 36px;
-`
-
+// 인기 탭에서는 검색 결과 (비디오 8개, 계정 4개) 자르기 -> 추후에 추가
 function SearchView() {
   const [currentTab, clickTab] = useState(0)
+
   const searchResults = () => {
-    const resultsList = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-    return resultsList.map((result, i) => {
-      return (
-        <div key={i}>
-          <StationListItem />
+    const resultsListVideo = [1, 2, 3, 4, 5, 6, 7, 8]
+    const resultsListAccount = [1, 2, 3, 4]
+
+    return (
+      <>
+        <div className="popular-tap">
+          <div className="popular-title">
+            <span
+              style={{
+                marginLeft: '15px',
+                fontSize: '21px',
+                fontWeight: 'bold'
+              }}
+            >
+              동영상
+            </span>
+            <span style={{ color: 'rgba(38, 38, 38, 1)' }}>더 알아보기</span>
+          </div>
+          <div className="popular-video">
+            {resultsListVideo.map((result, i) => {
+              return (
+                <div key={i}>
+                  <StationListItem isSearch={true} />
+                </div>
+              )
+            })}
+          </div>
         </div>
-      )
-    })
+        <div className="popular-tap">
+          {/* 동영상, 더알아보기가 왜 옆에서 보일까요~? */}
+          <p className="popular-title">
+            <span>계정</span>
+            <span style={{ textAlign: 'right' }}>더 알아보기</span>
+          </p>
+          {resultsListAccount.map((result, i) => {
+            return <div key={i}>계정</div>
+          })}
+        </div>
+      </>
+    )
   }
 
   const menuArr = [
@@ -61,8 +58,6 @@ function SearchView() {
   ]
 
   const selectMenuHandler = (index) => {
-    // parameter로 현재 선택한 인덱스 값을 전달해야 하며, 이벤트 객체(event)는 쓰지 않는다
-    // 해당 함수가 실행되면 현재 선택된 Tab Menu 가 갱신.
     clickTab(index)
   }
 
@@ -71,7 +66,7 @@ function SearchView() {
       <Header />
       <div className="result">
         <div className="result-tap">
-          <TabMenu>
+          <div className="tapmenu-ul">
             {menuArr.map((el, index) => (
               <li
                 key={el.i}
@@ -81,9 +76,9 @@ function SearchView() {
                 {el.name}
               </li>
             ))}
-          </TabMenu>
+          </div>
         </div>
-        <Desc>{menuArr[currentTab].content}</Desc>
+        <div className="tab-content">{menuArr[currentTab].content}</div>
       </div>
       <Footer />
     </div>
