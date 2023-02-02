@@ -14,4 +14,5 @@ public class StationDto {
     private boolean isComplete;
     private boolean isDelete;
     private List<String> tags;
+    private Long prevStationId;
 }
