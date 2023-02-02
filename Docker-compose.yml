@@ -1,0 +1,54 @@
+# 필요한 것들 볼륨 설정
+
+version: "3.7"
+
+services:
+  mariadb:
+    container_name: mariadb
+    image: mariadb:10
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mariadb/conf.d:/etc/mysql/conf.d
+      - ./mariadb/data:/var/lib/mysql
+      - ./mariadb/initdb.d:/docker-entrypoint-initdb.d
+    env_file: .env
+    environment:
+      TZ: Asia/Seoul
+    networks:
+      - stackers
+    restart: always
+  backend:
+    container_name: backend
+    build:
+      context: ./backend/
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+    depends_on:
+      - mariadb
+    networks:
+      - stackers
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    networks:
+      - stackers
+  nginx:
+    container_name: nginx
+    restart: always
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    networks:
+      - stackers
+
+networks:
+  stackers:
+    driver: bridge

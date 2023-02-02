@@ -1,9 +1,9 @@
 spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://mariadb:3306/stackers?useSSL=false
     password: root
     username: root
-    url: jdbc:mysql://localhost/stackers
   servlet:
     multipart:
       max-file-size: 500MB
