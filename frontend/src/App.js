@@ -2,7 +2,8 @@ import React from 'react'
 import MainRoom from './pages/main_room/MainRoom'
 import RecordRoom from './pages/record_room/RecordRoom'
 import StationRoom from './pages/station_room/stationview/StationRoom'
-import LogIn from './pages/sign_folder/LogIn'
+import LogIn from './pages/sign_folder/LogIn/LogIn'
+import SignUp from './pages/sign_folder/SignUp/SignUp'
 import SearchView from './pages/searchview/SearchView'
 import { Link, Route, Routes } from 'react-router-dom'
 
@@ -22,6 +23,9 @@ function App() {
         <li>
           <Link to="/LogIn">LogIn</Link>
         </li>
+        <li>
+          <Link to="/SignUp">SignUp</Link>
+        </li>
       </ul>
       <Routes>
         <Route path="/MainRoom" element={<MainRoom />} />
@@ -29,6 +33,7 @@ function App() {
         <Route path="/StationRoom" element={<StationRoom />} />
         <Route path="/LogIn" element={<LogIn />} />
         <Route path="/SearchView" element={<SearchView />} />
+        <Route path="SignUp" element={<SignUp />} />
       </Routes>
     </div>
   )
