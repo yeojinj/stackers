@@ -5,6 +5,8 @@ import logo from '../../assets/logo.svg'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import naverLogo from './naverLogo.svg'
+import kakaoLogo from './kakaoLogo.png'
+import GoogleLogo from './GoogleLogo.png'
 
 function LogIn() {
   return (
@@ -35,35 +37,76 @@ function LogIn() {
 
         <Button
           variant="contained"
+          className="LogIn-button"
           style={{
             width: '390px',
             height: '55px',
             backgroundColor: 'rgba(217, 217, 217, 1)',
-            color: 'black'
+            color: 'black',
+            marginBottom: '30px'
           }}
         >
           로그인
         </Button>
-        <div>
+        <div className="SNS-LogIn-buttons">
           <Button
             variant="contained"
             style={{
               width: '390px',
               height: '55px',
               backgroundColor: '#00c73c',
+              color: 'black',
+              marginBottom: '5px'
+            }}
+          >
+            <div className="div-LogIn-Naver">
+              <img src={naverLogo} alt="naverLogo" className="Logo-Naver" />
+              <b style={{ color: 'white' }}>네이버</b>
+              <b style={{ color: 'white' }}>로그인</b>
+            </div>
+          </Button>
+          <Button
+            variant="contained"
+            style={{
+              width: '390px',
+              height: '55px',
+              backgroundColor: '#FEE500',
+              color: 'black',
+              marginBottom: '5px'
+            }}
+          >
+            <div className="div-LogIn-Kakao ">
+              <img src={kakaoLogo} alt="kakaoLogo" className="Logo-Kakao" />
+              <p>카카오</p>
+              <p>로그인</p>
+            </div>
+          </Button>
+          <Button
+            variant="contained"
+            style={{
+              width: '390px',
+              height: '55px',
+              backgroundColor: '#FFFFFF',
               color: 'black'
             }}
           >
-            <img
-              src={naverLogo}
-              alt="naverLogo"
-              style={{
-                width: '15px',
-                color: 'white'
-              }}
-            />
-            네이버 로그인
+            <div className="div-LogIn-Google">
+              <img src={GoogleLogo} alt="GoogleLogo" className="Logo-Google" />
+              <p style={{ margin: '0 auto 0 auto' }}>Sign in with Google</p>
+            </div>
           </Button>
+        </div>
+        <div className="div-LogIn-footer">
+          <p style={{ margin: '0 20px 0 0 ' }}>계정이 없으신가요?</p>
+          <a
+            href="/LogIn"
+            onClick={(event) => {
+              event.preventDefault()
+            }}
+            className="move-to-SignUp"
+          >
+            회원가입
+          </a>
         </div>
       </div>
     </div>

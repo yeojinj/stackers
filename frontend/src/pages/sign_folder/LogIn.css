@@ -2,6 +2,7 @@
   border: 1px solid black;
   width: 490px;
   height: 705px;
+  border-radius: 20px;
 }
 
 .LogIn-logo {
@@ -20,4 +21,56 @@
   width: 390px;
   margin: 0 auto 30px auto;
   display: flex;
+}
+
+.SNS-LogIn-buttons {
+  margin-bottom: 42px;
+}
+
+.div-LogIn-Naver {
+  display: flex;
+  width: 100%;
+  margin: '0 30% 0 30%';
+  justify-content: space-between;
+}
+
+.Logo-Naver {
+  width: 15px;
+  color: white;
+}
+
+.div-LogIn-Kakao {
+  display: flex;
+  width: 100%;
+  margin: '0 30% 0 30%';
+  justify-content: space-between;
+}
+
+.Logo-Kakao {
+  width: 20px;
+  height: 20px;
+  margin: auto 0 auto 0;
+}
+
+.div-LogIn-Google {
+  display: flex;
+  width: 100%;
+}
+
+.Logo-Google {
+  width: 24px;
+  height: 24px;
+  margin: auto 0 auto 0;
+  color: white;
+}
+
+.div-LogIn-footer {
+  display: flex;
+  margin: auto 0 auto;
+  justify-content: center;
+}
+
+.move-to-SignUp {
+  color: rgba(172, 0, 143, 1);
+  text-decoration: none;
 }

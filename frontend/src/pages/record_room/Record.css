@@ -11,7 +11,7 @@
   margin: auto;
   flex-wrap: wrap;
 }
-div {
+.div {
   border: 1px solid blue;
   text-align: center;
 }
