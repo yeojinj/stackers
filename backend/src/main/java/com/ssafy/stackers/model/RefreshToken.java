@@ -27,12 +27,6 @@ public class RefreshToken {
         this.token = token;
     }
 
-    public RefreshToken(Long id, String userId, String token) {
-        this.id = id;
-       this.userId = userId;
-        this.token = token;
-    }
-
     public static RefreshToken createToken(String userId, String token) {
         return new RefreshToken(userId, token);
     }
