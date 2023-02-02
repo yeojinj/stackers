@@ -62,9 +62,8 @@ public class StationController {
         throws IOException {
 
         // 이전 스테이션 정보가 있는지 확인
-        if(stationDto.getPrevStationId() != -1){
-            Station prevStation = stationService.findById(stationDto.getPrevStationId());
-            if(prevStation == null){
+        if (stationDto.getPrevStationId() != -1) {
+            if (!stationService.existsById(stationDto.getPrevStationId())) {
                 return new ResponseEntity<>("이전 스테이션이 존재하지 않음", HttpStatus.NOT_FOUND);
             }
         }
@@ -72,9 +71,9 @@ public class StationController {
         Member loginMember = null;
 
         // 로그인 되어 있는 유저 정보 가져오기 -> 로그인 되어 있지 않다면 오류 반환
-        try{
+        try {
             loginMember = testForLoginMember(authentication);
-        } catch (CustomException e){
+        } catch (CustomException e) {
             System.out.println(e.getClass().getName());
             return new ResponseEntity<>(ErrorCode.INVALID_AUTH_TOKEN, HttpStatus.NOT_FOUND);
         }
@@ -83,9 +82,6 @@ public class StationController {
         Video video = videoService.uploadVideo(file);
         // 스테이션 저장
         Station uploadedStation = stationService.save(stationDto, video, loginMember);
-
-        // 태그 리스트 저장
-        log.info("[스테이션 업로드] 저장된 : {}", uploadedStation);
 
         return new ResponseEntity<>("스테이션 업로드 성공", HttpStatus.OK);
     }
@@ -127,6 +123,4 @@ public class StationController {
             .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         return loginMember;
     }
-
-
 }
