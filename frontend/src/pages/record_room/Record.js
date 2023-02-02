@@ -26,8 +26,7 @@ function Record(props) {
     <div className="record">
       <ReactMediaRecorder
         onStop={async (blobUrl, blob) => {
-          let objectURL = await URL.createObjectURL(blob)
-          setStack(objectURL)
+          await setStack(blob)
         }}
         video
         blobPropertyBag={{

@@ -1,7 +1,9 @@
 package com.ssafy.stackers.auth;
 
+import com.ssafy.stackers.exception.CustomException;
 import com.ssafy.stackers.model.Member;
 import com.ssafy.stackers.repository.MemberRepository;
+import com.ssafy.stackers.utils.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,10 +21,8 @@ public class PrincipalDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("[PrincipalDetailsService] loadUserByUsername {}", username);
-        Member memberEntity = memberRepository.findByUsername(username);
-        if (memberEntity == null) {
-            throw new UsernameNotFoundException("Unauthorized");
-        }
+        Member memberEntity = memberRepository.findByUsername(username)
+            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         return new PrincipalDetails(memberEntity);
     }
 

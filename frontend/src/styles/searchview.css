@@ -4,7 +4,7 @@
 }
 
 .result {
-  width: 1280px;
+  width: 1128px;
   margin-top: 0px;
   margin-bottom: 271px;
   margin-left: auto;
@@ -15,10 +15,54 @@
 }
 
 .result-tap {
-  width: 1280px;
+  width: 1128px;
   height: 76px;
   display: flex;
-  /* align-items: flex-end; */
+  align-items: center;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 
+.tapmenu-ul {
+  color: rgb(232, 234, 237);
+  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+}
+
+.submenu {
+  display: flex;
+  width: calc(100% / 3);
+  padding: 10px 10px 10px 10px;
+  font-size: 21px;
+  transition: 0.5s;
+}
+
+.focused {
+  background-color: rgb(255, 255, 255);
+  color: rgb(21, 20, 20);
+}
+
+.tab-content {
+  flex-wrap: wrap;  
+  width: 1128px;
+  text-align: center;
+  margin-top: 36px;
+}
+
+.popular-tap {
+  flex-wrap: wrap;
+}
+
+.popular-video {
+  margin-left: 15px;
+}
+
+.popular-title {
+  /* margin-left: 15px;
+  font-size: 21px;
+  font-weight: bold; */
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 19px;
+}

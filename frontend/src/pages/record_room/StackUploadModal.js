@@ -7,9 +7,7 @@ function StackUploadModal(props) {
   const handleClose = () => {
     props.handle()
   }
-  console.log('stack upload modal setopen')
-  console.log(props)
-  const stackUrl = props.src
+  const stackUrl = props
   return (
     <div className="modalBox">
       <div className="modalHeader">

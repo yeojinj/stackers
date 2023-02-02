@@ -6,6 +6,14 @@ import PhotoCameraFrontIcon from '@mui/icons-material/PhotoCameraFront'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import Modal from '@mui/material/Modal'
 
+function isEmptyObj(obj) {
+  if (obj.constructor === Object && Object.keys(obj).length === 0) {
+    return true
+  }
+
+  return false
+}
+
 function RecordRoom() {
   // const navigate = useNavigate()
 
@@ -14,7 +22,7 @@ function RecordRoom() {
     // navigate(-1)
   }
   const [open, setOpen] = useState(false)
-  const [stack, setStack] = useState({ src: null })
+  const [stack, setStack] = useState({})
   const handleOpen = () => {
     setOpen(true)
   }
@@ -53,7 +61,9 @@ function RecordRoom() {
             </button>
             <button
               onClick={() => {
-                handleOpen()
+                if (!isEmptyObj(stack)) {
+                  handleOpen()
+                }
               }}
             >
               업로드
