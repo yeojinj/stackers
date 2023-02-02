@@ -8,13 +8,14 @@ function UploadForm(props) {
   const handleClose = () => {
     props.handle()
   }
+  const object = props.src.src.src
   const [values, setValues] = useState({
+    stack: object,
     music: '',
     content: '',
-    instName: '',
     scope: 'public'
   })
-
+  const filedownloadlink = window.URL.createObjectURL(object)
   const handleChange = (e) => {
     setValues({
       ...values,
@@ -23,15 +24,16 @@ function UploadForm(props) {
   }
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (!values.content || !values.instName || !values.music || !values.scope) {
+    if (!values.content || !values.music || !values.scope) {
       alert('빈칸을 입력해주세요')
+    } else {
+      handleClose()
     }
-    handleClose()
   }
   return (
     <div className="container">
       <form className="left stack" onSubmit={handleSubmit}>
-        <video className="stackVideo" src={props.src.src} controls />
+        <video className="stackVideo" src={filedownloadlink} controls />
         <div className="item">노래 제목</div>
         <input
           type="text"
@@ -39,6 +41,11 @@ function UploadForm(props) {
           value={values.music}
           onChange={handleChange}
         ></input>
+        {filedownloadlink && (
+          <a href={filedownloadlink} download>
+            Download
+          </a>
+        )}
       </form>
       <div className="right">
         <form onSubmit={handleSubmit}>
@@ -52,16 +59,10 @@ function UploadForm(props) {
           <div className="thumbnailForm">썸네일</div>
           <div className="tagForm">태그</div>
           <Tag />
-          {/* <input type="text" name="tagName" onKeyUp={handleTag}></input> */}
           <div className="container">
             <div className="left">
               <div className="instForm">연주 악기</div>
-              <input
-                type="text"
-                name="instName"
-                value={values.instName}
-                onChange={handleChange}
-              ></input>
+              <Tag />
             </div>
             <div className="right">
               <div className="scopeForm">공개 범위</div>
