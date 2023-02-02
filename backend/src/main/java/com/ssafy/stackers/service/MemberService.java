@@ -5,6 +5,8 @@ import com.ssafy.stackers.config.jwt.JwtTokenProvider;
 import com.ssafy.stackers.exception.CustomException;
 import com.ssafy.stackers.model.Member;
 import com.ssafy.stackers.model.RefreshToken;
+import com.ssafy.stackers.model.dto.JoinDto;
+import com.ssafy.stackers.model.dto.LoginDto;
 import com.ssafy.stackers.model.dto.TokenDto;
 import com.ssafy.stackers.repository.MemberRepository;
 import com.ssafy.stackers.repository.RefreshTokenRepository;
@@ -33,27 +35,37 @@ public class MemberService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder = null;
 
     @Transactional
-    public void userJoin(Member member) {
-        Member m = Member.builder().username(member.getUsername())
-            .password(bCryptPasswordEncoder.encode(member.getPassword()))
-            .roles("ROLE_USER").build();
+    public void userJoin(JoinDto joinDto) {
+        checkUsernameDuplication(joinDto.getUsername());
+
+        Member m = Member.builder().username(joinDto.getUsername())
+            .password(bCryptPasswordEncoder.encode(joinDto.getPassword()))
+            .roles("ROLE_USER")
+            .nickname(joinDto.getUsername())
+            .email(joinDto.getEmail())
+            .bio("")
+            .imgPath("path")
+            .isResign(false)
+            .build();
+        System.out.println(m);
         memberRepository.save(m);
+        System.out.println("@");
     }
 
     @Transactional(readOnly = true)
-    public void checkUsernameDuplication(Member member) {
-        boolean usernameDuplicate = memberRepository.existsByUsername(member.getUsername());
+    public void checkUsernameDuplication(String username) {
+        boolean usernameDuplicate = memberRepository.existsByUsername(username);
         if (usernameDuplicate) {
             throw new CustomException(ErrorCode.USER_ALREADY_EXIST);
         }
     }
 
     @Transactional
-    public TokenDto login(String memberId, String password) {
+    public TokenDto login(LoginDto loginDto) {
         // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
         // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
         UsernamePasswordAuthenticationToken authenticationToken =
-            new UsernamePasswordAuthenticationToken(memberId, password);
+            new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
 
         // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
         // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
@@ -64,6 +76,9 @@ public class MemberService {
         TokenDto tokenDto = new TokenDto(
             JwtProperties.TOKEN_PREFIX + jwtTokenProvider.createAccessToken(authentication),
             JwtProperties.TOKEN_PREFIX + jwtTokenProvider.issueRefreshToken(authentication));
+
+        // lastLogin 갱신
+        setLastLogin(loginDto.getUsername());
 
         return tokenDto;
     }
@@ -89,7 +104,7 @@ public class MemberService {
         // 재발행해서 저장
         String newToken = jwtTokenProvider.createRefreshToken(authentication);
         refreshToken.changeToken(newToken);
-        refreshTokenRepository.save(refreshToken);
+//        refreshTokenRepository.save(refreshToken);
 
         // 3. 인증 정보를 기반으로 JWT 토큰
         TokenDto tokenDto = new TokenDto(
@@ -104,5 +119,14 @@ public class MemberService {
             return token.substring(JwtProperties.TOKEN_PREFIX.length());
         }
         throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
+    }
+
+    public Member findByUsername(String username) {
+        return memberRepository.findByUsername(username)
+            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+    }
+
+    private void setLastLogin(String username) {
+        memberRepository.setLastLogin(username);
     }
 }
