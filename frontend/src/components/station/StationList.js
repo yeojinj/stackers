@@ -8,15 +8,18 @@ StationList.propTypes = {
 }
 
 function StationList({ isRanking }) {
+  const stationItem = [1, 2, 3, 4, 5]
   return (
     // 5개씩 3개 -> 15개 스테이션 정렬
     <>
       <div className="station-list">
-        <StationListItem isRanking={isRanking} />
-        <StationListItem isRanking={isRanking} />
-        <StationListItem isRanking={isRanking} />
-        <StationListItem isRanking={isRanking} />
-        <StationListItem isRanking={isRanking} />
+        {stationItem.map(() => {
+          return (
+            <>
+              <StationListItem isRanking={isRanking} />
+            </>
+          )
+        })}
         <KeyboardDoubleArrowRightIcon />
       </div>
     </>
