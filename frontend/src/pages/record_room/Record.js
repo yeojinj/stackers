@@ -3,21 +3,20 @@ import React, { useRef, useState, useEffect } from 'react'
 import './Record.css'
 import { ReactMediaRecorder } from 'react-media-recorder'
 
-const VideoPreview = ({ stream }) => {
-  const videoRef = useRef(null)
-
-  useEffect(() => {
-    if (videoRef.current && stream) {
-      videoRef.current.srcObject = stream
-    }
-  }, [stream])
-  if (!stream) {
-    return null
-  }
-  return <video ref={videoRef} width={500} height={500} autoPlay controls />
-}
-
 function Record(props) {
+  const VideoPreview = ({ stream }) => {
+    const videoRef = useRef(null)
+
+    useEffect(() => {
+      if (videoRef.current && stream) {
+        videoRef.current.srcObject = stream
+      }
+    }, [stream])
+    if (!stream) {
+      return null
+    }
+    return <video ref={videoRef} width={500} height={500} autoPlay controls />
+  }
   const [enable, setEnable] = useState(true)
   const setStack = (src) => {
     props.stack(src)
