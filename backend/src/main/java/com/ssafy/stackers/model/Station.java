@@ -33,6 +33,9 @@ public class Station {
     @Column(name = "remain_depth", nullable = false)
     private int remainDepth;
 
+    @Column(name = "prev_station_id", nullable = false)
+    private Long prevStationId;
+
     @Column(name = "is_public", nullable = false)
     private boolean isPublic = true;
 
@@ -42,7 +45,7 @@ public class Station {
     @Column(name = "is_delete", nullable = false)
     private boolean isDelete = false;
 
-    @ManyToOne    // 스테이션 당 무조건 1명의 writer 만 가짐, column 이름은 어떻게?
+    @ManyToOne(fetch = FetchType.LAZY)    // 스테이션 당 무조건 1명의 writer 만 가짐, column 이름은 어떻게?
     @JoinColumn(name = "writer_id")
     private Member member;
 
@@ -50,17 +53,18 @@ public class Station {
     @JoinColumn(name = "video_id")
     private Video video;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "instrument_id")
     private Instrument instrument;
 
     @Builder
-    public Station(String content, String music, int heartCnt, int remainDepth, boolean isPublic,
+    public Station(String content, String music, int heartCnt, int remainDepth, Long prevStationId, boolean isPublic,
         boolean isComplete, boolean isDelete, Member member, Video video, Instrument instrument) {
         this.content = content;
         this.music = music;
         this.heartCnt = heartCnt;
         this.remainDepth = remainDepth;
+        this.prevStationId = prevStationId;
         this.isPublic = isPublic;
         this.isComplete = isComplete;
         this.isDelete = isDelete;
