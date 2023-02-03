@@ -8,6 +8,7 @@ import Modal from '@mui/material/Modal'
 import { ReactMediaRecorder } from 'react-media-recorder'
 import MultiStreamsMixer from 'multistreamsmixer'
 import RecordRTC from 'recordrtc'
+import RecordStation from './RecordStation.js'
 
 function isEmptyObj(obj) {
   if (obj.constructor === Object && Object.keys(obj).length === 0) {
@@ -79,11 +80,11 @@ function RecordRoom() {
 
   const soloStackRef = useRef({})
 
-  function startRecording() {
-    stack0.current.start()
+  function start() {
+    stack0.current.play()
     recorder.startRecording()
   }
-  function stopRecording() {
+  function stop() {
     stack0.current.pause()
     recorder.stopRecording()
   }
@@ -96,7 +97,7 @@ function RecordRoom() {
     soloStackRef.current.srcObject = cameraStream
     soloStackRef.current.play()
     const videoStream = await getVideoStream(stack0)
-    streams = [videoStream, cameraStream]
+    streams = [videoStream, stack.stream()]
     // streams.forEach(s => {
     //   const size = getStreamSize(s);
     //   s.width = size.width;
@@ -105,14 +106,14 @@ function RecordRoom() {
     const mixer = new MultiStreamsMixer(streams)
     mixer.startDrawingFrames()
     const mixedStream = mixer.getMixedStream()
-    output.srcObject = mixedStream
-    output.play()
+    output.current.srcObject = mixedStream
+    output.current.play()
     recorder = RecordRTC(mixedStream, {
       type: 'video',
-      mimeType: 'video/webm',
+      mimeType: 'video/mp4',
       previewStream: function (s) {
-        output.srcObject = s
-        output.play()
+        output.current.srcObject = s
+        output.current.play()
       }
     })
   })()
@@ -128,7 +129,7 @@ function RecordRoom() {
           ></PhotoCameraFrontIcon>
           <InfoOutlinedIcon className="box" onClick={showToolTip} />
         </div>
-        {/* <ReactMediaRecorder
+        <ReactMediaRecorder
           onStop={async (blobUrl, blob) => {
             await setStack(blob)
           }}
@@ -159,7 +160,7 @@ function RecordRoom() {
               </div>
             )
           }}
-        /> */}
+        />
         <div>
           <video ref={stack0} controls>
             <source
@@ -167,13 +168,14 @@ function RecordRoom() {
               src="https://webrtc.github.io/samples/src/video/chrome.webm"
             />
           </video>
-          {/* <Record stack={getVideo}></Record> */}
+          <Record stack={getVideo}></Record>
           <video ref={soloStackRef} crossOrigin="anonymous" />
           <video ref={output} />
+          <RecordStation />
           <p>{status}</p>
         </div>
-        <button onClick={startRecording}>Start Recording</button>
-        <button onClick={stopRecording}>Stop Recording</button>
+        <button onClick={start}>Start Recording</button>
+        <button onClick={stop}>Stop Recording</button>
         <div className="stack">
           <p></p>
           <p></p>
