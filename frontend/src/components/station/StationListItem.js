@@ -10,13 +10,15 @@ StationListItem.propTypes = {
 }
 
 function StationListItem({ isRanking, isSearch }) {
+  // const [autoPlay, setPlay] = useState(false)
+
   // 후에 stationInfo 는 useState 에서 기본 값으로 설정, 받아올 데이터 형식으로 변환하기
   const stationInfo = {
-    video_url: '...',
+    video_url: 'https://webrtc.github.io/samples/src/video/chrome.webm',
     video_description: '비디오 설명이에요 비디오 설명이에요 비디오 설명이에요',
     video_tags: ['#disco', '#music', '#dance', '#music', '#guitar'],
     profile_img: profileTest,
-    account_name: 'apricot',
+    username: 'apricot',
     video_likes: 12000
   }
   // const [info, setInfo] = useState(stationInfo)
@@ -53,7 +55,7 @@ function StationListItem({ isRanking, isSearch }) {
             <div className="profile-box">
               <img className="profile-img" src={stationInfo.profile_img}></img>
             </div>
-            <div className="account-name">{stationInfo.account_name}</div>
+            <div className="account-name">{stationInfo.username}</div>
             <FavoriteBorderIcon
               style={{ width: '17px', height: '17px', marginTop: '3px' }}
             />
@@ -64,15 +66,25 @@ function StationListItem({ isRanking, isSearch }) {
     }
   }
 
+  // const updatePlay = (e) => {
+  //   // console.log(autoPlay)
+  //   setPlay(!autoPlay)
+  //   // console.log(autoPlay)
+  // }
+
+  // useEffect(() => {
+  //   console.log(autoPlay)
+  // }, [autoPlay])
+
   return (
     <div className={isSearch ? 'station-item-search' : 'station-item'}>
-      {/* 컨트롤 바 없애기 */}
       {/* <img src={logo}></img> */}
       <video
         className={isSearch ? 'video-style-search' : 'video-style'}
         src={stationInfo.video_url}
-        controls
-        autoPlay
+        autoPlay={false}
+        // onMouseOver={updatePlay}
+        // onMouseLeave={updatePlay}
         loop
       ></video>
       <IsRanking />

@@ -27,3 +27,21 @@ logging:
       ssafy: INFO
 server:
   port: '5000'
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    disable-swagger-default-url: true
+    display-request-duration: true
+    tags-sorter: alpha
+    operations-sorter: alpha
+    doc-expansion: none
+    syntax-highlight:
+      theme: nord
+    urls-primary-name: TEST API
+    persist-authorization: true
+    query-config-enabled: true
+  pre-loading-enabled: true
+  packages-to-scan: com.ssafy.stackers

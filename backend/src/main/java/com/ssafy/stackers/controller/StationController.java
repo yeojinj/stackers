@@ -19,6 +19,10 @@ import com.ssafy.stackers.service.StationService;
 import com.ssafy.stackers.service.TagService;
 import com.ssafy.stackers.service.VideoService;
 import com.ssafy.stackers.utils.error.ErrorCode;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,11 +39,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
+@Tag(name = "Station", description = "스테이션 관련 API")
 @RestController
-@RequestMapping("station")
+@RequestMapping("api/station")
 public class StationController {
-
-
     @Autowired
     private MemberRepository memberRepository;
 
@@ -55,6 +58,12 @@ public class StationController {
     @Autowired
     private HeartService heartService;
 
+    @Operation(summary = "스테이션 업로드")
+    @ApiResponses( value = {
+        @ApiResponse(responseCode = "200", description = "성공"),
+        @ApiResponse(responseCode = "404", description = "포함되어 있는 엔티티를 찾을 수 없음"),
+        @ApiResponse(responseCode = "400", description = "잘못된 요청")
+    })
     @Secured("ROLE_USER")
     @PostMapping("/upload")
     public ResponseEntity<?> uploadStation(@RequestPart StationDto stationDto,
