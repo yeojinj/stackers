@@ -6,6 +6,7 @@ import com.ssafy.stackers.model.Member;
 import com.ssafy.stackers.model.Station;
 import com.ssafy.stackers.model.Tag;
 import com.ssafy.stackers.model.Video;
+import com.ssafy.stackers.model.dto.StationDetailDto;
 import com.ssafy.stackers.model.dto.StationDto;
 import com.ssafy.stackers.repository.StationRepository;
 import com.ssafy.stackers.utils.error.ErrorCode;
@@ -20,10 +21,8 @@ public class StationService {
 
     @Autowired
     private StationRepository stationRepository;
-
     @Autowired
     private InstrumentService instrumentService;
-
     @Autowired
     private TagService tagService;
     @Autowired
@@ -64,9 +63,34 @@ public class StationService {
         return stationRepository.findById(id).get();
     }
 
-    public boolean existsById(Long id){
+    public boolean existsById(Long id) {
         return stationRepository.existsById(id);
     }
 
+    @Transactional(readOnly = true)
+    public StationDetailDto findDetailById(Long id) {
+        StationDetailDto stationDetailDto = new StationDetailDto();
+        stationRepository.findById(id)
+            .orElseThrow(() -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
+        // 스테이션 엔티티
+        Station station = stationRepository.findById(id).get();
+
+        // 동영상 엔티티
+
+        // 작성자 엔티티
+
+        // 태그 엔티티 -> List<String>
+
+        // 이전 게시글 작성자 -> List<MusicianDto>
+
+        // 이전 게시글 악기 -> List<MusicianDto>
+
+        // 댓글 엔티티 -> List<CommentDetailDto>
+
+        // 댓글 수
+
+
+        return null;
+    }
 
 }

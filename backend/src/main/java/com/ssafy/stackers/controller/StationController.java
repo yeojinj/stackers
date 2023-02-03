@@ -8,6 +8,7 @@ import com.ssafy.stackers.model.Instrument;
 import com.ssafy.stackers.model.Member;
 import com.ssafy.stackers.model.Station;
 import com.ssafy.stackers.model.Video;
+import com.ssafy.stackers.model.dto.StationDetailDto;
 import com.ssafy.stackers.model.dto.StationDto;
 import com.ssafy.stackers.repository.MemberRepository;
 import com.ssafy.stackers.repository.PrevStationRepository;
@@ -31,6 +32,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -123,6 +125,15 @@ public class StationController {
         // station 좋아요 cnt 업데이트
         heartService.update((long) stationId, station.getHeartCnt());
         return new ResponseEntity<>("좋아요 작성 성공", HttpStatus.OK);
+    }
+
+    @GetMapping("/{stationid}")
+    public ResponseEntity<StationDetailDto> getStationDetail(@PathVariable("stationid") int stationId) {
+
+
+
+
+        return null;
     }
 
     public Member testForLoginMember(Authentication authentication) {
