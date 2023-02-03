@@ -40,13 +40,15 @@ public class StationService {
         Station s = Station.builder()
             .content(stationDto.getContent())
             .music(stationDto.getMusic())
-            .heartCnt(0)
-            .remainDepth(3)
+            .remainDepth(stationDto.getRemainDepth())
             .prevStationId((Long) stationDto.getPrevStationId())
-            .isPublic(true)
+            .isPublic(stationDto.isPublic())
             .member(member)
             .video(video)
             .instrument(instrument)
+            .isComplete(stationDto.getRemainDepth() == 0? true : false)
+            .heartCnt(0)
+            .isDelete(false)
             .build();
 
         stationRepository.save(s);
