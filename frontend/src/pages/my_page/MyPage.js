@@ -2,12 +2,67 @@ import { React, useState } from 'react'
 import './MyPage.css'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
+import StationListItem from '../../components/station/StationListItem'
 import profile from '../../assets/profileTest.svg'
 import Button from '@mui/material/Button'
 import MailOutlineIcon from '@mui/icons-material/MailOutline'
 
 function MyPage() {
   const [isfollowing, setIsfollow] = useState(true)
+  const [currentTab, clickTab] = useState(0)
+
+  const resultsListVideo = [
+    { id: 1, isPrivate: true },
+    { id: 2, isPrivate: true },
+    { id: 3, isPrivate: false },
+    { id: 4, isPrivate: true },
+    { id: 5, isPrivate: false },
+    { id: 6, isPrivate: true },
+    { id: 7, isPrivate: true }
+  ]
+  const viewStation = () => {
+    const canView = resultsListVideo.filter((station) => {
+      return !station.isPrivate
+    })
+    return (
+      <>
+        <div className="mystation-tap">
+          <div className="popular-video">
+            {canView.map((result, i) => {
+              return (
+                <div key={i}>
+                  <StationListItem />
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </>
+    )
+  }
+
+  const privateStation = () => {
+    return (
+      <>
+        <div className="mystation-tap">
+          <div className="popular-video">
+            {resultsListVideo.map((result, i) => {
+              return (
+                <div key={i}>
+                  <StationListItem />
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </>
+    )
+  }
+  const menuArr = [
+    { i: 1, name: '공개', content: viewStation() },
+    { i: 2, name: '비공개', content: privateStation() }
+  ]
+
   let followbutton = null
   if (!isfollowing) {
     followbutton = (
@@ -18,43 +73,47 @@ function MyPage() {
   } else if (isfollowing) {
     followbutton = (
       <Button variant="contained" size="small" color="secondary">
-        팔로우
+        팔로잉
       </Button>
     )
   }
   const introduce = `안녕하세요~ 기타로 일상의 행복을 배달하는 기타리스트 @dearsanta입니다.
-문의는 dearsanta@gmail.com으로 부탁드려요~`
+  문의는 dearsanta@gmail.com으로 부탁드려요~`
+
+  const selectMenuHandler = (index) => {
+    clickTab(index)
+  }
   return (
-    <div>
+    <>
       <Header />
       <div className="MyPage">
         <div className="div-profile">
           <div style={{ display: 'flex' }}>
-            <div style={{ marginRight: '50px' }}>
+            <div style={{ marginRight: '53px' }}>
               <img
                 src={profile}
                 alt="profile"
                 style={{ width: '220px', margin: '0px' }}
               />
             </div>
-            <div>
+            <div style={{ marginLeft: '100px' }}>
               <div className="div-profile-notPicture">
                 <div>
                   <b>dearSanta</b>
                   <p>김산타</p>
                   <div className="div-profile-Count">
-                    <p style={{ display: 'flex' }}>
+                    <div style={{ display: 'flex' }}>
                       <p className="profile-Count-content">영상</p>
                       <b>8</b>
-                    </p>
-                    <p style={{ display: 'flex' }}>
+                    </div>
+                    <div style={{ display: 'flex' }}>
                       <p className="profile-Count-content">팔로워</p>
                       <b>13K</b>
-                    </p>
-                    <p style={{ display: 'flex' }}>
+                    </div>
+                    <div style={{ display: 'flex' }}>
                       <p className="profile-Count-content">팔로잉</p>
                       <b>342</b>
-                    </p>
+                    </div>
                   </div>
                   <div
                     style={{
@@ -95,7 +154,7 @@ function MyPage() {
                     </p>
                   </div>
                 </div>
-                <div style={{ display: 'flex' }}>
+                <div style={{ display: 'flex', marginLeft: '100px' }}>
                   <p
                     onClick={(event) => {
                       event.preventDefault()
@@ -117,10 +176,29 @@ function MyPage() {
             </div>
           </div>
         </div>
+        <div>
+          <div className="result">
+            <div className="station-tap">
+              <div className="tapmenu-ul">
+                {menuArr.map((el, index) => (
+                  <li
+                    key={el.i}
+                    className={
+                      index === currentTab ? 'mystation focused' : 'mystation'
+                    }
+                    onClick={() => selectMenuHandler(index)}
+                  >
+                    {el.name}
+                  </li>
+                ))}
+              </div>
+            </div>
+            <div className="tab-content">{menuArr[currentTab].content}</div>
+          </div>
+        </div>
+        <Footer />
       </div>
-
-      <Footer />
-    </div>
+    </>
   )
 }
 
