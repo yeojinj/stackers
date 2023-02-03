@@ -82,7 +82,7 @@ function StationListItem({ isRanking, isSearch }) {
       <video
         className={isSearch ? 'video-style-search' : 'video-style'}
         src={stationInfo.video_url}
-        autoPlay={true}
+        autoPlay={false}
         // onMouseOver={updatePlay}
         // onMouseLeave={updatePlay}
         loop

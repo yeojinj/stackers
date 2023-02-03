@@ -8,6 +8,15 @@ import StationListItem from '../../components/station/StationListItem'
 function SearchView() {
   const [currentTab, clickTab] = useState(0)
 
+  const moveStack = () => {
+    clickTab(currentTab + 2)
+  }
+
+  function moveAccount() {
+    clickTab(currentTab + 1)
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+  }
+
   const searchResults = () => {
     const resultsListVideo = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
     const resultsListAccount = [1, 2, 3, 4, 5, 6, 7]
@@ -18,10 +27,11 @@ function SearchView() {
     return (
       <>
         <div className="popular-tap">
-          <div className="popular-title">
+          <div className="popular-title-video">
             <span className="popular-title-style">동영상</span>
-            {/* 더 알아보기 클릭시 탭 전환... 가능? 하도록 해야지 */}
-            <span className="popular-more">더 알아보기</span>
+            <span className="popular-more" onClick={moveStack}>
+              더 알아보기
+            </span>
           </div>
           <div className="popular-video">
             {cutVideoList.map((result, i) => {
@@ -34,9 +44,11 @@ function SearchView() {
           </div>
         </div>
         <div className="popular-tap">
-          <p className="popular-title">
+          <p className="popular-title-account">
             <span className="popular-title-style">계정</span>
-            <span className="popular-more">더 알아보기</span>
+            <span className="popular-more" onClick={moveAccount}>
+              더 알아보기
+            </span>
           </p>
           {cutAccountList.map((result, i) => {
             return (
@@ -84,6 +96,9 @@ function SearchView() {
               )
             })}
           </div>
+        </div>
+        <div className="stack-result">
+          총 <b>{resultsListVideo.length}</b>건의 스택이 검색되었습니다.
         </div>
       </>
     )

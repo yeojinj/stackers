@@ -15,14 +15,38 @@
 }
 
 .station-center {
-  width: 1079px;
+  width: 1033px;
   height: 375px;
   margin-left: 92px;
   margin-bottom: 100px;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .list-title {
   margin: 0px 0px 18px 0px;
   font-size: 24px;
   font-weight: bold;
+}
+
+.station-scroll {
+  display: flex;
+  float: left;
+  overflow-y: hidden;
+  overflow-x: scroll;
+}
+
+.station-scroll::-webkit-scrollbar {
+  height: 5px; /* 스크롤바의 너비 */
+}
+
+.station-scroll::-webkit-scrollbar-thumb {
+  width: 30%; /* 스크롤바의 길이 */
+  background: rgba(42, 32, 150, 1); /* 스크롤바의 색상 */
+
+  border-radius: 10px;
+}
+
+.station-scroll::-webkit-scrollbar-track {
+  background: rgba(33, 122, 244, 0.1); /*스크롤바 뒷 배경 색상*/
 }

@@ -1,0 +1,16 @@
+.SignUp {
+  width: 500px;
+  height: 1000px;
+  /* border: 1px solid black; */
+  margin: auto;
+}
+
+.div-center {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.SignUp-Input {
+  width: 100%;
+  margin-bottom: 25px;
+}
