@@ -9,11 +9,14 @@ function Header() {
   const navigateToSearchView = () => {
     navigate('/SearchView')
   }
+  const navigateToMain = () => {
+    navigate('/Mainroom')
+  }
 
   return (
     <header className="header">
       <div className="header-container">
-        <img className="logo-img" src={logo}></img>
+        <img className="logo-img" src={logo} onClick={navigateToMain}></img>
         <div>
           {/* 검색창 */}
           <div className="header-search">
