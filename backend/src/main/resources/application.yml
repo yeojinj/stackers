@@ -1,7 +1,7 @@
 spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    password: 1234
+    password: root
     username: root
     url: jdbc:mysql://localhost/stackers
   servlet:
@@ -32,7 +32,7 @@ springdoc:
   api-docs:
     enabled: true
   swagger-ui:
-    path: /docs
+    path: /swagger-ui.html
     disable-swagger-default-url: true
     display-request-duration: true
     tags-sorter: alpha
@@ -44,3 +44,4 @@ springdoc:
     persist-authorization: true
     query-config-enabled: true
   pre-loading-enabled: true
+  packages-to-scan: com.ssafy.stackers
