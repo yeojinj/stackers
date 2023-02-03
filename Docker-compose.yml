@@ -5,14 +5,11 @@ version: "3.7"
 services:
   mariadb:
     container_name: mariadb
-    image: mariadb:10
+    build:
+      context: ./mariadb
+      dockerfile: Dockerfile
     ports:
       - 3306:3306
-    volumes:
-      - ./mariadb/conf.d:/etc/mysql/conf.d
-      - ./mariadb/data:/var/lib/mysql
-      - ./mariadb/initdb.d:/docker-entrypoint-initdb.d
-    env_file: .env
     environment:
       TZ: Asia/Seoul
     networks:
