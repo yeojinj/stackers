@@ -59,6 +59,17 @@
   height: 17.49px;
 }
 
+.autocomplete-box {
+  z-index: 3;
+  height: 50vh;
+  width: 400px;
+  background-color: #fff;
+  position: absolute;
+  top: 45px;
+  border: 2px solid;
+  padding: 15px;
+}
+
 .login-btn {
   width: 111px;
   height: 45px;
