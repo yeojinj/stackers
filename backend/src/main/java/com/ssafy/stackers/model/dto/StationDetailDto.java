@@ -2,7 +2,14 @@ package com.ssafy.stackers.model.dto;
 
 import java.sql.Date;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
+@Builder
+@Setter
+@AllArgsConstructor
 public class StationDetailDto {
 
     private Long id;                // [게시글] 아이디
@@ -28,5 +35,9 @@ public class StationDetailDto {
     private Long prevStationId;     // [게시글] 이전 게시글 아이디
 
     // TODO: 로그인 한 사람(토큰)과 게시글 작성자 비교해서 본인/팔로우 X/팔로우 O 비교해서 버튼 변경해야 함
+
+    public StationDetailDto() {
+    }
+
 
 }
