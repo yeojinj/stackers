@@ -27,6 +27,7 @@ import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
@@ -62,12 +63,13 @@ public class StationController {
     @ApiResponses( value = {
         @ApiResponse(responseCode = "200", description = "성공"),
         @ApiResponse(responseCode = "404", description = "포함되어 있는 엔티티를 찾을 수 없음"),
-        @ApiResponse(responseCode = "400", description = "잘못된 요청")
+        @ApiResponse(responseCode = "400", description = "잘못된 요청"),
+        @ApiResponse(responseCode = "500", description = "서버 오류...마젠타 호출 요청...")
     })
     @Secured("ROLE_USER")
-    @PostMapping("/upload")
-    public ResponseEntity<?> uploadStation(@RequestPart StationDto stationDto,
-        @RequestPart(required = true) MultipartFile file, Authentication authentication)
+    @PostMapping(path = "/upload", consumes =  { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<?> uploadStation(@RequestPart(value = "info", required = true) StationDto stationDto,
+        @RequestPart(value = "file", required = true) MultipartFile file, Authentication authentication)
         throws IOException {
 
         // 이전 스테이션 정보가 있는지 확인
