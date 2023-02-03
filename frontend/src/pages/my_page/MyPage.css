@@ -1,20 +1,15 @@
-.MyPage {
-  width: 80%;
-  height: 1080px;
-  margin: auto;
-}
-
 .div-profile {
-  width: 80%;
   /* height: 600px; */
-  border-bottom: 1px solid black;
+  /* border-bottom: 1px solid black; */
+  width: 1000px;
   margin: auto;
-  padding: 10px 10% 50px 10%;
+  padding: 10px 153px 50px 165px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .div-profile-notPicture {
   display: flex;
-  justify-content: space-between;
+  float: left;
   width: 1000px;
 }
 
@@ -40,4 +35,41 @@
   color: rgba(80, 80, 80, 1);
   padding: 5px;
   border-radius: 10px;
+}
+
+.result {
+  width: 1128px;
+  margin-top: 0px;
+  margin-bottom: 271px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.station-tap {
+  cursor: default;
+  width: 1128px;
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tapmenu-ul {
+  color: rgb(232, 234, 237);
+  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+}
+
+.mystation {
+  display: flex;
+  width: 73px;
+  padding: 10px 10px 10px 10px;
+  font-size: 21px;
+  transition: 0.5s;
+}
+
+.mystation-tap {
+  width: 1128px;
 }
