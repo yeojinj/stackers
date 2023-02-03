@@ -15,6 +15,7 @@
 }
 
 .result-tap {
+  cursor: default;
   width: 1128px;
   height: 76px;
   display: flex;
@@ -59,10 +60,17 @@
   margin-left: 15px;
 }
 
-.popular-title {
+.popular-title-video {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 19px;
+  margin-bottom: 30px;
+}
+
+.popular-title-account {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 36px;
+  margin-bottom: 30px;
 }
 
 .popular-title-style {
@@ -72,10 +80,20 @@
 }
 
 .popular-more {
+  cursor: default;
   color: rgba(38, 38, 38, 1);
 }
 
 .account-result {
-  margin-top: 13px;
+  width: 1128px;
+  margin-top: 62px;
   font-size: 18px;
+  text-align: center;
+}
+
+.stack-result {
+  width: 1128px;
+  margin-top: 62px;
+  font-size: 18px;
+  text-align: center;
 }
