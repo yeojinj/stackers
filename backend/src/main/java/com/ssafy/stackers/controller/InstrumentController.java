@@ -2,6 +2,8 @@ package com.ssafy.stackers.controller;
 
 import com.ssafy.stackers.model.Instrument;
 import com.ssafy.stackers.service.InstrumentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
+@Tag(name = "Instrument", description = "악기 관련 API")
 @RestController
 @RequestMapping("instrument")
 public class InstrumentController {
@@ -19,6 +22,7 @@ public class InstrumentController {
     @Autowired
     private InstrumentService instrumentService;
 
+    @Operation(summary = "악기 업로드")
     @PostMapping
     public ResponseEntity<?> createInstrument(@RequestBody Instrument instrument) {
         instrumentService.save(instrument);

@@ -1,0 +1,43 @@
+.MyPage {
+  width: 80%;
+  height: 1080px;
+  margin: auto;
+}
+
+.div-profile {
+  width: 80%;
+  /* height: 600px; */
+  border-bottom: 1px solid black;
+  margin: auto;
+  padding: 10px 10% 50px 10%;
+}
+
+.div-profile-notPicture {
+  display: flex;
+  justify-content: space-between;
+  width: 1000px;
+}
+
+.div-profile-Count {
+  display: flex;
+  justify-content: space-between;
+  width: 300px;
+}
+
+.profile-Count-content {
+  margin: 0px 5px 0px 0px;
+}
+
+.profile-team {
+  background-color: rgba(227, 95, 173, 1);
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.profile-instrument {
+  background-color: rgba(245, 245, 245, 1);
+  color: rgba(80, 80, 80, 1);
+  padding: 5px;
+  border-radius: 10px;
+}
