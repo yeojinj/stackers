@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @Tag(name = "Instrument", description = "악기 관련 API")
 @RestController
-@RequestMapping("instrument")
+@RequestMapping("api/instrument")
 public class InstrumentController {
 
     @Autowired
