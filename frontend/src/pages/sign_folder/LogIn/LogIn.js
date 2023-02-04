@@ -8,6 +8,7 @@ import naverLogo from './naverLogo.svg'
 import kakaoLogo from './kakaoLogo.png'
 import GoogleLogo from './GoogleLogo.png'
 import { useState } from 'react'
+import axios from 'axios'
 
 function LogIn() {
   const [id, setId] = useState('')
@@ -65,6 +66,22 @@ function LogIn() {
         >
           로그인
         </Button>
+        <button
+          onClick={() => {
+            axios({
+              method: 'post',
+              url: '/api/login',
+              data: {
+                username: id,
+                password: password
+              }
+            }).then((response) => {
+              console.log(response)
+            })
+          }}
+        >
+          axios 테스트용
+        </button>
         <div className="SNS-LogIn-buttons">
           <Button
             variant="contained"
