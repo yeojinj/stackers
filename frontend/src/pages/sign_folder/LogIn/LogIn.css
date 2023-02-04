@@ -1,8 +1,24 @@
+.login-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.8);
+}
 .LogIn {
   border: 1px solid black;
+  background-color: white;
   width: 490px;
   height: 705px;
   border-radius: 20px;
+  z-index: 10;
+  position: absolute;
+  /* 로그인 모달 위치 */
+  top: 360px;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .LogIn-logo {
