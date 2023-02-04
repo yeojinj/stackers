@@ -1,6 +1,6 @@
 package com.ssafy.stackers.model.dto;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +20,7 @@ public class StationDetailDto {
     private String writerImgName;         // [작성자] 프로필 사진 파일명
     private String content;         // [게시글] 설명
     private List<String> tags;            // [게시글] 태그 목록
-    private Date regTime;           // [게시글] 게시 시간
+    private LocalDateTime regTime;           // [게시글] 게시 시간
     private boolean isPublic;       // [게시글] 공개 여부
     private boolean isComplete;     // [게시글] 완성 여부
     private boolean isDelete;       // [게시글] 삭제 여부
