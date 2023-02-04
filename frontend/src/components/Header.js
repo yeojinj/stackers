@@ -44,13 +44,15 @@ function Header() {
     } else {
       return (
         <>
-          <button className="login-btn" onClick={navigateToLogin}>
+          {/* onclick 시 navigateToLogin 함수 주석해제, 실행 */}
+          <button className="login-btn" onClick={() => setLogin(!login)}>
             로그인
           </button>
         </>
       )
     }
   }
+
   const showDropDownList = () => {
     if (inputValue === '') {
       setIsHaveInputValue(false)
@@ -107,10 +109,10 @@ function Header() {
   const navigateToMain = () => {
     navigate('/Mainroom')
   }
-  const navigateToLogin = () => {
-    setLogin(true)
-    navigate('/Login')
-  }
+  // const navigateToLogin = () => {
+  //   setLogin(true)
+  //   navigate('/Login')
+  // }
 
   return (
     <header className="header">
