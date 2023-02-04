@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import logo from '../assets/logo.svg'
 import search from '../assets/search.svg'
+import ProfileFrame from './profileFrame'
 import '../styles/header.css'
 import SearchIcon from '@mui/icons-material/Search'
 
@@ -24,11 +25,32 @@ const wholeTextArray = [
   '라피스'
 ]
 function Header() {
+  const [login, setLogin] = useState(false)
   const [inputValue, setInputValue] = useState('')
   const [isHaveInputValue, setIsHaveInputValue] = useState(false)
   const [dropDownList, setDropDownList] = useState(wholeTextArray)
   const [dropDownItemIndex, setDropDownItemIndex] = useState(-1)
 
+  const IsLogin = () => {
+    if (login) {
+      return (
+        <>
+          <div className="upload-profile">
+            <button className="upload-btn">+ 업로드</button>
+            <ProfileFrame />
+          </div>
+        </>
+      )
+    } else {
+      return (
+        <>
+          <button className="login-btn" onClick={navigateToLogin}>
+            로그인
+          </button>
+        </>
+      )
+    }
+  }
   const showDropDownList = () => {
     if (inputValue === '') {
       setIsHaveInputValue(false)
@@ -84,6 +106,10 @@ function Header() {
   // }
   const navigateToMain = () => {
     navigate('/Mainroom')
+  }
+  const navigateToLogin = () => {
+    setLogin(true)
+    navigate('/Login')
   }
 
   return (
@@ -167,7 +193,7 @@ function Header() {
         )}
       </div>
       {/* 로그인버튼 or 업로드버튼 + 프로필사진 */}
-      <button className="login-btn">로그인</button>
+      <IsLogin />
     </header>
   )
 }
