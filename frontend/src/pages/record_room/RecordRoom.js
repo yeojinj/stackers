@@ -5,7 +5,7 @@ import LightIcon from '@mui/icons-material/Light'
 import PhotoCameraFrontIcon from '@mui/icons-material/PhotoCameraFront'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import Modal from '@mui/material/Modal'
-import RecordStation from './RecordStation.js'
+import RecordStation from './RecordStation'
 
 function isEmptyObj(obj) {
   if (obj.constructor === Object && Object.keys(obj).length === 0) {
@@ -51,8 +51,8 @@ function RecordRoom() {
           <InfoOutlinedIcon className="box" onClick={showToolTip} />
         </div>
         <div className="box">
-          {/* <Record stack={getVideo} /> */}
           <RecordStation />
+          {/* <Record stack={getVideo} /> */}
         </div>
         <div className="stack">
           <p></p>

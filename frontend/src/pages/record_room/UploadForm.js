@@ -3,6 +3,7 @@
 import './Record'
 import React, { useState, useEffect } from 'react'
 import Tag from './ModalTag'
+import Axios from 'axios'
 
 function UploadForm(props) {
   const handleClose = () => {
@@ -15,6 +16,7 @@ function UploadForm(props) {
     content: '',
     scope: 'public'
   })
+
   const filedownloadlink = window.URL.createObjectURL(object)
   const handleChange = (e) => {
     setValues({
@@ -22,11 +24,27 @@ function UploadForm(props) {
       [e.target.name]: e.target.value
     })
   }
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (!values.content || !values.music || !values.scope) {
       alert('빈칸을 입력해주세요')
     } else {
+      console.log(values)
+      if (values) {
+        let formData = new FormData()
+        formData.append('stationDto', JSON.stringfy(values))
+
+        await axios({
+          method: 'POST',
+          url: `https://localhost:5000/api/station/upload`,
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
+          data: formData
+        })
+        console.log(formData)
+      }
       handleClose()
     }
   }
@@ -73,10 +91,9 @@ function UploadForm(props) {
                     name="scope"
                     value="true"
                     onChange={handleChange}
+                    checked
                   />
                   공개
-                </label>
-                <label>
                   <input
                     type="radio"
                     name="scope"

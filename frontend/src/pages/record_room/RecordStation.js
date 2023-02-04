@@ -62,15 +62,21 @@ const RecordStation = () => {
       .then((recordedChunks) => {
         const recordedBlob = new Blob(recordedChunks, { type: 'video/mp4' })
         recording.current.src = window.URL.createObjectURL(recordedBlob)
-        setRecordStream({ streamrecord: preview.current.srcObject })
-        setVideoStream({ streamRecord: left.current.captureStream() })
-
         downloadRef.current.href = recording.current.src
         downloadRef.current.download = 'RecordedVideo.mp4'
+        setRecordStream({ streamrecord: preview.current.srcObject })
+        setVideoStream({ streamRecord: left.current.captureStream() })
 
         log(
           `Successfully recorded ${recordedBlob.size} bytes of ${recordedBlob.type} media.`
         )
+      })
+      .then(() => {
+        setStreams([recordStream, videoStream])
+        console.log(streams)
+        const mixer = new MultiStreamsMixer(streams)
+        const mixedStream = mixer.getMixedStream()
+        recording.current.srcObject = mixedStream
       })
       .catch((error) => {
         if (error.name === 'NotFoundError') {
@@ -82,16 +88,8 @@ const RecordStation = () => {
   }
 
   useEffect(() => {
-    console.log('recordStream', recordStream)
-    console.log(videoStream)
-    setStreams([recordStream, videoStream])
-    console.log(streams)
-    const mixer = new MultiStreamsMixer(streams)
-    mixer.startDrawingFrames()
-    const mixedStream = mixer.getMixedStream()
-    recording.current.srcObject = mixedStream
     recording.current.play()
-  }, [recordStream, videoStream])
+  }, [recording.current.srcObject])
 
   const stopStation = () => {
     left.current.pause()
