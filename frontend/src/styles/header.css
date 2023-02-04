@@ -27,7 +27,6 @@
   /* align-items: center; */
 }
 
-
 .header-search {
   display: flex;
   flex-direction: row;
@@ -81,7 +80,9 @@
 }
 
 .dropDownItemIndex {
-  padding: 0 19px;
+  padding: 5px 19px;
+  display: flex;
+  align-items: center;
 }
 
 .selected {
