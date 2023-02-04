@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class StationDetailDto {
 
     private Long id;                // [게시글] 아이디
-    private String writerId;        // [작성자] 회원 번호
+    private Long writerId;        // [작성자] 회원 번호
     private String writerUsername;        // [작성자] 아이디
     private String writerNickname;        // [작성자] 닉네임
     private String writerImgPath;         // [작성자] 프로필 사진 경로
