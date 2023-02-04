@@ -103,8 +103,13 @@ function SignUp() {
         <button
           onClick={() => {
             axios({
-              method: 'get',
-              url: 'https://my-json-server.typicode.com/typicode/demo/posts'
+              method: 'post',
+              url: '/api/join',
+              data: {
+                username: id,
+                password: password,
+                email: email
+              }
             }).then((response) => {
               console.log(response)
             })
