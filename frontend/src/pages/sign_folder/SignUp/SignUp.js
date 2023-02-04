@@ -1,11 +1,16 @@
-import React from 'react'
+/* eslint-disable */
+import React, { useState } from 'react'
 import LogoImage from './LogoImage.png'
 import LogoText from './LogoText.png'
 import './SignUp.css'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
+import axios from 'axios'
 
 function SignUp() {
+  const [id, setId] = useState('')
+  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('')
   return (
     <div>
       <div className="SignUp">
@@ -25,7 +30,15 @@ function SignUp() {
             </h3>
           </div>
         </div>
-        <div>
+        <form
+          onSubmit={(event) => {
+            event.preventDefault()
+            setId(event.target.id.value)
+            setPassword(event.target.password.value)
+            setEmail(event.target.email.value)
+            console.log(id, password, email)
+          }}
+        >
           <TextField
             placeholder="아이디"
             size="medium"
@@ -33,16 +46,19 @@ function SignUp() {
               width: '100%',
               marginBottom: '25px'
             }}
+            name="id"
           />
           <TextField
             placeholder="비밀번호(알파벳, 특수문자를 포함한 8~10자로 구성)"
             size="medium"
             style={{ width: '100%', marginBottom: '25px' }}
+            name="password"
           />
           <TextField
             placeholder="이메일"
             size="medium"
             style={{ width: '100%', marginBottom: '25px' }}
+            name="email"
           />
           <div
             style={{
@@ -68,21 +84,34 @@ function SignUp() {
               전송
             </Button>
           </div>
-        </div>
-        <hr style={{ margin: '0px 0px 25px 0px' }} />
-        <Button
-          variant="contained"
-          className="LogIn-button"
-          style={{
-            width: '100%',
-            height: '55px',
-            backgroundColor: 'rgba(217, 217, 217, 1)',
-            color: 'black',
-            marginBottom: '30px'
+          <hr style={{ margin: '0px 0px 25px 0px' }} />
+          <Button
+            variant="contained"
+            className="LogIn-button"
+            style={{
+              width: '100%',
+              height: '55px',
+              backgroundColor: 'rgba(217, 217, 217, 1)',
+              color: 'black',
+              marginBottom: '30px'
+            }}
+            type="submit"
+          >
+            가입하기
+          </Button>
+        </form>
+        <button
+          onClick={() => {
+            axios({
+              method: 'get',
+              url: 'https://my-json-server.typicode.com/typicode/demo/posts'
+            }).then((response) => {
+              console.log(response)
+            })
           }}
         >
-          가입하기
-        </Button>
+          테스트용
+        </button>
       </div>
     </div>
   )

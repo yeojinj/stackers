@@ -7,21 +7,37 @@ import Button from '@mui/material/Button'
 import naverLogo from './naverLogo.svg'
 import kakaoLogo from './kakaoLogo.png'
 import GoogleLogo from './GoogleLogo.png'
+import { useState } from 'react'
 
 function LogIn() {
+  const [id, setId] = useState('')
+  const [password, setPassword] = useState('')
   return (
     <div className="LogIn">
       <img src={logo} alt="logo" className="LogIn-logo" />
-      <div style={{ textAlign: 'center' }}>
+      <form
+        style={{ textAlign: 'center' }}
+        onSubmit={(event) => {
+          event.preventDefault()
+          // console.log('제출된다.')
+          // console.log(event.target.id.value)
+          // console.log(event.target.password.value)
+          setId(event.target.id.value)
+          setPassword(event.target.password.value)
+          console.log(id, password)
+        }}
+      >
         <TextField
           placeholder="아이디(닉네임) 또는 아이디"
           size="medium"
           className="LogIn-inputBox "
+          name="id"
         />
         <TextField
           placeholder="비밀번호 입력"
           size="medium"
           className="LogIn-inputBox "
+          name="password"
         />
         <div className="find-password-div">
           <a
@@ -45,6 +61,7 @@ function LogIn() {
             color: 'black',
             marginBottom: '30px'
           }}
+          type="submit"
         >
           로그인
         </Button>
@@ -108,7 +125,7 @@ function LogIn() {
             회원가입
           </a>
         </div>
-      </div>
+      </form>
     </div>
   )
 }
