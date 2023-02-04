@@ -27,7 +27,6 @@
   /* align-items: center; */
 }
 
-
 .header-search {
   display: flex;
   flex-direction: row;
@@ -81,7 +80,9 @@
 }
 
 .dropDownItemIndex {
-  padding: 0 19px;
+  padding: 5px 19px;
+  display: flex;
+  align-items: center;
 }
 
 .selected {
@@ -94,6 +95,27 @@
   margin-top: 18px;
   /* margin-left: 157px; */
   margin-right: 89px;
+  padding: 0px;
+  border: 0px;
+  border-radius: 10px;
+  font-size: 18px;
+  color: white;
+  background-color: rgba(42, 32, 150, 1);
+}
+
+.upload-profile {
+  display: flex;
+  flex-direction: row;
+  margin-right: 10px;
+}
+
+.upload-btn {
+  width: 111px;
+  height: 45px;
+  margin-right: 11px;
+  margin-top: 18px;
+  /* margin-left: 157px; */
+  /* margin-right: 89px; */
   padding: 0px;
   border: 0px;
   border-radius: 10px;

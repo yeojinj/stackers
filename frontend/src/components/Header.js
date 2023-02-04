@@ -3,38 +3,75 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import logo from '../assets/logo.svg'
 import search from '../assets/search.svg'
+import ProfileFrame from './profileFrame'
 import '../styles/header.css'
+import SearchIcon from '@mui/icons-material/Search'
 
 const wholeTextArray = [
   'apple',
+  'applemango',
   'banana',
   'coding',
+  'candy',
+  'camera',
   'javascript',
-  '원티드',
-  '프리온보딩',
-  '프론트엔드'
+  'TENTEN',
+  '텐텐',
+  '터쿠아즈',
+  '마젠타',
+  '애프리콧',
+  '세이지',
+  '플라밍고',
+  '라피스'
 ]
 function Header() {
+  const [login, setLogin] = useState(false)
   const [inputValue, setInputValue] = useState('')
   const [isHaveInputValue, setIsHaveInputValue] = useState(false)
   const [dropDownList, setDropDownList] = useState(wholeTextArray)
   const [dropDownItemIndex, setDropDownItemIndex] = useState(-1)
 
+  const IsLogin = () => {
+    if (login) {
+      return (
+        <>
+          <div className="upload-profile">
+            <button className="upload-btn">+ 업로드</button>
+            <ProfileFrame />
+          </div>
+        </>
+      )
+    } else {
+      return (
+        <>
+          <button className="login-btn" onClick={navigateToLogin}>
+            로그인
+          </button>
+        </>
+      )
+    }
+  }
   const showDropDownList = () => {
     if (inputValue === '') {
       setIsHaveInputValue(false)
       setDropDownList([])
     } else {
       const choosenTextList = wholeTextArray.filter((textItem) =>
-        textItem.includes(inputValue)
+        textItem.toLowerCase().startsWith(inputValue)
       )
-      setDropDownList(choosenTextList)
+      if (Array.isArray(choosenTextList) && choosenTextList.length === 0) {
+        setIsHaveInputValue(false)
+        setDropDownList([])
+      } else {
+        setIsHaveInputValue(true)
+        setDropDownList(choosenTextList)
+      }
     }
   }
 
   const changeInputValue = (event) => {
     setInputValue(event.target.value)
-    setIsHaveInputValue(true)
+    // setIsHaveInputValue(true)
   }
 
   const clickDropDownItem = (clickedItem) => {
@@ -62,13 +99,17 @@ function Header() {
     }
   }
 
-  useEffect(showDropDownList, [inputValue])
+  useEffect(showDropDownList, [inputValue], [isHaveInputValue])
   const navigate = useNavigate()
   // const navigateToSearchView = () => {
   //   navigate('/SearchView')
   // }
   const navigateToMain = () => {
     navigate('/Mainroom')
+  }
+  const navigateToLogin = () => {
+    setLogin(true)
+    navigate('/Login')
   }
 
   return (
@@ -137,6 +178,13 @@ function Header() {
                       : 'dropDownItemIndex'
                   }
                 >
+                  <SearchIcon
+                    style={{
+                      width: '16px',
+                      height: '16px',
+                      marginRight: '5px'
+                    }}
+                  />
                   {dropDownItem}
                 </li>
               )
@@ -145,7 +193,7 @@ function Header() {
         )}
       </div>
       {/* 로그인버튼 or 업로드버튼 + 프로필사진 */}
-      <button className="login-btn">로그인</button>
+      <IsLogin />
     </header>
   )
 }
