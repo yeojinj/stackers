@@ -51,8 +51,8 @@ function RecordRoom() {
           <InfoOutlinedIcon className="box" onClick={showToolTip} />
         </div>
         <div className="box">
-          <RecordStation />
-          {/* <Record stack={getVideo} /> */}
+          {/* <RecordStation /> */}
+          <Record stack={getVideo} />
         </div>
         <div className="stack">
           <p></p>
