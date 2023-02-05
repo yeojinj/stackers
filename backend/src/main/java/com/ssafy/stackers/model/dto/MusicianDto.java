@@ -1,5 +1,14 @@
 package com.ssafy.stackers.model.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Builder
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class MusicianDto {
 
     private Long instrumentId;      // 악기 아이디
