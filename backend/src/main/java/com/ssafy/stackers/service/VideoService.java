@@ -43,8 +43,8 @@ public class VideoService {
 
         File destinationFile;
         String destinationFileName;
-        String videoPath = "C:\\stackers\\videos\\";
-//        String videoPath = "/Users/sennie/stackers/videos";
+//        String videoPath = "C:\\stackers\\videos\\";
+        String videoPath = "/Users/sennie/stackers/videos/";
 
         do {
             destinationFileName =
@@ -55,7 +55,7 @@ public class VideoService {
         destinationFile.getParentFile().mkdirs();
         file.transferTo(destinationFile);
 
-        Video video = Video.builder().videoName(destinationFileName).videoOriName(sourceVideoName)
+        Video video = Video.builder().videoName(destinationFileName + "mp4").videoOriName(sourceVideoName)
             .videoPath(videoPath).build();
 
         return video;
