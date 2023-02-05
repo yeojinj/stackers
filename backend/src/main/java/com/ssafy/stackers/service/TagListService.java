@@ -20,10 +20,14 @@ public class TagListService {
 
     @Transactional
     public void save(List<Tag> tags, Station station) {
-        log.info("tags : {}", tags.size());
         for (int i = 0, size = tags.size(); i < size; i++) {
             TagList tagList = TagList.builder().tag(tags.get(i)).station(station).build();
             tagListRepository.save(tagList);
         }
+    }
+
+    @Transactional
+    public List<TagList> findByStation(Station station){
+        return tagListRepository.findByStation(station);
     }
 }
