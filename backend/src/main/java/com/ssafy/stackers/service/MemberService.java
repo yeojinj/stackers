@@ -1,5 +1,6 @@
 package com.ssafy.stackers.service;
 
+import com.ssafy.stackers.auth.PrincipalDetails;
 import com.ssafy.stackers.config.jwt.JwtProperties;
 import com.ssafy.stackers.config.jwt.JwtTokenProvider;
 import com.ssafy.stackers.exception.CustomException;
@@ -12,6 +13,8 @@ import com.ssafy.stackers.repository.MemberRepository;
 import com.ssafy.stackers.repository.RefreshTokenRepository;
 import com.ssafy.stackers.utils.error.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -113,4 +116,12 @@ public class MemberService {
     private void setLastLogin(String username) {
         memberRepository.setLastLogin(username);
     }
+
+    public Member getLoginMember(String loginUsername) throws CustomException {
+        // 로그인 되어 있는 유저 정보 가져오기 -> 로그인 되어 있지 않다면 오류 반환
+        Member loginMember = memberRepository.findByUsername(loginUsername)
+            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        return loginMember;
+    }
+
 }
