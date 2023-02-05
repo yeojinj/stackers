@@ -5,6 +5,9 @@ import StationRoom from './pages/station_room/stationview/StationRoom'
 import LogIn from './pages/sign_folder/LogIn/LogIn'
 import SignUp from './pages/sign_folder/SignUp/SignUp'
 import SearchView from './pages/searchview/SearchView'
+import MyPage from './pages/my_page/MyPage'
+import ProfileEdit from './pages/profile_edit/ProfileEdit'
+import UploadLoading from './pages/record_room/UploadLoading'
 import { Link, Route, Routes } from 'react-router-dom'
 
 function App() {
@@ -26,6 +29,15 @@ function App() {
         <li>
           <Link to="/SignUp">SignUp</Link>
         </li>
+        <li>
+          <Link to="/MyPage">Mypage</Link>
+        </li>
+        <li>
+          <Link to="/ProfileEdit">ProfileEdit</Link>
+        </li>
+        <li>
+          <Link to="/UploadLoading">UploadLoading</Link>
+        </li>
       </ul>
       <Routes>
         <Route path="/MainRoom" element={<MainRoom />} />
@@ -33,7 +45,10 @@ function App() {
         <Route path="/StationRoom" element={<StationRoom />} />
         <Route path="/LogIn" element={<LogIn />} />
         <Route path="/SearchView" element={<SearchView />} />
-        <Route path="SignUp" element={<SignUp />} />
+        <Route path="/SignUp" element={<SignUp />} />
+        <Route path="/MyPage" element={<MyPage />} />
+        <Route path="/ProfileEdit" element={<ProfileEdit />} />
+        <Route path="/UploadLoading" element={<UploadLoading />} />
       </Routes>
     </div>
   )
