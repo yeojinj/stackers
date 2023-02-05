@@ -1,15 +1,14 @@
 package com.ssafy.stackers.service;
 
 import com.ssafy.stackers.exception.CustomException;
-import com.ssafy.stackers.model.Instrument;
-import com.ssafy.stackers.model.Member;
-import com.ssafy.stackers.model.Station;
-import com.ssafy.stackers.model.Tag;
-import com.ssafy.stackers.model.Video;
+import com.ssafy.stackers.model.*;
+import com.ssafy.stackers.model.dto.MainStationDto;
 import com.ssafy.stackers.model.dto.StationDetailDto;
 import com.ssafy.stackers.model.dto.StationDto;
 import com.ssafy.stackers.repository.StationRepository;
 import com.ssafy.stackers.utils.error.ErrorCode;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +29,7 @@ public class StationService {
 
     @Transactional
     public Station save(StationDto stationDto, Video video, Member member) {
-        // 악기 찾기
+        // 악기 찾기 : 악기가 없을 경우가 있나요?
         Instrument instrument = instrumentService.findById(stationDto.getInstrumentId());
 
         // 태그 저장
@@ -93,4 +92,19 @@ public class StationService {
         return null;
     }
 
+    public List<Station> findByIsPublicAndIsComplete(boolean isPublic, boolean isCompleted){
+        return stationRepository.findByIsPublicAndIsComplete(isPublic, isCompleted);
+    }
+
+    public List<MainStationDto> getStationShortDetail(List<Station> stations){
+        List<MainStationDto> stationList = new ArrayList<>();
+
+        for (int i = 0; i < stations.size(); i++) {
+            Station s = stations.get(i);
+            List<String> tags = tagService.findNameById(tagListService.findByStation(s));
+            stationList.add(new MainStationDto(s.getId(), s.getContent(), tags, s.getVideo()));
+        }
+
+        return stationList;
+    }
 }
