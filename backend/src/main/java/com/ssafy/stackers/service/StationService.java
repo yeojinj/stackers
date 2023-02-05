@@ -7,6 +7,7 @@ import com.ssafy.stackers.model.dto.StationDetailDto;
 import com.ssafy.stackers.model.dto.StationDto;
 import com.ssafy.stackers.repository.CommentRepository;
 import com.ssafy.stackers.repository.StationRepository;
+import com.ssafy.stackers.repository.TagListRepository;
 import com.ssafy.stackers.repository.VideoRepository;
 import com.ssafy.stackers.utils.error.ErrorCode;
 
@@ -27,6 +28,8 @@ public class StationService {
     private VideoRepository videoRepository;
     @Autowired
     private CommentRepository commentRepository;
+    @Autowired
+    private TagListRepository tagListRepository;
     @Autowired
     private InstrumentService instrumentService;
     @Autowired
@@ -81,7 +84,11 @@ public class StationService {
         Station station = stationRepository.findById(id).get();
 
         // 태그 엔티티 -> List<String>
-        // TODO : 태그 목록 가져오는 함수 만들기
+        List<TagList> tagLists = tagListRepository.findByStation(station);
+        List<String> tagDetails = new ArrayList<>();
+        for (int i = 0; i < tagLists.size(); i++) {
+            tagDetails.add(tagLists.get(i).getTag().getName());
+        }
 
         // 이전 게시글 작성자(연주자) -> List<MusicianDto>
 
@@ -92,7 +99,7 @@ public class StationService {
         // 댓글 수
         int commentCnt = comments.size();
         List<CommentDetailDto> commentDetails = new ArrayList<>();
-        for(int i = 0; i < commentCnt; i++){
+        for (int i = 0; i < commentCnt; i++) {
             CommentDetailDto commentDetailDto = CommentDetailDto.builder()
                     .commentContent(comments.get(i).getContent())
                     .commentRegTime(comments.get(i).getRegTime())
@@ -123,6 +130,8 @@ public class StationService {
                 // 댓글
                 .commentList(commentDetails)
                 .commentCnt(commentCnt)
+                // 태그
+                .tags(tagDetails)
                 .build();
 
         return stationDetailDto;
