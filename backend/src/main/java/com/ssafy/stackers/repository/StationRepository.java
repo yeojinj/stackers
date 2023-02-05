@@ -9,14 +9,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface StationRepository extends JpaRepository<Station, Long> {
     Optional<Station> findById(Long id);
-
-    // 로그인 된 회원의 완성 스테이션
-    // List<Station> findByPublicAndCompleteAndMemberIsNot(Member loginId);
-
-    // 로그인 안 된 회원의 완성 스테이션
-     List<Station> findByIsPublicAndIsComplete(boolean isPublic, boolean isComplete);
-
-
+    List<Station> findByIsPublicAndIsComplete(boolean isPublic, boolean isComplete);
+    List<Station> findTop10ByIsPublicOrderByHeartCntDescRegTimeAsc(boolean isPublic);
+    List<Station> findByIsPublicAndIsCompleteAndMemberIsNot(boolean isPublic, boolean isComplete, Member member);
+    List<Station> findByIsPublicAndMember(boolean isPublic, Member member);
     @Override
     boolean existsById(Long id);
 }

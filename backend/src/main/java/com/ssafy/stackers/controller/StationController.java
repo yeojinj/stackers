@@ -26,13 +26,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
@@ -51,12 +46,16 @@ public class StationController {
 
     @Autowired
     private CommentService commentService;
+
     @Autowired
     private MemberService memberService;
 
     @Autowired
     private HeartService heartService;
 
+    /**
+     * 스테이션 업로드
+     */
     @Operation(summary = "스테이션 업로드")
     @ApiResponses( value = {
         @ApiResponse(responseCode = "200", description = "성공"),
@@ -98,22 +97,72 @@ public class StationController {
     }
 
     /**
-     * 일단 로그인을 안 한 경우
-     * Authentication을 변수로 받는 문제가 있어서 일단 미뤄둠
+     *  완성 컨테이너 조회
+     *  로그인이 되지 않았을 경우에는 stackers 로 사용 -> stackers 막아놔야 됨
      */
-    @GetMapping("/completed")
-    public List<MainStationDto> readCompletedStation(){
-        List<Station> stations = stationService.findByIsPublicAndIsComplete(false, true);
+    @GetMapping("/completed/{username}")
+    public List<MainStationDto> getCompletedStation(@PathVariable("username") String username){
+        List<Station> stations = null;
+
+        if(username.trim().equals("stackers")){
+            stations = stationService.findByIsPublicAndIsComplete(false, true);
+        } else {
+            Member member = memberService.findByUsername(username.trim());
+            stations = stationService.findByIsPublicAndIsCompleteAndMember(false, true, member);
+        }
+
         return stationService.getStationShortDetail(stations);
     }
 
-    @GetMapping("/uncompleted")
-    public List<MainStationDto> readUnCompletedStation(){
-        List<Station> stations = stationService.findByIsPublicAndIsComplete(false, false);
+    /**
+     * 미완성 컨테이너 조회
+     * 로그인이 되지 않았을 경우에는 stackers 로 사용 -> stackers 막아놔야 됨
+     */
+    @GetMapping("/uncompleted/{username}")
+    public List<MainStationDto> getUnCompletedStation(@PathVariable("username") String username){
+        List<Station> stations = null;
+
+        if(username.trim().equals("stackers")){
+            stations = stationService.findByIsPublicAndIsComplete(false, false);
+        } else {
+            Member member = memberService.findByUsername(username.trim());
+            stations = stationService.findByIsPublicAndIsCompleteAndMember(false, false, member);
+        }
+
         return stationService.getStationShortDetail(stations);
     }
 
+    /**
+     * 상위 10개 컨테이너 조회
+     */
+    @GetMapping("/popular")
+    public List<MainStationDto> getPopularStation(){
+        List<Station> stations = stationService.findTop10Station(false);
+        return stationService.getStationShortDetail(stations);
+    }
 
+    /**
+     * 마이 페이지 공개 스테이션
+     */
+    @GetMapping("/public")
+    public List<MainStationDto> getPublicStation(@AuthenticationPrincipal PrincipalDetails principal){
+        List<Station> stations = stationService.findMyStation(false, memberService.getLoginMember(principal.getUsername()));
+        List<MainStationDto> station = null;
+        return station;
+    }
+
+    /**
+     * 마이 페이지 바공개 스테이션
+     */
+    @GetMapping("/private")
+    public List<MainStationDto> getPrivateStation(){
+        List<MainStationDto> station = null;
+        return station;
+    }
+
+    /**
+     * 스테이션 댓글 달기
+     */
     @PostMapping("/{stationid}/comment")
     public ResponseEntity<?> writeComment(@PathVariable("stationid") int stationId,
         @RequestBody Comment comment, Authentication authentication) {
@@ -127,14 +176,16 @@ public class StationController {
         return new ResponseEntity<>("댓글 작성 성공", HttpStatus.OK);
     }
 
+    /**
+     * 스테이션 좋아요 작성
+     */
     @PostMapping("/{stationid}/heart")
     public ResponseEntity<?> writeHeart(@PathVariable("stationid") int stationId,
-        Authentication authentication) {
+        @AuthenticationPrincipal PrincipalDetails principal) {
         Station station = stationService.findById((long) stationId);
 
         Heart saveHeart = Heart.builder().station(station)
-            .member(testForLoginMember(authentication)).build();
-
+            .member(memberService.getLoginMember(principal.getUsername())).build();
         heartService.save(saveHeart);
 
         // station 좋아요 cnt 업데이트
@@ -144,10 +195,6 @@ public class StationController {
 
     @GetMapping("/{stationid}")
     public ResponseEntity<StationDetailDto> getStationDetail(@PathVariable("stationid") int stationId) {
-
-
-
-
         return null;
     }
 
@@ -159,5 +206,16 @@ public class StationController {
         Member loginMember = memberRepository.findByUsername(loginUsername)
             .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         return loginMember;
+    }
+    @GetMapping("/loginmembertest")
+    public Member loginMemberTests(@AuthenticationPrincipal PrincipalDetails principal) {
+        Member member = null;
+        try {
+            member = memberService.getLoginMember(principal.getUsername());
+        } catch (CustomException e) {
+            System.out.println(e.getClass().getName());
+        }
+
+        return member;
     }
 }

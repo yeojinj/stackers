@@ -92,10 +92,37 @@ public class StationService {
         return null;
     }
 
+    /**
+     * 로그인 안 한 회원의 메인 페이지 스테이션 조회
+     */
     public List<Station> findByIsPublicAndIsComplete(boolean isPublic, boolean isCompleted){
         return stationRepository.findByIsPublicAndIsComplete(isPublic, isCompleted);
     }
 
+    /**
+     * 로그인 한 회원의 메인 페이지 스테이션 조회
+     */
+    public List<Station> findByIsPublicAndIsCompleteAndMember(boolean isPublic, boolean isCompleted, Member member){
+        return stationRepository.findByIsPublicAndIsCompleteAndMemberIsNot(isPublic, isCompleted, member);
+    }
+
+    /**
+     * 상위 스테이션 조회
+     */
+    public List<Station> findTop10Station(boolean isPublic){
+        return stationRepository.findTop10ByIsPublicOrderByHeartCntDescRegTimeAsc(isPublic);
+    }
+
+    /**
+     * 마이페이지 리스트 조회
+     */
+    public List<Station> findMyStation(boolean isPublic, Member member){
+        return stationRepository.findByIsPublicAndMember(isPublic, member);
+    }
+
+    /**
+     * Station을 MainStationDto로 변환하는 함수
+     */
     public List<MainStationDto> getStationShortDetail(List<Station> stations){
         List<MainStationDto> stationList = new ArrayList<>();
 
