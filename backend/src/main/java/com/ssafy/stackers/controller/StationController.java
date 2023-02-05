@@ -130,10 +130,9 @@ public class StationController {
     @GetMapping("/{stationid}")
     public ResponseEntity<StationDetailDto> getStationDetail(@PathVariable("stationid") int stationId) {
 
+        StationDetailDto stationDetailDto = stationService.findDetailById((long) stationId);
 
-
-
-        return null;
+        return new ResponseEntity<>(stationDetailDto, HttpStatus.OK);
     }
 
     public Member testForLoginMember(Authentication authentication) {
