@@ -8,6 +8,7 @@ import com.ssafy.stackers.model.Instrument;
 import com.ssafy.stackers.model.Member;
 import com.ssafy.stackers.model.Station;
 import com.ssafy.stackers.model.Video;
+import com.ssafy.stackers.model.dto.StationDetailDto;
 import com.ssafy.stackers.model.dto.StationDto;
 import com.ssafy.stackers.repository.MemberRepository;
 import com.ssafy.stackers.repository.PrevStationRepository;
@@ -27,9 +28,11 @@ import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -62,12 +65,13 @@ public class StationController {
     @ApiResponses( value = {
         @ApiResponse(responseCode = "200", description = "성공"),
         @ApiResponse(responseCode = "404", description = "포함되어 있는 엔티티를 찾을 수 없음"),
-        @ApiResponse(responseCode = "400", description = "잘못된 요청")
+        @ApiResponse(responseCode = "400", description = "잘못된 요청"),
+        @ApiResponse(responseCode = "500", description = "서버 오류...마젠타 호출 요청...")
     })
     @Secured("ROLE_USER")
-    @PostMapping("/upload")
-    public ResponseEntity<?> uploadStation(@RequestPart StationDto stationDto,
-        @RequestPart(required = true) MultipartFile file, Authentication authentication)
+    @PostMapping(path = "/upload", consumes =  { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<?> uploadStation(@RequestPart(value = "info", required = true) StationDto stationDto,
+        @RequestPart(value = "file", required = true) MultipartFile file, Authentication authentication)
         throws IOException {
 
         // 이전 스테이션 정보가 있는지 확인
@@ -121,6 +125,14 @@ public class StationController {
         // station 좋아요 cnt 업데이트
         heartService.update((long) stationId, station.getHeartCnt());
         return new ResponseEntity<>("좋아요 작성 성공", HttpStatus.OK);
+    }
+
+    @GetMapping("/{stationid}")
+    public ResponseEntity<StationDetailDto> getStationDetail(@PathVariable("stationid") int stationId) {
+
+        StationDetailDto stationDetailDto = stationService.findDetailById((long) stationId);
+
+        return new ResponseEntity<>(stationDetailDto, HttpStatus.OK);
     }
 
     public Member testForLoginMember(Authentication authentication) {

@@ -1,22 +1,15 @@
 .header {
   position: fixed;
-  z-index: 100;
+  z-index: 2;
   left: 0;
   top: 0;
   width: 100%;
   height: 76px;
-  /* display: flex;
-  justify-content: space-between;
-  align-items: center; */
-  background-color: rgba(251, 251, 251, 1);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.22);
-}
-
-.header-container {
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
   /* align-items: center; */
+  background-color: rgba(251, 251, 251, 1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.22);
 }
 
 .logo-img {
@@ -24,6 +17,14 @@
   height: 62px;
   margin-top: 17px;
   margin-left: 92px;
+}
+
+.header-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 530px;
+  /* align-items: center; */
 }
 
 .header-search {
@@ -59,12 +60,62 @@
   height: 17.49px;
 }
 
+.dropdownbox {
+  /* display: block; */
+  /* position: fixed; */
+  /* left: 573px;
+  top: 75px; */
+  width: 530px;
+  max-height: 600px;
+  /* margin-left: 19px; */
+  margin-top: 11px;
+  padding: 8px 0;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  /* border-top: none; */
+  border-radius: 16px;
+  box-shadow: 0 10px 10px rgb(0, 0, 0, 0.3);
+  list-style-type: none;
+  z-index: 3;
+}
+
+.dropDownItemIndex {
+  padding: 5px 19px;
+  display: flex;
+  align-items: center;
+}
+
+.selected {
+  background-color: rgba(248, 248, 248, 1);
+}
+
 .login-btn {
   width: 111px;
   height: 45px;
   margin-top: 18px;
   /* margin-left: 157px; */
   margin-right: 89px;
+  padding: 0px;
+  border: 0px;
+  border-radius: 10px;
+  font-size: 18px;
+  color: white;
+  background-color: rgba(42, 32, 150, 1);
+}
+
+.upload-profile {
+  display: flex;
+  flex-direction: row;
+  margin-right: 10px;
+}
+
+.upload-btn {
+  width: 111px;
+  height: 45px;
+  margin-right: 11px;
+  margin-top: 18px;
+  /* margin-left: 157px; */
+  /* margin-right: 89px; */
   padding: 0px;
   border: 0px;
   border-radius: 10px;
