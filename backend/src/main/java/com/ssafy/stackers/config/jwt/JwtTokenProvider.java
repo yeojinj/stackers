@@ -114,7 +114,6 @@ public class JwtTokenProvider implements InitializingBean {
         return newRefreshToken;
     }
 
-    // JWT 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드
     public Authentication getAuthentication(String token) {
         Claims claims = Jwts.parserBuilder()
             .setSigningKey(key)
@@ -126,7 +125,6 @@ public class JwtTokenProvider implements InitializingBean {
             throw new CustomException(ErrorCode.INVALID_AUTH_TOKEN);
         }
 
-        // 클레임에서 권한 정보 가져오기
         String authority = claims.get("auth").toString();
 
         PrincipalDetails principalDetails = new PrincipalDetails(
