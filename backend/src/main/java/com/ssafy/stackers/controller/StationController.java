@@ -35,8 +35,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("api/station")
 public class StationController {
-    @Autowired
-    private MemberRepository memberRepository;
 
     @Autowired
     private StationService stationService;
@@ -66,11 +64,8 @@ public class StationController {
     @Secured("ROLE_USER")
     @PostMapping(path = "/upload", consumes =  { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<?> uploadStation(@RequestPart(value = "info", required = true) StationDto stationDto,
-        @RequestPart(value = "file", required = true) MultipartFile file
-//            , Authentication authentication
-    )
+        @RequestPart(value = "file", required = true) MultipartFile file, @AuthenticationPrincipal PrincipalDetails principal)
         throws IOException {
-
         // 이전 스테이션 정보가 있는지 확인
         if (stationDto.getPrevStationId() != -1) {
             if (!stationService.existsById(stationDto.getPrevStationId())) {
@@ -80,12 +75,12 @@ public class StationController {
 
         Member loginMember = null;
         // 로그인 되어 있는 유저 정보 가져오기 -> 로그인 되어 있지 않다면 오류 반환
-//        try {
-//            loginMember = testForLoginMember(authentication);
-//        } catch (CustomException e) {
-//            System.out.println(e.getClass().getName());
-//            return new ResponseEntity<>(ErrorCode.INVALID_AUTH_TOKEN, HttpStatus.NOT_FOUND);
-//        }
+        try {
+            loginMember = memberService.findByUsername(principal.getUsername());
+        } catch (CustomException e) {
+            System.out.println(e.getClass().getName());
+            return new ResponseEntity<>(ErrorCode.INVALID_AUTH_TOKEN, HttpStatus.NOT_FOUND);
+        }
 
         // 비디오 저장
         Video video = videoService.uploadVideo(file);
@@ -105,10 +100,10 @@ public class StationController {
         List<Station> stations = null;
 
         if(username.trim().equals("stackers")){
-            stations = stationService.findByIsPublicAndIsComplete(false, true);
+            stations = stationService.findByIsPublicAndIsComplete(true, true);
         } else {
             Member member = memberService.findByUsername(username.trim());
-            stations = stationService.findByIsPublicAndIsCompleteAndMember(false, true, member);
+            stations = stationService.findByIsPublicAndIsCompleteAndMember(true, true, member);
         }
 
         return stationService.getStationShortDetail(stations);
@@ -123,10 +118,10 @@ public class StationController {
         List<Station> stations = null;
 
         if(username.trim().equals("stackers")){
-            stations = stationService.findByIsPublicAndIsComplete(false, false);
+            stations = stationService.findByIsPublicAndIsComplete(true, false);
         } else {
             Member member = memberService.findByUsername(username.trim());
-            stations = stationService.findByIsPublicAndIsCompleteAndMember(false, false, member);
+            stations = stationService.findByIsPublicAndIsCompleteAndMember(true, false, member);
         }
 
         return stationService.getStationShortDetail(stations);
@@ -146,18 +141,17 @@ public class StationController {
      */
     @GetMapping("/public")
     public List<MainStationDto> getPublicStation(@AuthenticationPrincipal PrincipalDetails principal){
-        List<Station> stations = stationService.findMyStation(false, memberService.getLoginMember(principal.getUsername()));
-        List<MainStationDto> station = null;
-        return station;
+        List<Station> stations = stationService.findMyStation(true, memberService.getLoginMember(principal.getUsername()));
+        return stationService.getStationShortDetail(stations);
     }
 
     /**
      * 마이 페이지 바공개 스테이션
      */
     @GetMapping("/private")
-    public List<MainStationDto> getPrivateStation(){
-        List<MainStationDto> station = null;
-        return station;
+    public List<MainStationDto> getPrivateStation(@AuthenticationPrincipal PrincipalDetails principal){
+        List<Station> stations = stationService.findMyStation(false, memberService.getLoginMember(principal.getUsername()));
+        return stationService.getStationShortDetail(stations);
     }
 
     /**
@@ -165,14 +159,13 @@ public class StationController {
      */
     @PostMapping("/{stationid}/comment")
     public ResponseEntity<?> writeComment(@PathVariable("stationid") int stationId,
-        @RequestBody Comment comment, Authentication authentication) {
+        @RequestBody Comment comment, @AuthenticationPrincipal PrincipalDetails principal) {
         Station station = stationService.findById((long) stationId);
 
         Comment saveComment = Comment.builder().content(comment.getContent()).station(station)
-            .member(testForLoginMember(authentication)).build();
+            .member(memberService.findByUsername(principal.getUsername())).build();
         commentService.save(saveComment);
 
-        log.info("[['{}' 스테이션에 댓글 작성] : {}", station.getContent(), comment.getContent());
         return new ResponseEntity<>("댓글 작성 성공", HttpStatus.OK);
     }
 
@@ -196,26 +189,5 @@ public class StationController {
     @GetMapping("/{stationid}")
     public ResponseEntity<StationDetailDto> getStationDetail(@PathVariable("stationid") int stationId) {
         return null;
-    }
-
-    public Member testForLoginMember(Authentication authentication) {
-        PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
-        String loginUsername = principal.getUsername();
-
-        // 로그인 되어 있는 유저 정보 가져오기 -> 로그인 되어 있지 않다면 오류 반환
-        Member loginMember = memberRepository.findByUsername(loginUsername)
-            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-        return loginMember;
-    }
-    @GetMapping("/loginmembertest")
-    public Member loginMemberTests(@AuthenticationPrincipal PrincipalDetails principal) {
-        Member member = null;
-        try {
-            member = memberService.getLoginMember(principal.getUsername());
-        } catch (CustomException e) {
-            System.out.println(e.getClass().getName());
-        }
-
-        return member;
     }
 }
