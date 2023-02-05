@@ -37,10 +37,10 @@ public class Station {
     private Long prevStationId;
 
     @Column(name = "is_public", nullable = false)
-    private boolean isPublic = true;
+    private boolean isPublic;
 
     @Column(name = "is_complete", nullable = false)
-    private boolean isComplete = false;
+    private boolean isComplete;
 
     @Column(name = "is_delete", nullable = false)
     private boolean isDelete = false;
