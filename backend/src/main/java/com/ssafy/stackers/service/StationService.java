@@ -41,11 +41,11 @@ public class StationService {
             .music(stationDto.getMusic())
             .remainDepth(stationDto.getRemainDepth())
             .prevStationId((Long) stationDto.getPrevStationId())
-            .isPublic(stationDto.isPublic())
             .member(member)
             .video(video)
             .instrument(instrument)
-            .isComplete(stationDto.getRemainDepth() == 0? true : false)
+            .isPublic(stationDto.getIsPublic() == 0? false : true)
+            .isComplete(stationDto.getRemainDepth() == 0 || stationDto.getIsComplete() == 1? true : false)
             .heartCnt(0)
             .isDelete(false)
             .build();
