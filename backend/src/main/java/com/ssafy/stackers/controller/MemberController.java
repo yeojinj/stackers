@@ -1,12 +1,14 @@
 package com.ssafy.stackers.controller;
 
 import com.ssafy.stackers.auth.PrincipalDetails;
+import com.ssafy.stackers.exception.CustomException;
 import com.ssafy.stackers.model.Member;
 import com.ssafy.stackers.model.dto.JoinDto;
 import com.ssafy.stackers.model.dto.LoginDto;
 import com.ssafy.stackers.model.dto.LoginMemberDto;
 import com.ssafy.stackers.model.dto.TokenDto;
 import com.ssafy.stackers.service.MemberService;
+import com.ssafy.stackers.utils.error.ErrorCode;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -14,11 +16,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 @RequiredArgsConstructor
 @Tag(name = "Member", description = "멤버 관련 API")
@@ -54,13 +59,9 @@ public class MemberController {
     public ResponseEntity<LoginMemberDto> user(Authentication authentication) {
         PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
         Member member = memberService.findByUsername(principal.getUsername());
-        LoginMemberDto loginMemberDto =
-            LoginMemberDto.builder().username(member.getUsername())
-                .nickname(member.getNickname())
-                .email(member.getEmail())
-                .bio(member.getBio())
-                .imgPath(member.getImgPath())
-                .build();
+        LoginMemberDto loginMemberDto = LoginMemberDto.builder().username(member.getUsername())
+            .nickname(member.getNickname()).email(member.getEmail()).bio(member.getBio())
+            .imgPath(member.getImgPath()).build();
         System.out.println(loginMemberDto);
         return new ResponseEntity<>(loginMemberDto, HttpStatus.OK);
     }
@@ -69,6 +70,18 @@ public class MemberController {
     @GetMapping("/v1/admin")
     public String admin() {
         return "admin";
+    }
+
+    @GetMapping("/loginmembertest")
+    public Member loginMemberTests(@AuthenticationPrincipal PrincipalDetails principal) {
+        Member member = null;
+        try {
+            member = memberService.getLoginMember(principal.getUsername());
+        } catch (CustomException e) {
+            System.out.println(e.getClass().getName());
+        }
+
+        return member;
     }
 
 }

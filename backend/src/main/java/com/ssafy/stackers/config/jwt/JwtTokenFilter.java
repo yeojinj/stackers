@@ -27,20 +27,18 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         String jwt = resolveToken(request, JwtProperties.AUTHORIZATION_HEADER);
 
-        if (jwt != null && jwtTokenProvider.validateToken(jwt) == JwtCode.ACCESS) {
+        if (jwt != null && jwtTokenProvider.validateToken(jwt) == JwtCode.ACCESS) {     // access token check
             Authentication authentication = jwtTokenProvider.getAuthentication(jwt);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             log.info("set Authentication to security context for '{}', uri: {}",
                 authentication.getName(), request.getRequestURI());
-        } else if (jwt != null && jwtTokenProvider.validateToken(jwt) == JwtCode.EXPIRED) {
+        } else if (jwt != null && jwtTokenProvider.validateToken(jwt) == JwtCode.EXPIRED) {     // refresh token check
             String refresh = resolveToken(request, JwtProperties.REFRESH_HEADER);
-            // refresh token을 확인해서 재발급해준다
             if (refresh != null && jwtTokenProvider.validateToken(refresh) == JwtCode.ACCESS) {
                 String newRefresh = jwtTokenProvider.reissueRefreshToken(refresh);
                 if (newRefresh != null) {
                     response.setHeader(JwtProperties.REFRESH_HEADER, JwtProperties.TOKEN_PREFIX + newRefresh);
 
-                    // access token 생성
                     Authentication authentication = jwtTokenProvider.getAuthenticationWithNoAuth(refresh);
                     response.setHeader(JwtProperties.AUTHORIZATION_HEADER,
                         JwtProperties.TOKEN_PREFIX + jwtTokenProvider.createAccessToken(authentication));
