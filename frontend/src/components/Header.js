@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-// import styled from 'styled-components'
+import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import logo from '../assets/logo.svg'
 import search from '../assets/search.svg'
@@ -32,6 +32,10 @@ function Header(props) {
   const [dropDownItemIndex, setDropDownItemIndex] = useState(-1)
 
   const IsLogin = () => {
+    const userLogin = useSelector((state) => {
+      return state.user.isLogged
+    })
+    setLogin(userLogin)
     if (login) {
       return (
         <>
