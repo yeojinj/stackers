@@ -1,0 +1,12 @@
+cloud:
+  aws:
+    s3:
+      bucket: stackers.bucket
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+    credentials:
+      access-key: AKIA5LIV3CU3NAWZHDVH
+      secret-key: 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
