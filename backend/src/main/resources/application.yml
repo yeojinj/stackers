@@ -19,6 +19,18 @@ spring:
   http:
     multipart:
       maxFileSize: 500MB
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          socketFactory.class: javax.net.ssl.SSLSocketFactory
+          auth: true
+          starttls:
+            enable: true
 logging:
   level:
     org:
