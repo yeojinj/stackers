@@ -1,5 +1,6 @@
 package com.ssafy.stackers.service;
 
+import com.ssafy.stackers.auth.PrincipalDetails;
 import com.ssafy.stackers.config.jwt.JwtProperties;
 import com.ssafy.stackers.config.jwt.JwtTokenProvider;
 import com.ssafy.stackers.exception.CustomException;
@@ -12,6 +13,8 @@ import com.ssafy.stackers.repository.MemberRepository;
 import com.ssafy.stackers.repository.RefreshTokenRepository;
 import com.ssafy.stackers.utils.error.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -45,6 +48,7 @@ public class MemberService {
             .email(joinDto.getEmail())
             .bio("")
             .imgPath("path")
+            .imgName("name")
             .isResign(false)
             .build();
         memberRepository.save(m);
@@ -60,24 +64,17 @@ public class MemberService {
 
     @Transactional
     public TokenDto login(LoginDto loginDto) {
-        // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
-        // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
         UsernamePasswordAuthenticationToken authenticationToken =
             new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
 
-        // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
-        // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
         Authentication authentication = authenticationManagerBuilder.getObject()
             .authenticate(authenticationToken);
 
-        // 3. 인증 정보를 기반으로 JWT 토큰 생성
         TokenDto tokenDto = new TokenDto(
             JwtProperties.TOKEN_PREFIX + jwtTokenProvider.createAccessToken(authentication),
             JwtProperties.TOKEN_PREFIX + jwtTokenProvider.issueRefreshToken(authentication));
 
-        // lastLogin 갱신
         setLastLogin(loginDto.getUsername());
-
         return tokenDto;
     }
 
@@ -85,30 +82,22 @@ public class MemberService {
     public TokenDto reissueAccessToken(String token) {
         String resolveToken = resolveToken(token);
 
-        //토큰 검증 메서드
-        //실패시 jwtTokenProvider.validateToken(resolveToken) 에서 exception을 리턴함
-        jwtTokenProvider.validateToken(resolveToken);
+        jwtTokenProvider.validateToken(resolveToken);       //토큰 검증
 
         Authentication authentication = jwtTokenProvider.getAuthenticationWithNoAuth(resolveToken);
-        // 디비에 있는게 맞는지 확인
         RefreshToken refreshToken = refreshTokenRepository.findByUserId(
             authentication.getName()).get();
 
-        // 토큰이 같은지 확인
         if (!resolveToken.equals(refreshToken.getToken())) {
             throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
 
-        // 재발행해서 저장
         String newToken = jwtTokenProvider.createRefreshToken(authentication);
         refreshToken.changeToken(newToken);
-//        refreshTokenRepository.save(refreshToken);
 
-        // 3. 인증 정보를 기반으로 JWT 토큰
         TokenDto tokenDto = new TokenDto(
             JwtProperties.TOKEN_PREFIX + jwtTokenProvider.createAccessToken(authentication),
             JwtProperties.TOKEN_PREFIX + newToken);
-
         return tokenDto;
     }
 
@@ -124,7 +113,20 @@ public class MemberService {
             .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
+    public Member findById(Long id) {
+        return memberRepository.findById(id)
+            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+    }
+
     private void setLastLogin(String username) {
         memberRepository.setLastLogin(username);
     }
+
+    public Member getLoginMember(String loginUsername) throws CustomException {
+        // 로그인 되어 있는 유저 정보 가져오기 -> 로그인 되어 있지 않다면 오류 반환
+        Member loginMember = memberRepository.findByUsername(loginUsername)
+            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        return loginMember;
+    }
+
 }

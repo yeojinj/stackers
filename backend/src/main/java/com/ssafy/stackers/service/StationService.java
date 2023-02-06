@@ -3,6 +3,7 @@ package com.ssafy.stackers.service;
 import com.ssafy.stackers.exception.CustomException;
 import com.ssafy.stackers.model.*;
 import com.ssafy.stackers.model.dto.CommentDetailDto;
+import com.ssafy.stackers.model.dto.MainStationDto;
 import com.ssafy.stackers.model.dto.StationDetailDto;
 import com.ssafy.stackers.model.dto.StationDto;
 import com.ssafy.stackers.repository.CommentRepository;
@@ -47,18 +48,18 @@ public class StationService {
 
         // 스테이션 DB 저장
         Station s = Station.builder()
-                .content(stationDto.getContent())
-                .music(stationDto.getMusic())
-                .remainDepth(stationDto.getRemainDepth())
-                .prevStationId((Long) stationDto.getPrevStationId())
-                .isPublic(stationDto.isPublic())
-                .member(member)
-                .video(video)
-                .instrument(instrument)
-                .isComplete(stationDto.getRemainDepth() == 0 ? true : false)
-                .heartCnt(0)
-                .isDelete(false)
-                .build();
+            .content(stationDto.getContent())
+            .music(stationDto.getMusic())
+            .remainDepth(stationDto.getRemainDepth())
+            .prevStationId((Long) stationDto.getPrevStationId())
+            .member(member)
+            .video(video)
+            .instrument(instrument)
+            .isPublic(stationDto.getIsPublic() == 0? false : true)
+            .isComplete(stationDto.getRemainDepth() == 0 || stationDto.getIsComplete() == 1? true : false)
+            .heartCnt(0)
+            .isDelete(false)
+            .build();
 
         stationRepository.save(s);
         tagListService.save(tags, s);
@@ -137,4 +138,46 @@ public class StationService {
         return stationDetailDto;
     }
 
+    /**
+     * 로그인 안 한 회원의 메인 페이지 스테이션 조회
+     */
+    public List<Station> findByIsPublicAndIsComplete(boolean isPublic, boolean isCompleted){
+        return stationRepository.findByIsPublicAndIsComplete(isPublic, isCompleted);
+    }
+
+    /**
+     * 로그인 한 회원의 메인 페이지 스테이션 조회
+     */
+    public List<Station> findByIsPublicAndIsCompleteAndMember(boolean isPublic, boolean isCompleted, Member member){
+        return stationRepository.findByIsPublicAndIsCompleteAndMemberIsNot(isPublic, isCompleted, member);
+    }
+
+    /**
+     * 상위 스테이션 조회
+     */
+    public List<Station> findTop10Station(boolean isPublic){
+        return stationRepository.findTop10ByIsPublicOrderByHeartCntDescRegTimeAsc(isPublic);
+    }
+
+    /**
+     * 마이페이지 리스트 조회
+     */
+    public List<Station> findMyStation(boolean isPublic, Member member){
+        return stationRepository.findByIsPublicAndMember(isPublic, member);
+    }
+
+    /**
+     * Station을 MainStationDto로 변환하는 함수
+     */
+    public List<MainStationDto> getStationShortDetail(List<Station> stations){
+        List<MainStationDto> stationList = new ArrayList<>();
+
+        for (int i = 0; i < stations.size(); i++) {
+            Station s = stations.get(i);
+            List<String> tags = tagService.findNameById(tagListService.findByStation(s));
+            stationList.add(new MainStationDto(s.getId(), s.getContent(), tags, s.getVideo()));
+        }
+
+        return stationList;
+    }
 }
