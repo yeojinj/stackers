@@ -111,6 +111,7 @@ public class VideoService {
         log.info("width: " + probeResult.getStreams().get(0).width);
         log.info("height: " + probeResult.getStreams().get(0).height);
         log.info("bit_rate: " + probeResult.getStreams().get(0).bit_rate);
+        log.info("avg_frame_rate: " + probeResult.getStreams().get(0).avg_frame_rate);
 
     }
 
@@ -151,5 +152,23 @@ public class VideoService {
 
         // one-pass encode
         executor.createJob(builder).run();
+    }
+
+    /**
+     * 동영상 합치기
+     * ffmpeg 명령어 그대로 사용함 -> 배포 시 수정 필요
+     */
+    public void videoMerging() {
+        String cmd = "ffmpeg -i C:\\test\\videos\\left.mp4 -i C:\\test\\videos\\right.mp4 -filter_complex \"[0:v][1:v]hstack=inputs=2[v]; [0:a][1:a]amerge[a]\" -map \"[v]\" -map \"[a]\" -ac 2 C:\\test\\videos\\output.mp4";
+        try {
+            Process p = Runtime.getRuntime().exec(cmd);
+//            System.out.println("===========");
+//            System.out.println(p.getErrorStream());
+//            System.out.println(p.info());
+        } catch (IOException e) {
+//            System.out.printf(e.getMessage());
+//            System.out.printf(e.getClass().getName());
+            throw new RuntimeException(e);
+        }
     }
 }
