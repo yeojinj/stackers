@@ -9,7 +9,7 @@ services:
       context: ./mariadb
       dockerfile: Dockerfile
     ports:
-      - 3306:3306
+      - 3308:3306
     environment:
       TZ: Asia/Seoul
     networks:
@@ -44,15 +44,19 @@ services:
     ports:
       - 80:80
       - 443:443
+    depends_on:
+      - frontend
+      - backend
     networks:
       - stackers
     volumes:
       - ../certbot/conf:/etc/letsencrypt
       - ../certbot/www:/var/www/certbot
-    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
+
   certbot:
     image: certbot/certbot
-    restart: unless-stopped
+    restart: always
     volumes:
       - ../certbot/conf:/etc/letsencrypt
       - ../certbot/www:/var/www/certbot

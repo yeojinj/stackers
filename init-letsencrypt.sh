@@ -5,10 +5,10 @@ if ! [ -x "$(command -v docker-compose)" ]; then
   exit 1
 fi
 
-domains=(localhost)
+domains=(www.stackers.site)
 rsa_key_size=4096
 data_path="../certbot"
-email="" # Adding a valid address is strongly recommended
+email="sbsc20@naver.com" # Adding a valid address is strongly recommended
 staging=0 # Set to 1 if you're testing your setup to avoid hitting request limits
 
 if [ -d "$data_path" ]; then
@@ -37,7 +37,6 @@ docker-compose run --rm --entrypoint "\
     -subj '/CN=localhost'" certbot
 echo
 
-
 echo "### Starting nginx ..."
 docker-compose up --force-recreate -d nginx
 echo
@@ -64,7 +63,7 @@ case "$email" in
 esac
 
 # Enable staging mode if needed
-if [ $staging != "0" ]; then staging_arg="--staging"; fi
+if [ $staging != "1" ]; then staging_arg="--staging"; fi
 
 docker-compose run --rm --entrypoint "\
   certbot certonly --webroot -w /var/www/certbot \
