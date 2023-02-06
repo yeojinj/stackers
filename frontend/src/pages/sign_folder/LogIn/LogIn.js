@@ -11,7 +11,7 @@ import { useState } from 'react'
 import axios from 'axios'
 
 function LogIn({ setModalOpen }) {
-  const [id, setId] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
   // 로그인 모달이 열리면 스크롤 못하게 막기
@@ -42,22 +42,45 @@ function LogIn({ setModalOpen }) {
             // console.log('제출된다.')
             // console.log(event.target.id.value)
             // console.log(event.target.password.value)
-            setId(event.target.id.value)
-            setPassword(event.target.password.value)
-            console.log(id, password)
+            // setUsername(event.target.username.value)
+            // setPassword(event.target.password.value)
+            // console.log(username, password)
+            axios({
+              method: 'post',
+              url: '/api/login',
+              data: {
+                username: username,
+                password: password
+              }
+            })
+              .then((response) => {
+                console.log(response.data.accessToken)
+                localStorage.setItem('accessToken', response.data.accessToken)
+              })
+              .catch((error) => {
+                console.log(error.response)
+              })
           }}
         >
           <TextField
             placeholder="아이디(닉네임) 또는 아이디"
             size="medium"
             className="LogIn-inputBox "
-            name="id"
+            name="username"
+            value={username}
+            onChange={(event) => {
+              setUsername(event.target.value)
+            }}
           />
           <TextField
             placeholder="비밀번호 입력"
             size="medium"
             className="LogIn-inputBox "
             name="password"
+            value={password}
+            onChange={(event) => {
+              setPassword(event.target.value)
+            }}
           />
           <div className="find-password-div">
             <a
@@ -85,22 +108,7 @@ function LogIn({ setModalOpen }) {
           >
             로그인
           </Button>
-          <button
-            onClick={() => {
-              axios({
-                method: 'post',
-                url: '/api/login',
-                data: {
-                  username: id,
-                  password: password
-                }
-              }).then((response) => {
-                console.log(response)
-              })
-            }}
-          >
-            axios 테스트용
-          </button>
+
           <div className="SNS-LogIn-buttons">
             <Button
               variant="contained"
