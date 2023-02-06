@@ -1,0 +1,17 @@
+.ProfileEdit {
+  width: 560px;
+  height: 800px;
+  border: solid 1px black;
+  border-radius: 20px;
+}
+
+.ProfileEdit-head {
+  text-align: center;
+  /* border-bottom: solid 1px black; */
+}
+
+.ProfileEdit-profilePicture {
+  height: 180px;
+  border: 1px solid gray;
+  display: flex;
+}

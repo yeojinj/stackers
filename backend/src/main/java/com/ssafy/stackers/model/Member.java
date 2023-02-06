@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,9 +22,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Getter
-@Setter
-@ToString
-@NoArgsConstructor
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Member {
 
@@ -60,6 +62,9 @@ public class Member {
     @Column(name = "img_path", nullable = false)
     private String imgPath;
 
+    @Column(name = "img_name", nullable = false)
+    private String imgName;
+
     @Column(name = "is_resign", nullable = false)
     private boolean isResign;
 
@@ -68,23 +73,6 @@ public class Member {
             return Arrays.asList(this.roles.split(","));
         }
         return new ArrayList<>();
-    }
-
-    @Builder
-    public Member(Long id, String password, String roles, String username, String nickname,
-        String email, String bio, LocalDateTime regDate, LocalDateTime lastLogin, String imgPath,
-        boolean isResign) {
-        this.id = id;
-        this.password = password;
-        this.roles = roles;
-        this.username = username;
-        this.nickname = nickname;
-        this.email = email;
-        this.bio = bio;
-        this.regDate = regDate;
-        this.lastLogin = lastLogin;
-        this.imgPath = imgPath;
-        this.isResign = isResign;
     }
 
 }
