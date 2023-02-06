@@ -77,16 +77,13 @@ public class StationController {
         try {
             loginMember = memberService.findByUsername(principal.getUsername());
         } catch (CustomException e) {
-            System.out.println(e.getClass().getName());
             return new ResponseEntity<>(ErrorCode.INVALID_AUTH_TOKEN, HttpStatus.NOT_FOUND);
         }
 
         // 비디오 저장
         Video video = videoService.uploadVideo(file);
-
-        Member member = memberService.findByUsername("subin");
         // 스테이션 저장
-        stationService.save(stationDto, video, member);
+        stationService.save(stationDto, video, loginMember);
         return new ResponseEntity<>("스테이션 업로드 성공", HttpStatus.OK);
     }
 
@@ -194,7 +191,6 @@ public class StationController {
         heartService.deleteHeart(stationService.findById((long) stationId),
             memberService.findByUsername(
                 principal.getUsername()));
-      
         return new ResponseEntity<>("좋아요 삭제 성공", HttpStatus.OK);
     }
 
