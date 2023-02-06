@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-// import styled from 'styled-components'
+import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import logo from '../assets/logo.svg'
 import search from '../assets/search.svg'
@@ -24,7 +24,7 @@ const wholeTextArray = [
   '플라밍고',
   '라피스'
 ]
-function Header() {
+function Header(props) {
   const [login, setLogin] = useState(false)
   const [inputValue, setInputValue] = useState('')
   const [isHaveInputValue, setIsHaveInputValue] = useState(false)
@@ -32,11 +32,17 @@ function Header() {
   const [dropDownItemIndex, setDropDownItemIndex] = useState(-1)
 
   const IsLogin = () => {
+    const userLogin = useSelector((state) => {
+      return state.user.isLogged
+    })
+    setLogin(userLogin)
     if (login) {
       return (
         <>
           <div className="upload-profile">
-            <button className="upload-btn">+ 업로드</button>
+            <button className="upload-btn" onClick={goRecordRoom}>
+              + 업로드
+            </button>
             <ProfileFrame />
           </div>
         </>
@@ -45,12 +51,21 @@ function Header() {
       return (
         <>
           {/* onclick 시 navigateToLogin 함수 주석해제, 실행 */}
-          <button className="login-btn" onClick={() => setLogin(!login)}>
+          <button className="login-btn" onClick={loginmodalOpen}>
             로그인
           </button>
         </>
       )
     }
+  }
+
+  const loginmodalOpen = () => {
+    setLogin(true)
+    props.openModal(true)
+  }
+
+  const goRecordRoom = () => {
+    navigate('/RecordRoom')
   }
 
   const showDropDownList = () => {
