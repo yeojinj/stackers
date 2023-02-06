@@ -26,7 +26,7 @@ function profileFrame() {
       {/* 드롭다운이 켜지면 업로드버튼과 프로필사진 위치 이동되는 이슈발생 */}
       {/* 이슈 해결 후 onMouseLeave 이벤트 주석 해제하기 */}
       <img
-        style={{ width: '42px', height: '42px', marginTop: '6px' }}
+        style={{ width: '55px', height: '55px', marginTop: '10px' }}
         src={profileInfo.profile_img}
         onMouseOver={profileDropdown}
         // onMouseLeave={() => setProfileDropDown(false)}

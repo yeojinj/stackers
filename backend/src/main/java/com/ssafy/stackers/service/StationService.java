@@ -2,16 +2,17 @@ package com.ssafy.stackers.service;
 
 import com.ssafy.stackers.exception.CustomException;
 import com.ssafy.stackers.model.*;
+import com.ssafy.stackers.model.dto.CommentDetailDto;
 import com.ssafy.stackers.model.dto.MainStationDto;
-import com.ssafy.stackers.model.*;
 import com.ssafy.stackers.model.dto.StationDetailDto;
 import com.ssafy.stackers.model.dto.StationDto;
+import com.ssafy.stackers.repository.CommentRepository;
 import com.ssafy.stackers.repository.StationRepository;
+import com.ssafy.stackers.repository.TagListRepository;
 import com.ssafy.stackers.repository.VideoRepository;
 import com.ssafy.stackers.utils.error.ErrorCode;
 
 import java.util.ArrayList;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,10 @@ public class StationService {
     private StationRepository stationRepository;
     @Autowired
     private VideoRepository videoRepository;
+    @Autowired
+    private CommentRepository commentRepository;
+    @Autowired
+    private TagListRepository tagListRepository;
     @Autowired
     private InstrumentService instrumentService;
     @Autowired
@@ -80,15 +85,31 @@ public class StationService {
         Station station = stationRepository.findById(id).get();
 
         // 태그 엔티티 -> List<String>
-        // TODO : 태그 목록 가져오는 함수 만들기
+        List<TagList> tagLists = tagListRepository.findByStation(station);
+        List<String> tagDetails = new ArrayList<>();
+        for (int i = 0; i < tagLists.size(); i++) {
+            tagDetails.add(tagLists.get(i).getTag().getName());
+        }
 
         // 이전 게시글 작성자(연주자) -> List<MusicianDto>
 
         // 이전 게시글 악기 -> List<MusicianDto>
 
-        // 댓글 엔티티 -> List<CommentDetailDto>
-
+        // 댓글 엔티티 List -> List<CommentDetailDto>
+        List<Comment> comments = commentRepository.findByStation(station);
         // 댓글 수
+        int commentCnt = comments.size();
+        List<CommentDetailDto> commentDetails = new ArrayList<>();
+        for (int i = 0; i < commentCnt; i++) {
+            CommentDetailDto commentDetailDto = CommentDetailDto.builder()
+                    .commentContent(comments.get(i).getContent())
+                    .commentRegTime(comments.get(i).getRegTime())
+                    .commenterUsername(comments.get(i).getMember().getUsername())
+                    .commenterImgPath(comments.get(i).getMember().getImgPath())
+                    .build();
+
+            commentDetails.add(commentDetailDto);
+        }
 
         StationDetailDto stationDetailDto = StationDetailDto.builder()
                 .id(station.getId())
@@ -106,7 +127,13 @@ public class StationService {
                 .music(station.getMusic())
                 .leadInstrumentId(station.getInstrument().getId())
                 .leadInstrumentName(station.getInstrument().getName())
-                .prevStationId(station.getPrevStationId()).build();
+                .prevStationId(station.getPrevStationId())
+                // 댓글
+                .commentList(commentDetails)
+                .commentCnt(commentCnt)
+                // 태그
+                .tags(tagDetails)
+                .build();
 
         return stationDetailDto;
     }

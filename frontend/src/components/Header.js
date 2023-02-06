@@ -24,7 +24,7 @@ const wholeTextArray = [
   '플라밍고',
   '라피스'
 ]
-function Header(props) {
+function Header() {
   const [login, setLogin] = useState(false)
   const [inputValue, setInputValue] = useState('')
   const [isHaveInputValue, setIsHaveInputValue] = useState(false)
@@ -45,7 +45,7 @@ function Header(props) {
       return (
         <>
           {/* onclick 시 navigateToLogin 함수 주석해제, 실행 */}
-          <button className="login-btn" onClick={loginmodalOpen}>
+          <button className="login-btn" onClick={() => setLogin(!login)}>
             로그인
           </button>
         </>
@@ -53,10 +53,6 @@ function Header(props) {
     }
   }
 
-  const loginmodalOpen = () => {
-    setLogin(true)
-    props.openModal(true)
-  }
   const showDropDownList = () => {
     if (inputValue === '') {
       setIsHaveInputValue(false)
