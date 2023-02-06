@@ -4,7 +4,7 @@
   left: 0;
   top: 0;
   width: 100%;
-  height: 76px;
+  height: 57px;
   display: flex;
   justify-content: space-between;
   /* align-items: center; */
@@ -13,9 +13,9 @@
 }
 
 .logo-img {
-  width: 234px;
-  height: 62px;
-  margin-top: 17px;
+  width: 210px;
+  height: 48px;
+  margin-top: 12px;
   margin-left: 92px;
 }
 
@@ -30,10 +30,10 @@
 .header-search {
   display: flex;
   flex-direction: row;
-  margin-top: 16px;
+  margin-top: 10px;
   /* margin-left: 30px; */
   width: 511px;
-  height: 49px;
+  height: 39px;
   border: 0px;
   border-radius: 30px;
   background-color: rgba(243, 243, 243, 1);
@@ -42,12 +42,12 @@
 
 .search-input {
   width: 458px;
-  height: 34px;
+  height: 30px;
   border-bottom: 0px;
   border-top: 0px;
   border-left: 0px;
   border-right: 1px solid rgba(175, 175, 175, 1);
-  margin-top: 7px;
+  margin-top: 5px;
   padding: 0px;
   background-color: rgba(243, 243, 243, 1);
   outline: none;
@@ -55,7 +55,7 @@
 
 .search-icon {
   margin-left: 12px;
-  margin-top: 15px;
+  margin-top: 10px;
   width: 17.49px;
   height: 17.49px;
 }
@@ -91,14 +91,14 @@
 
 .login-btn {
   width: 111px;
-  height: 45px;
-  margin-top: 18px;
+  height: 38px;
+  margin-top: 9px;
   /* margin-left: 157px; */
   margin-right: 89px;
   padding: 0px;
   border: 0px;
   border-radius: 10px;
-  font-size: 18px;
+  font-size: 16px;
   color: white;
   background-color: rgba(42, 32, 150, 1);
 }
@@ -106,20 +106,20 @@
 .upload-profile {
   display: flex;
   flex-direction: row;
-  margin-right: 10px;
+  margin-right: 30px;
 }
 
 .upload-btn {
   width: 111px;
-  height: 45px;
+  height: 38px;
   margin-right: 11px;
-  margin-top: 18px;
+  margin-top: 9px;
   /* margin-left: 157px; */
   /* margin-right: 89px; */
   padding: 0px;
   border: 0px;
   border-radius: 10px;
-  font-size: 18px;
+  font-size: 16px;
   color: white;
   background-color: rgba(42, 32, 150, 1);
 }
