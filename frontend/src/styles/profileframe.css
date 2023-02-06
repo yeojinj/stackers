@@ -1,3 +1,8 @@
+.profile-on {
+  position: fixed;
+  right: 0;
+  top: 53px;
+}
 .profile-dropdownbox {
   width: 132px;
   max-height: 175px;
