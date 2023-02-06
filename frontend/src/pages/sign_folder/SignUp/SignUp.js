@@ -128,27 +128,6 @@ function SignUp() {
           >
             가입하기
           </Button>
-          <button
-            onClick={() => {
-              axios({
-                method: 'POST',
-                url: '/api/join',
-                data: {
-                  username: 'test3',
-                  password: 'hi',
-                  email: 'dlckdals'
-                }
-              })
-                .then((response) => {
-                  console.log(response)
-                })
-                .catch((error) => {
-                  console.log(error.response)
-                })
-            }}
-          >
-            테스트용
-          </button>
         </form>
       </div>
     </div>
