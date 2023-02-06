@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <video
+      id="left"
+      src="https://webrtc.github.io/samples/src/video/chrome.webm"
+      crossorigin="anonymous"
+      preload
+    ></video>
+    <video id="right" crossorigin="anonymous" muted></video>
+    <video id="output" muted></video>
+    <div>
+      <button id="start-record-button">Start Record</button>
+      <button id="stop-record-button">Stop Record</button>
+      <button id="download-button">Download</button>
+    </div>
+    <scriipt src="https://www.webrtc-experiment.com/RecordRTC.js"></scriipt>
+    <script src="https://www.webrtc-experiment.com/MultiStreamsMixer.js"></script>
+    <script src="./multistreams.js"></script>
+  </body>
+</html>

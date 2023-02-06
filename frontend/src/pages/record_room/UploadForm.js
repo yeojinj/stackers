@@ -22,11 +22,46 @@ function UploadForm(props) {
       [e.target.name]: e.target.value
     })
   }
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (!values.content || !values.music || !values.scope) {
       alert('빈칸을 입력해주세요')
     } else {
+      console.log(values)
+      if (values) {
+        let testData = {
+          content: '프론트 테스트 데이터임',
+          music: '프론트 테스트 데이터임',
+          prevStationId: -1,
+          tags: ['행복', '사랑'],
+          remainDepth: 3,
+          instrumentId: 1
+        }
+
+        const formData = new FormData()
+        // 기본 정보
+        formData.append(
+          'info',
+          new Blob([JSON.stringify(testData)], {
+            type: 'application/json'
+          })
+        )
+
+        // 파일 정보
+        formData.append('file', values.stack)
+        await axios
+          .post(`/api/station/upload`, formData, {
+            headers: {
+              'Content-Type': `multipart/form-data`
+            }
+          })
+          .then(() => console.log('[스테이션 업로드] >> 성공'))
+          .catch((error) => {
+            alert(error)
+            console.log(error)
+          })
+        console.log(formData)
+      }
       handleClose()
     }
   }
@@ -73,6 +108,7 @@ function UploadForm(props) {
                     name="scope"
                     value="true"
                     onChange={handleChange}
+                    checked
                   />
                   공개
                 </label>
