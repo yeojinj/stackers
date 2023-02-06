@@ -62,10 +62,6 @@ public class VideoService {
     }
 
     /**
-     * 썸네일 추출 함수
-     */
-
-    /**
      * 동영상 썸네일 추출
      * 동영상 파일 경로, 썸네일 추출 경로 (프로젝트 외부) 절대 경로로 지정함
      */
@@ -117,7 +113,6 @@ public class VideoService {
         log.info("bit_rate: " + probeResult.getStreams().get(0).bit_rate);
 
     }
-
 
     /**
      * 동영상 인코딩
