@@ -164,8 +164,16 @@ public class StationController {
             .member(memberService.findByUsername(principal.getUsername())).build();
         commentService.save(saveComment);
 
-        log.info("[['{}' 스테이션에 댓글 작성] : {}", station.getContent(), comment.getContent());
         return new ResponseEntity<>("댓글 작성 성공", HttpStatus.OK);
+    }
+    /**
+     * 스테이션 댓글 삭제
+     */
+    @DeleteMapping("/comment/{commentid}")
+    public ResponseEntity<?> deleteComment(@PathVariable("commentid") int commentId){
+        System.out.println();
+        if(commentService.delete((long) commentId)) return new ResponseEntity<>("댓글 삭제 성공", HttpStatus.OK);
+        else return new ResponseEntity<>("댓글 삭제 실패", HttpStatus.SERVICE_UNAVAILABLE);
     }
 
     /**
@@ -185,6 +193,9 @@ public class StationController {
         return new ResponseEntity<>("좋아요 작성 성공", HttpStatus.OK);
     }
 
+    /**
+     * 스테이션 좋아요 삭제
+     */
     @DeleteMapping("/{stationid}/heart")
     public ResponseEntity<?> deleteHeart(@PathVariable("stationid") int stationId,
         @AuthenticationPrincipal PrincipalDetails principal) {
