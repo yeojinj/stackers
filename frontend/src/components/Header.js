@@ -40,7 +40,9 @@ function Header(props) {
       return (
         <>
           <div className="upload-profile">
-            <button className="upload-btn">+ 업로드</button>
+            <button className="upload-btn" onClick={goRecordRoom}>
+              + 업로드
+            </button>
             <ProfileFrame />
           </div>
         </>
@@ -60,6 +62,10 @@ function Header(props) {
   const loginmodalOpen = () => {
     setLogin(true)
     props.openModal(true)
+  }
+
+  const goRecordRoom = () => {
+    navigate('/RecordRoom')
   }
 
   const showDropDownList = () => {
