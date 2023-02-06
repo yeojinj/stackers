@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import './LogIn.css'
 import logo from '../../../assets/logo.svg'
 import TextField from '@mui/material/TextField'
@@ -7,13 +7,14 @@ import Button from '@mui/material/Button'
 import naverLogo from './naverLogo.svg'
 import kakaoLogo from './kakaoLogo.png'
 import GoogleLogo from './GoogleLogo.png'
-import { useState } from 'react'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
+
 import axios from 'axios'
 
 function LogIn({ setModalOpen }) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-
+  const navigate = useNavigate()
   // 로그인 모달이 열리면 스크롤 못하게 막기
   // 닫히면 스크롤 다시 가능
   const showModal = () => {
@@ -28,6 +29,7 @@ function LogIn({ setModalOpen }) {
   useEffect(() => {
     showModal
   }, [])
+
   return (
     <div className="login-background">
       <div className="LogIn">
@@ -49,13 +51,14 @@ function LogIn({ setModalOpen }) {
               method: 'post',
               url: '/api/login',
               data: {
-                username: username,
-                password: password
+                username,
+                password
               }
             })
               .then((response) => {
                 console.log(response.data.accessToken)
                 localStorage.setItem('accessToken', response.data.accessToken)
+                navigate('/MainRoom')
               })
               .catch((error) => {
                 console.log(error.response)
@@ -83,15 +86,9 @@ function LogIn({ setModalOpen }) {
             }}
           />
           <div className="find-password-div">
-            <a
-              href="/Login"
-              onClick={(event) => {
-                event.preventDefault()
-              }}
-              style={{ marginLeft: 'auto' }}
-            >
+            <Link to="/SignUp" style={{ marginLeft: 'auto' }}>
               비밀번호를 잊어버렸나요?
-            </a>
+            </Link>
           </div>
 
           <Button
