@@ -6,11 +6,13 @@ import './SignUp.css'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 function SignUp() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
+  const navigate = useNavigate()
   return (
     <div>
       <div className="SignUp">
@@ -120,6 +122,7 @@ function SignUp() {
               })
                 .then((response) => {
                   console.log(response)
+                  navigate('/MainRoom')
                 })
                 .catch((error) => {
                   console.log(error.response)
@@ -128,27 +131,6 @@ function SignUp() {
           >
             가입하기
           </Button>
-          <button
-            onClick={() => {
-              axios({
-                method: 'POST',
-                url: '/api/join',
-                data: {
-                  username: 'test3',
-                  password: 'hi',
-                  email: 'dlckdals'
-                }
-              })
-                .then((response) => {
-                  console.log(response)
-                })
-                .catch((error) => {
-                  console.log(error.response)
-                })
-            }}
-          >
-            테스트용
-          </button>
         </form>
       </div>
     </div>
