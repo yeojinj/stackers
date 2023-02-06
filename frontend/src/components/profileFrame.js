@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import profileTest from '../assets/profileTest.svg'
 import '../styles/profileframe.css'
 
@@ -12,7 +13,21 @@ function profileFrame() {
   const profileDropdown = () => {
     setProfileDropDown(true)
   }
+  const navigate = useNavigate()
 
+  const goToPage = (e) => {
+    const page = e.target.textContent
+    if (page === '내 프로필') {
+      navigate('/MyPage')
+    } else if (page === '비밀번호 변경') {
+      // 비밀번호 변경 페이지로 이동시키기
+      // navigate('')
+      console.log(page)
+    } else if (page === '로그아웃') {
+      // 로그아웃 시키기
+      console.log(page)
+    }
+  }
   const profileList = [
     '내 프로필',
     '비밀번호 변경',
@@ -26,19 +41,22 @@ function profileFrame() {
       {/* 드롭다운이 켜지면 업로드버튼과 프로필사진 위치 이동되는 이슈발생 */}
       {/* 이슈 해결 후 onMouseLeave 이벤트 주석 해제하기 */}
       <img
-        style={{ width: '55px', height: '55px', marginTop: '10px' }}
+        style={{ width: '42px', height: '42px', marginTop: '6px' }}
         src={profileInfo.profile_img}
         onMouseOver={profileDropdown}
-        // onMouseLeave={() => setProfileDropDown(false)}
       ></img>
-      <div className="profile-on">
+      <div
+        className="profile-on"
+        onMouseLeave={() => setProfileDropDown(false)}
+      >
         {profile && (
           <ul className="profile-dropdownbox">
             {profileList.map((dropDownItem, dropDownIndex) => {
               return (
                 <li
-                  key={dropDownIndex}
+                  onClick={goToPage}
                   onMouseOver={() => setDropDownItemIndex(dropDownIndex)}
+                  key={dropDownIndex}
                   className={
                     dropDownItemIndex === dropDownIndex
                       ? 'profile-menu selected'
