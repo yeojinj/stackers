@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import profileTest from '../assets/profileTest.svg'
 import '../styles/profileframe.css'
+import { useDispatch } from 'react-redux'
+import { LogOutState } from '../store'
 
 function profileFrame() {
   const [profile, setProfileDropDown] = useState(false)
@@ -14,6 +16,7 @@ function profileFrame() {
     setProfileDropDown(true)
   }
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const goToPage = (e) => {
     const page = e.target.textContent
@@ -25,7 +28,8 @@ function profileFrame() {
       console.log(page)
     } else if (page === '로그아웃') {
       // 로그아웃 시키기
-      console.log(page)
+      dispatch(LogOutState())
+      navigate('/MainRoom')
     }
   }
   const profileList = [
