@@ -1,18 +1,12 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { useEffect, useState, useRef } from 'react'
 import '../../styles/stationlistitem.css'
 import profileTest from '../../assets/profileTest.svg'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 
-StationListItem.propTypes = {
-  isRanking: PropTypes.bool,
-  isSearch: PropTypes.bool
-}
+function StationListItem({ isRanking, isSearch, station }) {
+  const [staion, setStation] = useState()
 
-function StationListItem({ isRanking, isSearch }) {
-  // const [autoPlay, setPlay] = useState(false)
-
-  // 후에 stationInfo 는 useState 에서 기본 값으로 설정, 받아올 데이터 형식으로 변환하기
+  // 검색 페이지 조회 연결 후 아래 stationInfo 데이터 삭제
   const stationInfo = {
     video_url: 'https://webrtc.github.io/samples/src/video/chrome.webm',
     video_description: '비디오 설명이에요 비디오 설명이에요 비디오 설명이에요',
@@ -21,25 +15,75 @@ function StationListItem({ isRanking, isSearch }) {
     username: 'apricot',
     video_likes: 12000
   }
-  // const [info, setInfo] = useState(stationInfo)
-  // const setInfo = () => {
-  //   const updateInfo = [...info, { props로 받아올 데이터 }]
-  //   setInfo(updateInfo)
-  // }
 
+  const videoRef = useRef(null)
+
+  useEffect(() => {
+    setStation(station)
+    console.log('mainroom 에서 보낸 데이터를 station 변수에 넣기', staion)
+  }, [])
+
+  useEffect(() => {
+    IsRanking()
+    IsSearch()
+  }, [])
+
+  // 마우스 오버시 비디오 재생, 마우스 리브시 비디오 일시정지
+  function playVideo() {
+    return videoRef.current.play()
+  }
+  function pauseVideo() {
+    return videoRef.current.pause()
+  }
+
+  // 메인페이지 스테이션 조회
   const IsRanking = () => {
+    // 스테이션 랭킹
     if (isRanking) {
-      return null
-    } else {
       return (
         <>
-          <p className="station-description">{stationInfo.video_description}</p>
-          <div className="station-tag">{stationInfo.video_tags}</div>
+          {/* 썸네일 */}
+          {/* <img
+            src="station.video.thumbnailPath"
+            className="thumbnail-style"
+          ></img> */}
+          <video
+            ref={videoRef}
+            id="staion"
+            className="video-style"
+            src={station.video.videoPath}
+            autoPlay={false}
+            onMouseOver={playVideo}
+            onMouseLeave={pauseVideo}
+            loop
+          ></video>
+        </>
+      )
+    } else {
+      // 완성, 미완성 스테이션
+      return (
+        <>
+          <video
+            ref={videoRef}
+            className="video-style"
+            src={station.video.videoPath}
+            autoPlay={false}
+            onMouseOver={playVideo}
+            onMouseLeave={pauseVideo}
+            loop
+          ></video>
+          <p className="station-description">{station.content}</p>
+          <div className="station-tag">
+            {station.tags.map((tag, i) => {
+              return `#${tag} `
+            })}
+          </div>
         </>
       )
     }
   }
 
+  // 검색페이지에서 데이터 받을 때 다시 해보기
   const IsSearch = () => {
     let likesResult = ''
     const modifyLikes = stationInfo.video_likes
@@ -51,6 +95,15 @@ function StationListItem({ isRanking, isSearch }) {
     if (isSearch) {
       return (
         <>
+          <video
+            ref={videoRef}
+            className={isSearch ? 'video-style-search' : 'video-style'}
+            src={station.video.videoPath}
+            autoPlay={false}
+            onMouseOver={playVideo}
+            onMouseLeave={pauseVideo}
+            loop
+          ></video>
           <div className="station-account">
             <div className="profile-box">
               <img className="profile-img" src={stationInfo.profile_img}></img>
@@ -66,27 +119,8 @@ function StationListItem({ isRanking, isSearch }) {
     }
   }
 
-  // const updatePlay = (e) => {
-  //   // console.log(autoPlay)
-  //   setPlay(!autoPlay)
-  //   // console.log(autoPlay)
-  // }
-
-  // useEffect(() => {
-  //   console.log(autoPlay)
-  // }, [autoPlay])
-
   return (
     <div className={isSearch ? 'station-item-search' : 'station-item'}>
-      {/* <img src={logo}></img> */}
-      <video
-        className={isSearch ? 'video-style-search' : 'video-style'}
-        src={stationInfo.video_url}
-        autoPlay={false}
-        // onMouseOver={updatePlay}
-        // onMouseLeave={updatePlay}
-        loop
-      ></video>
       <IsRanking />
       <IsSearch />
     </div>

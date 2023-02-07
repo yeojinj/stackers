@@ -5,6 +5,7 @@ import com.ssafy.stackers.exception.CustomException;
 import com.ssafy.stackers.model.*;
 import com.ssafy.stackers.model.dto.MainStationDto;
 import com.ssafy.stackers.model.dto.StationDetailDto;
+import com.ssafy.stackers.model.dto.StationDetailObjectDto;
 import com.ssafy.stackers.model.dto.StationDto;
 import com.ssafy.stackers.service.*;
 import com.ssafy.stackers.utils.error.ErrorCode;
@@ -21,7 +22,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -72,8 +72,8 @@ public class StationController {
             }
         }
 
-        Member loginMember = null;
         // 로그인 되어 있는 유저 정보 가져오기 -> 로그인 되어 있지 않다면 오류 반환
+        Member loginMember = null;
         try {
             loginMember = memberService.findByUsername(principal.getUsername());
         } catch (CustomException e) {
@@ -81,7 +81,9 @@ public class StationController {
         }
 
         // 비디오 저장
+//        Video video = videoService.uploadVideo(file, stationDto.getVideoName());
         Video video = videoService.uploadVideo(file);
+
         // 스테이션 저장
         stationService.save(stationDto, video, loginMember);
         return new ResponseEntity<>("스테이션 업로드 성공", HttpStatus.OK);
@@ -126,7 +128,7 @@ public class StationController {
      */
     @GetMapping("/popular")
     public List<MainStationDto> getPopularStation() {
-        List<Station> stations = stationService.findTop10Station(false);
+        List<Station> stations = stationService.findTop10Station(true);
         return stationService.getStationShortDetail(stations);
     }
 
@@ -166,14 +168,18 @@ public class StationController {
 
         return new ResponseEntity<>("댓글 작성 성공", HttpStatus.OK);
     }
+
     /**
      * 스테이션 댓글 삭제
      */
     @DeleteMapping("/comment/{commentid}")
-    public ResponseEntity<?> deleteComment(@PathVariable("commentid") int commentId){
+    public ResponseEntity<?> deleteComment(@PathVariable("commentid") int commentId) {
         System.out.println();
-        if(commentService.delete((long) commentId)) return new ResponseEntity<>("댓글 삭제 성공", HttpStatus.OK);
-        else return new ResponseEntity<>("댓글 삭제 실패", HttpStatus.SERVICE_UNAVAILABLE);
+        if (commentService.delete((long) commentId)) {
+            return new ResponseEntity<>("댓글 삭제 성공", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("댓글 삭제 실패", HttpStatus.SERVICE_UNAVAILABLE);
+        }
     }
 
     /**
@@ -205,12 +211,10 @@ public class StationController {
         return new ResponseEntity<>("좋아요 삭제 성공", HttpStatus.OK);
     }
 
+
     @GetMapping("/{stationid}")
-    public ResponseEntity<StationDetailDto> getStationDetail(
-        @PathVariable("stationid") int stationId) {
-
-        StationDetailDto stationDetailDto = stationService.findDetailById((long) stationId);
-
-        return new ResponseEntity<>(stationDetailDto, HttpStatus.OK);
+    public ResponseEntity<StationDetailObjectDto> getStationDetail(@PathVariable("stationid") int stationId){
+        StationDetailObjectDto station = stationService.getStationDetail((long) stationId);
+        return new ResponseEntity<>(station, HttpStatus.OK);
     }
 }

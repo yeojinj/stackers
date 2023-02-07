@@ -22,7 +22,7 @@ public class Video {
     @Column(name = "video_path", nullable = false)
     private String videoPath;
 
-    @Column(name = "video_name", nullable = false)
+    @Column(name = "video_name")
     private String videoName;
 
     @Column(name = "video_ori_name", nullable = false)
@@ -36,6 +36,13 @@ public class Video {
         String thumbnailPath) {
         this.videoPath = videoPath;
         this.videoName = videoName;
+        this.videoOriName = videoOriName;
+        this.thumbnailPath = thumbnailPath;
+    }
+
+    @Builder
+    public Video(String videoPath, String videoOriName, String thumbnailPath) {
+        this.videoPath = videoPath;
         this.videoOriName = videoOriName;
         this.thumbnailPath = thumbnailPath;
     }
