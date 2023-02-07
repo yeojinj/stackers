@@ -30,13 +30,13 @@ function Header(props) {
   const [isHaveInputValue, setIsHaveInputValue] = useState(false)
   const [dropDownList, setDropDownList] = useState(wholeTextArray)
   const [dropDownItemIndex, setDropDownItemIndex] = useState(-1)
+  const userLogin = useSelector((state) => {
+    return state.user.isLogged
+  })
 
   const IsLogin = () => {
-    const userLogin = useSelector((state) => {
-      return state.user.isLogged
-    })
-    setLogin(userLogin)
-    if (login) {
+    console.log(login)
+    if (userLogin) {
       return (
         <>
           <div className="upload-profile">
@@ -74,7 +74,7 @@ function Header(props) {
       setDropDownList([])
     } else {
       const choosenTextList = wholeTextArray.filter((textItem) =>
-        textItem.toLowerCase().startsWith(inputValue)
+        textItem.toLowerCase().startsWith(inputValue.toLowerCase())
       )
       if (Array.isArray(choosenTextList) && choosenTextList.length === 0) {
         setIsHaveInputValue(false)
