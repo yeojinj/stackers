@@ -81,7 +81,8 @@ public class StationController {
         }
 
         // 비디오 저장
-        Video video = videoService.uploadVideo(file, stationDto.getVideoName());
+//        Video video = videoService.uploadVideo(file, stationDto.getVideoName());
+        Video video = videoService.uploadVideo(file);
 
         // 스테이션 저장
         stationService.save(stationDto, video, loginMember);
