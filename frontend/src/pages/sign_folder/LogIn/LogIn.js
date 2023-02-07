@@ -24,12 +24,12 @@ function LogIn({ setModalOpen }) {
   // 닫히면 스크롤 다시 가능
   const showModal = () => {
     setModalOpen(true)
-    document.body.style.overflow = 'hidden'
+    // document.body.style.overflow = 'hidden'
   }
   const closeModal = () => {
-    navigate(-1)
-    // setModalOpen(false)
-    document.body.style.overflow = 'unset'
+    // document.body.style.overflow = 'unset'
+    setModalOpen(false)
+    // navigate(-1)
   }
 
   useEffect(() => {
