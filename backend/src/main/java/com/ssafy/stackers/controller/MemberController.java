@@ -59,9 +59,15 @@ public class MemberController {
     public ResponseEntity<?> user(
         @AuthenticationPrincipal PrincipalDetails principal) {
         Member member = memberService.getLoginMember(principal.getUsername());
-        LoginMemberDto loginMemberDto = LoginMemberDto.builder().username(member.getUsername())
-            .nickname(member.getNickname()).email(member.getEmail()).bio(member.getBio())
-            .imgPath(member.getImgPath()).build();
+        LoginMemberDto loginMemberDto = LoginMemberDto.builder()
+            .username(member.getUsername())
+            .nickname(member.getNickname())
+            .email(member.getEmail())
+            .bio(member.getBio())
+            .imgPath(member.getImgPath())
+            .instruments(playableInstrumentService.getInstruments(member.getId()))
+            .parties(partyMemberService.getParties(member.getId()))
+            .build();
         return new ResponseEntity<>(loginMemberDto, HttpStatus.OK);
     }
 

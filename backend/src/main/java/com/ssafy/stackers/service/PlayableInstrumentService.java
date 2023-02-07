@@ -6,6 +6,8 @@ import com.ssafy.stackers.model.Member;
 import com.ssafy.stackers.model.PlayableInstrument;
 import com.ssafy.stackers.repository.PlayableInstrumentRepository;
 import com.ssafy.stackers.utils.error.ErrorCode;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,4 +38,14 @@ public class PlayableInstrumentService {
         playableInstrumentRepository.deleteByMemberIdAndInstrumentId(member.getId(),
             instrument.getId());
     }
+
+    public List<String> getInstruments(Long id) {
+        List<String> instruments =
+            playableInstrumentRepository.findByMemberId(id).stream()
+                .map(PlayableInstrument::getInstrument)
+                .map(Instrument::getName)
+                .collect(Collectors.toList());
+        return instruments;
+    }
+
 }
