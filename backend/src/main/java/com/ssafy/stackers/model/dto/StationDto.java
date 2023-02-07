@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.ToString;
 
 @Getter
-@ToString
 public class StationDto {
     private String content;
     private String music;
@@ -17,4 +16,18 @@ public class StationDto {
     private boolean isDelete;
     private List<String> tags;
     private Long prevStationId;
+    private String videoName;
+
+    public StationDto(String content, String music, int heartCnt, int remainDepth, int isPublic,
+        int isComplete, boolean isDelete, List<String> tags, Long prevStationId) {
+        this.content = content;
+        this.music = music;
+        this.heartCnt = heartCnt;
+        this.remainDepth = remainDepth;
+        this.isPublic = isPublic;
+        this.isComplete = isComplete;
+        this.isDelete = isDelete;
+        this.tags = tags;
+        this.prevStationId = prevStationId;
+    }
 }

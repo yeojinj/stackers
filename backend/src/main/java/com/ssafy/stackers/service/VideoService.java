@@ -55,7 +55,7 @@ public class VideoService {
         destinationFile.getParentFile().mkdirs();
         file.transferTo(destinationFile);
 
-        Video video = Video.builder().videoName(destinationFileName + "mp4").videoOriName(sourceVideoName)
+        Video video = Video.builder().videoName(destinationFileName).videoOriName(sourceVideoName)
             .videoPath(videoPath).build();
 
         return video;

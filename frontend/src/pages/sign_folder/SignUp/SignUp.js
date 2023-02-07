@@ -6,11 +6,13 @@ import './SignUp.css'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 function SignUp() {
-  const [id, setId] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
+  const navigate = useNavigate()
   return (
     <div>
       <div className="SignUp">
@@ -33,10 +35,10 @@ function SignUp() {
         <form
           onSubmit={(event) => {
             event.preventDefault()
-            setId(event.target.id.value)
-            setPassword(event.target.password.value)
-            setEmail(event.target.email.value)
-            console.log(id, password, email)
+            // setUsername(event.target.username.value)
+            // setPassword(event.target.password.value)
+            // setEmail(event.target.email.value)
+            console.log(username, password, email)
           }}
         >
           <TextField
@@ -46,19 +48,31 @@ function SignUp() {
               width: '100%',
               marginBottom: '25px'
             }}
-            name="id"
+            name="username"
+            value={username}
+            onChange={(event) => {
+              setUsername(event.target.value)
+            }}
           />
           <TextField
             placeholder="비밀번호(알파벳, 특수문자를 포함한 8~10자로 구성)"
             size="medium"
             style={{ width: '100%', marginBottom: '25px' }}
             name="password"
+            value={password}
+            onChange={(event) => {
+              setPassword(event.target.value)
+            }}
           />
           <TextField
             placeholder="이메일"
             size="medium"
             style={{ width: '100%', marginBottom: '25px' }}
             name="email"
+            value={email}
+            onChange={(event) => {
+              setEmail(event.target.value)
+            }}
           />
           <div
             style={{
@@ -96,27 +110,28 @@ function SignUp() {
               marginBottom: '30px'
             }}
             type="submit"
+            onClick={() => {
+              axios({
+                method: 'post',
+                url: '/api/join',
+                data: {
+                  username: username,
+                  password: password,
+                  email: email
+                }
+              })
+                .then((response) => {
+                  console.log(response)
+                  navigate('/MainRoom')
+                })
+                .catch((error) => {
+                  console.log(error.response)
+                })
+            }}
           >
             가입하기
           </Button>
         </form>
-        <button
-          onClick={() => {
-            axios({
-              method: 'post',
-              url: '/api/join',
-              data: {
-                username: id,
-                password: password,
-                email: email
-              }
-            }).then((response) => {
-              console.log(response)
-            })
-          }}
-        >
-          테스트용
-        </button>
       </div>
     </div>
   )
