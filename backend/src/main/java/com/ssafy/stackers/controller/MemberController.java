@@ -8,22 +8,18 @@ import com.ssafy.stackers.model.dto.LoginDto;
 import com.ssafy.stackers.model.dto.LoginMemberDto;
 import com.ssafy.stackers.model.dto.TokenDto;
 import com.ssafy.stackers.service.MemberService;
-import com.ssafy.stackers.utils.error.ErrorCode;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 @RequiredArgsConstructor
 @Tag(name = "Member", description = "멤버 관련 API")
@@ -48,6 +44,14 @@ public class MemberController {
         return new ResponseEntity<>("회원가입 완료", HttpStatus.OK);
     }
 
+    @PostMapping("change-password")
+    public ResponseEntity<String> changePassword(@RequestBody Map<String, String> map,
+        @AuthenticationPrincipal PrincipalDetails principal) {
+        Member member = memberService.getLoginMember(principal.getUsername());
+        memberService.setNewPassword(member.getUsername(), map.get("password"));
+        return new ResponseEntity<>("비밀번호 변경 완료", HttpStatus.OK);
+    }
+
     @PostMapping("accessToken")
     public TokenDto reissueAccessToken(@RequestBody Map<String, String> map) {
         TokenDto tokenDto = memberService.reissueAccessToken(map.get("token"));
@@ -56,9 +60,9 @@ public class MemberController {
 
     // user 권한만 접근 가능
     @GetMapping("/v1/user")
-    public ResponseEntity<LoginMemberDto> user(Authentication authentication) {
-        PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
-        Member member = memberService.findByUsername(principal.getUsername());
+    public ResponseEntity<LoginMemberDto> user(
+        @AuthenticationPrincipal PrincipalDetails principal) {
+        Member member = memberService.getLoginMember(principal.getUsername());
         LoginMemberDto loginMemberDto = LoginMemberDto.builder().username(member.getUsername())
             .nickname(member.getNickname()).email(member.getEmail()).bio(member.getBio())
             .imgPath(member.getImgPath()).build();

@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
 public class EmailService {
 
     private final JavaMailSender emailSender;
-    private String authNum;
+    private String randomCode;
 
-    private void createCode() {
+    private void createCode(int size) {
         Random random = new Random();
         StringBuffer key = new StringBuffer();
 
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < size; i++) {
             int index = random.nextInt(3);
 
             switch (index) {
@@ -33,10 +33,10 @@ public class EmailService {
                     break;
             }
         }
-        authNum = key.toString();
+        randomCode = key.toString();
     }
 
-    private String setContext(String code) {
+    private String setEmailConfirmContext(String code) {
         StringBuffer msg = new StringBuffer();
 
         msg.append("<div style='margin:100px;'>")
@@ -48,14 +48,31 @@ public class EmailService {
             .append("<h3 style='color:blue;'>회원가입 인증 코드입니다.</h3>")
             .append("<div style='font-size:130%'>")
             .append("CODE : <strong>")
-            .append(authNum)
+            .append(randomCode)
             .append("</string></div>");
         return msg.toString();
     }
 
-    private MimeMessage createEmailForm(String email)
+    private String setFindPasswordContext(String code) {
+        StringBuffer msg = new StringBuffer();
+
+        msg.append("<div style='margin:100px;'>")
+            .append("<h1> 안녕하세요</h1>")
+            .append("<br>")
+            .append("<p>아래 임시 비밀번호를 사용하여 로그인해주시기 바랍니다<p>")
+            .append("<br>")
+            .append("<div align='center' style='border:1px solid black; font-family:verdana';>")
+            .append("<h3 style='color:blue;'>임시 비밀번호입니다.</h3>")
+            .append("<div style='font-size:130%'>")
+            .append("CODE : <strong>")
+            .append(randomCode)
+            .append("</string></div>");
+        return msg.toString();
+    }
+
+    public MimeMessage createEmailConfirmForm(String email)
         throws MessagingException {
-        createCode();
+        createCode(8);
         String setFrom = "sb030329@gmail.com";      // 수정
         String toEmail = email;
         String title = "Stackers 회원가입 인증 번호";
@@ -64,15 +81,28 @@ public class EmailService {
         message.addRecipients(MimeMessage.RecipientType.TO, email);
         message.setSubject(title);
         message.setFrom(setFrom);
-        message.setText(setContext(authNum), "utf-8", "html");
+        message.setText(setEmailConfirmContext(randomCode), "utf-8", "html");
         return message;
     }
 
-    public String sendEmail(String toEmail)
+    public MimeMessage createFindPasswordForm(String email)
         throws MessagingException {
-        MimeMessage emailForm = createEmailForm(toEmail);
+        createCode(10);
+        String setFrom = "sb030329@gmail.com";      // 수정
+        String toEmail = email;
+        String title = "Stackers 임시 비밀번호";
+
+        MimeMessage message = emailSender.createMimeMessage();
+        message.addRecipients(MimeMessage.RecipientType.TO, email);
+        message.setSubject(title);
+        message.setFrom(setFrom);
+        message.setText(setFindPasswordContext(randomCode), "utf-8", "html");
+        return message;
+    }
+
+    public String sendEmail(MimeMessage emailForm) {
         emailSender.send(emailForm);
-        return authNum;
+        return randomCode;
     }
 
 }
