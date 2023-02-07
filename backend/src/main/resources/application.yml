@@ -6,8 +6,8 @@ spring:
     url: jdbc:mysql://localhost/stackers
   servlet:
     multipart:
-      max-file-size: 500MB
-      max-request-size: 500MB
+      max-file-size: 50MB
+      max-request-size: 50MB
   jpa:
     hibernate:
       ddl-auto: 'create'
@@ -37,6 +37,9 @@ logging:
       springframework: INFO
     com:
       ssafy: INFO
+      amazonaws:
+        util:
+          EC2MetadataUtils: ERROR
 server:
   port: '5000'
 
@@ -57,3 +60,4 @@ springdoc:
     query-config-enabled: true
   pre-loading-enabled: true
   packages-to-scan: com.ssafy.stackers
+
