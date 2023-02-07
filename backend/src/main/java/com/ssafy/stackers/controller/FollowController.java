@@ -49,12 +49,5 @@ public class FollowController {
         followService.delete(followerId, followingId);
         return new ResponseEntity<>("팔로우 취소 성공", HttpStatus.OK);
     }
-    
-//    @Operation(summary = "악기 업로드")
-//    @PostMapping
-//    public ResponseEntity<?> createInstrument(@RequestBody Instrument instrument) {
-//        instrumentService.save(instrument);
-//        return new ResponseEntity<>("악기 생성 완료!\uD83D\uDE0D", HttpStatus.OK);
-//    }
 
 }
