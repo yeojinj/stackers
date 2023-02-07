@@ -132,26 +132,6 @@ function SignUp() {
             가입하기
           </Button>
         </form>
-        <button
-          onClick={() => {
-            console.log(localStorage.accessToken)
-            axios({
-              method: 'GET',
-              url: '/api/v1/user',
-              headers: {
-                Authorization: localStorage.accessToken
-              }
-            })
-              .then((response) => {
-                console.log(response)
-              })
-              .catch((error) => {
-                console.log(error.response)
-              })
-          }}
-        >
-          Token 확인
-        </button>
       </div>
     </div>
   )
