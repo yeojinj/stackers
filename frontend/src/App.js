@@ -16,7 +16,7 @@ function App() {
   })
   const dispatch = useDispatch()
   useEffect(() => {
-    console.log(isLogged)
+    // console.log(isLogged)
     if (isLogged) {
       axios({
         method: 'GET',
