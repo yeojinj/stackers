@@ -1,6 +1,5 @@
 package com.ssafy.stackers.service;
 
-import com.ssafy.stackers.auth.PrincipalDetails;
 import com.ssafy.stackers.config.jwt.JwtProperties;
 import com.ssafy.stackers.config.jwt.JwtTokenProvider;
 import com.ssafy.stackers.exception.CustomException;
@@ -13,8 +12,6 @@ import com.ssafy.stackers.repository.MemberRepository;
 import com.ssafy.stackers.repository.RefreshTokenRepository;
 import com.ssafy.stackers.utils.error.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -59,6 +56,14 @@ public class MemberService {
         boolean usernameDuplicate = memberRepository.existsByUsername(username);
         if (usernameDuplicate) {
             throw new CustomException(ErrorCode.USER_ALREADY_EXIST);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public void checkUsernameAndEmail(String username, String email) {
+        boolean exists = memberRepository.existsByUsernameAndEmail(username, email);
+        if (!exists) {
+            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
         }
     }
 
@@ -129,4 +134,9 @@ public class MemberService {
         return loginMember;
     }
 
+    @Transactional
+    public void setNewPassword(String username, String randomCode) {
+        Member member = findByUsername(username);
+        member.updatePassword(bCryptPasswordEncoder.encode(randomCode));
+    }
 }
