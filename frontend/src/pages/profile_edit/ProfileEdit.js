@@ -9,15 +9,28 @@ function ProfileEdit() {
   const email = '이메일'
   const [nickname, setNickname] = useState('닉네임')
   const [bio, setBio] = useState('정보입니다.')
-  const Instruments = [
-    '기타',
-    '보컬',
-    '젬베',
-    '카혼',
-    '피아노',
-    '베이스',
-    '일렉기타',
-    'English'
+  const Instrument = [
+    {
+      name: '기타'
+    },
+    { name: '가야금' },
+    { name: '바이올린' },
+    { name: '첼로' },
+    { name: '비올라' },
+    { name: '콘트라베이스' },
+    { name: '피아노' },
+    { name: '보컬' },
+    { name: '북' },
+    { name: '꽹과리' },
+    { name: '장구' },
+    { name: '징' },
+    { name: '캐스터네츠' },
+    { name: '실로폰' },
+    { name: '비브라폰' },
+    { name: '플룻' },
+    { name: '클라리넷' },
+    { name: '트럼펫' },
+    { name: '하프' }
   ]
   const [group, setGroup] = useState('배도라지')
 
@@ -89,15 +102,11 @@ function ProfileEdit() {
             multiple
             limitTags={2}
             id="multiple-limit-tags"
-            options={Instruments}
-            getOptionLabel={(option) => option.title}
-            defaultValue={[Instruments[2]]}
+            options={Instrument}
+            getOptionLabel={(option) => option.name}
+            // defaultValue={[Instrument[13], Instrument[12], Instrument[11]]}
             renderInput={(params) => (
-              <TextField
-                {...params}
-                label="limitTags"
-                placeholder="한글이 깨져요"
-              />
+              <TextField {...params} placeholder="Favorites" />
             )}
             sx={{ width: '100%' }}
           />
