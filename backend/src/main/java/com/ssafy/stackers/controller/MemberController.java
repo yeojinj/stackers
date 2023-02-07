@@ -36,15 +36,14 @@ public class MemberController {
         return new ResponseEntity<>(tokenDto, HttpStatus.OK);
     }
 
-    @PostMapping("join")
+    @PostMapping("/join")
     public ResponseEntity<String> join(@RequestBody JoinDto joinDto) {
         memberService.checkUsernameDuplication(joinDto.getUsername());
-
         memberService.userJoin(joinDto);
         return new ResponseEntity<>("회원가입 완료", HttpStatus.OK);
     }
 
-    @PostMapping("change-password")
+    @PostMapping("/change-password")
     public ResponseEntity<String> changePassword(@RequestBody Map<String, String> map,
         @AuthenticationPrincipal PrincipalDetails principal) {
         Member member = memberService.getLoginMember(principal.getUsername());
@@ -52,7 +51,7 @@ public class MemberController {
         return new ResponseEntity<>("비밀번호 변경 완료", HttpStatus.OK);
     }
 
-    @PostMapping("accessToken")
+    @PostMapping("/accessToken")
     public TokenDto reissueAccessToken(@RequestBody Map<String, String> map) {
         TokenDto tokenDto = memberService.reissueAccessToken(map.get("token"));
         return tokenDto;
@@ -74,18 +73,6 @@ public class MemberController {
     @GetMapping("/v1/admin")
     public String admin() {
         return "admin";
-    }
-
-    @GetMapping("/loginmembertest")
-    public Member loginMemberTests(@AuthenticationPrincipal PrincipalDetails principal) {
-        Member member = null;
-        try {
-            member = memberService.getLoginMember(principal.getUsername());
-        } catch (CustomException e) {
-            System.out.println(e.getClass().getName());
-        }
-
-        return member;
     }
 
 }

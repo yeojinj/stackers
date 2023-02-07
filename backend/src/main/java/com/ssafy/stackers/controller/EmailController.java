@@ -24,7 +24,7 @@ public class EmailController {
     private final MemberService memberService;
     private final EmailService emailService;
 
-    @PostMapping("mail-confirm")
+    @PostMapping("/mail-confirm")
     public ResponseEntity<?> mailConfirm(@RequestBody Map<String, String> map) // dto로 변경?
         throws MessagingException {
         MimeMessage message = emailService.createEmailConfirmForm(map.get("email"));
@@ -32,7 +32,7 @@ public class EmailController {
         return new ResponseEntity<>(randomCode, HttpStatus.OK);
     }
 
-    @PostMapping("find-password")
+    @PostMapping("/find-password")
     public ResponseEntity<?> findPassword(@RequestBody FindPasswordDto findPasswordDto)
         throws MessagingException {
         memberService.checkUsernameAndEmail(findPasswordDto.getUsername(),
