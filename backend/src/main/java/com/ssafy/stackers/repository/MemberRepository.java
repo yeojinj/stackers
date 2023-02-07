@@ -13,6 +13,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     boolean existsByUsername(String username);
 
+    boolean existsByUsernameAndEmail(String username, String email);
+
     @Modifying
     @Transactional
     @Query("update Member m set m.lastLogin = now() where m.username = ?1")

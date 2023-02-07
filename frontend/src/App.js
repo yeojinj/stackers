@@ -14,9 +14,10 @@ function App() {
   const total = useSelector((state) => {
     return state.user
   })
+  // console.log(localStorage.getItem('refreshToken'))
   const dispatch = useDispatch()
   useEffect(() => {
-    console.log(isLogged)
+    // console.log(isLogged)
     if (isLogged) {
       axios({
         method: 'GET',

@@ -24,12 +24,12 @@ function LogIn({ setModalOpen }) {
   // 닫히면 스크롤 다시 가능
   const showModal = () => {
     setModalOpen(true)
-    document.body.style.overflow = 'hidden'
+    // document.body.style.overflow = 'hidden'
   }
   const closeModal = () => {
-    navigate(-1)
-    // setModalOpen(false)
-    document.body.style.overflow = 'unset'
+    // document.body.style.overflow = 'unset'
+    setModalOpen(false)
+    // navigate(-1)
   }
 
   useEffect(() => {
@@ -168,15 +168,9 @@ function LogIn({ setModalOpen }) {
           </div>
           <div className="div-LogIn-footer">
             <p style={{ margin: '0 20px 0 0 ' }}>계정이 없으신가요?</p>
-            <a
-              href="/LogIn"
-              onClick={(event) => {
-                event.preventDefault()
-              }}
-              className="move-to-SignUp"
-            >
+            <Link to="/SignUp" className="move-to-SignUp">
               회원가입
-            </a>
+            </Link>
           </div>
         </form>
       </div>

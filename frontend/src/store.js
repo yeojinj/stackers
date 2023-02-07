@@ -22,6 +22,16 @@ const userSlice = createSlice({
       state.email = action.payload.email
       state.imgPath = action.payload.imgPath
       // state.bio = state.payload.bio
+    },
+    LogOutState: (state, action) => {
+      state.isLogged = false
+      state.username = ''
+      state.nickname = ''
+      state.email = ''
+      state.imgPath = ''
+      state.bio = ''
+      localStorage.removeItem('accessToken')
+      localStorage.removeItem('refreshToken')
     }
   }
 })
@@ -33,4 +43,4 @@ const store = configureStore({
 })
 
 export default store
-export const { logIn, LogInState } = userSlice.actions
+export const { logIn, LogInState, LogOutState } = userSlice.actions
