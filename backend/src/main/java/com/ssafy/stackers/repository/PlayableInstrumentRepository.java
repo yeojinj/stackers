@@ -10,7 +10,7 @@ public interface PlayableInstrumentRepository extends JpaRepository<PlayableInst
 
     Optional<PlayableInstrument> findByMemberIdAndInstrumentId(Long memberId, Long instrumentId);
 
-    boolean existsByMemberIdAndInstrumentId(Long id, Long id1);
+    boolean existsByMemberIdAndInstrumentId(Long memberId, Long instrumentId);
 
     @Modifying
     @Transactional
