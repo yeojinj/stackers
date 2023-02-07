@@ -30,6 +30,8 @@ const userSlice = createSlice({
       state.email = ''
       state.imgPath = ''
       state.bio = ''
+      localStorage.removeItem('accessToken')
+      localStorage.removeItem('refreshToken')
     }
   }
 })

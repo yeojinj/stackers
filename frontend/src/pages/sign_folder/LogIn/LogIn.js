@@ -168,15 +168,9 @@ function LogIn({ setModalOpen }) {
           </div>
           <div className="div-LogIn-footer">
             <p style={{ margin: '0 20px 0 0 ' }}>계정이 없으신가요?</p>
-            <a
-              href="/LogIn"
-              onClick={(event) => {
-                event.preventDefault()
-              }}
-              className="move-to-SignUp"
-            >
+            <Link to="/SignUp" className="move-to-SignUp">
               회원가입
-            </a>
+            </Link>
           </div>
         </form>
       </div>
