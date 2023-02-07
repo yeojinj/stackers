@@ -2,7 +2,6 @@ package com.ssafy.stackers.service;
 
 import com.ssafy.stackers.exception.CustomException;
 import com.ssafy.stackers.model.Instrument;
-import com.ssafy.stackers.model.Station;
 import com.ssafy.stackers.repository.InstrumentRepository;
 import com.ssafy.stackers.utils.error.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +22,13 @@ public class InstrumentService {
 
     public Instrument findById(Long id){
         Instrument instrument = instrumentRepository.findById(id).orElseThrow(() -> new CustomException(
+            ErrorCode.ENTITY_NOT_FOUND));
+
+        return instrument;
+    }
+
+    public Instrument findByName(String name){
+        Instrument instrument = instrumentRepository.findByName(name).orElseThrow(() -> new CustomException(
             ErrorCode.ENTITY_NOT_FOUND));
 
         return instrument;
