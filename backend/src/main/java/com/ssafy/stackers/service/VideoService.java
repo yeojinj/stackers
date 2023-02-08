@@ -191,6 +191,38 @@ public class VideoService {
             }
             }
         ).run();
+    }
 
+    /**
+     * 동영상 크롭
+     * width:405 height:720
+     */
+    public void videoCrop() throws IOException {
+        // 영상 파일 경로
+        String videoPath = "C:\\test\\videos\\";
+
+        // 크롭한 영상 추출 절대 경로
+        String cropingPath = "C:\\test\\videos\\";
+
+        // ffmpeg 설치 파일 경로 -> 환경 변수로 설정
+        FFmpeg ffmpeg = new FFmpeg("ffmpeg");
+        FFprobe ffprobe = new FFprobe("ffprobe");
+
+        FFmpegBuilder builder = new FFmpegBuilder()
+            .addInput(videoPath + "r.mp4")
+            .addOutput(cropingPath + "right.mp4")
+            .addExtraArgs("-vf", "crop=270:480")
+//            .addExtraArgs("-vf", "crop=405:720")
+            .done();
+
+        FFmpegExecutor executor = new FFmpegExecutor(ffmpeg, ffprobe);
+
+        // one-pass encode
+        executor.createJob(builder, p -> {
+                if(p.isEnd()) {
+                    System.out.println("!!!동영상 크롭 성공!!!");
+                }
+            }
+        ).run();
     }
 }
