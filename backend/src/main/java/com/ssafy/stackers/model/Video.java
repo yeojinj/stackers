@@ -25,25 +25,13 @@ public class Video {
     @Column(name = "video_name")
     private String videoName;
 
-    @Column(name = "video_ori_name", nullable = false)
-    private String videoOriName;
-
     @Column(name = "thumbnail_path")
     private String thumbnailPath;
 
     @Builder
-    public Video(String videoPath, String videoName, String videoOriName,
-        String thumbnailPath) {
+    public Video(String videoPath, String videoName, String thumbnailPath) {
         this.videoPath = videoPath;
         this.videoName = videoName;
-        this.videoOriName = videoOriName;
-        this.thumbnailPath = thumbnailPath;
-    }
-
-    @Builder
-    public Video(String videoPath, String videoOriName, String thumbnailPath) {
-        this.videoPath = videoPath;
-        this.videoOriName = videoOriName;
         this.thumbnailPath = thumbnailPath;
     }
 }
