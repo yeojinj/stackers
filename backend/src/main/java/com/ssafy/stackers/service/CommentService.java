@@ -43,7 +43,7 @@ public class CommentService {
         for (int i = 0; i < commentEntities.size(); i++) {
             Comment c = commentEntities.get(i);
             Member commenter = memberService.findById(c.getMember().getId());
-            comments.add(new CommentDetailDto(commenter.getUsername(), commenter.getImgName(), c.getContent(), c.getRegTime()));
+            comments.add(new CommentDetailDto(commenter.getUsername(), commenter.getImgPath(), c.getContent(), c.getRegTime()));
         }
 
         return comments;
