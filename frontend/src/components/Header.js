@@ -6,6 +6,10 @@ import search from '../assets/search.svg'
 import ProfileFrame from './profileFrame'
 import '../styles/header.css'
 import SearchIcon from '@mui/icons-material/Search'
+import Box from '@mui/material/Box'
+import Modal from '@mui/material/Modal'
+import LogIn from '../pages/sign_folder/LogIn/LogIn'
+// import Button from '@mui/material/Button'
 
 const wholeTextArray = [
   'apple',
@@ -25,17 +29,20 @@ const wholeTextArray = [
   '라피스'
 ]
 function Header(props) {
-  const [login, setLogin] = useState(false)
+  // const [login, setLogin] = useState(false)
   const [inputValue, setInputValue] = useState('')
   const [isHaveInputValue, setIsHaveInputValue] = useState(false)
   const [dropDownList, setDropDownList] = useState(wholeTextArray)
   const [dropDownItemIndex, setDropDownItemIndex] = useState(-1)
+  const [open, setOpen] = useState(false)
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
   const userLogin = useSelector((state) => {
     return state.user.isLogged
   })
 
   const IsLogin = () => {
-    console.log(login)
+    // console.log(login)
     if (userLogin) {
       return (
         <>
@@ -51,7 +58,7 @@ function Header(props) {
       return (
         <>
           {/* onclick 시 navigateToLogin 함수 주석해제, 실행 */}
-          <button className="login-btn" onClick={loginmodalOpen}>
+          <button className="login-btn" onClick={handleOpen}>
             로그인
           </button>
         </>
@@ -59,10 +66,10 @@ function Header(props) {
     }
   }
 
-  const loginmodalOpen = () => {
-    setLogin(true)
-    props.openModal(true)
-  }
+  // const loginmodalOpen = () => {
+  //   setLogin(true)
+  //   props.openModal(true)
+  // }
 
   const goRecordRoom = () => {
     navigate('/RecordRoom')
@@ -131,6 +138,11 @@ function Header(props) {
 
   return (
     <header className="header">
+      <Modal open={open} onClose={handleClose}>
+        <Box>
+          <LogIn handleClose={handleClose} />
+        </Box>
+      </Modal>
       <img className="logo-img" src={logo} onClick={navigateToMain}></img>
       <div className="header-container">
         {/* 검색창 */}
