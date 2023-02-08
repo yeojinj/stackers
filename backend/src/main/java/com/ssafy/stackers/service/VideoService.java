@@ -54,6 +54,8 @@ public class VideoService {
     }
 
     /**
+     * 데이터베이스에 비디오 업로드
+
      * S3 데이터베이스 파일 삭제
      */
     public void deleteVideoFromS3(String filePath) throws Exception {
@@ -98,10 +100,9 @@ public class VideoService {
         // 썸네일 추출 절대 경로
         String thumbnailPath = "C:\\test\\thumbs\\";
 
-        // ffmpeg 설치 파일 경로
-        String ffmpegPath = "C:\\Program Files\\ffmpeg\\bin\\";     // ffmpeg 설치 파일도 서버에 올려야 하는지?
-        FFmpeg ffmpeg = new FFmpeg(ffmpegPath + "ffmpeg");
-        FFprobe ffprobe = new FFprobe(ffmpegPath + "ffprobe");
+        // ffmpeg 설치 파일 경로 -> 환경 변수로 설정
+        FFmpeg ffmpeg = new FFmpeg("ffmpeg");
+        FFprobe ffprobe = new FFprobe("ffprobe");
 
         // 썸네일 추출 명령어
         FFmpegBuilder builder = new FFmpegBuilder()
@@ -124,10 +125,9 @@ public class VideoService {
         // 영상 파일 경로
         String videoPath = "C:\\test\\videos\\test.mp4";
 
-        // ffmpeg 설치 파일 경로
-        String ffmpegPath = "C:\\Program Files\\ffmpeg\\bin\\";
-        FFmpeg ffmpeg = new FFmpeg(ffmpegPath + "ffmpeg");
-        FFprobe ffprobe = new FFprobe(ffmpegPath + "ffprobe");
+        // ffmpeg 설치 파일 경로 -> 환경 변수로 설정
+        FFmpeg ffmpeg = new FFmpeg("ffmpeg");
+        FFprobe ffprobe = new FFprobe("ffprobe");
 
         FFmpegProbeResult probeResult = ffprobe.probe(videoPath);
 
@@ -137,9 +137,9 @@ public class VideoService {
         log.info("width: " + probeResult.getStreams().get(0).width);
         log.info("height: " + probeResult.getStreams().get(0).height);
         log.info("bit_rate: " + probeResult.getStreams().get(0).bit_rate);
+        log.info("avg_frame_rate: " + probeResult.getStreams().get(0).avg_frame_rate);
 
     }
-
 
     /**
      * 동영상 인코딩
@@ -151,10 +151,9 @@ public class VideoService {
         // 인코딩 파일 추출 절대 경로
         String encodingPath = "C:\\test\\videos\\";
 
-        // ffmpeg 설치 파일 경로
-        String ffmpegPath = "C:\\Program Files\\ffmpeg\\bin\\";
-        FFmpeg ffmpeg = new FFmpeg(ffmpegPath + "ffmpeg");
-        FFprobe ffprobe = new FFprobe(ffmpegPath + "ffprobe");
+        // ffmpeg 설치 파일 경로 -> 환경 변수로 설정
+        FFmpeg ffmpeg = new FFmpeg("ffmpeg");
+        FFprobe ffprobe = new FFprobe("ffprobe");
 
         // 동영상 인코딩 명령어
         FFmpegBuilder builder = new FFmpegBuilder()
@@ -178,5 +177,80 @@ public class VideoService {
 
         // one-pass encode
         executor.createJob(builder).run();
+    }
+
+    /**
+     * 동영상 합치기
+     * ffmpeg 명령어 그대로 사용함 -> 배포 시 수정 필요
+     */
+    public void videoMerging() throws IOException {
+        // 영상 파일 경로
+        String videoPath1 = "C:\\test\\videos\\";
+        String videoPath2 = "C:\\test\\videos\\";
+
+        // 합친 영상 추출 절대 경로
+        String mergingPath = "C:\\test\\videos\\";
+
+        // ffmpeg 설치 파일 경로 -> 환경 변수로 설정
+        FFmpeg ffmpeg = new FFmpeg("ffmpeg");
+        FFprobe ffprobe = new FFprobe("ffprobe");
+
+        FFmpegBuilder builder = new FFmpegBuilder()
+            .overrideOutputFiles(true)
+            .addInput(videoPath1 + "left.mp4")
+            .addInput(videoPath2 + "encoding-right.mp4")
+            .addOutput(mergingPath + "output.mp4")
+            .addExtraArgs("-preset", "ultrafast")
+            .addExtraArgs("-filter_complex",
+//                "[0:v]setpts=PTS-STARTPTS, pad=iw*2+5:ih[bg]; [1:v]setpts=PTS-STARTPTS[fg]; [bg][fg]overlay=w+5")
+                "[0:v][1:v]hstack=inputs=2[v]; [0:a][1:a]amerge[a]")
+            .addExtraArgs("-map", "[v]")
+            .addExtraArgs("-map", "[a]")
+            .addExtraArgs("-ac", "2")
+            .addExtraArgs("-vsync", "0")
+            .done();
+
+        FFmpegExecutor executor = new FFmpegExecutor(ffmpeg, ffprobe);
+
+        // one-pass encode
+        executor.createJob(builder, p -> {
+            if(p.isEnd()) {
+                System.out.println("!!!동영상 합치기 성공!!!");
+            }
+            }
+        ).run();
+    }
+
+    /**
+     * 동영상 크롭
+     * width:405 height:720
+     */
+    public void videoCrop() throws IOException {
+        // 영상 파일 경로
+        String videoPath = "C:\\test\\videos\\";
+
+        // 크롭한 영상 추출 절대 경로
+        String cropingPath = "C:\\test\\videos\\";
+
+        // ffmpeg 설치 파일 경로 -> 환경 변수로 설정
+        FFmpeg ffmpeg = new FFmpeg("ffmpeg");
+        FFprobe ffprobe = new FFprobe("ffprobe");
+
+        FFmpegBuilder builder = new FFmpegBuilder()
+            .addInput(videoPath + "r.mp4")
+            .addOutput(cropingPath + "right.mp4")
+            .addExtraArgs("-vf", "crop=270:480")
+//            .addExtraArgs("-vf", "crop=405:720")
+            .done();
+
+        FFmpegExecutor executor = new FFmpegExecutor(ffmpeg, ffprobe);
+
+        // one-pass encode
+        executor.createJob(builder, p -> {
+                if(p.isEnd()) {
+                    System.out.println("!!!동영상 크롭 성공!!!");
+                }
+            }
+        ).run();
     }
 }
