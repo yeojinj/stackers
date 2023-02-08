@@ -1,9 +1,13 @@
 package com.ssafy.stackers.service;
 
+import com.ssafy.stackers.exception.CustomException;
 import com.ssafy.stackers.model.Video;
 import com.ssafy.stackers.repository.VideoRepository;
+import com.ssafy.stackers.utils.S3Uploader;
+import com.ssafy.stackers.utils.error.ErrorCode;
 import java.io.File;
 import java.io.IOException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.FFmpegExecutor;
@@ -21,21 +25,46 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class VideoService {
 
     @Autowired
     private VideoRepository videoRepository;
+    private final S3Uploader s3Uploader;
 
     @Transactional
     public void save(Video video) {
         Video v = Video.builder().videoName(video.getVideoName())
-            .videoOriName(video.getVideoOriName()).videoPath(video.getVideoPath()).build();
+            .videoPath(video.getVideoPath()).build();
         videoRepository.save(v);
+    }
+
+    public Video findById(Long videoId){
+        Video v = videoRepository.findById(videoId).orElseThrow(() -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
+        return v;
+    }
+
+    /**
+     * S3 데이터베이스 파일 업로드
+     */
+    public Video uploadVideoToS3(MultipartFile file, String videoName) throws IOException{
+        String videoPath = s3Uploader.uploadFiles(file, "static/videos");
+        Video video = Video.builder().videoName(videoName).videoPath(videoPath).build();
+        return video;
     }
 
     /**
      * 데이터베이스에 비디오 업로드
+
+     * S3 데이터베이스 파일 삭제
      */
+    public void deleteVideoFromS3(String filePath) throws Exception {
+        s3Uploader.deleteS3(filePath);
+    }
+
+    /**
+     * 로컬 데이터베이스에 비디오 업로드
+     * */
     public Video uploadVideo(MultipartFile file) throws IOException {
         String sourceVideoName = file.getOriginalFilename();
         String sourceVideoNameExtension = FilenameUtils.getExtension(sourceVideoName).toLowerCase();
@@ -44,7 +73,6 @@ public class VideoService {
         File destinationFile;
         String destinationFileName;
         String videoPath = "C:\\stackers\\videos\\";
-//        String videoPath = "/Users/sennie/stackers/videos/";
 
         do {
             destinationFileName =
@@ -55,7 +83,7 @@ public class VideoService {
         destinationFile.getParentFile().mkdirs();
         file.transferTo(destinationFile);
 
-        Video video = Video.builder().videoName(destinationFileName).videoOriName(sourceVideoName)
+        Video video = Video.builder().videoName(destinationFileName)
             .videoPath(videoPath).build();
 
         return video;

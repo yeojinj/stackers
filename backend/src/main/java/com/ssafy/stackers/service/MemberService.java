@@ -6,20 +6,26 @@ import com.ssafy.stackers.model.Station;
 import com.ssafy.stackers.model.dto.JoinDto;
 import com.ssafy.stackers.model.dto.MemberModifyDto;
 import com.ssafy.stackers.repository.MemberRepository;
+import com.ssafy.stackers.utils.S3Uploader;
 import com.ssafy.stackers.utils.error.ErrorCode;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class MemberService {
 
     @Autowired
     private final MemberRepository memberRepository = null;
     @Autowired
     private final BCryptPasswordEncoder bCryptPasswordEncoder = null;
+    private final S3Uploader s3Uploader;
 
     @Transactional
     public void userJoin(JoinDto joinDto) {
@@ -82,6 +88,10 @@ public class MemberService {
         member.updateNickname(memberModifyDto.getNickname());
         member.updateBio(memberModifyDto.getBio());
         member.updateImgPath(memberModifyDto.getImgPath());
+    }
+
+    public String updateProfileToS3(MultipartFile file) throws Exception{
+        return s3Uploader.uploadFiles(file, "static/profile");
     }
 
 }

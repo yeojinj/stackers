@@ -60,6 +60,9 @@ public class Member {
     @Column(name = "img_path", nullable = false)
     private String imgPath;
 
+    @Column(name = "img_name", nullable = false)
+    private String imgName;
+
     @Column(name = "is_resign", nullable = false)
     private boolean isResign;
 
@@ -72,18 +75,6 @@ public class Member {
 
     public void updatePassword(String password) {
         this.password = password;
-    }
-
-    public void updateNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public void updateBio(String bio) {
-        this.bio = bio;
-    }
-
-    public void updateImgPath(String imgPath) {
-        this.imgPath = imgPath;
     }
 
 }
