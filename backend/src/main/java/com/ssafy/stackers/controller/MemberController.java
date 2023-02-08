@@ -6,6 +6,7 @@ import com.ssafy.stackers.model.Member;
 import com.ssafy.stackers.model.Party;
 import com.ssafy.stackers.model.dto.JoinDto;
 import com.ssafy.stackers.model.dto.LoginMemberDto;
+import com.ssafy.stackers.model.dto.MemberModifyDto;
 import com.ssafy.stackers.service.InstrumentService;
 import com.ssafy.stackers.service.MemberService;
 import com.ssafy.stackers.service.PartyMemberService;
@@ -20,6 +21,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,7 +50,7 @@ public class MemberController {
 
     @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(@RequestBody Map<String, String> map,
-        @AuthenticationPrincipal PrincipalDetails principal) {
+                                            @AuthenticationPrincipal PrincipalDetails principal) {
         Member member = memberService.getLoginMember(principal.getUsername());
         memberService.setNewPassword(member.getUsername(), map.get("password"));
         return new ResponseEntity<>("비밀번호 변경 완료", HttpStatus.OK);
@@ -57,18 +59,27 @@ public class MemberController {
     // user 권한만 접근 가능
     @GetMapping("/user")
     public ResponseEntity<?> user(
-        @AuthenticationPrincipal PrincipalDetails principal) {
+            @AuthenticationPrincipal PrincipalDetails principal) {
         Member member = memberService.getLoginMember(principal.getUsername());
         LoginMemberDto loginMemberDto = LoginMemberDto.builder()
-            .username(member.getUsername())
-            .nickname(member.getNickname())
-            .email(member.getEmail())
-            .bio(member.getBio())
-            .imgPath(member.getImgPath())
-            .instruments(playableInstrumentService.getInstruments(member.getId()))
-            .parties(partyMemberService.getParties(member.getId()))
-            .build();
+                .username(member.getUsername())
+                .nickname(member.getNickname())
+                .email(member.getEmail())
+                .bio(member.getBio())
+                .imgPath(member.getImgPath())
+                .instruments(playableInstrumentService.getInstruments(member.getId()))
+                .parties(partyMemberService.getParties(member.getId()))
+                .build();
         return new ResponseEntity<>(loginMemberDto, HttpStatus.OK);
+    }
+
+    // user 권한만 접근 가능
+    @PutMapping("/user")
+    public ResponseEntity<?> upadateUser(@RequestBody MemberModifyDto memberModifyDto,
+                                         @AuthenticationPrincipal PrincipalDetails principal) {
+        Member member = memberService.getLoginMember(principal.getUsername());
+        memberService.updateMember(member.getUsername(), memberModifyDto);
+        return new ResponseEntity<>("멤버 수정 완료", HttpStatus.OK);
     }
 
     // admin 권한만 접근 가능
@@ -79,7 +90,7 @@ public class MemberController {
 
     @PostMapping("/playable-instrument")
     public ResponseEntity<?> createPlayableInstrument(@RequestBody Map<String, String> map,
-        @AuthenticationPrincipal PrincipalDetails principal) {
+                                                      @AuthenticationPrincipal PrincipalDetails principal) {
         Member member = memberService.getLoginMember(principal.getUsername());
         Instrument instrument = instrumentService.findByName(map.get("instrument"));
         playableInstrumentService.save(member, instrument);
@@ -88,7 +99,7 @@ public class MemberController {
 
     @DeleteMapping("/playable-instrument")
     public ResponseEntity<?> deletePlayableInstrument(@RequestBody Map<String, String> map,
-        @AuthenticationPrincipal PrincipalDetails principal) {
+                                                      @AuthenticationPrincipal PrincipalDetails principal) {
         Member member = memberService.getLoginMember(principal.getUsername());
         Instrument instrument = instrumentService.findByName(map.get("instrument"));
         playableInstrumentService.delete(member, instrument);
@@ -97,7 +108,7 @@ public class MemberController {
 
     @PostMapping("/party-member")
     public ResponseEntity<?> createPartyMember(@RequestBody Map<String, String> map,
-        @AuthenticationPrincipal PrincipalDetails principal) {
+                                               @AuthenticationPrincipal PrincipalDetails principal) {
         Member member = memberService.getLoginMember(principal.getUsername());
         Party party = partyMemberService.findByName(map.get("party"));
         partyMemberService.save(member, party);
@@ -106,7 +117,7 @@ public class MemberController {
 
     @DeleteMapping("/party-member")
     public ResponseEntity<?> deletePartyMember(@RequestBody Map<String, String> map,
-        @AuthenticationPrincipal PrincipalDetails principal) {
+                                               @AuthenticationPrincipal PrincipalDetails principal) {
         Member member = memberService.getLoginMember(principal.getUsername());
         Party party = partyMemberService.findByName(map.get("party"));
         partyMemberService.delete(member, party);
