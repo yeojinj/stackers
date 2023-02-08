@@ -6,7 +6,9 @@ import profile2 from '../assets/profilePicture1.png'
 import profile3 from '../assets/profilePicture2.png'
 import profile4 from '../assets/profilePicture3.png'
 
-function StackerListItem() {
+function StackerListItem(props) {
+  const musicians = props.musicians
+  // console.log(musicians)
   const Participant = [
     {
       id: 1,
