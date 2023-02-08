@@ -1,14 +1,15 @@
 import React from 'react'
 import ArticleDetail from './ArticleDetail'
 import CommentList from '../comment/CommentList'
-import CommentCreate from '../comment/CommentCreate'
+// import CommentCreate from '../comment/CommentCreate'
 
-function Article() {
+function Article(props) {
+  // console.log(props.Info)
   return (
     <div className="RightStyle">
-      <ArticleDetail></ArticleDetail>
+      <ArticleDetail Info={props.Info}></ArticleDetail>
       <CommentList></CommentList>
-      <CommentCreate></CommentCreate>
+      {/* <CommentCreate></CommentCreate> */}
     </div>
   )
 }

@@ -2,6 +2,7 @@
 import React from 'react'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
+import CreateComment from '../../../store.js'
 
 function CommentCreate() {
   return (
@@ -11,14 +12,15 @@ function CommentCreate() {
         size="small"
         style={{
           width: '88%',
-          height: '40px',
+          height: '40px'
         }}
       />
       <Button
         variant="outlined"
         style={{
-          height: '40px',
+          height: '40px'
         }}
+        onClick={() => {}}
       >
         작성
       </Button>
