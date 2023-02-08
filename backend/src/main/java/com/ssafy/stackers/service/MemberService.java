@@ -2,7 +2,9 @@ package com.ssafy.stackers.service;
 
 import com.ssafy.stackers.exception.CustomException;
 import com.ssafy.stackers.model.Member;
+import com.ssafy.stackers.model.Station;
 import com.ssafy.stackers.model.dto.JoinDto;
+import com.ssafy.stackers.model.dto.MemberModifyDto;
 import com.ssafy.stackers.repository.MemberRepository;
 import com.ssafy.stackers.utils.error.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +32,6 @@ public class MemberService {
             .email(joinDto.getEmail())
             .bio("")
             .imgPath("path")
-            .imgName("name")
             .isResign(false)
             .build();
         memberRepository.save(m);
@@ -73,6 +74,14 @@ public class MemberService {
     public void setNewPassword(String username, String randomCode) {
         Member member = findByUsername(username);
         member.updatePassword(bCryptPasswordEncoder.encode(randomCode));
+    }
+
+    @Transactional
+    public void updateMember(String username, MemberModifyDto memberModifyDto){
+        Member member = findByUsername(username);
+        member.updateNickname(memberModifyDto.getNickname());
+        member.updateBio(memberModifyDto.getBio());
+        member.updateImgPath(memberModifyDto.getImgPath());
     }
 
 }

@@ -122,7 +122,7 @@ public class StationService {
             .writerId(station.getMember().getId())
             .writerUsername(station.getMember().getUsername())
             .writerImgPath(station.getMember().getImgPath())
-            .writerImgName(station.getMember().getImgName())
+//            .writerImgName(station.getMember().getImgName())
             .content(station.getContent())
             .regTime(station.getRegTime())
             .isPublic(station.isPublic())       // 왜 Getter로 접근 안 하는지?
