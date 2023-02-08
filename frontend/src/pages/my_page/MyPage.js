@@ -1,4 +1,5 @@
 import { React, useState } from 'react'
+// import axios from 'axios'
 import './MyPage.css'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
@@ -9,20 +10,109 @@ import MailOutlineIcon from '@mui/icons-material/MailOutline'
 
 function MyPage() {
   const [isfollowing, setIsfollow] = useState(true)
+  // axios 연결시 주석 해제
+  // const [resultsListVideo, setStation] = useState([])
   const [currentTab, clickTab] = useState(0)
 
+  // async function stationList() {
+  //   await axios
+  //     .get('/api/station/popular')
+  //     .then((res) => {
+  //       console.log('[사용자 스테이션 조회] ', res.data)
+  //       // 서버 통신 되면 아래 주석 풀고 그 아래 리스트 지우기
+  //       // setStation(res.data)
+  //     })
+  //     .catch((err) => {
+  //       console.log(err)
+  //     })
+  // }
+  // useEffect(() => {
+  //   stationList()
+  // }, [])
+
+  // useEffect(() => {
+  //   console.log('[useEffect 실행]]', resultsListVideo)
+  // }, [resultsListVideo])
+  // 일단 더미 데이터로 해보고 있음
+  // axios 데이터 형식 보고 수정하기
+
+  // 후에 useMemo 로 저장하기
   const resultsListVideo = [
-    { id: 1, isPrivate: true },
-    { id: 2, isPrivate: true },
-    { id: 3, isPrivate: false },
-    { id: 4, isPrivate: true },
-    { id: 5, isPrivate: false },
-    { id: 6, isPrivate: true },
-    { id: 7, isPrivate: true }
+    {
+      id: 5,
+      content: 'xptms',
+      tags: ['happy', 'mood'],
+      video: {
+        id: 5,
+        videoPath:
+          'https://stackers.bucket.s3.ap-northeast-2.amazonaws.com/static/videos/2fefd436-35c9-4f55-a2e3-cfe6328e3d13a.mp4',
+        videoName: null,
+        videoOriName: '테스트용 비디',
+        thumbnailPath: null,
+        isPrivate: false // 공개/비공개 여부, 후에 데이터 형식 보고 변경
+      }
+    },
+    {
+      id: 6,
+      content: '향기로운 음악의 세계~',
+      tags: ['smell_so_good', 'umm'],
+      video: {
+        id: 6,
+        videoPath:
+          'https://stackers.bucket.s3.ap-northeast-2.amazonaws.com/static/videos/7bdc5892-05c4-4547-b3e0-41d87397579dbJVSGr8VTiyz7a31JmZDLYCHMJtY0ySLZyY2ImqYWIojM9nUVTJGQNu8GKy8Zrdt.mp4',
+        videoName: null,
+        videoOriName: '2023_02_07_11:08',
+        thumbnailPath: null,
+        isPrivate: false
+      }
+    },
+    {
+      id: 7,
+      content: '향기로운 음악의 세계~',
+      tags: ['smell_so_good', 'umm'],
+      video: {
+        id: 7,
+        videoPath:
+          'https://stackers.bucket.s3.ap-northeast-2.amazonaws.com/static/videos/215eaa7d-8d58-4de2-a495-2931db5bbb37bJVSGr8VTiyz7a31JmZDLYCHMJtY0ySLZyY2ImqYWIojM9nUVTJGQNu8GKy8Zrdt.mp4',
+        videoName: null,
+        videoOriName: '2023_02_07_11:08',
+        thumbnailPath: null,
+        isPrivate: true
+      }
+    },
+    {
+      id: 8,
+      content: '향기로운 음악의 세계~',
+      tags: ['smell_so_good', 'umm'],
+      video: {
+        id: 8,
+        videoPath:
+          'https://stackers.bucket.s3.ap-northeast-2.amazonaws.com/static/videos/215eaa7d-8d58-4de2-a495-2931db5bbb37bJVSGr8VTiyz7a31JmZDLYCHMJtY0ySLZyY2ImqYWIojM9nUVTJGQNu8GKy8Zrdt.mp4',
+        videoName: null,
+        videoOriName: '2023_02_07_11:08',
+        thumbnailPath: null,
+        isPrivate: true
+      }
+    },
+    {
+      id: 9,
+      content: '향기로운 음악의 세계~ 같이 들어요',
+      tags: ['smell_so_good', 'umm', 'yahoo'],
+      video: {
+        id: 9,
+        videoPath:
+          'https://stackers.bucket.s3.ap-northeast-2.amazonaws.com/static/videos/215eaa7d-8d58-4de2-a495-2931db5bbb37bJVSGr8VTiyz7a31JmZDLYCHMJtY0ySLZyY2ImqYWIojM9nUVTJGQNu8GKy8Zrdt.mp4',
+        videoName: null,
+        videoOriName: '2023_02_07_11:08',
+        thumbnailPath: null,
+        isPrivate: true
+      }
+    }
   ]
+  // 공개 스테이션
   const viewStation = () => {
     const canView = resultsListVideo.filter((station) => {
-      return !station.isPrivate
+      return !station.video.isPrivate
     })
     return (
       <>
@@ -31,7 +121,33 @@ function MyPage() {
             {canView.map((result, i) => {
               return (
                 <div key={i}>
-                  <StationListItem />
+                  <StationListItem
+                    isRanking={false}
+                    isSearch={false}
+                    station={result}
+                  />
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </>
+    )
+  }
+  // 비공개 스테이션
+  const privateStation = () => {
+    return (
+      <>
+        <div className="mystation-tap">
+          <div className="popular-video">
+            {resultsListVideo.map((result, i) => {
+              return (
+                <div key={i}>
+                  <StationListItem
+                    isRanking={false}
+                    isSearch={false}
+                    station={result}
+                  />
                 </div>
               )
             })}
@@ -41,23 +157,7 @@ function MyPage() {
     )
   }
 
-  const privateStation = () => {
-    return (
-      <>
-        <div className="mystation-tap">
-          <div className="popular-video">
-            {resultsListVideo.map((result, i) => {
-              return (
-                <div key={i}>
-                  <StationListItem />
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </>
-    )
-  }
+  // 공개/비공개 탭 메뉴
   const menuArr = [
     { i: 1, name: '공개', content: viewStation() },
     { i: 2, name: '비공개', content: privateStation() }
