@@ -4,15 +4,19 @@
 
 .LeftStyle {
   background-image: url('./assets/Rectangle.png');
-  width: 50%;
-  height: 720px;
+  /* float: left; */
+  width: 686px;
+  height: 832px;
   color: white;
   display: flex;
+  flex: none;
 }
 
 .RightStyle {
-  width: 50%;
-  height: 720px;
+  width: 100%;
+  height: 832px;
+
+  /* float: left; */
 }
 
 .contentBox {
@@ -94,6 +98,8 @@
 
 .station-profile-id {
   margin: 5px 0 0 5px;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .station-profile-nickname {
@@ -102,6 +108,7 @@
 
 .station-follow {
   margin: auto 10px auto auto;
+  position: relative;
 }
 
 .station-usercontent {

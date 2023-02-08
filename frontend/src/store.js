@@ -36,11 +36,23 @@ const userSlice = createSlice({
   }
 })
 
+const CreateCommentSlice = createSlice({
+  name: 'CreateCommentSlice',
+  initialState: { value: 0 },
+  reducers: {
+    CreateComment: (state, action) => {
+      console.log(action)
+    }
+  }
+})
+
 const store = configureStore({
   reducer: {
-    user: userSlice.reducer
+    user: userSlice.reducer,
+    CreateComments: CreateCommentSlice.reducer
   }
 })
 
 export default store
 export const { logIn, LogInState, LogOutState } = userSlice.actions
+export const { CreateComment } = CreateCommentSlice.actions

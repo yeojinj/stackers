@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import { logIn } from '../../../store.js'
 
-function LogIn({ setModalOpen }) {
+function LogIn(props) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const navigate = useNavigate()
@@ -20,39 +20,21 @@ function LogIn({ setModalOpen }) {
   const isLogged = useSelector((state) => {
     return state.user.isLogged
   })
-  // 로그인 모달이 열리면 스크롤 못하게 막기
-  // 닫히면 스크롤 다시 가능
-  const showModal = () => {
-    setModalOpen(true)
-    // document.body.style.overflow = 'hidden'
-  }
-  const closeModal = () => {
-    // document.body.style.overflow = 'unset'
-    setModalOpen(false)
-    // navigate(-1)
-  }
-
-  useEffect(() => {
-    showModal
-  }, [])
-
   return (
-    <div className="login-background">
+    <div>
       <div className="LogIn">
         <img src={logo} alt="logo" className="LogIn-logo" />
-        {/* 임시방편으로 닫기 버튼 만들었어요 */}
-        {/* 메인페이지에 모달 띄우기 성공하면 없애겠습니당 */}
-        <button onClick={closeModal}>닫기</button>
+        <button
+          onClick={() => {
+            props.handleClose()
+          }}
+        >
+          닫기
+        </button>
         <form
           style={{ textAlign: 'center' }}
           onSubmit={(event) => {
             event.preventDefault()
-            // console.log('제출된다.')
-            // console.log(event.target.id.value)
-            // console.log(event.target.password.value)
-            // setUsername(event.target.username.value)
-            // setPassword(event.target.password.value)
-            // console.log(username, password)
             axios({
               method: 'post',
               url: '/api/login',
@@ -62,7 +44,6 @@ function LogIn({ setModalOpen }) {
               }
             })
               .then((response) => {
-                // console.log(response.data)
                 localStorage.setItem('accessToken', response.data.accessToken)
                 localStorage.setItem('refreshToken', response.data.refreshToken)
                 navigate('/MainRoom')
