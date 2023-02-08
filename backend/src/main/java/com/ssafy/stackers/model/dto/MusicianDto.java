@@ -8,20 +8,18 @@ import lombok.NoArgsConstructor;
 @Builder
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class MusicianDto {
 
     private Long instrumentId;      // 악기 아이디
     private String instrumentName;  // 악기명
-    private String musicianUsername;    // 연주자 아이디
-    private String musicianImgPath;     // 연주자 프로필 사진 경로
-    private String musicianImgName;     // 연주자 프로필 사진 파일명
+    private String username;    // 연주자 아이디
+    private String profileImg;     // 연주자 프로필 사진 경로
 
-    public MusicianDto(Long instrumentId, String instrumentName, String musicianUsername,
-        String musicianImgPath) {
+    public MusicianDto(Long instrumentId, String instrumentName, String username,
+        String profileImg) {
         this.instrumentId = instrumentId;
         this.instrumentName = instrumentName;
-        this.musicianUsername = musicianUsername;
-        this.musicianImgPath = musicianImgPath;
+        this.username = username;
+        this.profileImg = profileImg;
     }
 }
