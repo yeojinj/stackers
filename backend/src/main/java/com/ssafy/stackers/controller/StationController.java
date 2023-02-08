@@ -5,7 +5,6 @@ import com.ssafy.stackers.exception.CustomException;
 import com.ssafy.stackers.model.*;
 import com.ssafy.stackers.model.dto.MainStationDto;
 import com.ssafy.stackers.model.dto.StationDetailDto;
-import com.ssafy.stackers.model.dto.StationDetailObjectDto;
 import com.ssafy.stackers.model.dto.StationDto;
 import com.ssafy.stackers.service.*;
 import com.ssafy.stackers.utils.error.ErrorCode;
@@ -213,8 +212,8 @@ public class StationController {
 
 
     @GetMapping("/{stationid}")
-    public ResponseEntity<StationDetailObjectDto> getStationDetail(@PathVariable("stationid") int stationId){
-        StationDetailObjectDto station = stationService.getStationDetail((long) stationId);
+    public ResponseEntity<StationDetailDto> getStationDetail(@PathVariable("stationid") int stationId){
+        StationDetailDto station = stationService.getStationDetail((long) stationId);
         return new ResponseEntity<>(station, HttpStatus.OK);
     }
 }
