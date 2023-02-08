@@ -27,10 +27,6 @@ public class StationService {
     @Autowired
     private StationRepository stationRepository;
     @Autowired
-    private CommentRepository commentRepository;
-    @Autowired
-    private TagListRepository tagListRepository;
-    @Autowired
     private InstrumentService instrumentService;
     @Autowired
     private TagService tagService;
@@ -38,8 +34,6 @@ public class StationService {
     private TagListService tagListService;
     @Autowired
     private CommentService commentService;
-    @Autowired
-    private MemberService memberService;
 
     @Transactional
     public Station save(StationDto stationDto, Video video, Member member) {
@@ -51,19 +45,19 @@ public class StationService {
 
         // 스테이션 DB 저장
         Station s = Station.builder()
-            .content(stationDto.getContent())
-            .music(stationDto.getMusic())
-            .remainDepth(stationDto.getRemainDepth())
-            .prevStationId((Long) stationDto.getPrevStationId())
-            .member(member)
-            .video(video)
-            .instrument(instrument)
-            .isPublic(stationDto.getIsPublic() == 0 ? false : true)
-            .isComplete(
-                stationDto.getRemainDepth() == 0 || stationDto.getIsComplete() == 1 ? true : false)
-            .heartCnt(0)
-            .isDelete(false)
-            .build();
+                .content(stationDto.getContent())
+                .music(stationDto.getMusic())
+                .remainDepth(stationDto.getRemainDepth())
+                .prevStationId((Long) stationDto.getPrevStationId())
+                .member(member)
+                .video(video)
+                .instrument(instrument)
+                .isPublic(stationDto.getIsPublic() == 0 ? false : true)
+                .isComplete(
+                        stationDto.getRemainDepth() == 0 || stationDto.getIsComplete() == 1 ? true : false)
+                .heartCnt(0)
+                .isDelete(false)
+                .build();
 
         stationRepository.save(s);
         tagListService.save(tags, s);
@@ -73,7 +67,7 @@ public class StationService {
 
     public Station findById(Long id) {
         stationRepository.findById(id)
-            .orElseThrow(() -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
         return stationRepository.findById(id).get();
     }
 
@@ -89,7 +83,7 @@ public class StationService {
 
         Member w = s.getMember();
         LoginMemberDto writer = new LoginMemberDto(w.getId(), w.getUsername(), w.getNickname(),
-            w.getImgPath());
+                w.getImgPath());
 
         List<CommentDetailDto> comments = commentService.getComments(s);
         List<MusicianDto> musicians = getMusicians(s);
@@ -108,9 +102,9 @@ public class StationService {
      * 로그인 한 회원의 메인 페이지 스테이션 조회
      */
     public List<Station> findByIsPublicAndIsCompleteAndMember(boolean isPublic, boolean isCompleted,
-        Member member) {
+                                                              Member member) {
         return stationRepository.findByIsPublicAndIsCompleteAndMemberIsNot(isPublic, isCompleted,
-            member);
+                member);
     }
 
     /**
@@ -145,8 +139,8 @@ public class StationService {
         Station s = findById(id);
         List<String> tags = tagService.findNameById(tagListService.findByStation(s));
         return new StationDto(s.getContent(), s.getMusic(), s.getHeartCnt(), s.getRemainDepth(),
-            s.isPublic() ? 1 : 0, s.isComplete() ? 1 : 0, s.isComplete(), tags,
-            s.getPrevStationId(), s.getVideo().getVideoName());
+                s.isPublic() ? 1 : 0, s.isComplete() ? 1 : 0, s.isComplete(), tags,
+                s.getPrevStationId(), s.getVideo().getVideoName());
     }
 
     public List<MusicianDto> getMusicians(Station start){

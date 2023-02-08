@@ -32,14 +32,14 @@ public class MemberService {
         checkUsernameDuplication(joinDto.getUsername());
 
         Member m = Member.builder().username(joinDto.getUsername())
-            .password(bCryptPasswordEncoder.encode(joinDto.getPassword()))
-            .roles("ROLE_USER")
-            .nickname(joinDto.getUsername())
-            .email(joinDto.getEmail())
-            .bio("")
-            .imgPath("path")
-            .isResign(false)
-            .build();
+                .password(bCryptPasswordEncoder.encode(joinDto.getPassword()))
+                .roles("ROLE_USER")
+                .nickname(joinDto.getUsername())
+                .email(joinDto.getEmail())
+                .bio("")
+                .imgPath("path")
+                .isResign(false)
+                .build();
         memberRepository.save(m);
     }
 
@@ -61,18 +61,18 @@ public class MemberService {
 
     public Member findByUsername(String username) {
         return memberRepository.findByUsername(username)
-            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
     public Member findById(Long id) {
         return memberRepository.findById(id)
-            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
     public Member getLoginMember(String loginUsername) throws CustomException {
         // 로그인 되어 있는 유저 정보 가져오기 -> 로그인 되어 있지 않다면 오류 반환
         Member loginMember = memberRepository.findByUsername(loginUsername)
-            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         return loginMember;
     }
 
