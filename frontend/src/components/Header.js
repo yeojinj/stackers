@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-// import styled from 'styled-components'
+import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import logo from '../assets/logo.svg'
 import search from '../assets/search.svg'
@@ -30,13 +30,19 @@ function Header(props) {
   const [isHaveInputValue, setIsHaveInputValue] = useState(false)
   const [dropDownList, setDropDownList] = useState(wholeTextArray)
   const [dropDownItemIndex, setDropDownItemIndex] = useState(-1)
+  const userLogin = useSelector((state) => {
+    return state.user.isLogged
+  })
 
   const IsLogin = () => {
-    if (login) {
+    console.log(login)
+    if (userLogin) {
       return (
         <>
           <div className="upload-profile">
-            <button className="upload-btn">+ 업로드</button>
+            <button className="upload-btn" onClick={goRecordRoom}>
+              + 업로드
+            </button>
             <ProfileFrame />
           </div>
         </>
@@ -57,13 +63,18 @@ function Header(props) {
     setLogin(true)
     props.openModal(true)
   }
+
+  const goRecordRoom = () => {
+    navigate('/RecordRoom')
+  }
+
   const showDropDownList = () => {
     if (inputValue === '') {
       setIsHaveInputValue(false)
       setDropDownList([])
     } else {
       const choosenTextList = wholeTextArray.filter((textItem) =>
-        textItem.toLowerCase().startsWith(inputValue)
+        textItem.toLowerCase().startsWith(inputValue.toLowerCase())
       )
       if (Array.isArray(choosenTextList) && choosenTextList.length === 0) {
         setIsHaveInputValue(false)

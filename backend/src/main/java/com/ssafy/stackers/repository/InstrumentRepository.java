@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface InstrumentRepository extends JpaRepository<Instrument, Long> {
     Optional<Instrument> findById(Long id);
+    Optional<Instrument> findByName(String name);
 }

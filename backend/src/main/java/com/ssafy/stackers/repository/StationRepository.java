@@ -1,12 +1,18 @@
 package com.ssafy.stackers.repository;
 
+import com.ssafy.stackers.model.Member;
 import com.ssafy.stackers.model.Station;
+
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface StationRepository extends JpaRepository<Station, Long> {
     Optional<Station> findById(Long id);
-
+    List<Station> findByIsPublicAndIsComplete(boolean isPublic, boolean isComplete);
+    List<Station> findByIsPublicAndIsCompleteAndMemberIsNot(boolean isPublic, boolean isComplete, Member member);
+    List<Station> findTop10ByIsPublicOrderByHeartCntDescRegTimeAsc(boolean isPublic);
+    List<Station> findByIsPublicAndMember(boolean isPublic, Member member);
     @Override
     boolean existsById(Long id);
 }

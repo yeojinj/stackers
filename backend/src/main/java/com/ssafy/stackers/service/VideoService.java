@@ -44,7 +44,7 @@ public class VideoService {
         File destinationFile;
         String destinationFileName;
         String videoPath = "C:\\stackers\\videos\\";
-//        String videoPath = "/Users/sennie/stackers/videos";
+//        String videoPath = "/Users/sennie/stackers/videos/";
 
         do {
             destinationFileName =
