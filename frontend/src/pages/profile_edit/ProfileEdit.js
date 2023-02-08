@@ -3,12 +3,16 @@ import './ProfileEdit.css'
 import profileTest from '../../assets/profileTest.svg'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
+import MyDropzone from './MyDropzone'
+// import ImageCrop from './ImageCrop'
 
 function ProfileEdit() {
   const id = '아이디'
   const email = '이메일'
   const [nickname, setNickname] = useState('닉네임')
   const [bio, setBio] = useState('정보입니다.')
+  const [modalOpen, setModalOpen] = useState(false)
+  const [image, setImage] = useState('')
   const Instrument = [
     {
       name: '기타'
@@ -33,7 +37,17 @@ function ProfileEdit() {
     { name: '하프' }
   ]
   const [group, setGroup] = useState('배도라지')
+  const openModal = () => {
+    setModalOpen(true)
+  }
+  const closeModal = () => {
+    setModalOpen(false)
+  }
 
+  const onChangeImage = (uploadedImage) => {
+    setImage(URL.createObjectURL(uploadedImage))
+    console.log(image)
+  }
   return (
     <div className="ProfileEdit">
       <p className="ProfileEdit-head">프로필 편집</p>
@@ -42,7 +56,29 @@ function ProfileEdit() {
           <span>프로필 사진</span>
         </div>
         <div className="ProfileEdit-content">
-          <img src={profileTest} alt="profileTest" style={{ width: '113px' }} />
+          {/* 파일 클릭하면 dropzone 모달 띄우기 */}
+          <img
+            onClick={openModal}
+            src={profileTest}
+            alt="profileTest"
+            style={{ width: '113px' }}
+          />
+
+          {modalOpen && (
+            <div className="profileimg-edit">
+              <div className="profileimg-edit-title">
+                프로필 사진 변경
+                <button onClick={closeModal} className="close-btn">
+                  x
+                </button>
+              </div>
+              <MyDropzone
+                onChangeImage={onChangeImage}
+                setModalOpen={setModalOpen}
+              />
+              <div></div>
+            </div>
+          )}
         </div>
       </div>
 

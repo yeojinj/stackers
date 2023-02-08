@@ -1,0 +1,42 @@
+.dropzone {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.dropzone-img-style {
+  position: relative;
+  width: 113px;
+  height: 110px;
+  border-radius: 70%;
+  opacity: 0.5;
+}
+
+.dropzone-img {
+  position: relative;
+  width: 113px;
+  height: 110px;
+  border-radius: 70%;
+}
+
+.drag-drop-box {
+  position: absolute;
+  left: 100;
+  top: 80px;
+  font-size: small;
+}
+
+.img-upload-btn {
+  width: 111px;
+  height: 38px;
+  margin-top: 9px;
+  float: right;
+  margin-right: 30px;
+  padding: 0px;
+  border: 0px;
+  border-radius: 10px;
+  font-size: 16px;
+  color: white;
+  background-color: rgba(42, 32, 150, 1);
+}
+
