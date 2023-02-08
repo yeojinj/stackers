@@ -2,14 +2,13 @@
   display: grid;
   grid-template-rows: 8fr 1fr 1fr;
 }
-.record {
-  background-color: aqua;
-}
 .box {
   display: flex;
   padding: auto;
   margin: auto;
   flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
 }
 .container {
   display: flex;
@@ -27,12 +26,39 @@
   text-align: center;
 }
 .modalBox {
-  border: 2px solid yellowgreen;
-}
-VideoPreview {
-  width: 300px;
-  height: 300px;
-}
-.modalBox {
   background-color: white;
+}
+.recordRoom {
+  text-align: center;
+}
+.recordModal {
+  display: flex;
+  padding: auto;
+  margin: auto;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  opacity: 50%;
+}
+.recordTimer {
+  background-color: aliceblue;
+}
+.timer-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.timer {
+  font-family: 'Montserrat';
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.text {
+  color: #aaa;
+}
+
+.value {
+  font-size: 100px;
 }

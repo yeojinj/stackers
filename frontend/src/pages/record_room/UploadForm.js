@@ -1,10 +1,39 @@
 /* eslint-disable */
 
-import './Record'
 import React, { useState, useEffect } from 'react'
+import './Record'
 import Tag from './ModalTag'
+import './UploadForm.css'
+import TextField from '@mui/material/TextField'
+import Autocomplete from '@mui/material/Autocomplete'
+import { IconButton } from '@mui/material'
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
+// import axios from 'axios'
 
 function UploadForm(props) {
+  const Instrument = [
+    {
+      name: '기타'
+    },
+    { name: '가야금' },
+    { name: '바이올린' },
+    { name: '첼로' },
+    { name: '비올라' },
+    { name: '콘트라베이스' },
+    { name: '피아노' },
+    { name: '보컬' },
+    { name: '북' },
+    { name: '꽹과리' },
+    { name: '장구' },
+    { name: '징' },
+    { name: '캐스터네츠' },
+    { name: '실로폰' },
+    { name: '비브라폰' },
+    { name: '플룻' },
+    { name: '클라리넷' },
+    { name: '트럼펫' },
+    { name: '하프' }
+  ]
   const handleClose = () => {
     props.handle()
   }
@@ -13,7 +42,9 @@ function UploadForm(props) {
     stack: object,
     music: '',
     content: '',
-    scope: 'public'
+    InstrumentId: '',
+    isPublic: 1,
+    isCompleted: 0
   })
   const filedownloadlink = window.URL.createObjectURL(object)
   const handleChange = (e) => {
@@ -24,18 +55,20 @@ function UploadForm(props) {
   }
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!values.content || !values.music || !values.scope) {
+    if (!values.content || !values.music || !values.isPublic) {
       alert('빈칸을 입력해주세요')
     } else {
       console.log(values)
       if (values) {
         let testData = {
-          content: '프론트 테스트 데이터임',
-          music: '프론트 테스트 데이터임',
-          prevStationId: -1,
-          tags: ['행복', '사랑'],
-          remainDepth: 3,
-          instrumentId: 1
+          content: 'HELLO THERE',
+          music: 'HELLO THERE',
+          instrumentId: 1,
+          tags: ['happy', 'mood'],
+          prevStationId: 1,
+          remainDepth: 2,
+          isPublic: 1,
+          isComplete: 0
         }
 
         const formData = new FormData()
@@ -68,8 +101,17 @@ function UploadForm(props) {
   return (
     <div className="container">
       <form className="left stack" onSubmit={handleSubmit}>
-        <video className="stackVideo" src={filedownloadlink} controls />
-        <div className="item">노래 제목</div>
+        <video
+          className="stackVideo"
+          src={filedownloadlink}
+          width={258}
+          height={402}
+          style={{ objectFit: 'cover' }}
+          controls
+        />
+        <div className="item">
+          <b>노래 제목</b>
+        </div>
         <input
           type="text"
           name="music"
@@ -84,29 +126,58 @@ function UploadForm(props) {
       </form>
       <div className="right">
         <form onSubmit={handleSubmit}>
-          <div className="infoForm">설명</div>
+          <div className="infoForm">
+            <b>설명</b>
+          </div>
           <input
             type="text"
             name="content"
             value={values.content}
             onChange={handleChange}
           ></input>
-          <div className="thumbnailForm">썸네일</div>
-          <div className="tagForm">태그</div>
+          <div className="thumbnailForm">
+            <b>썸네일</b>
+          </div>
+          <div className="tagForm">
+            <b>태그</b>
+          </div>
           <Tag />
           <div className="container">
             <div className="left">
-              <div className="instForm">연주 악기</div>
-              <Tag />
+              <div className="instForm">
+                <b>연주 악기</b>
+                <IconButton>
+                  <AddCircleOutlineIcon />
+                </IconButton>
+              </div>
+              <Autocomplete
+                multiple
+                limitTags={2}
+                id="multiple-limit-tags"
+                options={Instrument}
+                onChange={(event, value) => {
+                  console.log(event, value)
+                  setValues({
+                    ...values,
+                    [value.name]: value
+                  })
+                }}
+                getOptionLabel={(option) => option.name}
+                // defaultValue={[Instrument[13], Instrument[12], Instrument[11]]}
+                renderInput={(params) => (
+                  <TextField {...params} placeholder="Instruments" />
+                )}
+                sx={{ width: '100%' }}
+              />
             </div>
             <div className="right">
-              <div className="scopeForm">공개 범위</div>
-              <div>
+              <div className="scopeForm">
+                <b>공개 범위</b>
                 <label>
                   <input
                     type="radio"
-                    name="scope"
-                    value="true"
+                    name="isPublic"
+                    value="public"
                     onChange={handleChange}
                     checked
                   />
@@ -115,11 +186,33 @@ function UploadForm(props) {
                 <label>
                   <input
                     type="radio"
-                    name="scope"
-                    value="false"
+                    name="isPublic"
+                    value="private"
                     onChange={handleChange}
                   />
                   비공개
+                </label>
+              </div>
+              <div className="StackForm">
+                <b>이어서 스택 쌓기</b>
+                <label>
+                  <input
+                    type="radio"
+                    name="isCompleted"
+                    value="notCompleted"
+                    onChange={handleChange}
+                    checked
+                  />
+                  허용
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="isCompleted"
+                    value="completed"
+                    onChange={handleChange}
+                  />
+                  불허용
                 </label>
               </div>
             </div>
