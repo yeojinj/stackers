@@ -60,7 +60,7 @@ function StationListItem({ isRanking, isSearch, station }) {
         </>
       )
     } else {
-      // 완성, 미완성 스테이션
+      // 완성, 미완성, 마이페이지 스테이션
       return (
         <>
           <video
