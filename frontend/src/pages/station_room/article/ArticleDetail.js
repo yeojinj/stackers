@@ -5,8 +5,9 @@ import StackerListItem from './StackerListItem'
 import '../Station.css'
 import profile from '../assets/profile.png'
 
-function ArticleDetail() {
+function ArticleDetail(props) {
   const [isfollowing, setIsfollow] = useState(true)
+  const writer = props.Info.writer
   let followbutton = null
   if (!isfollowing) {
     followbutton = (
@@ -29,8 +30,8 @@ function ArticleDetail() {
         <div className="station-profile">
           <img src={profile} alt="profile" />
           <div className="station-profile-name_nickname">
-            <h3 className="station-profile-id">dearSanta</h3>
-            <p className="station-profile-nickname">김싼타</p>
+            <p className="station-profile-id">{writer.username}</p>
+            <p className="station-profile-nickname">{writer.nickname}</p>
           </div>
           <div
             className="station-follow"
@@ -43,8 +44,9 @@ function ArticleDetail() {
           </div>
         </div>
         <p className="station-usercontent">{stationInformation}</p>
+        <p style={{ color: 'gray' }}>{props.Info.regTime}</p>
       </div>
-      <StackerListItem></StackerListItem>
+      <StackerListItem musicians={props.Info.musicians}></StackerListItem>
     </div>
   )
 }
