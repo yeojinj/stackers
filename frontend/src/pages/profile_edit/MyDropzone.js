@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import profileEdit from '../../assets/profileEdit.svg'
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined'
 import './mydropzone.css'
 
-function MyDropzone({ setModalOpen, onChangeImage }) {
+function MyDropzone({ onChangeImage, handleClose }) {
   const [img, setImage] = useState(false)
   const [imgblob, setImageBlob] = useState('')
 
@@ -22,35 +23,42 @@ function MyDropzone({ setModalOpen, onChangeImage }) {
   }, onChangeImage)
 
   const uploadImg = () => {
-    return console.log(imgblob)
+    console.log(imgblob)
+    handleClose()
   }
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
-  const showModal = () => {
-    setModalOpen(true)
-  }
-  useEffect(() => {
-    showModal()
-  }, [])
 
   return (
     <>
-      <div {...getRootProps()} className="dropzone">
-        <input type="image" {...getInputProps()} />
-        <img
-          className={!img ? 'dropzone-img-style' : 'dropzone-img'}
-          id="dropimg"
-          src={profileEdit}
-          alt="프로필 사진"
-        ></img>
-        <div className="drag-drop-box">
-          {/* {!img && <p>이곳에 파일을 끌어 업로드하세요</p>} */}
-          {isDragActive
-            ? '여기에 파일을 올려주세요'
-            : '파일을 드래그하거나 여기를 클릭하세요'}
+      <div className="dropzone">
+        <CloseOutlinedIcon
+          onClick={() => {
+            handleClose()
+          }}
+          style={{
+            cursor: 'pointer',
+            margin: '21px',
+            alignSelf: 'flex-end'
+          }}
+        />
+        <div {...getRootProps()}>
+          <input type="image" {...getInputProps()} />
+          <div className="image-center">
+            <img
+              className={!img ? 'dropzone-img-style' : 'dropzone-img'}
+              id="dropimg"
+              src={profileEdit}
+              alt="프로필 사진"
+            ></img>
+          </div>
+          <div className="drag-drop-box">
+            {/* {!img && <p>이곳에 파일을 끌어 업로드하세요</p>} */}
+            {isDragActive
+              ? '여기에 파일을 올려주세요'
+              : '파일을 드래그하거나 여기를 클릭하세요'}
+          </div>
         </div>
-      </div>
-      <div>
         <button className="img-upload-btn" onClick={uploadImg}>
           업로드
         </button>
