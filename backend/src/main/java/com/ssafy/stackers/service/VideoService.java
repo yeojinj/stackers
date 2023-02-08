@@ -35,7 +35,7 @@ public class VideoService {
 
     /**
      * 데이터베이스에 비디오 업로드
-     * */
+     */
     public Video uploadVideo(MultipartFile file) throws IOException {
         String sourceVideoName = file.getOriginalFilename();
         String sourceVideoNameExtension = FilenameUtils.getExtension(sourceVideoName).toLowerCase();
@@ -155,17 +155,42 @@ public class VideoService {
      * 동영상 합치기
      * ffmpeg 명령어 그대로 사용함 -> 배포 시 수정 필요
      */
-    public void videoMerging() {
-        String cmd = "ffmpeg -i C:\\test\\videos\\left.mp4 -i C:\\test\\videos\\right.mp4 -filter_complex \"[0:v][1:v]hstack=inputs=2[v]; [0:a][1:a]amerge[a]\" -map \"[v]\" -map \"[a]\" -ac 2 C:\\test\\videos\\output.mp4";
-        try {
-            Process p = Runtime.getRuntime().exec(cmd);
-//            System.out.println("===========");
-//            System.out.println(p.getErrorStream());
-//            System.out.println(p.info());
-        } catch (IOException e) {
-//            System.out.printf(e.getMessage());
-//            System.out.printf(e.getClass().getName());
-            throw new RuntimeException(e);
-        }
+    public void videoMerging() throws IOException {
+        // 영상 파일 경로
+        String videoPath1 = "C:\\test\\videos\\";
+        String videoPath2 = "C:\\test\\videos\\";
+
+        // 합친 영상 추출 절대 경로
+        String mergingPath = "C:\\test\\videos\\";
+
+        // ffmpeg 설치 파일 경로 -> 환경 변수로 설정
+        FFmpeg ffmpeg = new FFmpeg("ffmpeg");
+        FFprobe ffprobe = new FFprobe("ffprobe");
+
+        FFmpegBuilder builder = new FFmpegBuilder()
+            .overrideOutputFiles(true)
+            .addInput(videoPath1 + "left.mp4")
+            .addInput(videoPath2 + "encoding-right.mp4")
+            .addOutput(mergingPath + "output.mp4")
+            .addExtraArgs("-preset", "ultrafast")
+            .addExtraArgs("-filter_complex",
+//                "[0:v]setpts=PTS-STARTPTS, pad=iw*2+5:ih[bg]; [1:v]setpts=PTS-STARTPTS[fg]; [bg][fg]overlay=w+5")
+                "[0:v][1:v]hstack=inputs=2[v]; [0:a][1:a]amerge[a]")
+            .addExtraArgs("-map", "[v]")
+            .addExtraArgs("-map", "[a]")
+            .addExtraArgs("-ac", "2")
+            .addExtraArgs("-vsync", "0")
+            .done();
+
+        FFmpegExecutor executor = new FFmpegExecutor(ffmpeg, ffprobe);
+
+        // one-pass encode
+        executor.createJob(builder, p -> {
+            if(p.isEnd()) {
+                System.out.println("!!!동영상 합치기 성공!!!");
+            }
+            }
+        ).run();
+
     }
 }
