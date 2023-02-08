@@ -15,7 +15,7 @@
   font-size: 16px;
 }
 
-svg {
+.counterContainer {
   position: absolute;
   top: 0;
   right: 0;
@@ -24,7 +24,7 @@ svg {
   transform: rotateY(-180deg) rotateZ(-90deg);
 }
 
-svg circle {
+svg > circle {
   stroke-dasharray: 113px;
   stroke-dashoffset: 0px;
   stroke-linecap: butt;
@@ -32,10 +32,6 @@ svg circle {
   stroke: white;
   fill: none;
   animation-name: countdown;
-   {
-    animation-timing-function: linear;
-    animation-iteration-count: 1;
-  }
 }
 
 @keyframes countdown {

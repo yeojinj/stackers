@@ -38,7 +38,7 @@ function RecordRoom() {
     })
   }
   return (
-    <div>
+    <div className="recordRoom">
       <LightIcon></LightIcon>
       <div className="container">
         <div className="stack">
