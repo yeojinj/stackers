@@ -99,7 +99,7 @@ function UploadForm(props) {
     }
   }
   return (
-    <div className="container">
+    <div className="upload container">
       <form className="left stack" onSubmit={handleSubmit}>
         <video
           className="stackVideo"

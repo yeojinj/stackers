@@ -2,7 +2,7 @@ import React from 'react'
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 const renderTime = ({ remainingTime }) => {
   if (remainingTime === 0) {
-    return <div className="timer">Too lale...</div>
+    return <div className="timer">START</div>
   }
 
   return (
