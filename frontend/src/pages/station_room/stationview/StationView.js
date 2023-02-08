@@ -6,10 +6,18 @@ import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined'
 import ArrowCircleUpOutlinedIcon from '@mui/icons-material/ArrowCircleUpOutlined'
 import ArrowCircleDownOutlinedIcon from '@mui/icons-material/ArrowCircleDownOutlined'
 import '../Station.css'
+import { useNavigate } from 'react-router-dom'
+
 function StationView() {
+  const navigate = useNavigate()
   return (
     <div className="LeftStyle">
-      <CloseOutlinedIcon className="stationOutButton" />
+      <CloseOutlinedIcon
+        className="stationOutButton"
+        onClick={() => {
+          navigate(-1)
+        }}
+      />
       <div className="contentBox">
         <div className="videoBox">
           <img src={station} alt="station" className="videoBox" />

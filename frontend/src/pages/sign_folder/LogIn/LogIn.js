@@ -11,6 +11,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import { logIn } from '../../../store.js'
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined'
 
 function LogIn(props) {
   const [username, setUsername] = useState('')
@@ -23,14 +24,19 @@ function LogIn(props) {
   return (
     <div>
       <div className="LogIn">
+        <p style={{ margin: '21px' }}>
+          <CloseOutlinedIcon
+            onClick={() => {
+              props.handleClose()
+            }}
+            style={{
+              cursor: 'pointer',
+              float: 'right'
+            }}
+          />
+        </p>
         <img src={logo} alt="logo" className="LogIn-logo" />
-        <button
-          onClick={() => {
-            props.handleClose()
-          }}
-        >
-          닫기
-        </button>
+
         <form
           style={{ textAlign: 'center' }}
           onSubmit={(event) => {
