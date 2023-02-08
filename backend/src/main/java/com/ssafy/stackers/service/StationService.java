@@ -146,7 +146,7 @@ public class StationService {
         List<String> tags = tagService.findNameById(tagListService.findByStation(s));
         return new StationDto(s.getContent(), s.getMusic(), s.getHeartCnt(), s.getRemainDepth(),
             s.isPublic() ? 1 : 0, s.isComplete() ? 1 : 0, s.isComplete(), tags,
-            s.getPrevStationId());
+            s.getPrevStationId(), s.getVideo().getVideoName());
     }
 
     public List<MusicianDto> getMusicians(Station start){

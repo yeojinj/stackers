@@ -7,12 +7,20 @@ import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import Box from '@mui/material/Box'
+import Modal from '@mui/material/Modal'
+import LogIn from '../LogIn/LogIn.js'
 
 function SignUp() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
   const navigate = useNavigate()
+
+  const [open, setOpen] = useState(false)
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
+
   return (
     <div>
       <div className="SignUp">
@@ -132,6 +140,14 @@ function SignUp() {
             가입하기
           </Button>
         </form>
+      </div>
+      <div>
+        <Button onClick={handleOpen}>Open modal</Button>
+        <Modal open={open} onClose={handleClose}>
+          <Box>
+            <LogIn handleClose={handleClose} />
+          </Box>
+        </Modal>
       </div>
     </div>
   )

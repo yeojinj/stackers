@@ -41,6 +41,7 @@ const RecordStation = () => {
   function stop(stream) {
     stream.getTracks().forEach((track) => track.stop())
   }
+
   const startStation = () => {
     left.current.play()
     navigator.mediaDevices

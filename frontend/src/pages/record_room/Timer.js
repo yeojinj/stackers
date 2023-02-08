@@ -1,61 +1,30 @@
-import React, { useState, useEffect } from 'react'
-import styles from './Timer.css'
-
-let countInterval
-
-const Timer = ({ active, initialValue }) => {
-  const [counter, setCounter] = useState(0)
-
-  const startCount = () => {
-    countInterval = setInterval(() => {
-      setCounter((s) => --s)
-    }, 1000)
+import React from 'react'
+import { CountdownCircleTimer } from 'react-countdown-circle-timer'
+const renderTime = ({ remainingTime }) => {
+  if (remainingTime === 0) {
+    return <div className="timer">Too lale...</div>
   }
-
-  const stopCount = () => {
-    clearInterval(countInterval)
-  }
-
-  const animationPlay = (a) => (a ? 'running' : 'paused')
-
-  useEffect(() => {
-    if (active) {
-      setCounter(initialValue / 1000)
-      startCount()
-    } else {
-      stopCount()
-    }
-  }, [active])
-
-  useEffect(() => {
-    if (counter <= 0) {
-      stopCount()
-    }
-  }, [counter])
 
   return (
-    <>
-      {active && (
-        <div className={styles.countdown}>
-          <div className={styles.countdownNumber}>{counter}</div>
-          <svg className={styles.counterContainer}>
-            <circle
-              r="18"
-              cx="20"
-              cy="20"
-              className={styles.counterServer}
-              style={{
-                animationPlayState: animationPlay(active),
-                animationIterationCount: '1',
-                animationTimingFunction: 'linear',
-                animationDuration: `${initialValue / 1000}s`,
-                animationFillMode: 'forwards'
-              }}
-            ></circle>
-          </svg>
-        </div>
-      )}
-    </>
+    <div className="timer">
+      <div className="text"></div>
+      <div className="text value">
+        <b>{remainingTime}</b>
+      </div>
+      <div className="text"></div>
+    </div>
+  )
+}
+
+function Timer() {
+  return (
+    <div>
+      <div className="timer-wrapper">
+        <CountdownCircleTimer isPlaying duration={3} colors={['#ffffff']}>
+          {renderTime}
+        </CountdownCircleTimer>
+      </div>
+    </div>
   )
 }
 
