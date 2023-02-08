@@ -72,10 +72,9 @@ public class VideoService {
         // 썸네일 추출 절대 경로
         String thumbnailPath = "C:\\test\\thumbs\\";
 
-        // ffmpeg 설치 파일 경로
-        String ffmpegPath = "C:\\Program Files\\ffmpeg\\bin\\";     // ffmpeg 설치 파일도 서버에 올려야 하는지?
-        FFmpeg ffmpeg = new FFmpeg(ffmpegPath + "ffmpeg");
-        FFprobe ffprobe = new FFprobe(ffmpegPath + "ffprobe");
+        // ffmpeg 설치 파일 경로 -> 환경 변수로 설정
+        FFmpeg ffmpeg = new FFmpeg("ffmpeg");
+        FFprobe ffprobe = new FFprobe("ffprobe");
 
         // 썸네일 추출 명령어
         FFmpegBuilder builder = new FFmpegBuilder()
@@ -98,10 +97,9 @@ public class VideoService {
         // 영상 파일 경로
         String videoPath = "C:\\test\\videos\\test.mp4";
 
-        // ffmpeg 설치 파일 경로
-        String ffmpegPath = "C:\\Program Files\\ffmpeg\\bin\\";
-        FFmpeg ffmpeg = new FFmpeg(ffmpegPath + "ffmpeg");
-        FFprobe ffprobe = new FFprobe(ffmpegPath + "ffprobe");
+        // ffmpeg 설치 파일 경로 -> 환경 변수로 설정
+        FFmpeg ffmpeg = new FFmpeg("ffmpeg");
+        FFprobe ffprobe = new FFprobe("ffprobe");
 
         FFmpegProbeResult probeResult = ffprobe.probe(videoPath);
 
@@ -125,10 +123,9 @@ public class VideoService {
         // 인코딩 파일 추출 절대 경로
         String encodingPath = "C:\\test\\videos\\";
 
-        // ffmpeg 설치 파일 경로
-        String ffmpegPath = "C:\\Program Files\\ffmpeg\\bin\\";
-        FFmpeg ffmpeg = new FFmpeg(ffmpegPath + "ffmpeg");
-        FFprobe ffprobe = new FFprobe(ffmpegPath + "ffprobe");
+        // ffmpeg 설치 파일 경로 -> 환경 변수로 설정
+        FFmpeg ffmpeg = new FFmpeg("ffmpeg");
+        FFprobe ffprobe = new FFprobe("ffprobe");
 
         // 동영상 인코딩 명령어
         FFmpegBuilder builder = new FFmpegBuilder()
