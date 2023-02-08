@@ -81,7 +81,7 @@ public class StationController {
 
         // 비디오 저장
 //        Video video = videoService.uploadVideo(file, stationDto.getVideoName());
-        Video video = videoService.uploadVideo(file);
+        Video video = videoService.uploadVideoToS3(file, stationDto.getVideoName());
 
         // 스테이션 저장
         stationService.save(stationDto, video, loginMember);
@@ -210,10 +210,21 @@ public class StationController {
         return new ResponseEntity<>("좋아요 삭제 성공", HttpStatus.OK);
     }
 
-
+    /**
+     * 스테이션 상세 조회 정보
+     * @param stationId : 조회할 스테이션 아이디
+     * @return
+     */
     @GetMapping("/{stationid}")
     public ResponseEntity<StationDetailDto> getStationDetail(@PathVariable("stationid") int stationId){
         StationDetailDto station = stationService.getStationDetail((long) stationId);
         return new ResponseEntity<>(station, HttpStatus.OK);
+    }
+
+    @PostMapping("/video/{videoid}")
+    public ResponseEntity<?> deleteVideoFromS3(@PathVariable("videoid") int videoId) throws Exception{
+        Video video = videoService.findById((long) videoId);
+        videoService.deleteVideoFromS3(video.getVideoPath());
+        return new ResponseEntity<>("S3 삭제 완료", HttpStatus.OK);
     }
 }

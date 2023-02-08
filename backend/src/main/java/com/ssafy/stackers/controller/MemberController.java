@@ -6,7 +6,6 @@ import com.ssafy.stackers.model.Member;
 import com.ssafy.stackers.model.Party;
 import com.ssafy.stackers.model.dto.JoinDto;
 import com.ssafy.stackers.model.dto.LoginMemberDto;
-import com.ssafy.stackers.model.dto.MemberModifyDto;
 import com.ssafy.stackers.service.InstrumentService;
 import com.ssafy.stackers.service.MemberService;
 import com.ssafy.stackers.service.PartyMemberService;
@@ -21,7 +20,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -71,15 +69,6 @@ public class MemberController {
             .parties(partyMemberService.getParties(member.getId()))
             .build();
         return new ResponseEntity<>(loginMemberDto, HttpStatus.OK);
-    }
-
-    // user 권한만 접근 가능
-    @PutMapping("/user")
-    public ResponseEntity<?> upadateUser(@RequestBody MemberModifyDto memberModifyDto,
-        @AuthenticationPrincipal PrincipalDetails principal) {
-        Member member = memberService.getLoginMember(principal.getUsername());
-        memberService.updateMember(member.getUsername(), memberModifyDto);
-        return new ResponseEntity<>("멤버 수정 완료", HttpStatus.OK);
     }
 
     // admin 권한만 접근 가능
