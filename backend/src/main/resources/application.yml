@@ -3,7 +3,7 @@ spring:
     driverClassName: com.mysql.cj.jdbc.Driver
     password: root
     username: root
-    url: jdbc:mysql://localhost:3307/stackers
+    url: jdbc:mysql://localhost/stackers
   servlet:
     multipart:
       max-file-size: 50MB
