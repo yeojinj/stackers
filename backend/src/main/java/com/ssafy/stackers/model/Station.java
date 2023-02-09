@@ -77,4 +77,7 @@ public class Station {
         this.heartCnt = heartCnt;
     }
     public void deleteHeart(int heartCnt) {this.heartCnt = heartCnt;}
+    public void updateVideo(Video video){
+        this.video = video;
+    }
 }
