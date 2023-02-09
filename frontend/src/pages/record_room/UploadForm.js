@@ -5,13 +5,25 @@ import './Record'
 import Tag from './ModalTag'
 import './UploadForm.css'
 import TextField from '@mui/material/TextField'
-import Autocomplete from '@mui/material/Autocomplete'
 import { IconButton } from '@mui/material'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import Moment from 'moment'
+import { useSelector, useDispatch } from 'react-redux'
+import { CreateStack, ClearStack } from '../../store.js'
 // import axios from 'axios'
 
 function UploadForm(props) {
+  const dispatch = useDispatch()
+  const data = useSelector((state) => {
+    return state.stack
+  })
+  const username = useSelector((state) => {
+    return state.user.username
+  })
+
+  const dateNow = Moment().format('YYYYMMDDHHmm')
+  dispatch(CreateStack(['videoName', dateNow + username]))
+
   const handleClose = () => {
     props.handle()
   }
@@ -34,120 +46,66 @@ function UploadForm(props) {
   const filedownloadlink = window.URL.createObjectURL(object)
   const handleChange = (e) => {
     console.log(e.target.name, e.target.value)
+
+    dispatch(CreateStack([e.target.name, e.target.value]))
     setValues({
       ...values,
       [e.target.name]: e.target.value
     })
-    // if (e.target.name === 'isComplete' && e.target.value === 'notCompleted') {
-    //   setValues({
-    //     ...values,
-    //     isComplete: 0
-    //   })
-    // }
-    // if (e.target.name === 'isComplete' && e.target.value === 'completed') {
-    //   setValues({
-    //     ...values,
-    //     isComplete: 1
-    //   })
-    // }
-    // if (e.target.name === 'isPublic' && e.target.value === 'pulic') {
-    //   setValues({
-    //     ...values,
-    //     isPublic: 1
-    //   })
-    // }
-    // if (e.target.name === 'isPublic' && e.target.value === 'private') {
-    //   setValues({
-    //     ...values,
-    //     isPublic: 0
-    //   })
-    // }
-    // const dateNow = Moment().format('YYYYMMDDHHmm')
-    // const username = 'subin'
-    // setValues({
-    //   ...values,
-    //   videoName: dateNow + username
-    // })
-
-    // const dateNow = Moment().format('YYYYMMDDHHmm')
-    // const username = 'subin'
-    // setValues({
-    //   ...values,
-    //   videoName: dateNow + username
-    // })
-    // if (values.isPublic === 'private') {
-    //   setValues({
-    //     ...values,
-    //     isPublic: 0
-    //   })
-    // }
-    // if (values.isPublic === 'public') {
-    //   setValues({
-    //     ...values,
-    //     isPublic: 1
-    //   })
-    // }
-    // if (values.isComplete === 'notCompleted') {
-    //   setValues({
-    //     ...values,
-    //     isComplete: 0
-    //   })
-    // }
-    // if (values.isComplete === 'Completed') {
-    //   setValues({
-    //     ...values,
-    //     isComplete: 1
-    //   })
-    // }
-    console.log(values)
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!values.content || !values.music || !values.isPublic) {
+    if (!values.content || !values.music) {
       alert('빈칸을 입력해주세요')
     } else {
-      // if (values) {
-      //   let testData = {
-      //     content: values.content,
-      //     music: values.music,
-      //     instrumentId: values.instrumentId,
-      //     tags: values.tags,
-      //     heartCnt: values.heartCnt,
-      //     remainDepth: values.remainDepth,
-      //     isPublic: values.isPublic,
-      //     isComplete: values.isComplete,
-      //     tags: values.tags,
-      //     prevStationId: values.prevStationId,
-      //     videoName: values.videoName,
-      //     delete: true,
-      //   }
+      setValues({
+        ...values,
+        videoName: dateNow + username
+      })
+      if (values) {
+        let testData = {
+          content: data.content,
+          music: data.music,
+          instrumentId: data.instrumentId,
+          tags: data.tags,
+          heartCnt: data.heartCnt,
+          remainDepth: data.remainDepth,
+          isPublic: data.isPublic,
+          isComplete: data.isComplete,
+          tags: data.tags,
+          prevStationId: data.prevStationId,
+          videoName: data.videoName,
+          delete: true
+        }
+        console.log(testData)
+        const formData = new FormData()
+        // 기본 정보
+        formData.append(
+          'info',
+          new Blob([JSON.stringify(testData)], {
+            type: 'application/json'
+          })
+        )
 
-      //   const formData = new FormData()
-      //   // 기본 정보
-      //   formData.append(
-      //     'info',
-      //     new Blob([JSON.stringify(testData)], {
-      //       type: 'application/json'
-      //     })
-      //   )
-
-      //   // 파일 정보
-      //   formData.append('file', values.file)
-      //   await axios
-      //     .post(`/api/station/upload`, formData, {
-      //       headers: {
-      //         'Content-Type': `multipart/form-data`
-      //       }
-      //     })
-      //     .then(() => console.log('[스테이션 업로드] >> 성공'))
-      //     .catch((error) => {
-      //       alert(error)
-      //       console.log(error)
-      //     })
-      //   console.log(formData)
-      // }
+        // 파일 정보
+        formData.append('file', object)
+        console.log(formData)
+        // await axios
+        //   .post(`/api/station/upload`, formData, {
+        //     headers: {
+        //       'Content-Type': `multipart/form-data`
+        //     }
+        //   })
+        //   .then(() => console.log('[스테이션 업로드] >> 성공'))
+        //   .catch((error) => {
+        //     alert(error)
+        //     console.log(error)
+        //   })
+        // console.log(formData)
+      }
       handleClose()
+      dispatch(ClearStack())
     }
   }
   return (
