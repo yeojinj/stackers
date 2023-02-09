@@ -87,9 +87,13 @@ public class StationController {
 
     /**
      * 스테이션 삭제
+     * isDelete = 1로 처리 & S3 비디오 정보 삭제
      */
-
-
+    @DeleteMapping("/{stationid}")
+    public ResponseEntity<?> deleteStation(@PathVariable("stationid") int stationId) throws Exception{
+        stationService.deleteStation(stationId);
+        return new ResponseEntity<>("스테이션 삭제 성공", HttpStatus.OK);
+    }
 
     /**
      * 스테이션 수정
