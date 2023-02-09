@@ -46,8 +46,8 @@ const CreateCommentSlice = createSlice({
   }
 })
 
-const CreateStackSlice = createSlice({
-  name: 'CreateStackSlice',
+const stackSlice = createSlice({
+  name: 'stackSlice',
   initialState: {
     content: '',
     music: '',
@@ -63,16 +63,58 @@ const CreateStackSlice = createSlice({
     file: {}
   },
   reducers: {
-    createStack: (state, action) => {
-      state.content = action.payload.content
-      state.music = action.payload.music
-      state.instrumentId = action.payload.instrumentId
+    CreateStack: (state, action) => {
+      const val = action.payload[1]
       state.remainDepth = 3
-      state.isPublic = action.payload.isPublic
-      state.isComplete = action.payload.isComplete
-      state.tags = action.payload.tags
-      state.videoName = action.payload.videoName
-      state.file = action.payload.file
+      state.prevStationId = -1
+      switch (action.payload[0]) {
+        case 'content':
+          state.content = val
+          break
+        case 'music':
+          state.music = val
+          break
+        case 'instrumentId':
+          state.instrumentId = val
+          break
+        case 'isPublic':
+          if (val === 'private') {
+            state.isPublic = 0
+          } else {
+            state.isPublic = 1
+          }
+          break
+        case 'isComplete':
+          if (val === 'notCompleted') {
+            state.isComplete = 0
+          } else {
+            state.isComplete = 1
+          }
+          break
+        case 'tags':
+          state.tags = val
+          break
+        case 'videoName':
+          state.videoName = val
+          break
+        default:
+          state = { ...state }
+          break
+      }
+    },
+    ClearStack: (state, action) => {
+      state.content = ''
+      state.music = ''
+      state.instrumentId = []
+      state.heartCnt = 0
+      state.remainDepth = 0
+      state.isPublic = 0
+      state.isComplete = 0
+      state.tags = []
+      state.prevStationId = 0
+      state.videoName = ''
+      state.delete = true
+      state.file = {}
     }
   }
 })
@@ -113,7 +155,7 @@ const store = configureStore({
   reducer: {
     user: userSlice.reducer,
     CreateComments: CreateCommentSlice.reducer,
-    CreateStack: CreateStackSlice.reducer,
+    stack: stackSlice.reducer,
     CreateInst: CreateInstSlice.reducer,
     SearchKeyword: SearchSlice.reducer
   }
@@ -122,6 +164,6 @@ const store = configureStore({
 export default store
 export const { logIn, LogInState, LogOutState } = userSlice.actions
 export const { CreateComment } = CreateCommentSlice.actions
-export const { CreateStack } = CreateStackSlice.actions
+export const { CreateStack, ClearStack } = stackSlice.actions
 export const { CreateInst } = CreateInstSlice.actions
 export const { SearchKeyword } = SearchSlice.actions
