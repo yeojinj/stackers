@@ -28,6 +28,7 @@ public class InstrumentController {
         return new ResponseEntity<>("악기 생성 완료!\uD83D\uDE0D", HttpStatus.OK);
     }
 
+    @Operation(summary = "악기 리스트 조회")
     @GetMapping
     public List<Instrument> getInstrument(){
         return instrumentService.getInstrument();
