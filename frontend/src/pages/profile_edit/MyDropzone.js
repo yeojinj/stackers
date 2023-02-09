@@ -23,7 +23,8 @@ function MyDropzone({ onChangeImage, handleClose }) {
   }, onChangeImage)
 
   const uploadImg = () => {
-    console.log(imgblob)
+    console.log('[업로드 버튼 누른 후]', imgblob)
+    onChangeImage(imgblob)
     handleClose()
   }
 
