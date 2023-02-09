@@ -63,7 +63,8 @@ public class StationController {
         @RequestPart(value = "info", required = true) StationDto stationDto,
         @RequestPart(value = "file", required = true) MultipartFile file,
         @AuthenticationPrincipal PrincipalDetails principal)
-        throws IOException {
+        throws Exception {
+
         // 이전 스테이션 정보가 있는지 확인
         if (stationDto.getPrevStationId() != -1) {
             if (!stationService.existsById(stationDto.getPrevStationId())) {
@@ -79,14 +80,23 @@ public class StationController {
             return new ResponseEntity<>(ErrorCode.INVALID_AUTH_TOKEN, HttpStatus.NOT_FOUND);
         }
 
-        // 비디오 저장
-//        Video video = videoService.uploadVideo(file, stationDto.getVideoName());
-        Video video = videoService.uploadVideoToS3(file, stationDto.getVideoName());
-
         // 스테이션 저장
-        stationService.save(stationDto, video, loginMember);
+        stationService.save(stationDto, file, loginMember);
         return new ResponseEntity<>("스테이션 업로드 성공", HttpStatus.OK);
     }
+
+    /**
+     * 스테이션 삭제
+     */
+
+
+
+    /**
+     * 스테이션 수정
+     */
+
+
+
 
     /**
      * 완성 컨테이너 조회 로그인이 되지 않았을 경우에는 stackers 로 사용 -> stackers 막아놔야 됨
@@ -221,6 +231,9 @@ public class StationController {
         return new ResponseEntity<>(station, HttpStatus.OK);
     }
 
+    /**
+     * S3 파일 삭제 테스트 컨트롤러
+     */
     @PostMapping("/video/{videoid}")
     public ResponseEntity<?> deleteVideoFromS3(@PathVariable("videoid") int videoId) throws Exception{
         Video video = videoService.findById((long) videoId);
