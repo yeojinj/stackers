@@ -4,6 +4,94 @@ import '../../styles/searchview.css'
 import StationListItem from '../../components/station/StationListItem'
 
 function SearchView() {
+  // 더미데이터
+  const station = [
+    {
+      id: 5,
+      content: 'xptms',
+      tags: ['happy', 'mood'],
+      video: {
+        id: 5,
+        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+        videoName: null,
+        videoOriName: '테스트용 비디',
+        thumbnailPath: null
+      }
+    },
+    {
+      id: 6,
+      content: '향기로운 음악의 세계~',
+      tags: ['smell_so_good', 'umm'],
+      video: {
+        id: 6,
+        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+        videoName: null,
+        videoOriName: '2023_02_07_11:08',
+        thumbnailPath: null
+      }
+    },
+    {
+      id: 7,
+      content: '향기로운 음악의 세계~',
+      tags: ['smell_so_good', 'umm'],
+      video: {
+        id: 7,
+        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+        videoName: null,
+        videoOriName: '2023_02_07_11:08',
+        thumbnailPath: null
+      }
+    },
+    {
+      id: 8,
+      content: '향기로운 음악의 세계~',
+      tags: ['smell_so_good', 'umm'],
+      video: {
+        id: 8,
+        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+        videoName: null,
+        videoOriName: '2023_02_07_11:08',
+        thumbnailPath: null
+      }
+    },
+    {
+      id: 9,
+      content: '향기로운 음악의 세계~ 같이 들어요',
+      tags: ['smell_so_good', 'umm', 'yahoo'],
+      video: {
+        id: 9,
+        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+        videoName: null,
+        videoOriName: '2023_02_07_11:08',
+        thumbnailPath: null
+      }
+    },
+    {
+      id: 9,
+      content: '향기로운 음악의 세계~ 같이 들어요',
+      tags: ['smell_so_good', 'umm', 'yahoo'],
+      video: {
+        id: 9,
+        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+        videoName: null,
+        videoOriName: '2023_02_07_11:08',
+        thumbnailPath: null
+      }
+    },
+    {
+      id: 9,
+      content: '향기로운 음악의 세계~ 같이 들어요',
+      tags: ['smell_so_good', 'umm', 'yahoo'],
+      video: {
+        id: 9,
+        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+        videoName: null,
+        videoOriName: '2023_02_07_11:08',
+        thumbnailPath: null
+      }
+    }
+  ]
+
   const [currentTab, clickTab] = useState(0)
 
   const moveStack = () => {
@@ -16,10 +104,9 @@ function SearchView() {
   }
 
   const searchResults = () => {
-    const resultsListVideo = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
     const resultsListAccount = [1, 2, 3, 4, 5, 6, 7]
 
-    const cutVideoList = resultsListVideo.slice(0, 8)
+    const cutVideoList = station.slice(0, 8)
     const cutAccountList = resultsListAccount.slice(0, 4)
 
     return (
@@ -35,7 +122,11 @@ function SearchView() {
             {cutVideoList.map((result, i) => {
               return (
                 <div key={i}>
-                  <StationListItem isSearch={true} />
+                  <StationListItem
+                    isSearch={true}
+                    isRanking={false}
+                    station={result}
+                  />
                 </div>
               )
             })}
@@ -86,10 +177,14 @@ function SearchView() {
       <>
         <div className="popular-tap">
           <div className="popular-video">
-            {resultsListVideo.map((result, i) => {
+            {station.map((result, i) => {
               return (
                 <div key={i}>
-                  <StationListItem isSearch={true} />
+                  <StationListItem
+                    isSearch={true}
+                    isRanking={false}
+                    station={result}
+                  />
                 </div>
               )
             })}
