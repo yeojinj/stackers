@@ -18,12 +18,18 @@ function ArticleDetail(props) {
   } else if (isfollowing) {
     followbutton = (
       <Button variant="contained" size="small" color="secondary">
-        팔로우
+        팔로잉
       </Button>
     )
   }
   const stationInformation = `안녕하세요. 이것은 나의 첫 비디오입니다.
 만나서 반갑습니다~~ #첫인사 #새해복많이받으세요`
+  const createDate =
+    props.Info.regTime.substr(0, 4) +
+    '.' +
+    props.Info.regTime.substr(5, 2) +
+    '.' +
+    props.Info.regTime.substr(8, 2)
   return (
     <div className="information">
       <div className="station-information">
@@ -44,7 +50,7 @@ function ArticleDetail(props) {
           </div>
         </div>
         <p className="station-usercontent">{stationInformation}</p>
-        <p style={{ color: 'gray' }}>{props.Info.regTime}</p>
+        <p style={{ color: 'gray' }}>{createDate}</p>
       </div>
       <StackerListItem musicians={props.Info.musicians}></StackerListItem>
     </div>
