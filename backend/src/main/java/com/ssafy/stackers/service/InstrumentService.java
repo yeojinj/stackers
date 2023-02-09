@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 public class InstrumentService {
@@ -32,6 +34,10 @@ public class InstrumentService {
             ErrorCode.ENTITY_NOT_FOUND));
 
         return instrument;
+    }
+
+    public List<Instrument> getInstrument(){
+        return instrumentRepository.findAll();
     }
 
 }
