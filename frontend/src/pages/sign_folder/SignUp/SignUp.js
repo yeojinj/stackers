@@ -43,10 +43,22 @@ function SignUp() {
         <form
           onSubmit={(event) => {
             event.preventDefault()
-            // setUsername(event.target.username.value)
-            // setPassword(event.target.password.value)
-            // setEmail(event.target.email.value)
-            console.log(username, password, email)
+            axios({
+              method: 'post',
+              url: '/api/member/join',
+              data: {
+                username: username,
+                password: password,
+                email: email
+              }
+            })
+              .then((response) => {
+                console.log(response)
+                navigate('/')
+              })
+              .catch((error) => {
+                console.log(error.response)
+              })
           }}
         >
           <TextField
@@ -118,24 +130,6 @@ function SignUp() {
               marginBottom: '30px'
             }}
             type="submit"
-            onClick={() => {
-              axios({
-                method: 'post',
-                url: '/api/join',
-                data: {
-                  username: username,
-                  password: password,
-                  email: email
-                }
-              })
-                .then((response) => {
-                  console.log(response)
-                  navigate('/')
-                })
-                .catch((error) => {
-                  console.log(error.response)
-                })
-            }}
           >
             가입하기
           </Button>
