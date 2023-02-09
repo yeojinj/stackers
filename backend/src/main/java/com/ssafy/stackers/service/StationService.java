@@ -38,6 +38,19 @@ public class StationService {
     @Autowired
     private VideoService videoService;
 
+    public Station findById(Long id) {
+        stationRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
+        return stationRepository.findById(id).get();
+    }
+
+    public boolean existsById(Long id) {
+        return stationRepository.existsById(id);
+    }
+
+    /**
+     * 스테이션 업로드
+     */
     @Transactional
     public Station save(StationDto stationDto, MultipartFile file, Member member) throws Exception{
         // 악기 찾기
@@ -71,16 +84,9 @@ public class StationService {
         return s;
     }
 
-    public Station findById(Long id) {
-        stationRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
-        return stationRepository.findById(id).get();
-    }
-
-    public boolean existsById(Long id) {
-        return stationRepository.existsById(id);
-    }
-
+    /**
+     * 스테이션 상세 조회
+     */
     public StationDetailDto getStationDetail(Long id) {
 
         Station s = findById(id);
@@ -140,6 +146,9 @@ public class StationService {
         return stationList;
     }
 
+    /**
+     * 메인페이지에 뿌릴 dto 변환 함수
+     */
     public StationDto getStationShortInfo(Long id) {
         Station s = findById(id);
         List<String> tags = tagService.findNameById(tagListService.findByStation(s));
@@ -148,6 +157,9 @@ public class StationService {
                 s.getPrevStationId(), s.getVideo().getVideoName());
     }
 
+    /**
+     * 연주자 목록 추출 메서드
+     */
     public List<MusicianDto> getMusicians(Station start){
         List<MusicianDto> musicians = new ArrayList<>();
         while (true){
@@ -158,5 +170,12 @@ public class StationService {
             start = findById(start.getPrevStationId());
         }
         return musicians;
+    }
+
+    @Transactional
+    public void deleteStation(int stationId) throws Exception {
+        Station station = findById((long) stationId);
+        station.deleteStation(true);
+        videoService.deleteVideoFromS3(station.getVideo().getVideoPath());
     }
 }

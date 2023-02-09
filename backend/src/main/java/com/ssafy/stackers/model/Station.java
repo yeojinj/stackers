@@ -80,4 +80,7 @@ public class Station {
     public void updateVideo(Video video){
         this.video = video;
     }
+    public void deleteStation(boolean isDelete){
+        this.isDelete = isDelete;
+    }
 }
