@@ -1,6 +1,4 @@
 import React, { useState } from 'react'
-import Header from '../../components/Header'
-import Footer from '../../components/Footer'
 import AccountListItem from '../../components/account/AccountListItem'
 import '../../styles/searchview.css'
 import StationListItem from '../../components/station/StationListItem'
@@ -115,7 +113,6 @@ function SearchView() {
 
   return (
     <div className="search-page">
-      <Header />
       <div className="result">
         <div className="result-tap">
           <div className="tapmenu-ul">
@@ -132,7 +129,6 @@ function SearchView() {
         </div>
         <div className="tab-content">{menuArr[currentTab].content}</div>
       </div>
-      <Footer />
     </div>
   )
 }
