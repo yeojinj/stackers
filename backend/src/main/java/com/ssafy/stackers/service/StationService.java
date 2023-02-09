@@ -104,7 +104,7 @@ public class StationService {
         List<CommentDetailDto> comments = commentService.getComments(s);
         List<MusicianDto> musicians = getMusicians(s);
 
-        return new StationDetailDto(id, stationInfo, s.getRegTime(), comments.size(), comments, musicians, writer);
+        return new StationDetailDto(id, stationInfo, s.getRegTime(), s.getVideo().getVideoPath(), comments.size(), comments, musicians, writer);
     }
 
     /**
