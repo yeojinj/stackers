@@ -129,7 +129,7 @@ function Header(props) {
   //   navigate('/SearchView')
   // }
   const navigateToMain = () => {
-    navigate('/Mainroom')
+    navigate('/')
   }
   // const navigateToLogin = () => {
   //   setLogin(true)
