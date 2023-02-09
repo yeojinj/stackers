@@ -19,7 +19,7 @@ public class Video {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "video_path", nullable = false)
+    @Column(name = "video_path", nullable = false, length = 500)
     private String videoPath;
 
     @Column(name = "video_name")
