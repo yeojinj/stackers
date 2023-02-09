@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
 
-import Header from '../../components/Header'
-import Footer from '../../components/Footer'
 // import StationList from '../../components/station/StationList'
 import StationListItem from '../../components/station/StationListItem'
 import '../../styles/mainroom.css'
@@ -222,7 +220,6 @@ function MainRoom() {
 
   return (
     <div className="main-room">
-      <Header />
       <div className="main">
         <div className="station-center">
           <p className="list-title">당신이 놓친 스테이션!</p>
@@ -272,7 +269,6 @@ function MainRoom() {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   )
 }
