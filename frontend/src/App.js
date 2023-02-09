@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import router from './router.js'
 import { RouterProvider } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { logIn, LogInState } from './store.js'
+import { logIn, LogInState, CreateInst } from './store.js'
 import axios from 'axios'
 
 function App() {
@@ -56,6 +56,21 @@ function App() {
           console.log(error)
         })
     }
+  })
+  useEffect(() => {
+    axios({
+      method: 'GET',
+      url: '/api/instrument',
+      headers: {
+        'Content-Type': `multipart/form-data`
+      }
+    })
+      .then((response) => {
+        dispatch(CreateInst(response.data))
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   })
 
   return (
