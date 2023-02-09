@@ -39,7 +39,7 @@ function App() {
     // console.log(localStorage.getItem('accessToken'))
     const Token = localStorage.getItem('accessToken')
     // console.log(Token)
-    if (Token) {
+    if (isLogged || Token) {
       axios({
         method: 'GET',
         url: '/api/member/user',
@@ -48,7 +48,7 @@ function App() {
         }
       })
         .then((response) => {
-          // console.log(response.data)
+          console.log(response.data)
           dispatch(logIn())
           dispatch(LogInState(response.data))
         })
