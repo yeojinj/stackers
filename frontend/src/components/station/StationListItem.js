@@ -59,7 +59,7 @@ function StationListItem({ isRanking, isSearch, station }) {
           ></video>
         </>
       )
-    } else {
+    } else if (!isSearch) {
       // 완성, 미완성, 마이페이지 스테이션
       return (
         <>
@@ -99,11 +99,18 @@ function StationListItem({ isRanking, isSearch, station }) {
             ref={videoRef}
             className={isSearch ? 'video-style-search' : 'video-style'}
             src={station.video.videoPath}
+            // src={stationInfo.video_url}
             autoPlay={false}
             onMouseOver={playVideo}
             onMouseLeave={pauseVideo}
             loop
           ></video>
+          <p className="station-description">{station.content}</p>
+          <div className="station-tag">
+            {station.tags.map((tag, i) => {
+              return `#${tag} `
+            })}
+          </div>
           <div className="station-account">
             <div className="profile-box">
               <img className="profile-img" src={stationInfo.profile_img}></img>

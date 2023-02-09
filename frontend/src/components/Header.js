@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
+// import { SearchKeyword } from '../store.js'
 import { useNavigate } from 'react-router-dom'
+// import axios from 'axios'
 import logo from '../assets/logo.svg'
 import search from '../assets/search.svg'
 import ProfileFrame from './profileFrame'
@@ -11,8 +13,20 @@ import Modal from '@mui/material/Modal'
 import LogIn from '../pages/sign_folder/LogIn/LogIn'
 // import Button from '@mui/material/Button'
 
+// 더미데이터
 const wholeTextArray = [
   'apple',
+  'ab',
+  'abc',
+  'abcd',
+  'abcde',
+  'abcdef',
+  'abcdefg',
+  'abcdefgh',
+  'abcdefghi',
+  'abcdefghij',
+  'abcdefghijk',
+  'abcdefghijkl',
   'applemango',
   'banana',
   'coding',
@@ -30,8 +44,14 @@ const wholeTextArray = [
 ]
 function Header(props) {
   // const [login, setLogin] = useState(false)
+
+  // axios 실행시 주석 해제
+  // const token = localStorage.getItem('accessToken')
+  // const [search, setSearch] = useState('')
   const [inputValue, setInputValue] = useState('')
   const [isHaveInputValue, setIsHaveInputValue] = useState(false)
+
+  // wholeTextArray 대신 search 넣기
   const [dropDownList, setDropDownList] = useState(wholeTextArray)
   const [dropDownItemIndex, setDropDownItemIndex] = useState(-1)
   const [open, setOpen] = useState(false)
@@ -41,8 +61,11 @@ function Header(props) {
     return state.user.isLogged
   })
 
+  // const getKeyword = useSelector((state) => {
+  //   return state.SearchKeyword.keyword
+  // })
+
   const IsLogin = () => {
-    // console.log(login)
     if (userLogin) {
       return (
         <>
@@ -57,7 +80,6 @@ function Header(props) {
     } else {
       return (
         <>
-          {/* onclick 시 navigateToLogin 함수 주석해제, 실행 */}
           <button className="login-btn" onClick={handleOpen}>
             로그인
           </button>
@@ -66,13 +88,42 @@ function Header(props) {
     }
   }
 
-  // const loginmodalOpen = () => {
-  //   setLogin(true)
-  //   props.openModal(true)
+  // async function searchList() {
+  //   await axios
+  //     // 검색 api 주소
+  //     .get('/api/station/popular', {
+  //       headers: {
+  //         Authorization: token
+  //       }
+  //     })
+  //     .then((res) => {
+  //       setSearch(res.data)
+  //     })
+  //     .catch((err) => console.log(err))
   // }
 
+  // useEffect(() => {
+  //   searchList()
+  // }, [])
+
+  const navigate = useNavigate()
+
+  // 로고 클릭시 메인페이지로 이동
+  const navigateToMain = () => {
+    navigate('/')
+  }
+  // 업로드 버튼 클릭 -> 녹화페이지로 이동
   const goRecordRoom = () => {
     navigate('/RecordRoom')
+  }
+
+  // 클릭 누르면 store 에 검색 키워드나 검색 키워드 결과 저장하고 검색페이지로 이동
+  // const dispatch = useDispatch()
+  const gotoSearch = () => {
+    // if (inputValue) {
+    //   dispatch(SearchKeyword(inputValue))
+    // }
+    navigate('/SearchView')
   }
 
   const showDropDownList = () => {
@@ -95,7 +146,6 @@ function Header(props) {
 
   const changeInputValue = (event) => {
     setInputValue(event.target.value)
-    // setIsHaveInputValue(true)
   }
 
   const clickDropDownItem = (clickedItem) => {
@@ -124,17 +174,6 @@ function Header(props) {
   }
 
   useEffect(showDropDownList, [inputValue], [isHaveInputValue])
-  const navigate = useNavigate()
-  // const navigateToSearchView = () => {
-  //   navigate('/SearchView')
-  // }
-  const navigateToMain = () => {
-    navigate('/')
-  }
-  // const navigateToLogin = () => {
-  //   setLogin(true)
-  //   navigate('/Login')
-  // }
 
   return (
     <header className="header">
@@ -187,11 +226,7 @@ function Header(props) {
             onChange={changeInputValue}
             onKeyUp={handleDropDownKey}
           />
-          <img
-            onClick={() => setInputValue('')}
-            className="search-icon"
-            src={search}
-          />
+          <img onClick={gotoSearch} className="search-icon" src={search} />
         </div>
         {isHaveInputValue && (
           <ul className="dropdownbox">
