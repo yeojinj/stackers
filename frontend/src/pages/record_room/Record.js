@@ -7,7 +7,6 @@ import { IconButton } from '@mui/material'
 import StopCircleIcon from '@mui/icons-material/StopCircle'
 import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite'
 import Timer from './Timer'
-import Cropper from 'react-easy-crop'
 
 function blobToBase64(blob) {
   return new Promise((resolve, _) => {
@@ -20,6 +19,7 @@ function blobToBase64(blob) {
 function Record(props) {
   const videoRef = useRef(null)
   const stackRef = useRef(null)
+
   useEffect(() => {
     getVideo()
   }, [videoRef])

@@ -8,93 +8,145 @@ import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
 import { IconButton } from '@mui/material'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
+import Moment from 'moment'
 // import axios from 'axios'
 
 function UploadForm(props) {
-  const Instrument = [
-    {
-      name: '기타'
-    },
-    { name: '가야금' },
-    { name: '바이올린' },
-    { name: '첼로' },
-    { name: '비올라' },
-    { name: '콘트라베이스' },
-    { name: '피아노' },
-    { name: '보컬' },
-    { name: '북' },
-    { name: '꽹과리' },
-    { name: '장구' },
-    { name: '징' },
-    { name: '캐스터네츠' },
-    { name: '실로폰' },
-    { name: '비브라폰' },
-    { name: '플룻' },
-    { name: '클라리넷' },
-    { name: '트럼펫' },
-    { name: '하프' }
-  ]
   const handleClose = () => {
     props.handle()
   }
   const object = props.src.src.src
   const [values, setValues] = useState({
-    stack: object,
-    music: '',
     content: '',
-    InstrumentId: '',
-    isPublic: 1,
-    isCompleted: 0
+    music: '',
+    instrumentId: 0,
+    heartCnt: 0,
+    remainDepth: 0,
+    isPublic: 0,
+    isComplete: 0,
+    tags: ['string'],
+    prevStationId: 0,
+    videoName: 'string',
+    delete: true,
+    file: object
   })
+
   const filedownloadlink = window.URL.createObjectURL(object)
   const handleChange = (e) => {
+    console.log(e.target.name, e.target.value)
     setValues({
       ...values,
       [e.target.name]: e.target.value
     })
+    // if (e.target.name === 'isComplete' && e.target.value === 'notCompleted') {
+    //   setValues({
+    //     ...values,
+    //     isComplete: 0
+    //   })
+    // }
+    // if (e.target.name === 'isComplete' && e.target.value === 'completed') {
+    //   setValues({
+    //     ...values,
+    //     isComplete: 1
+    //   })
+    // }
+    // if (e.target.name === 'isPublic' && e.target.value === 'pulic') {
+    //   setValues({
+    //     ...values,
+    //     isPublic: 1
+    //   })
+    // }
+    // if (e.target.name === 'isPublic' && e.target.value === 'private') {
+    //   setValues({
+    //     ...values,
+    //     isPublic: 0
+    //   })
+    // }
+    // const dateNow = Moment().format('YYYYMMDDHHmm')
+    // const username = 'subin'
+    // setValues({
+    //   ...values,
+    //   videoName: dateNow + username
+    // })
+
+    // const dateNow = Moment().format('YYYYMMDDHHmm')
+    // const username = 'subin'
+    // setValues({
+    //   ...values,
+    //   videoName: dateNow + username
+    // })
+    // if (values.isPublic === 'private') {
+    //   setValues({
+    //     ...values,
+    //     isPublic: 0
+    //   })
+    // }
+    // if (values.isPublic === 'public') {
+    //   setValues({
+    //     ...values,
+    //     isPublic: 1
+    //   })
+    // }
+    // if (values.isComplete === 'notCompleted') {
+    //   setValues({
+    //     ...values,
+    //     isComplete: 0
+    //   })
+    // }
+    // if (values.isComplete === 'Completed') {
+    //   setValues({
+    //     ...values,
+    //     isComplete: 1
+    //   })
+    // }
+    console.log(values)
   }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (!values.content || !values.music || !values.isPublic) {
       alert('빈칸을 입력해주세요')
     } else {
-      console.log(values)
-      if (values) {
-        let testData = {
-          content: 'HELLO THERE',
-          music: 'HELLO THERE',
-          instrumentId: 1,
-          tags: ['happy', 'mood'],
-          prevStationId: 1,
-          remainDepth: 2,
-          isPublic: 1,
-          isComplete: 0
-        }
+      // if (values) {
+      //   let testData = {
+      //     content: values.content,
+      //     music: values.music,
+      //     instrumentId: values.instrumentId,
+      //     tags: values.tags,
+      //     heartCnt: values.heartCnt,
+      //     remainDepth: values.remainDepth,
+      //     isPublic: values.isPublic,
+      //     isComplete: values.isComplete,
+      //     tags: values.tags,
+      //     prevStationId: values.prevStationId,
+      //     videoName: values.videoName,
+      //     delete: true,
+      //   }
 
-        const formData = new FormData()
-        // 기본 정보
-        formData.append(
-          'info',
-          new Blob([JSON.stringify(testData)], {
-            type: 'application/json'
-          })
-        )
+      //   const formData = new FormData()
+      //   // 기본 정보
+      //   formData.append(
+      //     'info',
+      //     new Blob([JSON.stringify(testData)], {
+      //       type: 'application/json'
+      //     })
+      //   )
 
-        // 파일 정보
-        formData.append('file', values.stack)
-        await axios
-          .post(`/api/station/upload`, formData, {
-            headers: {
-              'Content-Type': `multipart/form-data`
-            }
-          })
-          .then(() => console.log('[스테이션 업로드] >> 성공'))
-          .catch((error) => {
-            alert(error)
-            console.log(error)
-          })
-        console.log(formData)
-      }
+      //   // 파일 정보
+      //   formData.append('file', values.file)
+      //   await axios
+      //     .post(`/api/station/upload`, formData, {
+      //       headers: {
+      //         'Content-Type': `multipart/form-data`
+      //       }
+      //     })
+      //     .then(() => console.log('[스테이션 업로드] >> 성공'))
+      //     .catch((error) => {
+      //       alert(error)
+      //       console.log(error)
+      //     })
+      //   console.log(formData)
+      // }
       handleClose()
     }
   }
@@ -150,25 +202,6 @@ function UploadForm(props) {
                   <AddCircleOutlineIcon />
                 </IconButton>
               </div>
-              <Autocomplete
-                multiple
-                limitTags={2}
-                id="multiple-limit-tags"
-                options={Instrument}
-                onChange={(event, value) => {
-                  console.log(event, value)
-                  setValues({
-                    ...values,
-                    [value.name]: value
-                  })
-                }}
-                getOptionLabel={(option) => option.name}
-                // defaultValue={[Instrument[13], Instrument[12], Instrument[11]]}
-                renderInput={(params) => (
-                  <TextField {...params} placeholder="Instruments" />
-                )}
-                sx={{ width: '100%' }}
-              />
             </div>
             <div className="right">
               <div className="scopeForm">
@@ -181,7 +214,7 @@ function UploadForm(props) {
                     name="isPublic"
                     value="public"
                     onChange={handleChange}
-                    checked
+                    checked={values.isPublic === 'public'}
                   />
                   공개
                 </label>
@@ -191,6 +224,7 @@ function UploadForm(props) {
                     name="isPublic"
                     value="private"
                     onChange={handleChange}
+                    checked={values.isPublic === 'private'}
                   />
                   비공개
                 </label>
@@ -202,19 +236,20 @@ function UploadForm(props) {
                 <label>
                   <input
                     type="radio"
-                    name="isCompleted"
+                    name="isComplete"
                     value="notCompleted"
                     onChange={handleChange}
-                    checked
+                    checked={values.isComplete === 'notCompleted'}
                   />
                   허용
                 </label>
                 <label>
                   <input
                     type="radio"
-                    name="isCompleted"
+                    name="isComplete"
                     value="completed"
                     onChange={handleChange}
+                    checked={values.isComplete === 'completed'}
                   />
                   불허용
                 </label>
