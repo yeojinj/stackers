@@ -1,8 +1,6 @@
 import { React, useState } from 'react'
 // import axios from 'axios'
 import './MyPage.css'
-import Header from '../../components/Header'
-import Footer from '../../components/Footer'
 import StationListItem from '../../components/station/StationListItem'
 import profile from '../../assets/profileTest.svg'
 import Button from '@mui/material/Button'
@@ -185,7 +183,6 @@ function MyPage() {
   }
   return (
     <>
-      <Header />
       <div className="MyPage">
         <div className="div-profile">
           <div style={{ display: 'flex' }}>
@@ -296,7 +293,6 @@ function MyPage() {
             <div className="tab-content">{menuArr[currentTab].content}</div>
           </div>
         </div>
-        <Footer />
       </div>
     </>
   )

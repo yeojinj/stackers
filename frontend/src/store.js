@@ -93,12 +93,29 @@ const CreateInstSlice = createSlice({
     }
   }
 })
+
+// 검색키워드 저장
+const SearchSlice = createSlice({
+  name: 'SearchSlice',
+  initialState: {
+    keyword: ''
+  },
+  reducers: {
+    SearchKeyword: (state, action) => {
+      console.log(action.payload)
+      state.keyword = action.payload
+      console.log(state.keyword)
+    }
+  }
+})
+
 const store = configureStore({
   reducer: {
     user: userSlice.reducer,
     CreateComments: CreateCommentSlice.reducer,
     CreateStack: CreateStackSlice.reducer,
-    CreateInst: CreateInstSlice.reducer
+    CreateInst: CreateInstSlice.reducer,
+    SearchKeyword: SearchSlice.reducer
   }
 })
 
@@ -107,3 +124,4 @@ export const { logIn, LogInState, LogOutState } = userSlice.actions
 export const { CreateComment } = CreateCommentSlice.actions
 export const { CreateStack } = CreateStackSlice.actions
 export const { CreateInst } = CreateInstSlice.actions
+export const { SearchKeyword } = SearchSlice.actions
