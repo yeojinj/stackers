@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react'
 
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
-import Login from '../sign_folder/LogIn/LogIn'
 // import StationList from '../../components/station/StationList'
 import StationListItem from '../../components/station/StationListItem'
 import '../../styles/mainroom.css'
@@ -13,7 +12,6 @@ import axios from 'axios'
 
 function MainRoom() {
   const [completedStation, setStation] = useState([])
-  const [modalOpen, setModalOpen] = useState(false)
 
   // 처음에 useState 로 station 빈 배열
   // axios 로 setStation 함수로 station에 조회 데이터 넣기
@@ -124,12 +122,6 @@ function MainRoom() {
       })
       .catch((err) => console.log(err))
   }
-
-  const showModal = () => {
-    setModalOpen(true)
-    document.body.style.overflow = 'hidden'
-  }
-
   // 렌더링 후 한번 실행(axios)
   useEffect(() => {
     stationList()
@@ -142,8 +134,7 @@ function MainRoom() {
 
   return (
     <div className="main-room">
-      {modalOpen && <Login setModalOpen={setModalOpen} />}
-      <Header openModal={showModal} />
+      <Header />
       <div className="main">
         <div className="station-center">
           <p className="list-title">당신이 놓친 스테이션!</p>

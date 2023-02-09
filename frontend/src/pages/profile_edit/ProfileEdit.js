@@ -3,6 +3,8 @@ import './ProfileEdit.css'
 import profileTest from '../../assets/profileTest.svg'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
+import Box from '@mui/material/Box'
+import Modal from '@mui/material/Modal'
 import MyDropzone from './MyDropzone'
 // import ImageCrop from './ImageCrop'
 
@@ -11,7 +13,9 @@ function ProfileEdit() {
   const email = '이메일'
   const [nickname, setNickname] = useState('닉네임')
   const [bio, setBio] = useState('정보입니다.')
-  const [modalOpen, setModalOpen] = useState(false)
+  const [open, setOpen] = useState(false)
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
   const [image, setImage] = useState('')
   const Instrument = [
     {
@@ -37,12 +41,6 @@ function ProfileEdit() {
     { name: '하프' }
   ]
   const [group, setGroup] = useState('배도라지')
-  const openModal = () => {
-    setModalOpen(true)
-  }
-  const closeModal = () => {
-    setModalOpen(false)
-  }
 
   const onChangeImage = (uploadedImage) => {
     setImage(URL.createObjectURL(uploadedImage))
@@ -58,27 +56,19 @@ function ProfileEdit() {
         <div className="ProfileEdit-content">
           {/* 파일 클릭하면 dropzone 모달 띄우기 */}
           <img
-            onClick={openModal}
+            onClick={handleOpen}
             src={profileTest}
             alt="profileTest"
             style={{ width: '113px' }}
           />
-
-          {modalOpen && (
-            <div className="profileimg-edit">
-              <div className="profileimg-edit-title">
-                프로필 사진 변경
-                <button onClick={closeModal} className="close-btn">
-                  x
-                </button>
-              </div>
+          <Modal open={open} onClose={handleClose}>
+            <Box>
               <MyDropzone
                 onChangeImage={onChangeImage}
-                setModalOpen={setModalOpen}
+                handleClose={handleClose}
               />
-              <div></div>
-            </div>
-          )}
+            </Box>
+          </Modal>
         </div>
       </div>
 

@@ -130,7 +130,7 @@ function SignUp() {
               })
                 .then((response) => {
                   console.log(response)
-                  navigate('/MainRoom')
+                  navigate('/')
                 })
                 .catch((error) => {
                   console.log(error.response)
