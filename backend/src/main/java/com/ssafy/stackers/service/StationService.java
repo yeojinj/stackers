@@ -19,6 +19,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional(readOnly = true)
@@ -34,9 +35,11 @@ public class StationService {
     private TagListService tagListService;
     @Autowired
     private CommentService commentService;
+    @Autowired
+    private VideoService videoService;
 
     @Transactional
-    public Station save(StationDto stationDto, Video video, Member member) {
+    public Station save(StationDto stationDto, MultipartFile file, Member member) throws Exception{
         // 악기 찾기
         Instrument instrument = instrumentService.findById(stationDto.getInstrumentId());
 
@@ -50,7 +53,6 @@ public class StationService {
                 .remainDepth(stationDto.getRemainDepth())
                 .prevStationId((Long) stationDto.getPrevStationId())
                 .member(member)
-                .video(video)
                 .instrument(instrument)
                 .isPublic(stationDto.getIsPublic() == 0 ? false : true)
                 .isComplete(
@@ -61,6 +63,10 @@ public class StationService {
 
         stationRepository.save(s);
         tagListService.save(tags, s);
+
+        // 비디오 저장
+        Video video = videoService.uploadVideoToS3(file, stationDto.getVideoName());
+        s.updateVideo(video);
 
         return s;
     }
@@ -78,7 +84,6 @@ public class StationService {
     public StationDetailDto getStationDetail(Long id) {
 
         Station s = findById(id);
-        System.out.println(s.getContent());
         StationDto stationInfo = getStationShortInfo(id);
 
         Member w = s.getMember();
@@ -154,6 +159,4 @@ public class StationService {
         }
         return musicians;
     }
-
-
 }

@@ -48,15 +48,15 @@ public class VideoService {
      * S3 데이터베이스 파일 업로드
      */
     public Video uploadVideoToS3(MultipartFile file, String videoName) throws IOException{
-        String videoPath = s3Uploader.uploadFiles(file, "static/videos");
+        String videoPath = s3Uploader.uploadFiles(file, "static/videos", videoName);
         Video video = Video.builder().videoName(videoName).videoPath(videoPath).build();
         return video;
     }
 
     /**
-     * 데이터베이스에 비디오 업로드
-
-     * S3 데이터베이스 파일 삭제
+     * 데이터베이스 파일 삭제
+     * @param filePath
+     * @throws Exception
      */
     public void deleteVideoFromS3(String filePath) throws Exception {
         s3Uploader.deleteS3(filePath);
