@@ -52,8 +52,9 @@ function LogIn(props) {
               .then((response) => {
                 localStorage.setItem('accessToken', response.data.accessToken)
                 localStorage.setItem('refreshToken', response.data.refreshToken)
-                navigate('/')
                 dispatch(logIn())
+                navigate('/')
+                props.handleClose()
               })
               .catch((error) => {
                 console.log(error.response)

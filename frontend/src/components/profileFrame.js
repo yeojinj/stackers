@@ -29,7 +29,7 @@ function profileFrame() {
     } else if (page === '로그아웃') {
       // 로그아웃 시키기
       dispatch(LogOutState())
-      navigate('/MainRoom')
+      navigate('/')
     }
   }
   const profileList = [
