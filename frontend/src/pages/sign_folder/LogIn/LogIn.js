@@ -77,6 +77,7 @@ function LogIn(props) {
             className="LogIn-inputBox "
             name="password"
             value={password}
+            type="password"
             onChange={(event) => {
               setPassword(event.target.value)
             }}
