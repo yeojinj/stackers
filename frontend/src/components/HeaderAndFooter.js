@@ -7,7 +7,7 @@ function HeaderAndFooter() {
   return (
     <>
       <Header />
-      <div style={{ marginTop: '200px' }}>
+      <div style={{ marginTop: '150px' }}>
         <Outlet />
       </div>
       <Footer />
