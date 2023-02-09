@@ -24,9 +24,9 @@ function UploadForm(props) {
     remainDepth: 0,
     isPublic: 0,
     isComplete: 0,
-    tags: ['string'],
+    tags: [''],
     prevStationId: 0,
-    videoName: 'string',
+    videoName: '',
     delete: true,
     file: object
   })
@@ -152,15 +152,15 @@ function UploadForm(props) {
   }
   return (
     <div className="upload container">
-      <form className="left stack" onSubmit={handleSubmit}>
-        <video
-          className="stackVideo"
-          src={filedownloadlink}
-          width={258}
-          height={402}
-          style={{ objectFit: 'cover' }}
-          controls
-        />
+      <video
+        className="stackVideo"
+        src={filedownloadlink}
+        width={258}
+        height={402}
+        style={{ objectFit: 'cover' }}
+        controls
+      />
+      <form className="right" onSubmit={handleSubmit}>
         <div className="item">
           <b>노래 제목</b>
         </div>
@@ -175,92 +175,88 @@ function UploadForm(props) {
             Download
           </a>
         )}
+        <div className="infoForm">
+          <b>설명</b>
+        </div>
+        <input
+          type="text"
+          name="content"
+          value={values.content}
+          onChange={handleChange}
+        ></input>
+        <div className="thumbnailForm">
+          <b>썸네일</b>
+        </div>
+        <div className="tagForm">
+          <b>태그</b>
+        </div>
+        <Tag />
+        <div className="container">
+          <div className="left">
+            <div className="instForm">
+              <b>연주 악기</b>
+              <IconButton>
+                <AddCircleOutlineIcon />
+              </IconButton>
+            </div>
+          </div>
+          <div className="right">
+            <div className="scopeForm">
+              <div>
+                <b>공개 범위</b>
+              </div>
+              <label>
+                <input
+                  type="radio"
+                  name="isPublic"
+                  value="public"
+                  onChange={handleChange}
+                  checked={values.isPublic === 'public'}
+                />
+                공개
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="isPublic"
+                  value="private"
+                  onChange={handleChange}
+                  checked={values.isPublic === 'private'}
+                />
+                비공개
+              </label>
+            </div>
+            <div className="StackForm">
+              <div>
+                <b>이어서 스택 쌓기</b>
+              </div>
+              <label>
+                <input
+                  type="radio"
+                  name="isComplete"
+                  value="notCompleted"
+                  onChange={handleChange}
+                  checked={values.isComplete === 'notCompleted'}
+                />
+                허용
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="isComplete"
+                  value="completed"
+                  onChange={handleChange}
+                  checked={values.isComplete === 'completed'}
+                />
+                불허용
+              </label>
+            </div>
+          </div>
+        </div>
+        <button type="submit" className="uploadButton" onClick={handleSubmit}>
+          업로드
+        </button>
       </form>
-      <div className="right">
-        <form onSubmit={handleSubmit}>
-          <div className="infoForm">
-            <b>설명</b>
-          </div>
-          <input
-            type="text"
-            name="content"
-            value={values.content}
-            onChange={handleChange}
-          ></input>
-          <div className="thumbnailForm">
-            <b>썸네일</b>
-          </div>
-          <div className="tagForm">
-            <b>태그</b>
-          </div>
-          <Tag />
-          <div className="container">
-            <div className="left">
-              <div className="instForm">
-                <b>연주 악기</b>
-                <IconButton>
-                  <AddCircleOutlineIcon />
-                </IconButton>
-              </div>
-            </div>
-            <div className="right">
-              <div className="scopeForm">
-                <div>
-                  <b>공개 범위</b>
-                </div>
-                <label>
-                  <input
-                    type="radio"
-                    name="isPublic"
-                    value="public"
-                    onChange={handleChange}
-                    checked={values.isPublic === 'public'}
-                  />
-                  공개
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="isPublic"
-                    value="private"
-                    onChange={handleChange}
-                    checked={values.isPublic === 'private'}
-                  />
-                  비공개
-                </label>
-              </div>
-              <div className="StackForm">
-                <div>
-                  <b>이어서 스택 쌓기</b>
-                </div>
-                <label>
-                  <input
-                    type="radio"
-                    name="isComplete"
-                    value="notCompleted"
-                    onChange={handleChange}
-                    checked={values.isComplete === 'notCompleted'}
-                  />
-                  허용
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="isComplete"
-                    value="completed"
-                    onChange={handleChange}
-                    checked={values.isComplete === 'completed'}
-                  />
-                  불허용
-                </label>
-              </div>
-            </div>
-          </div>
-          <button type="submit" className="uploadButton" onClick={handleSubmit}>
-            업로드
-          </button>
-        </form>
-      </div>
     </div>
   )
 }

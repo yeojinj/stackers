@@ -96,7 +96,6 @@ function Record(props) {
                   src={mediaBlobUrl}
                   width={405}
                   height={720}
-                  autoPlay
                   style={{ objectFit: 'cover' }}
                   controls
                 />
@@ -106,7 +105,6 @@ function Record(props) {
                   className="streamingRef"
                   ref={videoRef}
                   src={previewStream}
-                  controls
                   autoPlay
                 />
               )}
