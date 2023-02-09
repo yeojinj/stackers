@@ -16,15 +16,11 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Tag(name = "Member", description = "멤버 관련 API")
@@ -73,12 +69,17 @@ public class MemberController {
         return new ResponseEntity<>(loginMemberDto, HttpStatus.OK);
     }
 
-    // user 권한만 접근 가능
-    @PutMapping("/user")
-    public ResponseEntity<?> upadateUser(@RequestBody MemberModifyDto memberModifyDto,
-                                         @AuthenticationPrincipal PrincipalDetails principal) {
+    /**
+     * 프로필 수정 : user 권한만 접근 가능
+     */
+    @PutMapping(path = "/user", consumes = {MediaType.APPLICATION_JSON_VALUE,
+            MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<?> upadateUser(
+            @RequestPart("info") MemberModifyDto memberModifyDto,
+            @RequestPart("profile") MultipartFile file,
+            @AuthenticationPrincipal PrincipalDetails principal) throws Exception {
         Member member = memberService.getLoginMember(principal.getUsername());
-        memberService.updateMember(member.getUsername(), memberModifyDto);
+        memberService.updateMember(member.getUsername(), memberModifyDto, file);
         return new ResponseEntity<>("멤버 수정 완료", HttpStatus.OK);
     }
 

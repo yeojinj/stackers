@@ -9,6 +9,7 @@ import com.ssafy.stackers.repository.MemberRepository;
 import com.ssafy.stackers.utils.S3Uploader;
 import com.ssafy.stackers.utils.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -83,15 +85,21 @@ public class MemberService {
     }
 
     @Transactional
-    public void updateMember(String username, MemberModifyDto memberModifyDto){
+    public void updateMember(String username, MemberModifyDto memberModifyDto, MultipartFile file) throws Exception {
         Member member = findByUsername(username);
         member.updateNickname(memberModifyDto.getNickname());
         member.updateBio(memberModifyDto.getBio());
-        member.updateImgPath(memberModifyDto.getImgPath());
+
+        String originImgPath = member.getImgPath();
+        log.info("[프로필 이미지 경로] : {}", originImgPath);
+
+        member.updateImgPath(updateProfileToS3(file, username));
+        if(!originImgPath.equals("path")) s3Uploader.deleteS3(originImgPath);
     }
 
-    public String updateProfileToS3(MultipartFile file) throws Exception{
-        return s3Uploader.uploadFiles(file, "static/profile");
+    public String updateProfileToS3(MultipartFile file, String username) throws Exception{
+        String profileImgName = "profile" + username + "picture";
+        return s3Uploader.uploadFiles(file, "static/profile", profileImgName);
     }
 
 }
