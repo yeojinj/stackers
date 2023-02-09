@@ -172,7 +172,9 @@ function UploadForm(props) {
             </div>
             <div className="right">
               <div className="scopeForm">
-                <b>공개 범위</b>
+                <div>
+                  <b>공개 범위</b>
+                </div>
                 <label>
                   <input
                     type="radio"
@@ -194,7 +196,9 @@ function UploadForm(props) {
                 </label>
               </div>
               <div className="StackForm">
-                <b>이어서 스택 쌓기</b>
+                <div>
+                  <b>이어서 스택 쌓기</b>
+                </div>
                 <label>
                   <input
                     type="radio"
@@ -217,10 +221,10 @@ function UploadForm(props) {
               </div>
             </div>
           </div>
+          <button type="submit" className="uploadButton" onClick={handleSubmit}>
+            업로드
+          </button>
         </form>
-        <button type="submit" className="uploadButton" onClick={handleSubmit}>
-          업로드
-        </button>
       </div>
     </div>
   )
