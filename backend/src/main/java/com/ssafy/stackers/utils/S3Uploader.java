@@ -27,12 +27,6 @@ public class S3Uploader {
     private AmazonS3Client amazonS3Client;
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
-    @Value("${cloud.aws.credentials.access-key}")
-    private String iamAccessKey;
-    @Value("${cloud.aws.credentials.secret-key}")
-    private String iamSecretKey;
-    @Value("${cloud.aws.region.static}")
-    private String region;
 
     /**
      *
@@ -40,18 +34,18 @@ public class S3Uploader {
      * @param multipartFile : 업로드할 파일
      * @param dirName : 파일 이름
      */
-    public String uploadFiles(MultipartFile multipartFile, String dirName) throws IOException {
+    public String uploadFiles(MultipartFile multipartFile, String dirName, String fileName) throws IOException {
         File uploadFile = convert(multipartFile)
             .orElseThrow(() -> new IllegalArgumentException("[error]: MultipartFile -> 파일 변환 실패"));
-        return upload(uploadFile, dirName);
+        return upload(uploadFile, dirName, fileName);
     }
 
     /**
      * 로컬 경로에 저장
      */
-    public String upload(File uploadFile, String filePath) {
+    public String upload(File uploadFile, String filePath, String fileNameParam) {
         // S3에 저장된 파일 이름
-        String fileName = filePath + "/" + UUID.randomUUID() + uploadFile.getName();
+        String fileName = filePath + "/" + UUID.randomUUID() + fileNameParam;
         // s3로 업로드
         String uploadImageUrl = putS3(uploadFile, fileName);
         removeNewFile(uploadFile);
@@ -73,6 +67,7 @@ public class S3Uploader {
 
     /**
      * S3에 있는 파일 삭제
+     * 영어 파일만 삭제 가능 -> 한글 이름 파일은 안됨
      */
     public void deleteS3(String filePath) throws Exception {
         try{
@@ -87,6 +82,7 @@ public class S3Uploader {
         } catch (Exception exception) {
             log.info(exception.getMessage());
         }
+        log.info("[S3Uploader] : S3에 있는 파일 삭제");
     }
 
     /**
