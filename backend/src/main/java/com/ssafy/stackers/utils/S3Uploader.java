@@ -59,7 +59,7 @@ public class S3Uploader {
      * @param fileName : 업로드할 파일 이름
      * @return
      */
-    private String putS3(File uploadFile, String fileName) {
+    public String putS3(File uploadFile, String fileName) {
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(
             CannedAccessControlList.PublicRead));
         return amazonS3Client.getUrl(bucket, fileName).toString();
