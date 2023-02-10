@@ -1,5 +1,6 @@
 package com.ssafy.stackers.model.dto;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,8 +12,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MemberModifyDto {
 
-    String nickname;
-    String bio;
-    String imgPath;
+    private String nickname;
+    private String bio;
+    private List<String> instruments;
+    private String party;
 
 }

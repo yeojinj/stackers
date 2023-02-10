@@ -7,8 +7,7 @@ import com.ssafy.stackers.model.Party;
 import com.ssafy.stackers.repository.PartyMemberRepository;
 import com.ssafy.stackers.repository.PartyRepository;
 import com.ssafy.stackers.utils.error.ErrorCode;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,13 +48,16 @@ public class PartyMemberService {
         return party;
     }
 
-    public List<String> getParties(Long id) {
-        List<String> parties =
-            partyMemberRepository.findByMemberId(id).stream()
-                .map(PartyMember::getParty)
-                .map(Party::getName)
-                .collect(Collectors.toList());
-        return parties;
+    public String getParty(Long id) {
+        Optional<PartyMember> partyMember = partyMemberRepository.findByMemberId(id);
+        if (partyMember.isPresent()) {
+            return partyMember.get().getParty().getName();
+        }
+        return null;
+    }
+
+    public void deleteByMemberId(Member member) {
+        partyMemberRepository.deleteByMemberId(member.getId());
     }
 
 }

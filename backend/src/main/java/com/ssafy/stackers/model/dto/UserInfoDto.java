@@ -8,9 +8,8 @@ import lombok.Getter;
 @Builder
 @Getter
 @AllArgsConstructor
-public class LoginMemberDto {
+public class UserInfoDto {
 
-   private Long id;
     private String username;
     private String nickname;
     private String email;
@@ -18,11 +17,7 @@ public class LoginMemberDto {
     private String imgPath;
     private List<String> instruments;
     private String party;
+    private Long followingCnt;
+    private Long followerCnt;
 
-    public LoginMemberDto(Long id, String username, String nickname, String imgPath) {
-        this.id = id;
-        this.username = username;
-        this.nickname = nickname;
-        this.imgPath = imgPath;
-    }
 }

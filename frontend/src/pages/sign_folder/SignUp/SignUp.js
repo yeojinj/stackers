@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import LogoImage from './LogoImage.png'
 import LogoText from './LogoText.png'
 import './SignUp.css'
@@ -21,6 +21,72 @@ function SignUp() {
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
+  const [isUsername, setIsUsername] = useState(null)
+  const [isPassword, setIsPassword] = useState(null)
+  const [isEmail, setIsEmail] = useState(null)
+  // username 기본 CSS
+  const [usernameCSS, setUsernameCSS] = useState({
+    width: '100%',
+    marginBottom: '25px'
+  })
+
+  // password 기본 CSS
+  const [passwordCSS, setPasswordCSS] = useState({
+    width: '100%',
+    marginBottom: '25px'
+  })
+
+  // usernameCSS
+  useEffect(() => {
+    if (isUsername === null) {
+    } else if (isUsername) {
+      // True일때 css
+      setUsernameCSS(() => {
+        return {
+          width: '100%',
+          marginBottom: '25px',
+          border: '1px solid rgba(42, 32, 150, 1)',
+          borderRadius: 4
+        }
+      })
+    } else {
+      // False일때 css
+      setUsernameCSS(() => {
+        return {
+          width: '100%',
+          marginBottom: '25px',
+          border: '1px solid rgba(172, 0, 143, 1)',
+          borderRadius: 4
+        }
+      })
+    }
+  }, [isUsername])
+
+  // passwordCSS
+  useEffect(() => {
+    if (isPassword === null) {
+    } else if (isPassword) {
+      // True일때 css
+      setPasswordCSS(() => {
+        return {
+          width: '100%',
+          marginBottom: '25px',
+          border: '1px solid rgba(42, 32, 150, 1)',
+          borderRadius: 4
+        }
+      })
+    } else {
+      // False일때 css
+      setPasswordCSS(() => {
+        return {
+          width: '100%',
+          marginBottom: '25px',
+          border: '1px solid rgba(172, 0, 143, 1)',
+          borderRadius: 4
+        }
+      })
+    }
+  }, [isPassword])
   return (
     <div>
       <div className="SignUp">
@@ -64,24 +130,37 @@ function SignUp() {
           <TextField
             placeholder="아이디"
             size="medium"
-            style={{
-              width: '100%',
-              marginBottom: '25px'
-            }}
+            style={usernameCSS}
             name="username"
             value={username}
             onChange={(event) => {
               setUsername(event.target.value)
             }}
+            // usernameCSS 값 변경 조건
+            onBlur={() => {
+              if (1 <= username.length && username.length <= 8) {
+                setIsUsername(true)
+              } else {
+                setIsUsername(false)
+              }
+            }}
           />
           <TextField
             placeholder="비밀번호(알파벳, 특수문자를 포함한 8~10자로 구성)"
             size="medium"
-            style={{ width: '100%', marginBottom: '25px' }}
+            style={passwordCSS}
             name="password"
             value={password}
             onChange={(event) => {
               setPassword(event.target.value)
+            }}
+            // password 값 변경 조건
+            onBlur={() => {
+              if (8 <= password.length && password.length <= 12) {
+                setIsPassword(true)
+              } else {
+                setIsPassword(false)
+              }
             }}
           />
           <TextField
@@ -136,7 +215,6 @@ function SignUp() {
         </form>
       </div>
       <div>
-        <Button onClick={handleOpen}>Open modal</Button>
         <Modal open={open} onClose={handleClose}>
           <Box>
             <LogIn handleClose={handleClose} />
