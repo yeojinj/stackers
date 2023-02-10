@@ -91,7 +91,7 @@ function UploadForm(props) {
         )
 
         // 파일 정보
-        await formData.append('file', filedownloadlink)
+        formData.append('file', object)
         await axios
           .post(`/api/station/upload`, formData, {
             headers: {
