@@ -1,6 +1,6 @@
 .ProfileEdit {
   width: 560px;
-  height: 800px;
+  /* height: 800px; */
   border: solid 1px black;
   border-radius: 20px;
 }
@@ -12,6 +12,95 @@
 
 .ProfileEdit-profilePicture {
   height: 180px;
-  border: 1px solid gray;
+  border-top: 1px solid gray;
   display: flex;
+}
+
+.ProfileEdit-Id {
+  height: 115px;
+  border-top: 1px solid gray;
+  display: flex;
+}
+
+.ProfileEdit-nickname {
+  height: 105px;
+  border-top: 1px solid gray;
+  display: flex;
+}
+
+.ProfileEdit-first {
+  width: 160px;
+  margin: 15px;
+}
+
+.ProfileEdit-content {
+  margin: auto 0;
+}
+
+.ProfileEdit-content-Bio {
+  margin: auto 0;
+  width: 50%;
+}
+
+.ProfileEdit-Bio {
+  height: 150px;
+  border-top: 1px solid gray;
+  display: flex;
+}
+
+.ProfileEdit-Instrument {
+  height: 110px;
+  border-top: 1px solid gray;
+  display: flex;
+}
+.ProfileEdit-group {
+  height: 120px;
+  border-top: 1px solid gray;
+  display: flex;
+}
+
+.profileimg-edit {
+  position: absolute;
+  left: 550px;
+  top: 70px;
+  width: 400px;
+  height: fit-content;
+  padding: 1rem;
+  background-color: white;
+  z-index: 16;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  border: 1px solid black;
+  border-radius: 16px;
+}
+
+.profileimg-edit-title {
+  width: 100%;
+  height: 30px;
+  text-align: center;
+  border-bottom: 1px solid black;
+}
+
+.close-btn {
+  width: 22px;
+  height: 22px;
+  border: none;
+  background-color: white;
+  text-align: center;
+  font-size: 19px;
+  margin: 21px;
+  float: right;
+}
+
+.profile-edit-btn {
+  width: 111px;
+  height: 38px;
+  margin: 21px 21px 21px 421px;
+  padding: 0px;
+  border: 0px;
+  border-radius: 10px;
+  font-size: 16px;
+  color: white;
+  background-color: rgba(42, 32, 150, 1);
 }

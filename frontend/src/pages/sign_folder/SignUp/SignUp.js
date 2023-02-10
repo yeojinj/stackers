@@ -6,11 +6,21 @@ import './SignUp.css'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
+import Box from '@mui/material/Box'
+import Modal from '@mui/material/Modal'
+import LogIn from '../LogIn/LogIn.js'
 
 function SignUp() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
+  const navigate = useNavigate()
+
+  const [open, setOpen] = useState(false)
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
+
   return (
     <div>
       <div className="SignUp">
@@ -33,10 +43,22 @@ function SignUp() {
         <form
           onSubmit={(event) => {
             event.preventDefault()
-            // setUsername(event.target.username.value)
-            // setPassword(event.target.password.value)
-            // setEmail(event.target.email.value)
-            console.log(username, password, email)
+            axios({
+              method: 'post',
+              url: '/api/member/join',
+              data: {
+                username: username,
+                password: password,
+                email: email
+              }
+            })
+              .then((response) => {
+                console.log(response)
+                navigate('/')
+              })
+              .catch((error) => {
+                console.log(error.response)
+              })
           }}
         >
           <TextField
@@ -108,48 +130,18 @@ function SignUp() {
               marginBottom: '30px'
             }}
             type="submit"
-            onClick={() => {
-              axios({
-                method: 'post',
-                url: '/api/join',
-                data: {
-                  username: username,
-                  password: password,
-                  email: email
-                }
-              })
-                .then((response) => {
-                  console.log(response)
-                })
-                .catch((error) => {
-                  console.log(error.response)
-                })
-            }}
           >
             가입하기
           </Button>
-          <button
-            onClick={() => {
-              axios({
-                method: 'POST',
-                url: '/api/join',
-                data: {
-                  username: 'test3',
-                  password: 'hi',
-                  email: 'dlckdals'
-                }
-              })
-                .then((response) => {
-                  console.log(response)
-                })
-                .catch((error) => {
-                  console.log(error.response)
-                })
-            }}
-          >
-            테스트용
-          </button>
         </form>
+      </div>
+      <div>
+        <Button onClick={handleOpen}>Open modal</Button>
+        <Modal open={open} onClose={handleClose}>
+          <Box>
+            <LogIn handleClose={handleClose} />
+          </Box>
+        </Modal>
       </div>
     </div>
   )

@@ -34,6 +34,7 @@
   margin: 0;
   white-space: nowrap;
   overflow: hidden;
+  text-align: left;
   text-overflow: ellipsis;
   font-size: 18px;
 }

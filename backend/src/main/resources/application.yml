@@ -6,11 +6,11 @@ spring:
     username: root
   servlet:
     multipart:
-      max-file-size: 500MB
-      max-request-size: 500MB
+      max-file-size: 50MB
+      max-request-size: 50MB
   jpa:
     hibernate:
-      ddl-auto: 'create'
+      ddl-auto: 'update'
     show-sql: 'true'
     properties:
       hibernate:
@@ -19,12 +19,27 @@ spring:
   http:
     multipart:
       maxFileSize: 500MB
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          socketFactory.class: javax.net.ssl.SSLSocketFactory
+          auth: true
+          starttls:
+            enable: true
 logging:
   level:
     org:
       springframework: INFO
     com:
       ssafy: INFO
+      amazonaws:
+        util:
+          EC2MetadataUtils: ERROR
 server:
   port: '5000'
 
@@ -45,3 +60,15 @@ springdoc:
     query-config-enabled: true
   pre-loading-enabled: true
   packages-to-scan: com.ssafy.stackers
+cloud:
+  aws:
+    s3:
+      bucket: stackers.bucket
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+    credentials:
+      access-key: ${STORAGE_PUBLIC_KEY}
+      secret-key: ${STORAGE_PRIVATE_KEY}

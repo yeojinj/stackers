@@ -35,12 +35,6 @@ public class FollowService {
 
     @Transactional
     public void delete(Long followerId, Long followingId){
-        Follow follow =
-            Follow.builder()
-                .follower(memberService.findById(followerId))
-                .following(memberService.findById(followingId))
-                .build();
-
         if (!followRepository.existsByFollowerIdAndFollowingId(followerId, followingId)) {
             throw new CustomException(ErrorCode.NOT_FOLLOW);
         }
