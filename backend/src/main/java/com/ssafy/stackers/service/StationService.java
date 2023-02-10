@@ -8,9 +8,7 @@ import com.ssafy.stackers.model.dto.MainStationDto;
 import com.ssafy.stackers.model.dto.MusicianDto;
 import com.ssafy.stackers.model.dto.StationDetailDto;
 import com.ssafy.stackers.model.dto.StationDto;
-import com.ssafy.stackers.repository.CommentRepository;
 import com.ssafy.stackers.repository.StationRepository;
-import com.ssafy.stackers.repository.TagListRepository;
 import com.ssafy.stackers.utils.error.ErrorCode;
 
 import java.util.ArrayList;
@@ -77,8 +75,16 @@ public class StationService {
         stationRepository.save(s);
         tagListService.save(tags, s);
 
+        Long prevStationId = s.getPrevStationId();
+        String prevPath = null;
+        // 이전 스테이션이 있을 경우 해당 스테이션의 비디오 경로 가져오기
+        if(prevStationId != -1) {
+            Station ps = findById(prevStationId);
+            prevPath = ps.getVideo().getVideoPath();
+        }
+
         // 비디오 저장
-        Video video = videoService.uploadVideoToS3(file, stationDto.getVideoName());
+        Video video = videoService.uploadVideoToS3(file, stationDto.getVideoName(), s.getPrevStationId(), s.getRemainDepth(), prevPath);
         s.updateVideo(video);
 
         return s;
