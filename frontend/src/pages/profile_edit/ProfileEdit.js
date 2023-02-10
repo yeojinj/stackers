@@ -242,7 +242,7 @@ function ProfileEdit() {
           </p>
         </div>
       </div>
-      <button className="img-upload-btn" onClick={changeInfo}>
+      <button className="profile-edit-btn" onClick={changeInfo}>
         업로드
       </button>
     </div>
