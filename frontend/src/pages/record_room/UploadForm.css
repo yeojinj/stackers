@@ -1,3 +1,8 @@
 .stackVideo {
   border-radius: 5px;
 }
+.upload {
+  border: 1px solid black;
+  padding: 5%;
+  border-radius: 5px;
+}

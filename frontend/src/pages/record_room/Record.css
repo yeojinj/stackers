@@ -12,7 +12,8 @@
 }
 .container {
   display: flex;
-  margin: auto;
+  margin: 3%;
+  padding: 3;
 }
 .left {
   width: 50%;
@@ -27,6 +28,11 @@
 }
 .modalBox {
   background-color: white;
+  width: 70%;
+  padding: 2%;
+  margin: auto;
+  margin-top: 2%;
+  border-radius: 5px;
 }
 .recordRoom {
   text-align: center;
@@ -61,4 +67,21 @@
 
 .value {
   font-size: 100px;
+}
+.inforForm {
+  margin: 10%;
+}
+.scopeForm {
+  margin: auto;
+}
+.stackForm {
+  margin: auto;
+}
+.uploadButton {
+  margin-left: auto;
+}
+
+.stackVideo {
+  align-self: center;
+  justify-self: center;
 }

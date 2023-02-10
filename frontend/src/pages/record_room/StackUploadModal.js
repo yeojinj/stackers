@@ -14,6 +14,7 @@ function StackUploadModal(props) {
         <div>스택 업로드</div>
         <CloseIcon onClick={handleClose} />
       </div>
+      <hr></hr>
       <UploadForm handle={handleClose} src={stackUrl} />
     </div>
   )
