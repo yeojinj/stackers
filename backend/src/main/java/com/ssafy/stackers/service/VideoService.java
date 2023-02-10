@@ -168,7 +168,7 @@ public class VideoService {
         // one-pass encode
         executor.createJob(builder, p -> {
                     if(p.isEnd()) {
-                        System.out.println("!!!" + encodePath + " 동영상 인코딩 성공!!!");
+                        log.info("!!!" + encodePath + " 동영상 인코딩 성공!!!");
                     }
                 }
         ).run();
@@ -202,7 +202,7 @@ public class VideoService {
         // one-pass encode
         executor.createJob(builder, p -> {
                     if(p.isEnd()) {
-                        System.out.println("!!!" + cropPath + " 동영상 크롭 성공!!!");
+                        log.info("!!!" + cropPath + " 동영상 크롭 성공!!!");
                     }
                 }
         ).run();
@@ -243,7 +243,7 @@ public class VideoService {
         // one-pass encode
         executor.createJob(builder, p -> {
                 if(p.isEnd()) {
-                    System.out.println("!!!" + mergePath + " 동영상 합치기 성공!!!");
+                    log.info("!!!" + mergePath + " 동영상 합치기 성공!!!");
                 }
             }
         ).run();
