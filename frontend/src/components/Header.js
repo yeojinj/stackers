@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
-// import { SearchKeyword } from '../store.js'
+import { useSelector, useDispatch } from 'react-redux'
+import { SearchKeyword } from '../store.js'
 import { useNavigate } from 'react-router-dom'
-// import axios from 'axios'
+import axios from 'axios'
 import logo from '../assets/logo.svg'
-import search from '../assets/search.svg'
+import searchimg from '../assets/search.svg'
 import ProfileFrame from './profileFrame'
 import '../styles/header.css'
 import SearchIcon from '@mui/icons-material/Search'
@@ -14,45 +14,45 @@ import LogIn from '../pages/sign_folder/LogIn/LogIn'
 // import Button from '@mui/material/Button'
 
 // 더미데이터
-const wholeTextArray = [
-  'apple',
-  'ab',
-  'abc',
-  'abcd',
-  'abcde',
-  'abcdef',
-  'abcdefg',
-  'abcdefgh',
-  'abcdefghi',
-  'abcdefghij',
-  'abcdefghijk',
-  'abcdefghijkl',
-  'applemango',
-  'banana',
-  'coding',
-  'candy',
-  'camera',
-  'javascript',
-  'TENTEN',
-  '텐텐',
-  '터쿠아즈',
-  '마젠타',
-  '애프리콧',
-  '세이지',
-  '플라밍고',
-  '라피스'
-]
+// const search = [
+//   'apple',
+//   'ab',
+//   'abc',
+//   'abcd',
+//   'abcde',
+//   'abcdef',
+//   'abcdefg',
+//   'abcdefgh',
+//   'abcdefghi',
+//   'abcdefghij',
+//   'abcdefghijk',
+//   'abcdefghijkl',
+//   'applemango',
+//   'banana',
+//   'coding',
+//   'candy',
+//   'camera',
+//   'javascript',
+//   'TENTEN',
+//   '텐텐',
+//   '터쿠아즈',
+//   '마젠타',
+//   '애프리콧',
+//   '세이지',
+//   '플라밍고',
+//   '라피스'
+// ]
 function Header(props) {
   // const [login, setLogin] = useState(false)
 
   // axios 실행시 주석 해제
-  // const token = localStorage.getItem('accessToken')
-  // const [search, setSearch] = useState('')
+  const token = localStorage.getItem('accessToken')
+  const [search, setSearch] = useState([])
   const [inputValue, setInputValue] = useState('')
   const [isHaveInputValue, setIsHaveInputValue] = useState(false)
 
   // wholeTextArray 대신 search 넣기
-  const [dropDownList, setDropDownList] = useState(wholeTextArray)
+  const [dropDownList, setDropDownList] = useState(search)
   const [dropDownItemIndex, setDropDownItemIndex] = useState(-1)
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
@@ -60,10 +60,6 @@ function Header(props) {
   const userLogin = useSelector((state) => {
     return state.user.isLogged
   })
-
-  // const getKeyword = useSelector((state) => {
-  //   return state.SearchKeyword.keyword
-  // })
 
   const IsLogin = () => {
     if (userLogin) {
@@ -88,23 +84,25 @@ function Header(props) {
     }
   }
 
-  // async function searchList() {
-  //   await axios
-  //     // 검색 api 주소
-  //     .get('/api/station/popular', {
-  //       headers: {
-  //         Authorization: token
-  //       }
-  //     })
-  //     .then((res) => {
-  //       setSearch(res.data)
-  //     })
-  //     .catch((err) => console.log(err))
-  // }
+  async function searchList() {
+    console.log('axios로 보낼 키워드', inputValue)
+    await axios
+      // 검색 api 주소
+      .get(`/api/search/${inputValue}`, {
+        headers: {
+          Authorization: token
+        }
+      })
+      .then((res) => {
+        // setSearch(res.data)
+        console.log('받아온 검색결과들', search)
+      })
+      .catch((err) => console.log(err))
+  }
 
-  // useEffect(() => {
-  //   searchList()
-  // }, [])
+  useEffect(() => {
+    searchList()
+  }, [inputValue])
 
   const navigate = useNavigate()
 
@@ -118,11 +116,11 @@ function Header(props) {
   }
 
   // 클릭 누르면 store 에 검색 키워드나 검색 키워드 결과 저장하고 검색페이지로 이동
-  // const dispatch = useDispatch()
+  const dispatch = useDispatch()
   const gotoSearch = () => {
-    // if (inputValue) {
-    //   dispatch(SearchKeyword(inputValue))
-    // }
+    if (inputValue) {
+      dispatch(SearchKeyword(inputValue))
+    }
     navigate('/SearchView')
   }
 
@@ -131,7 +129,7 @@ function Header(props) {
       setIsHaveInputValue(false)
       setDropDownList([])
     } else {
-      const choosenTextList = wholeTextArray.filter((textItem) =>
+      const choosenTextList = search.filter((textItem) =>
         textItem.toLowerCase().startsWith(inputValue.toLowerCase())
       )
       if (Array.isArray(choosenTextList) && choosenTextList.length === 0) {
@@ -226,7 +224,7 @@ function Header(props) {
             onChange={changeInputValue}
             onKeyUp={handleDropDownKey}
           />
-          <img onClick={gotoSearch} className="search-icon" src={search} />
+          <img onClick={gotoSearch} className="search-icon" src={searchimg} />
         </div>
         {isHaveInputValue && (
           <ul className="dropdownbox">
