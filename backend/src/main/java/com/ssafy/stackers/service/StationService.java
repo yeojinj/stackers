@@ -11,14 +11,17 @@ import com.ssafy.stackers.model.dto.StationDto;
 import com.ssafy.stackers.repository.StationRepository;
 import com.ssafy.stackers.utils.error.ErrorCode;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 public class StationService {
@@ -50,10 +53,7 @@ public class StationService {
      * 스테이션 업로드
      */
     @Transactional
-    public Station save(StationDto stationDto, MultipartFile file, Member member) throws Exception{
-        // 악기 찾기
-        Instrument instrument = instrumentService.findById(stationDto.getInstrumentId());
-
+    public Station save(StationDto stationDto, MultipartFile file, Member member, Instrument instrument){
         // 태그 저장
         List<Tag> tags = tagService.save(stationDto.getTags());
 
@@ -84,8 +84,13 @@ public class StationService {
         }
 
         // 비디오 저장
-        Video video = videoService.uploadVideoToS3(file, stationDto.getVideoName(), s.getPrevStationId(), s.getRemainDepth(), prevPath);
-        s.updateVideo(video);
+        Video video = null;
+        try {
+            video = videoService.uploadVideoToS3(file, stationDto.getVideoName(), s.getPrevStationId(), s.getRemainDepth(), prevPath);
+            s.updateVideo(video);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         return s;
     }
@@ -105,7 +110,7 @@ public class StationService {
         List<CommentDetailDto> comments = commentService.getComments(s);
         List<MusicianDto> musicians = getMusicians(s);
 
-        return new StationDetailDto(id, stationInfo, s.getRegTime(), comments.size(), comments, musicians, writer);
+        return new StationDetailDto(id, stationInfo, s.getRegTime(), s.getVideo().getVideoPath(), comments.size(), comments, musicians, writer);
     }
 
     /**

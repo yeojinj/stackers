@@ -45,6 +45,8 @@ public class StationController {
 
     @Autowired
     private HeartService heartService;
+    @Autowired
+    private InstrumentService instrumentService;
 
     /**
      * 스테이션 업로드
@@ -80,8 +82,15 @@ public class StationController {
             return new ResponseEntity<>(ErrorCode.INVALID_AUTH_TOKEN, HttpStatus.NOT_FOUND);
         }
 
+        Instrument instrument = null;
+        try {
+            instrument = instrumentService.findById(stationDto.getInstrumentId());
+        } catch (Exception e) {
+            return new ResponseEntity<>("일치하는 악기가 없음", HttpStatus.NOT_FOUND);
+        }
+
         // 스테이션 저장
-        stationService.save(stationDto, file, loginMember);
+        stationService.save(stationDto, file, loginMember, instrument);
         return new ResponseEntity<>("스테이션 업로드 성공", HttpStatus.OK);
     }
 
@@ -96,7 +105,7 @@ public class StationController {
     }
 
     /**
-     * 스테이션 수정
+     * 스테이션 수정 : [가능한 정보] content,
      */
 
 
