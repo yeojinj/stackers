@@ -233,7 +233,7 @@ public class VideoService {
                 }
         ).run();
 
-        removeLocalFile(new File(encodePath));
+        removeLocalFile(new File(localPath));
 
         return encodePath;
     }
@@ -267,7 +267,7 @@ public class VideoService {
                 }
         ).run();
 
-        removeLocalFile(new File(cropPath));
+        removeLocalFile(new File(localPath));
         
         return cropPath;
     }
@@ -309,7 +309,7 @@ public class VideoService {
             }
         ).run();
 
-        removeLocalFile(new File(mergePath));
+        removeLocalFile(new File(localPath));
 
         return mergePath;
     }
