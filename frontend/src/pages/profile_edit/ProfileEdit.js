@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './ProfileEdit.css'
-import profileTest from '../../assets/profileTest.svg'
+import NoImg from '../../assets/noImg.svg'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
 import Box from '@mui/material/Box'
@@ -132,7 +132,7 @@ function ProfileEdit() {
           <img
             id="profileedit-img"
             onClick={handleOpen}
-            src={imageurl || profileTest}
+            src={imageurl === 'path' ? NoImg : imageurl}
             alt="profileTest"
             style={{
               width: '113px',
@@ -242,7 +242,7 @@ function ProfileEdit() {
           </p>
         </div>
       </div>
-      <button className="img-upload-btn" onClick={changeInfo}>
+      <button className="profile-edit-btn" onClick={changeInfo}>
         업로드
       </button>
     </div>
