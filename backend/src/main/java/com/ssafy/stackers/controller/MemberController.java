@@ -72,7 +72,7 @@ public class MemberController {
     /**
      * 프로필 수정 : user 권한만 접근 가능
      */
-    @PutMapping(path = "/user", consumes = {MediaType.APPLICATION_JSON_VALUE,
+    @PostMapping(path = "/user", consumes = {MediaType.APPLICATION_JSON_VALUE,
             MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<?> upadateUser(
             @RequestPart("info") MemberModifyDto memberModifyDto,
