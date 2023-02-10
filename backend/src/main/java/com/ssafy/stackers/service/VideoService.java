@@ -185,12 +185,9 @@ public class VideoService {
     /**
      * 동영상 인코딩
      */
-    public void videoEncoding() throws IOException {
-        // 영상 파일 경로
-        String videoPath = "C:\\test\\videos\\";
-
-        // 인코딩 파일 추출 절대 경로
-        String encodingPath = "C:\\test\\videos\\";
+    public String encodeVideo(String localPath) throws IOException {
+        // 인코딩 파일 추출 경로
+        String encodePath = localPath + "_E";
 
         // ffmpeg 설치 파일 경로 -> 환경 변수로 설정
         FFmpeg ffmpeg = new FFmpeg("ffmpeg");
@@ -198,39 +195,78 @@ public class VideoService {
 
         // 동영상 인코딩 명령어
         FFmpegBuilder builder = new FFmpegBuilder()
-            .setInput(videoPath + "test.mp4")                       // 영상 파일 경로
+            .setInput(localPath)                                    // 영상 파일 경로
             .overrideOutputFiles(true)                              // 인코딩 파일 존재할 경우 덮어쓰기
-            .addOutput(encodingPath + "encoding-test.mp4")     // 인코딩 파일 경로
+            .addOutput(encodePath)        // 인코딩 파일 경로
             .setFormat("mp4")               // 인코딩 파일 형식
 //            .setTargetSize(2130_000)        // 인코딩 목표 용량 (KB)
-            .disableSubtitle()              // 자막 없음
-            .setAudioChannels(1)            // mono audio
-            .setAudioCodec("aac")           // 오디오 코덱
-            .setAudioSampleRate(48_000)     // 48KHz : 오디오 샘플 레이트
-            .setAudioBitRate(32768)         // 32kbit/s : 오디오 비트 레이트 (오디오 품질, 높을수록 좋음)
-            .setVideoCodec("libx264")       // 비디오 코덱
-            .setVideoFrameRate(24, 1)    // 24 frames per second
-            .setVideoResolution(640, 480)
+//            .disableSubtitle()              // 자막 없음
+//            .setAudioChannels(1)            // mono audio
+//            .setAudioCodec("aac")           // 오디오 코덱
+//            .setAudioSampleRate(48_000)     // 48KHz : 오디오 샘플 레이트
+//            .setAudioBitRate(32768)         // 32kbit/s : 오디오 비트 레이트 (오디오 품질, 높을수록 좋음)
+//            .setVideoCodec("libx264")       // 비디오 코덱
+//            .setVideoFrameRate(24, 1)    // 24 frames per second
+            .setVideoResolution(1080, 720)
             .setStrict(Strict.EXPERIMENTAL)
             .done();
 
         FFmpegExecutor executor = new FFmpegExecutor(ffmpeg, ffprobe);
 
         // one-pass encode
-        executor.createJob(builder).run();
+        executor.createJob(builder, p -> {
+                    if(p.isEnd()) {
+                        System.out.println("!!!" + encodePath + " 동영상 인코딩 성공!!!");
+                    }
+                }
+        ).run();
+
+        removeLocalFile(new File(encodePath));
+
+        return encodePath;
+    }
+
+    /**
+     * 동영상 크롭
+     * width:405 height:720
+     */
+    public String cropVideo(String localPath) throws IOException {
+        // 크롭한 영상 추출 경로
+        String cropPath = localPath + "_C";
+
+        // ffmpeg 설치 파일 경로 -> 환경 변수로 설정
+        FFmpeg ffmpeg = new FFmpeg("ffmpeg");
+        FFprobe ffprobe = new FFprobe("ffprobe");
+
+        FFmpegBuilder builder = new FFmpegBuilder()
+                .addInput(localPath)
+                .addOutput(cropPath)
+                .addExtraArgs("-vf", "crop=270:480")
+//            .addExtraArgs("-vf", "crop=405:720")
+                .done();
+
+        FFmpegExecutor executor = new FFmpegExecutor(ffmpeg, ffprobe);
+
+        // one-pass encode
+        executor.createJob(builder, p -> {
+                    if(p.isEnd()) {
+                        System.out.println("!!!" + cropPath + " 동영상 크롭 성공!!!");
+                    }
+                }
+        ).run();
+
+        removeLocalFile(new File(cropPath));
+        
+        return cropPath;
     }
 
     /**
      * 동영상 합치기
      * ffmpeg 명령어 그대로 사용함 -> 배포 시 수정 필요
      */
-    public void videoMerging() throws IOException {
-        // 영상 파일 경로
-        String videoPath1 = "C:\\test\\videos\\";
-        String videoPath2 = "C:\\test\\videos\\";
-
-        // 합친 영상 추출 절대 경로
-        String mergingPath = "C:\\test\\videos\\";
+    public String mergeVideo(String prevPath, String localPath) throws IOException {
+        // 합친 영상 추출 경로
+        String mergePath = localPath + "_M";
 
         // ffmpeg 설치 파일 경로 -> 환경 변수로 설정
         FFmpeg ffmpeg = new FFmpeg("ffmpeg");
@@ -238,9 +274,9 @@ public class VideoService {
 
         FFmpegBuilder builder = new FFmpegBuilder()
             .overrideOutputFiles(true)
-            .addInput(videoPath1 + "left.mp4")
-            .addInput(videoPath2 + "encoding-right.mp4")
-            .addOutput(mergingPath + "output.mp4")
+            .addInput(prevPath)
+            .addInput(localPath)
+            .addOutput(mergePath)
             .addExtraArgs("-preset", "ultrafast")
             .addExtraArgs("-filter_complex",
 //                "[0:v]setpts=PTS-STARTPTS, pad=iw*2+5:ih[bg]; [1:v]setpts=PTS-STARTPTS[fg]; [bg][fg]overlay=w+5")
@@ -255,43 +291,14 @@ public class VideoService {
 
         // one-pass encode
         executor.createJob(builder, p -> {
-            if(p.isEnd()) {
-                System.out.println("!!!동영상 합치기 성공!!!");
-            }
-            }
-        ).run();
-    }
-
-    /**
-     * 동영상 크롭
-     * width:405 height:720
-     */
-    public void videoCrop() throws IOException {
-        // 영상 파일 경로
-        String videoPath = "C:\\test\\videos\\";
-
-        // 크롭한 영상 추출 절대 경로
-        String cropingPath = "C:\\test\\videos\\";
-
-        // ffmpeg 설치 파일 경로 -> 환경 변수로 설정
-        FFmpeg ffmpeg = new FFmpeg("ffmpeg");
-        FFprobe ffprobe = new FFprobe("ffprobe");
-
-        FFmpegBuilder builder = new FFmpegBuilder()
-            .addInput(videoPath + "r.mp4")
-            .addOutput(cropingPath + "right.mp4")
-            .addExtraArgs("-vf", "crop=270:480")
-//            .addExtraArgs("-vf", "crop=405:720")
-            .done();
-
-        FFmpegExecutor executor = new FFmpegExecutor(ffmpeg, ffprobe);
-
-        // one-pass encode
-        executor.createJob(builder, p -> {
                 if(p.isEnd()) {
-                    System.out.println("!!!동영상 크롭 성공!!!");
+                    System.out.println("!!!" + mergePath + " 동영상 합치기 성공!!!");
                 }
             }
         ).run();
+
+        removeLocalFile(new File(mergePath));
+
+        return mergePath;
     }
 }
