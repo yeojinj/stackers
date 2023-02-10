@@ -91,8 +91,8 @@ public class MemberController {
     @PostMapping(path = "/user", consumes = {MediaType.APPLICATION_JSON_VALUE,
             MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<?> upadateUser(
-            @RequestPart("info") MemberModifyDto memberModifyDto,
-            @RequestPart("profile") MultipartFile file,
+            @RequestPart(value = "info", required = false) MemberModifyDto memberModifyDto,
+            @RequestPart(value = "profile", required = false) MultipartFile file,
             @AuthenticationPrincipal PrincipalDetails principal) throws Exception {
         Member member = memberService.getLoginMember(principal.getUsername());
 //        memberService.updateMember(member.getUsername(), memberModifyDto, file);
