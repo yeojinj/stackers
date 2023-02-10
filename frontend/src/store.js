@@ -127,11 +127,12 @@ const CreateInstSlice = createSlice({
   },
   reducers: {
     CreateInst: (state, action) => {
-      console.log(action.payload)
       const asdf = action.payload
       const instt = state.inst
       state.inst = [...instt, ...asdf]
-      console.log(state.inst)
+      state.inst = new Set(state.inst)
+      state.inst = [...state.inst]
+
       // console.log(action)
     }
   }
