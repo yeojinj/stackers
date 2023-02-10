@@ -6,7 +6,12 @@ import com.ssafy.stackers.repository.VideoRepository;
 import com.ssafy.stackers.utils.S3Uploader;
 import com.ssafy.stackers.utils.error.ErrorCode;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Optional;
+import java.util.UUID;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bramp.ffmpeg.FFmpeg;
@@ -87,6 +92,42 @@ public class VideoService {
             .videoPath(videoPath).build();
 
         return video;
+    }
+
+    /**
+     * MultipartFile -> File 변환, 로컬에 파일 저장, 경로 반환
+     */
+    private String saveLocalFile(MultipartFile file) {
+        // 로컬에서 저장할 파일 경로 : user.dir => 현재 디렉토리 기준
+        String dirPath = System.getProperty("user.dir") + "/" + file.getOriginalFilename();
+        File convertFile = new File(dirPath);
+
+        try {
+            convertFile.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        // FileOutputStream 데이터를 파일에 바이트 스트림으로 저장
+        try (FileOutputStream fos = new FileOutputStream(convertFile)) {
+            fos.write(file.getBytes());
+            return dirPath;
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 로컬에 저장된 파일 삭제
+     */
+    private void removeLocalFile(File targetFile) {
+        if (targetFile.delete()) {
+            log.info("[파일 업로드] : 파일 삭제 성공");
+            return;
+        }
+        log.info("[파일 업로드] : 파일 삭제 실패");
     }
 
     /**
