@@ -52,8 +52,20 @@ public class VideoService {
     /**
      * S3 데이터베이스 파일 업로드
      */
-    public Video uploadVideoToS3(MultipartFile file, String videoName) throws IOException{
-        String videoPath = s3Uploader.uploadFiles(file, "static/videos", videoName);
+    public Video uploadVideoToS3(MultipartFile file, String videoName, Long prevStationId, int remainDepth, String prevPath) throws IOException{
+        String localPath = saveLocalFile(file);     // 로컬에 임시 저장
+        localPath = encodeVideo(localPath);         // 인코딩
+        localPath = cropVideo(localPath);           // 크롭
+
+        if(prevStationId != -1 && remainDepth != 3) {   // '참여하기'일 경우 기존 영상과 합치기
+            localPath = mergeVideo(prevPath, localPath);
+        }
+
+        File processedFile = new File(localPath);
+
+        String fileName = "static/videos/" + UUID.randomUUID() + processedFile.getName();
+        String videoPath = s3Uploader.putS3(processedFile, fileName);
+        removeLocalFile(processedFile);
         Video video = Video.builder().videoName(videoName).videoPath(videoPath).build();
         return video;
     }
