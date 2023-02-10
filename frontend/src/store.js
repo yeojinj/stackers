@@ -67,6 +67,7 @@ const stackSlice = createSlice({
       const val = action.payload[1]
       state.remainDepth = 3
       state.prevStationId = -1
+      state.instrumentId = [1, 2]
       switch (action.payload[0]) {
         case 'content':
           state.content = val
