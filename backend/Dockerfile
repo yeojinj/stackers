@@ -13,10 +13,6 @@ RUN gradle build -x test --parallel --continue  > /dev/null 2>&1 || true
 COPY . /build
 RUN gradle clean build -x test --parallel
 
-# ffmpeg
-RUN apt update
-RUN apt install -y ffmpeg
-
 # APP
 FROM openjdk:17.0-slim
 WORKDIR /build
@@ -25,6 +21,10 @@ WORKDIR /build
 COPY --from=builder /build/build/libs/stackers-0.0.1-SNAPSHOT.jar .
 
 EXPOSE 5000
+
+# ffmpeg
+RUN apt update
+RUN apt install -y ffmpeg
 
 # root 대신 nobody 권한으로 실행
 USER nobody
