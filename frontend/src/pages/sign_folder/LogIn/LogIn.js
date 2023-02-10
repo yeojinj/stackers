@@ -52,8 +52,9 @@ function LogIn(props) {
               .then((response) => {
                 localStorage.setItem('accessToken', response.data.accessToken)
                 localStorage.setItem('refreshToken', response.data.refreshToken)
-                navigate('/')
                 dispatch(logIn())
+                navigate('/')
+                props.handleClose()
               })
               .catch((error) => {
                 console.log(error.response)
@@ -76,6 +77,7 @@ function LogIn(props) {
             className="LogIn-inputBox "
             name="password"
             value={password}
+            type="password"
             onChange={(event) => {
               setPassword(event.target.value)
             }}

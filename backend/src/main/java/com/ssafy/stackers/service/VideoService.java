@@ -6,7 +6,12 @@ import com.ssafy.stackers.repository.VideoRepository;
 import com.ssafy.stackers.utils.S3Uploader;
 import com.ssafy.stackers.utils.error.ErrorCode;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Optional;
+import java.util.UUID;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bramp.ffmpeg.FFmpeg;
@@ -47,16 +52,28 @@ public class VideoService {
     /**
      * S3 데이터베이스 파일 업로드
      */
-    public Video uploadVideoToS3(MultipartFile file, String videoName) throws IOException{
-        String videoPath = s3Uploader.uploadFiles(file, "static/videos");
+    public Video uploadVideoToS3(MultipartFile file, String videoName, Long prevStationId, int remainDepth, String prevPath) throws IOException{
+        String localPath = saveLocalFile(file);     // 로컬에 임시 저장
+        localPath = encodeVideo(localPath);         // 인코딩
+        localPath = cropVideo(localPath);           // 크롭
+
+        if(prevStationId != -1 && remainDepth != 3) {   // '참여하기'일 경우 기존 영상과 합치기
+            localPath = mergeVideo(prevPath, localPath);
+        }
+
+        File processedFile = new File(localPath);
+
+        String fileName = "static/videos/" + UUID.randomUUID() + processedFile.getName();
+        String videoPath = s3Uploader.putS3(processedFile, fileName);
+        removeLocalFile(processedFile);
         Video video = Video.builder().videoName(videoName).videoPath(videoPath).build();
         return video;
     }
 
     /**
-     * 데이터베이스에 비디오 업로드
-
-     * S3 데이터베이스 파일 삭제
+     * 데이터베이스 파일 삭제
+     * @param filePath
+     * @throws Exception
      */
     public void deleteVideoFromS3(String filePath) throws Exception {
         s3Uploader.deleteS3(filePath);
@@ -90,66 +107,47 @@ public class VideoService {
     }
 
     /**
-     * 동영상 썸네일 추출
-     * 동영상 파일 경로, 썸네일 추출 경로 (프로젝트 외부) 절대 경로로 지정함
+     * MultipartFile -> File 변환, 로컬에 파일 저장, 경로 반환
      */
-    public void exportThumbnail() throws IOException {
-        // 영상 파일 경로
-        String videoPath = "C:\\test\\videos\\test.mp4";
+    private String saveLocalFile(MultipartFile file) {
+        // 로컬에서 저장할 파일 경로 : user.dir => 현재 디렉토리 기준
+        String dirPath = System.getProperty("user.dir") + "/" + file.getOriginalFilename();
+        File convertFile = new File(dirPath);
 
-        // 썸네일 추출 절대 경로
-        String thumbnailPath = "C:\\test\\thumbs\\";
+        try {
+            convertFile.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
-        // ffmpeg 설치 파일 경로 -> 환경 변수로 설정
-        FFmpeg ffmpeg = new FFmpeg("ffmpeg");
-        FFprobe ffprobe = new FFprobe("ffprobe");
-
-        // 썸네일 추출 명령어
-        FFmpegBuilder builder = new FFmpegBuilder()
-            .setInput(videoPath)                // 영상 파일 경로
-            .overrideOutputFiles(true)          // 썸네일 파일 존재할 경우 덮어쓰기
-            .addOutput(thumbnailPath + "thumb.png")   // 썸네일 추출 절대 경로
-            .addExtraArgs("-ss", "00:00:01")            // 썸네일 추출 시작점 ([영상 길이 / 10]으로 10개 뽑을 예정)
-            .setFrames(1)
-            .done();
-
-        FFmpegExecutor executor = new FFmpegExecutor(ffmpeg,
-            ffprobe);        // FFmpeg 명령어 실행을 위한 FFmpegExecutor 객체 생성
-        executor.createJob(builder).run();                                    // one-pass encodes
+        // FileOutputStream 데이터를 파일에 바이트 스트림으로 저장
+        try (FileOutputStream fos = new FileOutputStream(convertFile)) {
+            fos.write(file.getBytes());
+            return dirPath;
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
-     * 동영상 메타데이터 추출
+     * 로컬에 저장된 파일 삭제
      */
-    public void getMetaData() throws IOException {
-        // 영상 파일 경로
-        String videoPath = "C:\\test\\videos\\test.mp4";
-
-        // ffmpeg 설치 파일 경로 -> 환경 변수로 설정
-        FFmpeg ffmpeg = new FFmpeg("ffmpeg");
-        FFprobe ffprobe = new FFprobe("ffprobe");
-
-        FFmpegProbeResult probeResult = ffprobe.probe(videoPath);
-
-        log.info("===== Video Meta Data =====");
-        log.info("duration: " + probeResult.getStreams().get(0).duration);
-        log.info("codec name: " + probeResult.getStreams().get(0).codec_name);
-        log.info("width: " + probeResult.getStreams().get(0).width);
-        log.info("height: " + probeResult.getStreams().get(0).height);
-        log.info("bit_rate: " + probeResult.getStreams().get(0).bit_rate);
-        log.info("avg_frame_rate: " + probeResult.getStreams().get(0).avg_frame_rate);
-
+    private void removeLocalFile(File targetFile) {
+        if (targetFile.delete()) {
+            log.info("[파일 업로드] : 파일 삭제 성공");
+            return;
+        }
+        log.info("[파일 업로드] : 파일 삭제 실패");
     }
 
     /**
      * 동영상 인코딩
      */
-    public void videoEncoding() throws IOException {
-        // 영상 파일 경로
-        String videoPath = "C:\\test\\videos\\";
-
-        // 인코딩 파일 추출 절대 경로
-        String encodingPath = "C:\\test\\videos\\";
+    public String encodeVideo(String localPath) throws IOException {
+        // 인코딩 파일 추출 경로
+        String encodePath = localPath.substring(0, localPath.length() - 4) + "_E.mp4";
 
         // ffmpeg 설치 파일 경로 -> 환경 변수로 설정
         FFmpeg ffmpeg = new FFmpeg("ffmpeg");
@@ -157,39 +155,70 @@ public class VideoService {
 
         // 동영상 인코딩 명령어
         FFmpegBuilder builder = new FFmpegBuilder()
-            .setInput(videoPath + "test.mp4")                       // 영상 파일 경로
+            .setInput(localPath)                                    // 영상 파일 경로
             .overrideOutputFiles(true)                              // 인코딩 파일 존재할 경우 덮어쓰기
-            .addOutput(encodingPath + "encoding-test.mp4")     // 인코딩 파일 경로
+            .addOutput(encodePath)        // 인코딩 파일 경로
             .setFormat("mp4")               // 인코딩 파일 형식
-//            .setTargetSize(2130_000)        // 인코딩 목표 용량 (KB)
-            .disableSubtitle()              // 자막 없음
-            .setAudioChannels(1)            // mono audio
-            .setAudioCodec("aac")           // 오디오 코덱
-            .setAudioSampleRate(48_000)     // 48KHz : 오디오 샘플 레이트
-            .setAudioBitRate(32768)         // 32kbit/s : 오디오 비트 레이트 (오디오 품질, 높을수록 좋음)
-            .setVideoCodec("libx264")       // 비디오 코덱
-            .setVideoFrameRate(24, 1)    // 24 frames per second
-            .setVideoResolution(640, 480)
+            .setVideoResolution(1080, 720)
             .setStrict(Strict.EXPERIMENTAL)
             .done();
 
         FFmpegExecutor executor = new FFmpegExecutor(ffmpeg, ffprobe);
 
         // one-pass encode
-        executor.createJob(builder).run();
+        executor.createJob(builder, p -> {
+                    if(p.isEnd()) {
+                        log.info("!!!" + encodePath + " 동영상 인코딩 성공!!!");
+                    }
+                }
+        ).run();
+
+        removeLocalFile(new File(localPath));
+
+        return encodePath;
+    }
+
+    /**
+     * 동영상 크롭
+     * width:405 height:720
+     */
+    public String cropVideo(String localPath) throws IOException {
+        // 크롭한 영상 추출 경로
+        String cropPath = localPath.substring(0, localPath.length() - 4) + "_C.mp4";
+
+        // ffmpeg 설치 파일 경로 -> 환경 변수로 설정
+        FFmpeg ffmpeg = new FFmpeg("ffmpeg");
+        FFprobe ffprobe = new FFprobe("ffprobe");
+
+        FFmpegBuilder builder = new FFmpegBuilder()
+                .addInput(localPath)
+                .addOutput(cropPath)
+                .addExtraArgs("-vf", "crop=405:720")
+//            .addExtraArgs("-vf", "crop=405:720")
+                .done();
+
+        FFmpegExecutor executor = new FFmpegExecutor(ffmpeg, ffprobe);
+
+        // one-pass encode
+        executor.createJob(builder, p -> {
+                    if(p.isEnd()) {
+                        log.info("!!!" + cropPath + " 동영상 크롭 성공!!!");
+                    }
+                }
+        ).run();
+
+        removeLocalFile(new File(localPath));
+        
+        return cropPath;
     }
 
     /**
      * 동영상 합치기
      * ffmpeg 명령어 그대로 사용함 -> 배포 시 수정 필요
      */
-    public void videoMerging() throws IOException {
-        // 영상 파일 경로
-        String videoPath1 = "C:\\test\\videos\\";
-        String videoPath2 = "C:\\test\\videos\\";
-
-        // 합친 영상 추출 절대 경로
-        String mergingPath = "C:\\test\\videos\\";
+    public String mergeVideo(String prevPath, String localPath) throws IOException {
+        // 합친 영상 추출 경로
+        String mergePath = localPath.substring(0, localPath.length() - 4) + "_M.mp4";
 
         // ffmpeg 설치 파일 경로 -> 환경 변수로 설정
         FFmpeg ffmpeg = new FFmpeg("ffmpeg");
@@ -197,12 +226,11 @@ public class VideoService {
 
         FFmpegBuilder builder = new FFmpegBuilder()
             .overrideOutputFiles(true)
-            .addInput(videoPath1 + "left.mp4")
-            .addInput(videoPath2 + "encoding-right.mp4")
-            .addOutput(mergingPath + "output.mp4")
+            .addInput(prevPath)
+            .addInput(localPath)
+            .addOutput(mergePath)
             .addExtraArgs("-preset", "ultrafast")
             .addExtraArgs("-filter_complex",
-//                "[0:v]setpts=PTS-STARTPTS, pad=iw*2+5:ih[bg]; [1:v]setpts=PTS-STARTPTS[fg]; [bg][fg]overlay=w+5")
                 "[0:v][1:v]hstack=inputs=2[v]; [0:a][1:a]amerge[a]")
             .addExtraArgs("-map", "[v]")
             .addExtraArgs("-map", "[a]")
@@ -214,43 +242,14 @@ public class VideoService {
 
         // one-pass encode
         executor.createJob(builder, p -> {
-            if(p.isEnd()) {
-                System.out.println("!!!동영상 합치기 성공!!!");
-            }
-            }
-        ).run();
-    }
-
-    /**
-     * 동영상 크롭
-     * width:405 height:720
-     */
-    public void videoCrop() throws IOException {
-        // 영상 파일 경로
-        String videoPath = "C:\\test\\videos\\";
-
-        // 크롭한 영상 추출 절대 경로
-        String cropingPath = "C:\\test\\videos\\";
-
-        // ffmpeg 설치 파일 경로 -> 환경 변수로 설정
-        FFmpeg ffmpeg = new FFmpeg("ffmpeg");
-        FFprobe ffprobe = new FFprobe("ffprobe");
-
-        FFmpegBuilder builder = new FFmpegBuilder()
-            .addInput(videoPath + "r.mp4")
-            .addOutput(cropingPath + "right.mp4")
-            .addExtraArgs("-vf", "crop=270:480")
-//            .addExtraArgs("-vf", "crop=405:720")
-            .done();
-
-        FFmpegExecutor executor = new FFmpegExecutor(ffmpeg, ffprobe);
-
-        // one-pass encode
-        executor.createJob(builder, p -> {
                 if(p.isEnd()) {
-                    System.out.println("!!!동영상 크롭 성공!!!");
+                    log.info("!!!" + mergePath + " 동영상 합치기 성공!!!");
                 }
             }
         ).run();
+
+        removeLocalFile(new File(localPath));
+
+        return mergePath;
     }
 }

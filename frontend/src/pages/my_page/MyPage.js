@@ -1,18 +1,31 @@
 import { React, useState } from 'react'
+import { useParams, useNavigate } from 'react-router'
+import { useSelector } from 'react-redux'
 // import axios from 'axios'
 import './MyPage.css'
-import Header from '../../components/Header'
-import Footer from '../../components/Footer'
 import StationListItem from '../../components/station/StationListItem'
 import profile from '../../assets/profileTest.svg'
 import Button from '@mui/material/Button'
 import MailOutlineIcon from '@mui/icons-material/MailOutline'
+// import Box from '@mui/material/Box'
+// import Modal from '@mui/material/Modal'
+// import ProfileEdit from '../profile_edit/ProfileEdit'
 
 function MyPage() {
+  const navigate = useNavigate()
   const [isfollowing, setIsfollow] = useState(true)
   // axios 연결시 주석 해제
   // const [resultsListVideo, setStation] = useState([])
   const [currentTab, clickTab] = useState(0)
+  const params = useParams()
+  const profileUsername = params.username // 프로필페이지 유저
+  const loginUser = useSelector((state) => {
+    // 현재 로그인한 유저
+    return state.user
+  })
+  // const [open, setOpen] = useState(false)
+  // const handleOpen = () => setOpen(true)
+  // const handleClose = () => setOpen(false)
 
   // async function stationList() {
   //   await axios
@@ -163,19 +176,39 @@ function MyPage() {
     { i: 2, name: '비공개', content: privateStation() }
   ]
 
+  // 팔로우 버튼, 프로필 편집 버튼
   let followbutton = null
-  if (!isfollowing) {
+  if (loginUser.username === profileUsername) {
     followbutton = (
-      <Button variant="outlined" size="small" color="secondary">
-        팔로우
+      <Button
+        variant="contained"
+        size="small"
+        style={{
+          backgroundColor: 'rgba(217, 217, 217, 1)',
+          color: 'rgba(73, 73, 73, 1)',
+          fontWeight: 'bold'
+        }}
+        onClick={() => {
+          navigate('/ProfileEdit')
+        }}
+      >
+        프로필 편집
       </Button>
     )
-  } else if (isfollowing) {
-    followbutton = (
-      <Button variant="contained" size="small" color="secondary">
-        팔로잉
-      </Button>
-    )
+  } else {
+    if (!isfollowing) {
+      followbutton = (
+        <Button variant="outlined" size="small" color="secondary">
+          팔로우
+        </Button>
+      )
+    } else if (isfollowing) {
+      followbutton = (
+        <Button variant="contained" size="small" color="secondary">
+          팔로잉
+        </Button>
+      )
+    }
   }
   const introduce = `안녕하세요~ 기타로 일상의 행복을 배달하는 기타리스트 @dearsanta입니다.
   문의는 dearsanta@gmail.com으로 부탁드려요~`
@@ -185,7 +218,6 @@ function MyPage() {
   }
   return (
     <>
-      <Header />
       <div className="MyPage">
         <div className="div-profile">
           <div style={{ display: 'flex' }}>
@@ -296,7 +328,11 @@ function MyPage() {
             <div className="tab-content">{menuArr[currentTab].content}</div>
           </div>
         </div>
-        <Footer />
+        {/* <Modal open={open} onClose={handleClose}>
+          <Box>
+            <ProfileEdit handleClose={handleClose} className="LogIn" />
+          </Box>
+        </Modal> */}
       </div>
     </>
   )

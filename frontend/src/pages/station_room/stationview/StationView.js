@@ -27,8 +27,14 @@ function StationView() {
         </div>
       </div>
       <div className="prevnextbutton">
-        <ArrowCircleUpOutlinedIcon sx={{ fontSize: 30 }} />
-        <ArrowCircleDownOutlinedIcon sx={{ fontSize: 30 }} />
+        <ArrowCircleUpOutlinedIcon
+          sx={{ fontSize: 30 }}
+          style={{ cursor: 'pointer' }}
+        />
+        <ArrowCircleDownOutlinedIcon
+          sx={{ fontSize: 30 }}
+          style={{ cursor: 'pointer' }}
+        />
       </div>
     </div>
   )

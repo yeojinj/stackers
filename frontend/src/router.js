@@ -9,11 +9,26 @@ import SearchView from './pages/searchview/SearchView'
 import MyPage from './pages/my_page/MyPage'
 import ProfileEdit from './pages/profile_edit/ProfileEdit'
 import UploadLoading from './pages/record_room/UploadLoading'
+import HeaderAndFooter from './components/HeaderAndFooter'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <MainRoom />
+    element: <HeaderAndFooter />,
+    children: [
+      {
+        path: '',
+        element: <MainRoom />
+      },
+      {
+        path: 'SearchView',
+        element: <SearchView />
+      },
+      {
+        path: 'MyPage/:username',
+        element: <MyPage />
+      }
+    ]
   },
   {
     path: '/RecordRoom',
