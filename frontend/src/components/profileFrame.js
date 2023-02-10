@@ -15,6 +15,11 @@ function profileFrame() {
     return state.user.imgPath
   })
 
+  // 로그인 한 유저 정보
+  const loginUser = useSelector((state) => {
+    return state.user
+  })
+
   const profileDropdown = () => {
     setProfileDropDown(true)
   }
@@ -24,7 +29,7 @@ function profileFrame() {
   const goToPage = (e) => {
     const page = e.target.textContent
     if (page === '내 프로필') {
-      navigate('/MyPage')
+      navigate(`/MyPage/${loginUser.username}`)
     } else if (page === '비밀번호 변경') {
       // 비밀번호 변경 페이지로 이동시키기
       // navigate('')
