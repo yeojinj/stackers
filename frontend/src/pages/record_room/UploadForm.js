@@ -10,8 +10,16 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import Moment from 'moment'
 import { useSelector, useDispatch } from 'react-redux'
 import { CreateStack, ClearStack } from '../../store.js'
-// import axios from 'axios'
+import axios from 'axios'
 
+const blobFile = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      resolve(event.target.result)
+    }
+    reader.readAsDataURL(file)
+  })
 function UploadForm(props) {
   const dispatch = useDispatch()
   const data = useSelector((state) => {
@@ -28,6 +36,9 @@ function UploadForm(props) {
     props.handle()
   }
   const object = props.src.src.src
+
+  const filedownloadlink = window.URL.createObjectURL(object)
+
   const [values, setValues] = useState({
     content: '',
     music: '',
@@ -40,30 +51,22 @@ function UploadForm(props) {
     prevStationId: 0,
     videoName: '',
     delete: true,
-    file: object
+    file: filedownloadlink
   })
 
-  const filedownloadlink = window.URL.createObjectURL(object)
   const handleChange = (e) => {
     console.log(e.target.name, e.target.value)
 
     dispatch(CreateStack([e.target.name, e.target.value]))
-    setValues({
-      ...values,
-      [e.target.name]: e.target.value
-    })
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!values.content || !values.music) {
+
+    if (!data.content || !data.music) {
       alert('빈칸을 입력해주세요')
     } else {
-      setValues({
-        ...values,
-        videoName: dateNow + username
-      })
-      if (values) {
+      if (data) {
         let testData = {
           content: data.content,
           music: data.music,
@@ -73,10 +76,9 @@ function UploadForm(props) {
           remainDepth: data.remainDepth,
           isPublic: data.isPublic,
           isComplete: data.isComplete,
-          tags: data.tags,
           prevStationId: data.prevStationId,
-          videoName: data.videoName,
-          delete: true
+          videoName: data.videoName
+          // delete: true
         }
         console.log(testData)
         const formData = new FormData()
@@ -89,23 +91,24 @@ function UploadForm(props) {
         )
 
         // 파일 정보
-        formData.append('file', object)
+        await formData.append('file', filedownloadlink)
+        await axios
+          .post(`/api/station/upload`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Authorization: localStorage.getItem('accessToken')
+            }
+          })
+          .then(() => console.log('[스테이션 업로드] >> 성공'))
+          .catch((error) => {
+            alert(error)
+            console.log(error)
+          })
         console.log(formData)
-        // await axios
-        //   .post(`/api/station/upload`, formData, {
-        //     headers: {
-        //       'Content-Type': `multipart/form-data`
-        //     }
-        //   })
-        //   .then(() => console.log('[스테이션 업로드] >> 성공'))
-        //   .catch((error) => {
-        //     alert(error)
-        //     console.log(error)
-        //   })
-        // console.log(formData)
       }
       handleClose()
       dispatch(ClearStack())
+      window.URL.revokeObjectUrl(filedownloadlink)
     }
   }
   return (
@@ -125,7 +128,7 @@ function UploadForm(props) {
         <input
           type="text"
           name="music"
-          value={values.music}
+          value={data.music}
           onChange={handleChange}
         ></input>
         {filedownloadlink && (
@@ -139,7 +142,7 @@ function UploadForm(props) {
         <input
           type="text"
           name="content"
-          value={values.content}
+          value={data.content}
           onChange={handleChange}
         ></input>
         <div className="thumbnailForm">
@@ -169,7 +172,6 @@ function UploadForm(props) {
                   name="isPublic"
                   value="public"
                   onChange={handleChange}
-                  checked={values.isPublic === 'public'}
                 />
                 공개
               </label>
@@ -179,7 +181,6 @@ function UploadForm(props) {
                   name="isPublic"
                   value="private"
                   onChange={handleChange}
-                  checked={values.isPublic === 'private'}
                 />
                 비공개
               </label>
@@ -194,7 +195,6 @@ function UploadForm(props) {
                   name="isComplete"
                   value="notCompleted"
                   onChange={handleChange}
-                  checked={values.isComplete === 'notCompleted'}
                 />
                 허용
               </label>
@@ -204,7 +204,6 @@ function UploadForm(props) {
                   name="isComplete"
                   value="completed"
                   onChange={handleChange}
-                  checked={values.isComplete === 'completed'}
                 />
                 불허용
               </label>

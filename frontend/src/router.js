@@ -25,7 +25,7 @@ const router = createBrowserRouter([
         element: <SearchView />
       },
       {
-        path: 'MyPage',
+        path: 'MyPage/:username',
         element: <MyPage />
       }
     ]

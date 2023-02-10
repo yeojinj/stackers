@@ -95,8 +95,10 @@ public class MemberService {
         String originImgPath = member.getImgPath();
         log.info("[프로필 이미지 경로] : {}", originImgPath);
 
-        member.updateImgPath(updateProfileToS3(file, username));
-        if(!originImgPath.equals("path")) s3Uploader.deleteS3(originImgPath);
+        if(file != null){
+            member.updateImgPath(updateProfileToS3(file, username));
+            if(!originImgPath.equals("path")) s3Uploader.deleteS3(originImgPath);
+        }
     }
 
     public String updateProfileToS3(MultipartFile file, String username) throws Exception{
