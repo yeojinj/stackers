@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Base64;
+
 @Slf4j
 @Service
 @Transactional(readOnly = true)
@@ -98,7 +100,10 @@ public class MemberService {
     }
 
     public String updateProfileToS3(MultipartFile file, String username) throws Exception{
-        String profileImgName = "profile" + username + "picture";
+        String name = file.getName() + username;
+        String profileImgName = Base64.getEncoder().withoutPadding().encodeToString(name.getBytes());
+        log.info(profileImgName);
+//        return  "";
         return s3Uploader.uploadFiles(file, "static/profile", profileImgName);
     }
 
