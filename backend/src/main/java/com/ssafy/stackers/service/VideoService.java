@@ -199,7 +199,7 @@ public class VideoService {
      */
     public String encodeVideo(String localPath) throws IOException {
         // 인코딩 파일 추출 경로
-        String encodePath = localPath + "_E";
+        String encodePath = localPath.substring(0, localPath.length() - 4) + "_E.mp4";
 
         // ffmpeg 설치 파일 경로 -> 환경 변수로 설정
         FFmpeg ffmpeg = new FFmpeg("ffmpeg");
@@ -244,7 +244,7 @@ public class VideoService {
      */
     public String cropVideo(String localPath) throws IOException {
         // 크롭한 영상 추출 경로
-        String cropPath = localPath + "_C";
+        String cropPath = localPath.substring(0, localPath.length() - 4) + "_C.mp4";
 
         // ffmpeg 설치 파일 경로 -> 환경 변수로 설정
         FFmpeg ffmpeg = new FFmpeg("ffmpeg");
@@ -278,7 +278,7 @@ public class VideoService {
      */
     public String mergeVideo(String prevPath, String localPath) throws IOException {
         // 합친 영상 추출 경로
-        String mergePath = localPath + "_M";
+        String mergePath = localPath.substring(0, localPath.length() - 4) + "_M.mp4";
 
         // ffmpeg 설치 파일 경로 -> 환경 변수로 설정
         FFmpeg ffmpeg = new FFmpeg("ffmpeg");
