@@ -253,7 +253,7 @@ public class VideoService {
         FFmpegBuilder builder = new FFmpegBuilder()
                 .addInput(localPath)
                 .addOutput(cropPath)
-                .addExtraArgs("-vf", "crop=270:480")
+                .addExtraArgs("-vf", "crop=405:720")
 //            .addExtraArgs("-vf", "crop=405:720")
                 .done();
 
