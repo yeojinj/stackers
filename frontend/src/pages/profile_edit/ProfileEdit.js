@@ -11,12 +11,12 @@ import axios from 'axios'
 // import ImageCrop from './ImageCrop'
 
 function ProfileEdit() {
+  // const [userinfo, setUserInfo] = useState([])
   const [id, setId] = useState('')
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [nickname, setNickname] = useState('')
   const [bio, setBio] = useState('')
-  const [instruments, setInstruments] = useState([])
   const [parties, setParties] = useState('')
 
   const [open, setOpen] = useState(false)
@@ -56,7 +56,6 @@ function ProfileEdit() {
 
   // 사용자 정보 조회
   async function userInfo() {
-    console.log(token)
     await axios
       .get('/api/member/user', {
         headers: {
@@ -64,14 +63,12 @@ function ProfileEdit() {
         }
       })
       .then((res) => {
-        console.log('[회원정보가져오는거 확인]', res.data)
         setId(res.data.id)
         setUsername(res.data.username)
         setNickname(res.data.nickname)
         setEmail(res.data.email)
         setBio(res.data.bio)
         setImageurl(res.data.imgPath)
-        setInstruments(res.data.Instruments)
         setParties(res.data.parties)
       })
       .catch((err) => console.log(err))
@@ -111,22 +108,36 @@ function ProfileEdit() {
         type: 'application/json'
       })
     )
-    console.log(instruments)
-    console.log('[axios 로 보낼 이미지 파일 확인]', image)
-    formData.append('profile', image)
-    console.log(formData)
-    axios
-      .put('/api/member/user', formData, {
-        data: newInfo,
-        headers: {
-          Authorization: token,
-          'Content-Type': 'multipart/form-data'
-        }
-      })
-      .then((res) => {
-        console.log(res.data)
-      })
-      .catch((err) => console.log(err))
+    if (image) {
+      console.log('[axios 로 보낼 이미지 파일 확인]', image)
+      formData.append('profile', image)
+      console.log(formData)
+      axios
+        .put('/api/member/user', formData, {
+          data: newInfo,
+          headers: {
+            Authorization: token,
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+        .then((res) => {
+          console.log(res.data)
+        })
+        .catch((err) => console.log(err))
+    } else {
+      axios
+        .put('/api/member/user', formData, {
+          data: newInfo,
+          headers: {
+            Authorization: token,
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+        .then((res) => {
+          console.log(res.data)
+        })
+        .catch((err) => console.log(err))
+    }
   }
   return (
     <div className="ProfileEdit">
