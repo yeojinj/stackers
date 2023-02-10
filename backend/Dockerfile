@@ -13,6 +13,10 @@ RUN gradle build -x test --parallel --continue  > /dev/null 2>&1 || true
 COPY . /build
 RUN gradle clean build -x test --parallel
 
+# ffmpeg
+RUN apt update
+RUN apt install -y ffmpeg
+
 # APP
 FROM openjdk:17.0-slim
 WORKDIR /build
