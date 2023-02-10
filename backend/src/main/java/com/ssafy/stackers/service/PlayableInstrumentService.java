@@ -48,4 +48,13 @@ public class PlayableInstrumentService {
         return instruments;
     }
 
+    public boolean existsByMemberIdAndInstrumentId(Member member, Instrument instrument) {
+        return playableInstrumentRepository.existsByMemberIdAndInstrumentId(member.getId(),
+            instrument.getId());
+    }
+
+    public void deleteByMemberId(Member member) {
+        playableInstrumentRepository.deleteByMemberId(member.getId());
+    }
+
 }

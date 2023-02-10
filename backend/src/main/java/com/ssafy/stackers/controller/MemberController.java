@@ -7,9 +7,12 @@ import com.ssafy.stackers.model.Party;
 import com.ssafy.stackers.model.dto.JoinDto;
 import com.ssafy.stackers.model.dto.LoginMemberDto;
 import com.ssafy.stackers.model.dto.MemberModifyDto;
+import com.ssafy.stackers.model.dto.UserInfoDto;
+import com.ssafy.stackers.service.FollowService;
 import com.ssafy.stackers.service.InstrumentService;
 import com.ssafy.stackers.service.MemberService;
 import com.ssafy.stackers.service.PartyMemberService;
+import com.ssafy.stackers.service.PartyService;
 import com.ssafy.stackers.service.PlayableInstrumentService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Map;
@@ -32,6 +35,8 @@ public class MemberController {
     private MemberService memberService;
     @Autowired
     private InstrumentService instrumentService;
+    @Autowired
+    private PartyService partyService;
     @Autowired
     private PlayableInstrumentService playableInstrumentService;
     @Autowired
@@ -95,14 +100,17 @@ public class MemberController {
             @RequestPart(value = "profile", required = false) MultipartFile file,
             @AuthenticationPrincipal PrincipalDetails principal) throws Exception {
         Member member = memberService.getLoginMember(principal.getUsername());
-//        memberService.updateMember(member.getUsername(), memberModifyDto, file);
+        memberService.updateMember(member.getUsername(), memberModifyDto, file);
         // 악기 등록
-//        playableInstrumentService.deleteByMemberId(member);
-//        for (String instrumentName: memberModifyDto.getInstruments()) {
-//            Instrument instrument = instrumentService.findByName(instrumentName);
-//            playableInstrumentService.save(member, instrument);
-//        }
+        playableInstrumentService.deleteByMemberId(member);
+        for (String instrumentName: memberModifyDto.getInstruments()) {
+            Instrument instrument = instrumentService.findByName(instrumentName);
+            playableInstrumentService.save(member, instrument);
+        }
         // 팀 등록
+        partyMemberService.deleteByMemberId(member);
+        Party party = partyService.findByName(memberModifyDto.getParty());
+        partyMemberService.save(member, party);
 
         return new ResponseEntity<>("멤버 수정 완료", HttpStatus.OK);
     }
