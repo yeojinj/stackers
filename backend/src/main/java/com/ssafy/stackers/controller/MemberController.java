@@ -41,6 +41,8 @@ public class MemberController {
     private PlayableInstrumentService playableInstrumentService;
     @Autowired
     private PartyMemberService partyMemberService;
+    @Autowired
+    private FollowService followService;
 
     @PostMapping("/join")
     public ResponseEntity<?> join(@RequestBody JoinDto joinDto) {
@@ -74,11 +76,10 @@ public class MemberController {
         return new ResponseEntity<>(loginMemberDto, HttpStatus.OK);
     }
 
-    // user 권한만 접근 가능
     @GetMapping("/{username}")
     public ResponseEntity<?> getUserInfo(@PathVariable String username) {
         Member member = memberService.getLoginMember(username);
-        LoginMemberDto loginMemberDto = LoginMemberDto.builder()
+        UserInfoDto loginMemberDto = UserInfoDto.builder()
             .username(member.getUsername())
             .nickname(member.getNickname())
             .email(member.getEmail())
@@ -86,6 +87,8 @@ public class MemberController {
             .imgPath(member.getImgPath())
             .instruments(playableInstrumentService.getInstruments(member.getId()))
             .party(partyMemberService.getParty(member.getId()))
+            .followingCnt(followService.countByFollowingId(member.getId()))
+            .followerCnt(followService.countByFollowerId(member.getId()))
             .build();
         return new ResponseEntity<>(loginMemberDto, HttpStatus.OK);
     }
