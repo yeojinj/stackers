@@ -35,4 +35,10 @@ public class PartyService {
         partyRepository.deleteByName(name);
     }
 
+    public Party findByName(String name) {
+        Party party = partyRepository.findByName(name).orElseThrow(() -> new CustomException(
+            ErrorCode.ENTITY_NOT_FOUND));
+
+        return party;
+    }
 }

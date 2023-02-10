@@ -7,9 +7,12 @@ import com.ssafy.stackers.model.Party;
 import com.ssafy.stackers.model.dto.JoinDto;
 import com.ssafy.stackers.model.dto.LoginMemberDto;
 import com.ssafy.stackers.model.dto.MemberModifyDto;
+import com.ssafy.stackers.model.dto.UserInfoDto;
+import com.ssafy.stackers.service.FollowService;
 import com.ssafy.stackers.service.InstrumentService;
 import com.ssafy.stackers.service.MemberService;
 import com.ssafy.stackers.service.PartyMemberService;
+import com.ssafy.stackers.service.PartyService;
 import com.ssafy.stackers.service.PlayableInstrumentService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Map;
@@ -33,9 +36,13 @@ public class MemberController {
     @Autowired
     private InstrumentService instrumentService;
     @Autowired
+    private PartyService partyService;
+    @Autowired
     private PlayableInstrumentService playableInstrumentService;
     @Autowired
     private PartyMemberService partyMemberService;
+    @Autowired
+    private FollowService followService;
 
     @PostMapping("/join")
     public ResponseEntity<?> join(@RequestBody JoinDto joinDto) {
@@ -64,8 +71,25 @@ public class MemberController {
                 .bio(member.getBio())
                 .imgPath(member.getImgPath())
                 .instruments(playableInstrumentService.getInstruments(member.getId()))
-                .parties(partyMemberService.getParties(member.getId()))
+                .party(partyMemberService.getParty(member.getId()))
                 .build();
+        return new ResponseEntity<>(loginMemberDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/{username}")
+    public ResponseEntity<?> getUserInfo(@PathVariable String username) {
+        Member member = memberService.getLoginMember(username);
+        UserInfoDto loginMemberDto = UserInfoDto.builder()
+            .username(member.getUsername())
+            .nickname(member.getNickname())
+            .email(member.getEmail())
+            .bio(member.getBio())
+            .imgPath(member.getImgPath())
+            .instruments(playableInstrumentService.getInstruments(member.getId()))
+            .party(partyMemberService.getParty(member.getId()))
+            .followingCnt(followService.countByFollowingId(member.getId()))
+            .followerCnt(followService.countByFollowerId(member.getId()))
+            .build();
         return new ResponseEntity<>(loginMemberDto, HttpStatus.OK);
     }
 
@@ -80,6 +104,17 @@ public class MemberController {
             @AuthenticationPrincipal PrincipalDetails principal) throws Exception {
         Member member = memberService.getLoginMember(principal.getUsername());
         memberService.updateMember(member.getUsername(), memberModifyDto, file);
+        // 악기 등록
+        playableInstrumentService.deleteByMemberId(member);
+        for (String instrumentName: memberModifyDto.getInstruments()) {
+            Instrument instrument = instrumentService.findByName(instrumentName);
+            playableInstrumentService.save(member, instrument);
+        }
+        // 팀 등록
+        partyMemberService.deleteByMemberId(member);
+        Party party = partyService.findByName(memberModifyDto.getParty());
+        partyMemberService.save(member, party);
+
         return new ResponseEntity<>("멤버 수정 완료", HttpStatus.OK);
     }
 
