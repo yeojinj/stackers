@@ -64,8 +64,24 @@ public class MemberController {
                 .bio(member.getBio())
                 .imgPath(member.getImgPath())
                 .instruments(playableInstrumentService.getInstruments(member.getId()))
-                .parties(partyMemberService.getParties(member.getId()))
+                .party(partyMemberService.getParty(member.getId()))
                 .build();
+        return new ResponseEntity<>(loginMemberDto, HttpStatus.OK);
+    }
+
+    // user 권한만 접근 가능
+    @GetMapping("/{username}")
+    public ResponseEntity<?> getUserInfo(@PathVariable String username) {
+        Member member = memberService.getLoginMember(username);
+        LoginMemberDto loginMemberDto = LoginMemberDto.builder()
+            .username(member.getUsername())
+            .nickname(member.getNickname())
+            .email(member.getEmail())
+            .bio(member.getBio())
+            .imgPath(member.getImgPath())
+            .instruments(playableInstrumentService.getInstruments(member.getId()))
+            .party(partyMemberService.getParty(member.getId()))
+            .build();
         return new ResponseEntity<>(loginMemberDto, HttpStatus.OK);
     }
 
@@ -79,7 +95,15 @@ public class MemberController {
             @RequestPart("profile") MultipartFile file,
             @AuthenticationPrincipal PrincipalDetails principal) throws Exception {
         Member member = memberService.getLoginMember(principal.getUsername());
-        memberService.updateMember(member.getUsername(), memberModifyDto, file);
+//        memberService.updateMember(member.getUsername(), memberModifyDto, file);
+        // 악기 등록
+//        playableInstrumentService.deleteByMemberId(member);
+//        for (String instrumentName: memberModifyDto.getInstruments()) {
+//            Instrument instrument = instrumentService.findByName(instrumentName);
+//            playableInstrumentService.save(member, instrument);
+//        }
+        // 팀 등록
+
         return new ResponseEntity<>("멤버 수정 완료", HttpStatus.OK);
     }
 
