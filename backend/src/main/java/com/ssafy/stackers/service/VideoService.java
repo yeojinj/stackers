@@ -159,14 +159,6 @@ public class VideoService {
             .overrideOutputFiles(true)                              // 인코딩 파일 존재할 경우 덮어쓰기
             .addOutput(encodePath)        // 인코딩 파일 경로
             .setFormat("mp4")               // 인코딩 파일 형식
-//            .setTargetSize(2130_000)        // 인코딩 목표 용량 (KB)
-//            .disableSubtitle()              // 자막 없음
-//            .setAudioChannels(1)            // mono audio
-//            .setAudioCodec("aac")           // 오디오 코덱
-//            .setAudioSampleRate(48_000)     // 48KHz : 오디오 샘플 레이트
-//            .setAudioBitRate(32768)         // 32kbit/s : 오디오 비트 레이트 (오디오 품질, 높을수록 좋음)
-//            .setVideoCodec("libx264")       // 비디오 코덱
-//            .setVideoFrameRate(24, 1)    // 24 frames per second
             .setVideoResolution(1080, 720)
             .setStrict(Strict.EXPERIMENTAL)
             .done();
@@ -239,7 +231,6 @@ public class VideoService {
             .addOutput(mergePath)
             .addExtraArgs("-preset", "ultrafast")
             .addExtraArgs("-filter_complex",
-//                "[0:v]setpts=PTS-STARTPTS, pad=iw*2+5:ih[bg]; [1:v]setpts=PTS-STARTPTS[fg]; [bg][fg]overlay=w+5")
                 "[0:v][1:v]hstack=inputs=2[v]; [0:a][1:a]amerge[a]")
             .addExtraArgs("-map", "[v]")
             .addExtraArgs("-map", "[a]")
