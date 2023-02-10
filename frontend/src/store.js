@@ -51,7 +51,7 @@ const stackSlice = createSlice({
   initialState: {
     content: '',
     music: '',
-    instrumentId: [],
+    instrumentId: 0,
     heartCnt: 0,
     remainDepth: 0,
     isPublic: 0,
@@ -59,12 +59,13 @@ const stackSlice = createSlice({
     tags: [],
     prevStationId: 0,
     videoName: '',
-    delete: true,
-    file: {}
+    delete: true
   },
   reducers: {
     CreateStack: (state, action) => {
+      console.log(action.payload[0], action.payload[1])
       const val = action.payload[1]
+      state.instrumentId = 1
       state.remainDepth = 3
       state.prevStationId = -1
       switch (action.payload[0]) {
@@ -101,6 +102,7 @@ const stackSlice = createSlice({
           state = { ...state }
           break
       }
+      console.log(state)
     },
     ClearStack: (state, action) => {
       state.content = ''
@@ -114,7 +116,6 @@ const stackSlice = createSlice({
       state.prevStationId = 0
       state.videoName = ''
       state.delete = true
-      state.file = {}
     }
   }
 })

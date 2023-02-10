@@ -11,9 +11,10 @@ function App() {
     return state.user.isLogged
   })
 
-  const total = useSelector((state) => {
+  const loginUser = useSelector((state) => {
     return state.user
   })
+  // console.log(loginUser)
   // console.log(localStorage.getItem('refreshToken'))
   const dispatch = useDispatch()
   useEffect(() => {
@@ -48,7 +49,7 @@ function App() {
         }
       })
         .then((response) => {
-          console.log(response.data)
+          // console.log(response.data)
           dispatch(logIn())
           dispatch(LogInState(response.data))
         })
