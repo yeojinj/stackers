@@ -152,13 +152,26 @@ const SearchSlice = createSlice({
   }
 })
 
+const TagSlice = createSlice({
+  name: 'TagSlice',
+  initialState: {
+    tags: []
+  },
+  reducers: {
+    TagList: (state, action) => {
+      state.tags = action.payload
+    }
+  }
+})
+
 const store = configureStore({
   reducer: {
     user: userSlice.reducer,
     CreateComments: CreateCommentSlice.reducer,
     stack: stackSlice.reducer,
     CreateInst: CreateInstSlice.reducer,
-    SearchKeyword: SearchSlice.reducer
+    SearchKeyword: SearchSlice.reducer,
+    TagList: TagSlice.reducer
   }
 })
 
@@ -168,3 +181,4 @@ export const { CreateComment } = CreateCommentSlice.actions
 export const { CreateStack, ClearStack } = stackSlice.actions
 export const { CreateInst } = CreateInstSlice.actions
 export const { SearchKeyword } = SearchSlice.actions
+export const { TagList } = TagSlice.actions
