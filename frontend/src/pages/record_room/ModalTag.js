@@ -1,11 +1,15 @@
 import React, { useState } from 'react'
 import { Chip } from '@mui/material'
+import { useDispatch } from 'react-redux'
+import { CreateStack } from '../../store.js'
 
 const Tag = () => {
   const [tagItem, setTagItem] = useState('')
   const [tagList, setTagList] = useState([])
-
+  const dispatch = useDispatch()
   const uploadTagHandler = () => {
+    dispatch(CreateStack(['tags', [...tagList, tagItem]]))
+
     setTagList((tagList) => [...tagList, tagItem])
     setTagItem('')
   }
@@ -15,6 +19,7 @@ const Tag = () => {
     const filteredTagList = tagList.filter(
       (tagItem) => tagItem !== deleteTagItem
     )
+    dispatch(CreateStack(['tags', filteredTagList]))
     setTagList(filteredTagList)
   }
 
