@@ -13,47 +13,61 @@ import Modal from '@mui/material/Modal'
 import LogIn from '../pages/sign_folder/LogIn/LogIn'
 // import Button from '@mui/material/Button'
 
-// 더미데이터
-// const search = [
-//   'apple',
-//   'ab',
-//   'abc',
-//   'abcd',
-//   'abcde',
-//   'abcdef',
-//   'abcdefg',
-//   'abcdefgh',
-//   'abcdefghi',
-//   'abcdefghij',
-//   'abcdefghijk',
-//   'abcdefghijkl',
-//   'applemango',
-//   'banana',
-//   'coding',
-//   'candy',
-//   'camera',
-//   'javascript',
-//   'TENTEN',
-//   '텐텐',
-//   '터쿠아즈',
-//   '마젠타',
-//   '애프리콧',
-//   '세이지',
-//   '플라밍고',
-//   '라피스'
-// ]
 function Header(props) {
   // const [login, setLogin] = useState(false)
 
   // axios 실행시 주석 해제
   const token = localStorage.getItem('accessToken')
-  const [search, setSearch] = useState([])
+  const [search, setSearch] = useState({
+    stationList: [
+      {
+        id: 3,
+        content: '깜찍한 저예요',
+        tags: ['SSAFY', '광주'],
+        video: {
+          id: 3,
+          videoPath: 'static/videos/s3비디오링크.mp4',
+          videoName: '원본video03.mp4',
+          thumbnailPath: null
+        }
+      }
+    ],
+    memberList: [
+      {
+        id: 4,
+        imgPath: 'static/s3이미지링크.png',
+        username: 'user04',
+        nickname: '깜찍한 백지원',
+        teamName: '배도라지'
+      },
+      {
+        id: 4,
+        imgPath: 'static/s3이미지링크.png',
+        username: 'user05',
+        nickname: '깜찍한 최보영',
+        teamName: '배도라지'
+      },
+      {
+        id: 4,
+        imgPath: 'static/s3이미지링크.png',
+        username: 'user06',
+        nickname: '깜찍한 이창민',
+        teamName: '배도라지'
+      }
+    ]
+  })
   const [inputValue, setInputValue] = useState('')
   const [isHaveInputValue, setIsHaveInputValue] = useState(false)
 
   // wholeTextArray 대신 search 넣기
-  const [dropDownList, setDropDownList] = useState(search)
-  const [dropDownItemIndex, setDropDownItemIndex] = useState(-1)
+  const [stationdropDownList, setStationDropDownList] = useState(
+    search.stationList
+  )
+  const [AccountdropDownList, setAccountDropDownList] = useState(
+    search.memberList
+  )
+  const [stationdropDownItemIndex, setStationDropDownItemIndex] = useState(-1)
+  const [accountdropDownItemIndex, setAccountDropDownItemIndex] = useState(-1)
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
@@ -84,9 +98,9 @@ function Header(props) {
     }
   }
 
-  async function searchList() {
+  const searchList = () => {
     console.log('axios로 보낼 키워드', inputValue)
-    await axios
+    axios
       // 검색 api 주소
       .get(`/api/search/${inputValue}`, {
         headers: {
@@ -94,15 +108,11 @@ function Header(props) {
         }
       })
       .then((res) => {
-        // setSearch(res.data)
+        setSearch(res.data)
         console.log('받아온 검색결과들', search)
       })
       .catch((err) => console.log(err))
   }
-
-  useEffect(() => {
-    searchList()
-  }, [inputValue])
 
   const navigate = useNavigate()
 
@@ -127,17 +137,20 @@ function Header(props) {
   const showDropDownList = () => {
     if (inputValue === '') {
       setIsHaveInputValue(false)
-      setDropDownList([])
+      setStationDropDownList([])
+      setAccountDropDownList([])
     } else {
-      const choosenTextList = search.filter((textItem) =>
-        textItem.toLowerCase().startsWith(inputValue.toLowerCase())
-      )
-      if (Array.isArray(choosenTextList) && choosenTextList.length === 0) {
+      // const choosenTextList = search.filter((textItem) =>
+      //   textItem.toLowerCase().startsWith(inputValue.toLowerCase())
+      // )
+      if (Array.isArray(search) && search.length === 0) {
         setIsHaveInputValue(false)
-        setDropDownList([])
+        setStationDropDownList([])
+        setAccountDropDownList([])
       } else {
         setIsHaveInputValue(true)
-        setDropDownList(choosenTextList)
+        setStationDropDownList(search.stationList)
+        setAccountDropDownList(search.memberList)
       }
     }
   }
@@ -147,31 +160,43 @@ function Header(props) {
   }
 
   const clickDropDownItem = (clickedItem) => {
-    setInputValue(clickedItem)
-    setIsHaveInputValue(false)
-  }
-
-  const handleDropDownKey = (event) => {
-    // input에 값이 있을때만 작동
-    if (isHaveInputValue) {
-      if (
-        event.key === 'ArrowDown' &&
-        dropDownList.length - 1 > dropDownItemIndex
-      ) {
-        setDropDownItemIndex(dropDownItemIndex + 1)
-      }
-
-      if (event.key === 'ArrowUp' && dropDownItemIndex >= 0) {
-        setDropDownItemIndex(dropDownItemIndex - 1)
-      }
-      if (event.key === 'Enter' && dropDownItemIndex >= 0) {
-        clickDropDownItem(dropDownList[dropDownItemIndex])
-        setDropDownItemIndex(-1)
-      }
+    // 클릭하면 바로 드롭다운 없어져야 하는데 두번 클릭해야 사라짐
+    if (clickedItem.content) {
+      setInputValue(clickedItem.content)
+      setIsHaveInputValue(false)
     }
+    // else {
+    //   // 계정으로 이동
+    // }
   }
+
+  // const handleDropDownKey = (event) => {
+  //   // input에 값이 있을때만 작동
+  //   if (isHaveInputValue) {
+  //     if (
+  //       event.key === 'ArrowDown' &&
+  //       dropDownList.length - 1 > dropDownItemIndex
+  //     ) {
+  //       setDropDownItemIndex(dropDownItemIndex + 1)
+  //     }
+
+  //     if (event.key === 'ArrowUp' && dropDownItemIndex >= 0) {
+  //       setDropDownItemIndex(dropDownItemIndex - 1)
+  //     }
+  //     if (event.key === 'Enter' && dropDownItemIndex >= 0) {
+  //       clickDropDownItem(dropDownList[dropDownItemIndex])
+  //       setDropDownItemIndex(-1)
+  //     }
+  //   }
+  // }
 
   useEffect(showDropDownList, [inputValue], [isHaveInputValue])
+
+  useEffect(() => {
+    if (inputValue) {
+      searchList()
+    }
+  }, [inputValue])
 
   return (
     <header className="header">
@@ -222,20 +247,24 @@ function Header(props) {
             type="text"
             value={inputValue}
             onChange={changeInputValue}
-            onKeyUp={handleDropDownKey}
+            // onKeyUp={handleDropDownKey}
           />
           <img onClick={gotoSearch} className="search-icon" src={searchimg} />
         </div>
         {isHaveInputValue && (
           <ul className="dropdownbox">
-            {dropDownList.map((dropDownItem, dropDownIndex) => {
+            {search.length === 0 && (
+              <div className="dropDownItemIndex">해당하는 단어가 없습니다</div>
+            )}
+            {stationdropDownList.map((dropDownItem, dropDownIndex) => {
               return (
                 <li
                   key={dropDownIndex}
                   onClick={() => clickDropDownItem(dropDownItem)}
-                  onMouseOver={() => setDropDownItemIndex(dropDownIndex)}
+                  onMouseOver={() => setStationDropDownItemIndex(dropDownIndex)}
+                  onMouseLeave={() => setStationDropDownItemIndex(-1)}
                   className={
-                    dropDownItemIndex === dropDownIndex
+                    stationdropDownItemIndex === dropDownIndex
                       ? 'dropDownItemIndex selected'
                       : 'dropDownItemIndex'
                   }
@@ -247,7 +276,31 @@ function Header(props) {
                       marginRight: '5px'
                     }}
                   />
-                  {dropDownItem}
+                  {dropDownItem.content}
+                </li>
+              )
+            })}
+            <div className="accounts-title">Accounts</div>
+            {AccountdropDownList.map((dropDownItem, dropDownIndex) => {
+              return (
+                <li
+                  key={dropDownIndex}
+                  onClick={() => clickDropDownItem(dropDownItem)}
+                  onMouseOver={() => setAccountDropDownItemIndex(dropDownIndex)}
+                  onMouseLeave={() => setAccountDropDownItemIndex(-1)}
+                  className={
+                    accountdropDownItemIndex === dropDownIndex
+                      ? 'dropDownItemIndex selected'
+                      : 'dropDownItemIndex'
+                  }
+                >
+                  <div>
+                    <img src={dropDownItem.imgPath} className="dropdown-img" />
+                  </div>
+                  <div className="dropdown-accounts">
+                    <div className="dropdown-user">{dropDownItem.username}</div>
+                    <div className="dropdown-nick">{dropDownItem.nickname}</div>
+                  </div>
                 </li>
               )
             })}
