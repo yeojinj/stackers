@@ -4,6 +4,7 @@ import com.ssafy.stackers.auth.PrincipalDetails;
 import com.ssafy.stackers.model.Instrument;
 import com.ssafy.stackers.model.Member;
 import com.ssafy.stackers.model.Party;
+import com.ssafy.stackers.model.dto.ChangePasswordDto;
 import com.ssafy.stackers.model.dto.JoinDto;
 import com.ssafy.stackers.model.dto.LoginMemberDto;
 import com.ssafy.stackers.model.dto.MemberModifyDto;
@@ -53,10 +54,10 @@ public class MemberController {
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<?> changePassword(@RequestBody @Valid Map<String, String> map,
+    public ResponseEntity<?> changePassword(@RequestBody @Valid ChangePasswordDto changePasswordDto,
                                             @AuthenticationPrincipal PrincipalDetails principal) {
         Member member = memberService.getLoginMember(principal.getUsername());
-        memberService.setNewPassword(member.getUsername(), map.get("password"));
+        memberService.setNewPassword(member.getUsername(), changePasswordDto.getPassword());
         return new ResponseEntity<>("비밀번호 변경 완료", HttpStatus.OK);
     }
 
