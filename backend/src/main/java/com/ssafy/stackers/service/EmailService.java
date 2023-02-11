@@ -73,7 +73,7 @@ public class EmailService {
     public MimeMessage createEmailConfirmForm(String email)
         throws MessagingException {
         createCode(8);
-        String setFrom = "sb030329@gmail.com";      // 수정
+        String setFrom = "www.stackers.site@gmail.com";
         String toEmail = email;
         String title = "Stackers 회원가입 인증 번호";
 
@@ -88,7 +88,7 @@ public class EmailService {
     public MimeMessage createFindPasswordForm(String email)
         throws MessagingException {
         createCode(10);
-        String setFrom = "sb030329@gmail.com";      // 수정
+        String setFrom = "www.stackers.site@gmail.com";
         String toEmail = email;
         String title = "Stackers 임시 비밀번호";
 
