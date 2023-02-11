@@ -10,4 +10,5 @@ public interface InstrumentRepository extends JpaRepository<Instrument, Long> {
     Optional<Instrument> findById(Long id);
     Optional<Instrument> findByName(String name);
     List<Instrument> findAll();
+    boolean existsByName(String name);
 }
