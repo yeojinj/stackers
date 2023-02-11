@@ -6,10 +6,22 @@ import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined'
 import ArrowCircleUpOutlinedIcon from '@mui/icons-material/ArrowCircleUpOutlined'
 import ArrowCircleDownOutlinedIcon from '@mui/icons-material/ArrowCircleDownOutlined'
 import '../Station.css'
-function StationView() {
+import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+function StationView(props) {
+  const navigate = useNavigate()
+  const preUrl = useSelector((state) => {
+    return state.url.preUrl
+  })
+
   return (
     <div className="LeftStyle">
-      <CloseOutlinedIcon className="stationOutButton" />
+      <CloseOutlinedIcon
+        className="stationOutButton"
+        onClick={() => {
+          navigate(preUrl)
+        }}
+      />
       <div className="contentBox">
         <div className="videoBox">
           <img src={station} alt="station" className="videoBox" />
@@ -19,8 +31,22 @@ function StationView() {
         </div>
       </div>
       <div className="prevnextbutton">
-        <ArrowCircleUpOutlinedIcon sx={{ fontSize: 30 }} />
-        <ArrowCircleDownOutlinedIcon sx={{ fontSize: 30 }} />
+        <ArrowCircleUpOutlinedIcon
+          sx={{ fontSize: 30 }}
+          style={{ cursor: 'pointer' }}
+          onClick={() => {
+            // 이전 페이지 이동 url
+            navigate(`/StationRoom/${(props.stationId % 2) + 1}`)
+          }}
+        />
+        <ArrowCircleDownOutlinedIcon
+          sx={{ fontSize: 30 }}
+          style={{ cursor: 'pointer' }}
+          onClick={() => {
+            // 다음 페이지 이동 url
+            navigate(`/StationRoom/${(props.stationId % 2) + 1}`)
+          }}
+        />
       </div>
     </div>
   )

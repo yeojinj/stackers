@@ -1,6 +1,7 @@
 package com.ssafy.stackers.controller;
 
 import com.ssafy.stackers.auth.PrincipalDetails;
+import com.ssafy.stackers.config.jwt.JwtProperties;
 import com.ssafy.stackers.model.Member;
 import com.ssafy.stackers.model.dto.JoinDto;
 import com.ssafy.stackers.model.dto.LoginDto;
@@ -9,6 +10,7 @@ import com.ssafy.stackers.model.dto.TokenDto;
 import com.ssafy.stackers.service.AuthService;
 import com.ssafy.stackers.service.MemberService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,15 +33,20 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<TokenDto> login(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<?> login(HttpServletResponse response,
+        @RequestBody LoginDto loginDto) {
         TokenDto tokenDto = authService.login(loginDto);
-        return new ResponseEntity<>(tokenDto, HttpStatus.OK);
+        response.setHeader(JwtProperties.AUTHORIZATION_HEADER, tokenDto.getAccessToken());
+        response.setHeader(JwtProperties.REFRESH_HEADER, tokenDto.getRefreshToken());
+
+//        return new ResponseEntity<>(tokenDto, HttpStatus.OK);
+        return new ResponseEntity<>("로그인 성공", HttpStatus.OK);
     }
 
-    @PostMapping("/accessToken")
-    public TokenDto reissueAccessToken(@RequestBody Map<String, String> map) {
-        TokenDto tokenDto = authService.reissueAccessToken(map.get("token"));
-        return tokenDto;
-    }
+//    @PostMapping("/accessToken")
+//    public TokenDto reissueAccessToken(@RequestBody Map<String, String> map) {
+//        TokenDto tokenDto = authService.reissueAccessToken(map.get("token"));
+//        return tokenDto;
+//    }
 
 }

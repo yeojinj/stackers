@@ -20,15 +20,15 @@
 }
 
 .contentBox {
-  margin: 10% auto 10% 15%;
+  margin: 10% auto 5% 15%;
   /* border: white 1px solid; */
   display: flex;
   /* width: 60%; */
 }
 
 .videoBox {
-  height: 100%;
-  width: 90%;
+  height: 720px;
+  width: 405px;
   /* backgroundColor: white; */
   color: black;
 }
@@ -78,6 +78,7 @@
 
 .stationOutButton {
   margin: 10px 0px 0px 10px;
+  cursor: pointer;
 }
 
 .station-information {

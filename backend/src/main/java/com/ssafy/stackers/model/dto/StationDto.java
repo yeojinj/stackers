@@ -8,7 +8,7 @@ import lombok.ToString;
 public class StationDto {
     private String content;
     private String music;
-    private Long instrumentId;
+    private String instrument;
     private int heartCnt;
     private int remainDepth;
     private int isPublic;
@@ -19,7 +19,7 @@ public class StationDto {
     private String videoName;
 
     public StationDto(String content, String music, int heartCnt, int remainDepth, int isPublic,
-        int isComplete, boolean isDelete, List<String> tags, Long prevStationId) {
+        int isComplete, boolean isDelete, List<String> tags, Long prevStationId, String videoName) {
         this.content = content;
         this.music = music;
         this.heartCnt = heartCnt;
@@ -29,5 +29,6 @@ public class StationDto {
         this.isDelete = isDelete;
         this.tags = tags;
         this.prevStationId = prevStationId;
+        this.videoName = videoName;
     }
 }

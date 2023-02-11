@@ -1,25 +1,48 @@
 /* eslint-disable */
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect, useCallback } from 'react'
 import './Record.css'
 import { ReactMediaRecorder } from 'react-media-recorder'
 import Modal from '@mui/material/Modal'
+import { IconButton } from '@mui/material'
+import StopCircleIcon from '@mui/icons-material/StopCircle'
+import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite'
 import Timer from './Timer'
-function Record(props) {
-  const VideoPreview = ({ stream }) => {
-    const videoRef = useRef(null)
 
-    useEffect(() => {
-      if (videoRef.current && stream) {
-        videoRef.current.srcObject = stream
-      }
-    }, [stream])
-    if (!stream) {
-      return null
-    }
-    return <video ref={videoRef} width={500} height={500} autoPlay controls />
+function blobToBase64(blob) {
+  return new Promise((resolve, _) => {
+    const reader = new FileReader()
+    reader.onloadend = () => resolve(reader.result)
+    reader.readAsDataURL(blob)
+  })
+}
+
+function Record(props) {
+  const videoRef = useRef(null)
+  const stackRef = useRef(null)
+
+  useEffect(() => {
+    getVideo()
+  }, [videoRef])
+  const getVideo = () => {
+    navigator.mediaDevices
+      .getUserMedia({
+        video: { width: 405, height: 720 }
+      })
+      .then((stream) => {
+        const video = videoRef.current
+        video.srcObject = stream
+        video.play()
+      })
+      .catch((err) => {
+        console.error(err)
+      })
   }
+
   const [enable, setEnable] = useState(true)
   const [open, setOpen] = useState(false)
+  const handleEnable = () => {
+    setEnable(!enable)
+  }
   const setStack = (src) => {
     props.stack(src)
   }
@@ -32,16 +55,18 @@ function Record(props) {
   const initialValue = 3000
 
   let [active, setActive] = useState(false)
-
-  const togglecounter = () => {
-    setActive((s) => !s)
+  const activeHandle = () => {
+    setActive(!active)
   }
 
   return (
-    <div className="record">
+    <div className="recordRoom">
       <ReactMediaRecorder
         onStop={async (blobUrl, blob) => {
           await setStack(blob)
+          const video = videoRef.current
+          video.srcObject = stream
+          video.play()
         }}
         video
         blobPropertyBag={{
@@ -55,43 +80,67 @@ function Record(props) {
           mediaBlobUrl
         }) => {
           return (
-            <div>
-              <Modal open={open}>
-                <Timer active={open} initialValue={initialValue} />
+            <div className="recordRoom">
+              <Modal className="recordModal" open={open}>
+                <Timer
+                  classNAme="recordTimer"
+                  active={open}
+                  initialValue={initialValue}
+                />
               </Modal>
-              <p>{status}</p>
+
+              {active && (
+                <video
+                  className="stackVideo"
+                  ref={stackRef}
+                  src={mediaBlobUrl}
+                  width={405}
+                  height={720}
+                  style={{ objectFit: 'cover' }}
+                  controls
+                />
+              )}
+              {!active && (
+                <video
+                  className="streamingRef"
+                  ref={videoRef}
+                  src={previewStream}
+                  autoPlay
+                />
+              )}
+              {/* {enable && <VideoPreview stream={previewStream} />} */}
               <div className="box">
-                <button
-                  onClick={() => {
-                    handleOpen()
-                    setTimeout(handleClose, 3000)
-                    setTimeout(startRecording, 3000)
-                    setTimeout(stopRecording, 60000)
-                  }}
-                >
-                  Start Recording
-                </button>
-                <button
-                  onClick={() => {
-                    stopRecording()
-                  }}
-                >
-                  Stop Recording
-                </button>
-                <button></button>
-                {/* <button
-                  onClick={() => {
-                    startRecording()
-                    setTimeout(stopRecording, 60000)
-                    setEnable(!enable)
-                  }}
-                >
-                  togglestreaming
-                </button> */}
+                {enable && (
+                  <IconButton
+                    fontSize="Large"
+                    color="primary"
+                    onClick={() => {
+                      handleEnable()
+                      activeHandle()
+                      handleOpen()
+                      getVideo()
+                      setTimeout(startRecording, 3000)
+                      setTimeout(handleClose, 3000)
+                      setTimeout(stopRecording, 60000).then(setActive(false))
+                    }}
+                  >
+                    <PlayCircleFilledWhiteIcon />
+                  </IconButton>
+                )}
+                {!enable && (
+                  <IconButton
+                    fontSize="Large"
+                    color="primary"
+                    onClick={() => {
+                      handleEnable()
+                      activeHandle()
+                      stopRecording()
+                    }}
+                  >
+                    <StopCircleIcon />
+                  </IconButton>
+                )}
               </div>
-              {/* <audio src={mediaBlobUrl} controls autoPlay loop /> */}
-              <video className="stackVideo" src={mediaBlobUrl} controls />
-              {enable && <VideoPreview stream={previewStream} />}
             </div>
           )
         }}

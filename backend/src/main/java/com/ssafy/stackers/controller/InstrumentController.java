@@ -8,10 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @Tag(name = "Instrument", description = "악기 관련 API")
@@ -25,7 +24,13 @@ public class InstrumentController {
     @Operation(summary = "악기 업로드")
     @PostMapping
     public ResponseEntity<?> createInstrument(@RequestBody Instrument instrument) {
-        instrumentService.save(instrument);
+        instrumentService.addInstrument(instrument.getName());
         return new ResponseEntity<>("악기 생성 완료!\uD83D\uDE0D", HttpStatus.OK);
+    }
+
+    @Operation(summary = "악기 리스트 조회")
+    @GetMapping
+    public List<Instrument> getInstrument(){
+        return instrumentService.getInstrument();
     }
 }

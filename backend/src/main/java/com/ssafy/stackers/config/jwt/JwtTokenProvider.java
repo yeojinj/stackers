@@ -34,7 +34,7 @@ public class JwtTokenProvider implements InitializingBean {
     @Autowired
     private RefreshRedisRepository refreshTokenRedisRepository;
 
-    private final long tokenValidityInMs = 1000 * 60 * 5;
+    private final long tokenValidityInMs = 1000 * 60 * 1;
     private final long refreshTokenValidityInMs = 1000 * 60 * 30;
 
     private Key key;
@@ -76,7 +76,7 @@ public class JwtTokenProvider implements InitializingBean {
 
     @Transactional
     public String reissueRefreshToken(String refreshToken) throws RuntimeException {
-        Authentication authentication = getAuthentication(refreshToken);
+        Authentication authentication = getAuthenticationWithNoAuth(refreshToken);
 
         RefreshRedisToken findRefreshToken = refreshTokenRedisRepository.findById(
                 authentication.getName())

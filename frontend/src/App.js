@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import router from './router.js'
 import { RouterProvider } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { LogInState } from './store.js'
+import { logIn, LogInState, CreateInst } from './store.js'
 import axios from 'axios'
 
 function App() {
@@ -11,17 +11,17 @@ function App() {
     return state.user.isLogged
   })
 
-  const total = useSelector((state) => {
+  const loginUser = useSelector((state) => {
     return state.user
   })
+  // console.log(loginUser)
   // console.log(localStorage.getItem('refreshToken'))
   const dispatch = useDispatch()
   useEffect(() => {
-    // console.log(isLogged)
     if (isLogged) {
       axios({
         method: 'GET',
-        url: '/api/v1/user',
+        url: '/api/member/user',
         headers: {
           Authorization: localStorage.accessToken
         }
@@ -35,6 +35,44 @@ function App() {
         })
     }
   }, [isLogged])
+
+  useEffect(() => {
+    // console.log(localStorage.getItem('accessToken'))
+    const Token = localStorage.getItem('accessToken')
+    // console.log(Token)
+    if (isLogged || Token) {
+      axios({
+        method: 'GET',
+        url: '/api/member/user',
+        headers: {
+          Authorization: Token
+        }
+      })
+        .then((response) => {
+          // console.log(response.data)
+          dispatch(logIn())
+          dispatch(LogInState(response.data))
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    }
+  })
+  useEffect(() => {
+    axios({
+      method: 'GET',
+      url: '/api/instrument',
+      headers: {
+        'Content-Type': `multipart/form-data`
+      }
+    })
+      .then((response) => {
+        dispatch(CreateInst(response.data))
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  })
 
   return (
     <div className="App">

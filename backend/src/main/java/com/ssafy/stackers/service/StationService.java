@@ -8,28 +8,26 @@ import com.ssafy.stackers.model.dto.MainStationDto;
 import com.ssafy.stackers.model.dto.MusicianDto;
 import com.ssafy.stackers.model.dto.StationDetailDto;
 import com.ssafy.stackers.model.dto.StationDto;
-import com.ssafy.stackers.repository.CommentRepository;
 import com.ssafy.stackers.repository.StationRepository;
-import com.ssafy.stackers.repository.TagListRepository;
 import com.ssafy.stackers.utils.error.ErrorCode;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 public class StationService {
 
     @Autowired
     private StationRepository stationRepository;
-    @Autowired
-    private CommentRepository commentRepository;
-    @Autowired
-    private TagListRepository tagListRepository;
     @Autowired
     private InstrumentService instrumentService;
     @Autowired
@@ -39,41 +37,11 @@ public class StationService {
     @Autowired
     private CommentService commentService;
     @Autowired
-    private MemberService memberService;
-
-    @Transactional
-    public Station save(StationDto stationDto, Video video, Member member) {
-        // 악기 찾기
-        Instrument instrument = instrumentService.findById(stationDto.getInstrumentId());
-
-        // 태그 저장
-        List<Tag> tags = tagService.save(stationDto.getTags());
-
-        // 스테이션 DB 저장
-        Station s = Station.builder()
-            .content(stationDto.getContent())
-            .music(stationDto.getMusic())
-            .remainDepth(stationDto.getRemainDepth())
-            .prevStationId((Long) stationDto.getPrevStationId())
-            .member(member)
-            .video(video)
-            .instrument(instrument)
-            .isPublic(stationDto.getIsPublic() == 0 ? false : true)
-            .isComplete(
-                stationDto.getRemainDepth() == 0 || stationDto.getIsComplete() == 1 ? true : false)
-            .heartCnt(0)
-            .isDelete(false)
-            .build();
-
-        stationRepository.save(s);
-        tagListService.save(tags, s);
-
-        return s;
-    }
+    private VideoService videoService;
 
     public Station findById(Long id) {
         stationRepository.findById(id)
-            .orElseThrow(() -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
         return stationRepository.findById(id).get();
     }
 
@@ -81,20 +49,68 @@ public class StationService {
         return stationRepository.existsById(id);
     }
 
+    /**
+     * 스테이션 업로드
+     */
+    @Transactional
+    public Station save(StationDto stationDto, MultipartFile file, Member member, Instrument instrument){
+        // 태그 저장
+        List<Tag> tags = tagService.save(stationDto.getTags());
+
+        // 스테이션 DB 저장
+        Station s = Station.builder()
+                .content(stationDto.getContent())
+                .music(stationDto.getMusic())
+                .remainDepth(stationDto.getRemainDepth())
+                .prevStationId((Long) stationDto.getPrevStationId())
+                .member(member)
+                .instrument(instrument)
+                .isPublic(stationDto.getIsPublic() == 0 ? false : true)
+                .isComplete(
+                        stationDto.getRemainDepth() == 0 || stationDto.getIsComplete() == 1 ? true : false)
+                .heartCnt(0)
+                .isDelete(false)
+                .build();
+
+        stationRepository.save(s);
+        tagListService.save(tags, s);
+
+        Long prevStationId = s.getPrevStationId();
+        String prevPath = null;
+        // 이전 스테이션이 있을 경우 해당 스테이션의 비디오 경로 가져오기
+        if(prevStationId != -1) {
+            Station ps = findById(prevStationId);
+            prevPath = ps.getVideo().getVideoPath();
+        }
+
+        // 비디오 저장
+        Video video = null;
+        try {
+            video = videoService.uploadVideoToS3(file, stationDto.getVideoName(), s.getPrevStationId(), s.getRemainDepth(), prevPath);
+            s.updateVideo(video);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return s;
+    }
+
+    /**
+     * 스테이션 상세 조회
+     */
     public StationDetailDto getStationDetail(Long id) {
 
         Station s = findById(id);
-        System.out.println(s.getContent());
         StationDto stationInfo = getStationShortInfo(id);
 
         Member w = s.getMember();
         LoginMemberDto writer = new LoginMemberDto(w.getId(), w.getUsername(), w.getNickname(),
-            w.getImgPath());
+                w.getImgPath());
 
         List<CommentDetailDto> comments = commentService.getComments(s);
         List<MusicianDto> musicians = getMusicians(s);
 
-        return new StationDetailDto(id, stationInfo, s.getRegTime(), comments.size(), comments, musicians, writer);
+        return new StationDetailDto(id, stationInfo, s.getRegTime(), s.getVideo().getVideoPath(), comments.size(), comments, musicians, writer);
     }
 
     /**
@@ -108,9 +124,9 @@ public class StationService {
      * 로그인 한 회원의 메인 페이지 스테이션 조회
      */
     public List<Station> findByIsPublicAndIsCompleteAndMember(boolean isPublic, boolean isCompleted,
-        Member member) {
+                                                              Member member) {
         return stationRepository.findByIsPublicAndIsCompleteAndMemberIsNot(isPublic, isCompleted,
-            member);
+                member);
     }
 
     /**
@@ -141,14 +157,20 @@ public class StationService {
         return stationList;
     }
 
+    /**
+     * 메인페이지에 뿌릴 dto 변환 함수
+     */
     public StationDto getStationShortInfo(Long id) {
         Station s = findById(id);
         List<String> tags = tagService.findNameById(tagListService.findByStation(s));
         return new StationDto(s.getContent(), s.getMusic(), s.getHeartCnt(), s.getRemainDepth(),
-            s.isPublic() ? 1 : 0, s.isComplete() ? 1 : 0, s.isComplete(), tags,
-            s.getPrevStationId());
+                s.isPublic() ? 1 : 0, s.isComplete() ? 1 : 0, s.isComplete(), tags,
+                s.getPrevStationId(), s.getVideo().getVideoName());
     }
 
+    /**
+     * 연주자 목록 추출 메서드
+     */
     public List<MusicianDto> getMusicians(Station start){
         List<MusicianDto> musicians = new ArrayList<>();
         while (true){
@@ -161,5 +183,10 @@ public class StationService {
         return musicians;
     }
 
-
+    @Transactional
+    public void deleteStation(int stationId) throws Exception {
+        Station station = findById((long) stationId);
+        station.deleteStation(true);
+        videoService.deleteVideoFromS3(station.getVideo().getVideoPath());
+    }
 }

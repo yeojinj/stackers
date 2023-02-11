@@ -1,135 +1,117 @@
 import React, { useState, useEffect, useRef } from 'react'
 
-import Header from '../../components/Header'
-import Footer from '../../components/Footer'
-import Login from '../sign_folder/LogIn/LogIn'
 // import StationList from '../../components/station/StationList'
 import StationListItem from '../../components/station/StationListItem'
 import '../../styles/mainroom.css'
 import './carousel-style.css'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import axios from 'axios'
+// import axios from 'axios'
 
 function MainRoom() {
   const [completedStation, setStation] = useState([])
-  const [modalOpen, setModalOpen] = useState(false)
 
   // 처음에 useState 로 station 빈 배열
   // axios 로 setStation 함수로 station에 조회 데이터 넣기
   // station.map으로 하나씩 props 로 stastionListItem 에 전달
 
   // 스테이션 조회 axios
+  // 현재 영상이 없어서 더미데이터 넣어줌
+  // 서버와 다시 통신 후, 아래 주석풀기
   async function stationList() {
-    await axios
-      .get('/api/station/popular')
-      .then((res) => {
-        console.log('[상위 스테이션 조회] ', res.data)
-        // 서버 통신 되면 아래 주석 풀고 그 아래 리스트 지우기
-        // setStation(res.data)
-        setStation([
-          {
-            id: 5,
-            content: 'xptms',
-            tags: ['happy', 'mood'],
-            video: {
-              id: 5,
-              videoPath:
-                'https://stackers.bucket.s3.ap-northeast-2.amazonaws.com/static/videos/2fefd436-35c9-4f55-a2e3-cfe6328e3d13a.mp4',
-              videoName: null,
-              videoOriName: '테스트용 비디',
-              thumbnailPath: null
-            }
-          },
-          {
-            id: 6,
-            content: '향기로운 음악의 세계~',
-            tags: ['smell_so_good', 'umm'],
-            video: {
-              id: 6,
-              videoPath:
-                'https://stackers.bucket.s3.ap-northeast-2.amazonaws.com/static/videos/7bdc5892-05c4-4547-b3e0-41d87397579dbJVSGr8VTiyz7a31JmZDLYCHMJtY0ySLZyY2ImqYWIojM9nUVTJGQNu8GKy8Zrdt.mp4',
-              videoName: null,
-              videoOriName: '2023_02_07_11:08',
-              thumbnailPath: null
-            }
-          },
-          {
-            id: 7,
-            content: '향기로운 음악의 세계~',
-            tags: ['smell_so_good', 'umm'],
-            video: {
-              id: 7,
-              videoPath:
-                'https://stackers.bucket.s3.ap-northeast-2.amazonaws.com/static/videos/215eaa7d-8d58-4de2-a495-2931db5bbb37bJVSGr8VTiyz7a31JmZDLYCHMJtY0ySLZyY2ImqYWIojM9nUVTJGQNu8GKy8Zrdt.mp4',
-              videoName: null,
-              videoOriName: '2023_02_07_11:08',
-              thumbnailPath: null
-            }
-          },
-          {
-            id: 8,
-            content: '향기로운 음악의 세계~',
-            tags: ['smell_so_good', 'umm'],
-            video: {
-              id: 8,
-              videoPath:
-                'https://stackers.bucket.s3.ap-northeast-2.amazonaws.com/static/videos/215eaa7d-8d58-4de2-a495-2931db5bbb37bJVSGr8VTiyz7a31JmZDLYCHMJtY0ySLZyY2ImqYWIojM9nUVTJGQNu8GKy8Zrdt.mp4',
-              videoName: null,
-              videoOriName: '2023_02_07_11:08',
-              thumbnailPath: null
-            }
-          },
-          {
-            id: 9,
-            content: '향기로운 음악의 세계~ 같이 들어요',
-            tags: ['smell_so_good', 'umm', 'yahoo'],
-            video: {
-              id: 9,
-              videoPath:
-                'https://stackers.bucket.s3.ap-northeast-2.amazonaws.com/static/videos/215eaa7d-8d58-4de2-a495-2931db5bbb37bJVSGr8VTiyz7a31JmZDLYCHMJtY0ySLZyY2ImqYWIojM9nUVTJGQNu8GKy8Zrdt.mp4',
-              videoName: null,
-              videoOriName: '2023_02_07_11:08',
-              thumbnailPath: null
-            }
-          },
-          {
-            id: 9,
-            content: '향기로운 음악의 세계~ 같이 들어요',
-            tags: ['smell_so_good', 'umm', 'yahoo'],
-            video: {
-              id: 9,
-              videoPath:
-                'https://stackers.bucket.s3.ap-northeast-2.amazonaws.com/static/videos/215eaa7d-8d58-4de2-a495-2931db5bbb37bJVSGr8VTiyz7a31JmZDLYCHMJtY0ySLZyY2ImqYWIojM9nUVTJGQNu8GKy8Zrdt.mp4',
-              videoName: null,
-              videoOriName: '2023_02_07_11:08',
-              thumbnailPath: null
-            }
-          },
-          {
-            id: 9,
-            content: '향기로운 음악의 세계~ 같이 들어요',
-            tags: ['smell_so_good', 'umm', 'yahoo'],
-            video: {
-              id: 9,
-              videoPath:
-                'https://stackers.bucket.s3.ap-northeast-2.amazonaws.com/static/videos/215eaa7d-8d58-4de2-a495-2931db5bbb37bJVSGr8VTiyz7a31JmZDLYCHMJtY0ySLZyY2ImqYWIojM9nUVTJGQNu8GKy8Zrdt.mp4',
-              videoName: null,
-              videoOriName: '2023_02_07_11:08',
-              thumbnailPath: null
-            }
-          }
-        ])
-        console.log('[스테이션 변수에 들어갔는지 확인]', completedStation)
-      })
-      .catch((err) => console.log(err))
+    setStation([
+      {
+        id: 5,
+        content: 'xptms',
+        tags: ['happy', 'mood'],
+        video: {
+          id: 5,
+          videoPath:
+            'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
+          videoName: null,
+          videoOriName: '테스트용 비디',
+          thumbnailPath: null
+        }
+      },
+      {
+        id: 6,
+        content: '향기로운 음악의 세계~',
+        tags: ['smell_so_good', 'umm'],
+        video: {
+          id: 6,
+          videoPath:
+            'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
+          videoName: null,
+          videoOriName: '2023_02_07_11:08',
+          thumbnailPath: null
+        }
+      },
+      {
+        id: 7,
+        content: '향기로운 음악의 세계~',
+        tags: ['smell_so_good', 'umm'],
+        video: {
+          id: 7,
+          videoPath:
+            'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
+          videoName: null,
+          videoOriName: '2023_02_07_11:08',
+          thumbnailPath: null
+        }
+      },
+      {
+        id: 8,
+        content: '향기로운 음악의 세계~',
+        tags: ['smell_so_good', 'umm'],
+        video: {
+          id: 8,
+          videoPath:
+            'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
+          videoName: null,
+          videoOriName: '2023_02_07_11:08',
+          thumbnailPath: null
+        }
+      },
+      {
+        id: 9,
+        content: '향기로운 음악의 세계~ 같이 들어요',
+        tags: ['smell_so_good', 'umm', 'yahoo'],
+        video: {
+          id: 9,
+          videoPath:
+            'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
+          videoName: null,
+          videoOriName: '2023_02_07_11:08',
+          thumbnailPath: null
+        }
+      },
+      {
+        id: 9,
+        content: '향기로운 음악의 세계~ 같이 들어요',
+        tags: ['smell_so_good', 'umm', 'yahoo'],
+        video: {
+          id: 9,
+          videoPath:
+            'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
+          videoName: null,
+          videoOriName: '2023_02_07_11:08',
+          thumbnailPath: null
+        }
+      },
+      {
+        id: 9,
+        content: '향기로운 음악의 세계~ 같이 들어요',
+        tags: ['smell_so_good', 'umm', 'yahoo'],
+        video: {
+          id: 9,
+          videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+          videoName: null,
+          videoOriName: '2023_02_07_11:08',
+          thumbnailPath: null
+        }
+      }
+    ])
   }
-
-  const showModal = () => {
-    setModalOpen(true)
-    document.body.style.overflow = 'hidden'
-  }
-
   // 렌더링 후 한번 실행(axios)
   useEffect(() => {
     stationList()
@@ -139,14 +121,11 @@ function MainRoom() {
   useEffect(() => {
     console.log('[useEffect 실행]]', completedStation)
   }, [completedStation])
-
   return (
     <div className="main-room">
-      {modalOpen && <Login setModalOpen={setModalOpen} />}
-      <Header openModal={showModal} />
       <div className="main">
         <div className="station-center">
-          <p className="list-title">당신이 놓친 스테이션!</p>
+          <div className="chip top">⚡️ 당신이 놓친 스테이션</div>
           <div className="parent">
             <Carousel>
               {completedStation.map((station, i) => {
@@ -162,45 +141,93 @@ function MainRoom() {
             {/* <StationList /> */}
           </div>
         </div>
-        <div className="station-center">
-          <p className="list-title">당신을 기다리는 스테이션!</p>
-          <div className="station-scroll">
-            {completedStation.map((station, i) => {
-              return (
-                <StationListItem key={i} isRanking={false} station={station} />
-              )
-            })}
-            {/* <StationList /> */}
+        <FadeContent>
+          <div className="station-center">
+            <div
+              className="chip top"
+              style={{
+                marginLeft: '80%'
+              }}
+            >
+              당신을 기다리는 스테이션 🪐
+            </div>
+            <div className="parent">
+              <Carousel>
+                {completedStation.map((station, i) => {
+                  return (
+                    <StationListItem
+                      key={i}
+                      isRanking={false}
+                      station={station}
+                    />
+                  )
+                })}
+              </Carousel>
+            </div>
           </div>
-        </div>
-        <div className="station-center">
-          <p className="list-title">지금 가장 뜨거운 영상🔥</p>
-          <div className="station-scroll">
-            {completedStation.map((station, i) => {
-              return (
-                <StationListItem key={i} isRanking={true} station={station} />
-              )
-            })}
-            {/* axios 로 받은 비디오를 화면에 출력해보기 */}
-            {/* {station.map((item, key) => (
-              <div key={key}>
-                <video
-                  src="C:\\stackers\\videos\\bJVSGr8VTiyz7a31JmZDLYCHMJtY0ySLZyY2ImqYWIojM9nUVTJGQNu8GKy8Zrdt.mp4"
-                  autoPlay
-                ></video>
+        </FadeContent>
+        <div className="wave">
+          <FadeContent>
+            <div className="station-center">
+              <div
+                className="chip bottom"
+                style={{
+                  transform: ' scale(1.05) rotate(-2.5deg)'
+                }}
+              >
+                🔥 지금 가장 뜨거운 스테이션
               </div>
-            ))} */}
-            {/* <StationList isRanking={true} /> */}
-          </div>
+              <div className="parent">
+                <Carousel>
+                  {completedStation.map((station, i) => {
+                    return (
+                      <StationListItem
+                        key={i}
+                        index={i + 1}
+                        isRanking={true}
+                        station={station}
+                      />
+                    )
+                  })}
+                </Carousel>
+              </div>
+            </div>
+          </FadeContent>
+          <FadeContent>
+            <div className="station-center" style={{ color: 'white' }}>
+              <div
+                className="chip bottom"
+                style={{
+                  marginLeft: '75%',
+                  transform: 'scale(1.05) rotate(2.5deg)'
+                }}
+              >
+                당신이 좋아하는 스태커들의 이야기 💫
+              </div>
+              <div className="parent">
+                <Carousel>
+                  {completedStation.map((station, i) => {
+                    return (
+                      <StationListItem
+                        key={i}
+                        isRanking={true}
+                        station={station}
+                      />
+                    )
+                  })}
+                </Carousel>
+              </div>
+            </div>
+          </FadeContent>
         </div>
       </div>
-      <Footer />
     </div>
   )
 }
 
 export default MainRoom
 
+/* 캐러셀 관련 함수 */
 const Carousel = (props) => {
   let ref = useRef()
   const [prev, setPrev] = useState(true)
@@ -228,7 +255,7 @@ const Carousel = (props) => {
           checkButtons(ref.offsetWidth, ref.offsetWidth)
         }}
       >
-        <ExpandMoreIcon style={{ color: 'gray' }} />
+        <ExpandMoreIcon style={{ transform: 'rotate(90deg)' }} />
       </div>
       <div
         className={`btn next ${next} ? 'disable' : ''}`}
@@ -238,8 +265,46 @@ const Carousel = (props) => {
           checkButtons(ref.offsetWidth, ref.offsetWidth)
         }}
       >
-        <ExpandLessIcon style={{ color: 'gray' }} />
+        <ExpandLessIcon style={{ transform: 'rotate(90deg)' }} />
       </div>
+    </div>
+  )
+}
+
+/* fade animation 함수 */
+const FadeContent = ({ children }) => {
+  const wrapper = useRef()
+
+  useEffect(() => {
+    animateFading(wrapper.current)
+  }, [])
+
+  const animateFading = (element) => {
+    const fadeOnScrollOptions = {
+      threshold: 0.3,
+      rootMargin: '0px 0px -100px 0px'
+    }
+
+    const fadeOnScrollObserver = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            console.log('isinteresting')
+          } else {
+            entry.target.classList.add('appear')
+            observer.unobserve(entry.target)
+          }
+        })
+      },
+      fadeOnScrollOptions
+    )
+
+    fadeOnScrollObserver.observe(element)
+  }
+
+  return (
+    <div className="fade-in" ref={wrapper}>
+      {children}
     </div>
   )
 }

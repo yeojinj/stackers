@@ -1,11 +1,163 @@
-import React, { useState } from 'react'
-import Header from '../../components/Header'
-import Footer from '../../components/Footer'
+import React, { useState, useEffect } from 'react'
 import AccountListItem from '../../components/account/AccountListItem'
 import '../../styles/searchview.css'
 import StationListItem from '../../components/station/StationListItem'
+import axios from 'axios'
+// import { useLocation } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 function SearchView() {
+  const token = localStorage.getItem('accessToken')
+  // const location = useLocation()
+  // const keyword = location.state.keyword
+  const [search, setSearch] = useState([])
+  const keyword = useSelector((state) => {
+    return state.SearchKeyword.keyword
+  })
+  // 더미데이터, 연동시 삭제
+  const station = [
+    {
+      id: 5,
+      content: 'xptms',
+      tags: ['happy', 'mood'],
+      video: {
+        id: 5,
+        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+        videoName: null,
+        videoOriName: '테스트용 비디',
+        thumbnailPath: null
+      }
+    },
+    {
+      id: 6,
+      content: '향기로운 음악의 세계~',
+      tags: ['smell_so_good', 'umm'],
+      video: {
+        id: 6,
+        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+        videoName: null,
+        videoOriName: '2023_02_07_11:08',
+        thumbnailPath: null
+      }
+    },
+    {
+      id: 7,
+      content: '향기로운 음악의 세계~',
+      tags: ['smell_so_good', 'umm'],
+      video: {
+        id: 7,
+        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+        videoName: null,
+        videoOriName: '2023_02_07_11:08',
+        thumbnailPath: null
+      }
+    },
+    {
+      id: 8,
+      content: '향기로운 음악의 세계~',
+      tags: ['smell_so_good', 'umm'],
+      video: {
+        id: 8,
+        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+        videoName: null,
+        videoOriName: '2023_02_07_11:08',
+        thumbnailPath: null
+      }
+    },
+    {
+      id: 9,
+      content: '향기로운 음악의 세계~ 같이 들어요',
+      tags: ['smell_so_good', 'umm', 'yahoo'],
+      video: {
+        id: 9,
+        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+        videoName: null,
+        videoOriName: '2023_02_07_11:08',
+        thumbnailPath: null
+      }
+    },
+    {
+      id: 10,
+      content: '향기로운 음악의 세계~ 같이 들어요',
+      tags: ['smell_so_good', 'umm', 'yahoo'],
+      video: {
+        id: 10,
+        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+        videoName: null,
+        videoOriName: '2023_02_07_11:08',
+        thumbnailPath: null
+      }
+    },
+    {
+      id: 11,
+      content: '향기로운 음악의 세계~ 같이 들어요',
+      tags: ['smell_so_good', 'umm', 'yahoo'],
+      video: {
+        id: 11,
+        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+        videoName: null,
+        videoOriName: '2023_02_07_11:08',
+        thumbnailPath: null
+      }
+    },
+    {
+      id: 12,
+      content: '향기로운 음악의 세계~ 같이 들어요',
+      tags: ['smell_so_good', 'umm', 'yahoo'],
+      video: {
+        id: 12,
+        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+        videoName: null,
+        videoOriName: '2023_02_07_11:08',
+        thumbnailPath: null
+      }
+    },
+    {
+      id: 13,
+      content: '향기로운 음악의 세계~ 같이 들어요',
+      tags: ['smell_so_good', 'umm', 'yahoo'],
+      video: {
+        id: 13,
+        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+        videoName: null,
+        videoOriName: '2023_02_07_11:08',
+        thumbnailPath: null
+      }
+    },
+    {
+      id: 14,
+      content: '향기로운 음악의 세계~ 같이 들어요',
+      tags: ['smell_so_good', 'umm', 'yahoo'],
+      video: {
+        id: 14,
+        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+        videoName: null,
+        videoOriName: '2023_02_07_11:08',
+        thumbnailPath: null
+      }
+    }
+  ]
+
+  // 검색키워드로 axios 요청하기
+  async function searchList() {
+    console.log('[스토어에서 가져온 키워드]', keyword)
+    await axios
+      .get(`/api/search/${keyword}`, {
+        headers: {
+          Authorization: token
+        }
+      })
+      .then((res) => {
+        setSearch(res.data)
+        console.log('받아온 검색결과들', search)
+      })
+      .catch((err) => console.log(err))
+  }
+
+  useEffect(() => {
+    searchList()
+  }, [keyword])
+
   const [currentTab, clickTab] = useState(0)
 
   const moveStack = () => {
@@ -17,12 +169,16 @@ function SearchView() {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
   }
 
+  // 연동시 주석해제
   const searchResults = () => {
-    const resultsListVideo = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
     const resultsListAccount = [1, 2, 3, 4, 5, 6, 7]
+    // const resultsListStation = search.stationList
+    // const resultsListAccount = search.memberList
 
-    const cutVideoList = resultsListVideo.slice(0, 8)
+    const cutVideoList = station.slice(0, 8)
     const cutAccountList = resultsListAccount.slice(0, 4)
+    // const cutVideoList = resultsListStation.slice(0, 8)
+    // const cutAccountList = resultsListAccount.slice(0, 4)
 
     return (
       <>
@@ -37,7 +193,11 @@ function SearchView() {
             {cutVideoList.map((result, i) => {
               return (
                 <div key={i}>
-                  <StationListItem isSearch={true} />
+                  <StationListItem
+                    isSearch={true}
+                    isRanking={false}
+                    station={result}
+                  />
                 </div>
               )
             })}
@@ -83,22 +243,29 @@ function SearchView() {
   }
 
   const searchStacks = () => {
-    const resultsListVideo = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
     return (
       <>
         <div className="popular-tap">
           <div className="popular-video">
-            {resultsListVideo.map((result, i) => {
+            {/* 연동시 주석해제 */}
+            {/* {resultsListStation.map((result, i) => { */}
+            {station.map((result, i) => {
               return (
                 <div key={i}>
-                  <StationListItem isSearch={true} />
+                  <StationListItem
+                    isSearch={true}
+                    isRanking={false}
+                    station={result}
+                  />
                 </div>
               )
             })}
           </div>
         </div>
         <div className="stack-result">
-          총 <b>{resultsListVideo.length}</b>건의 스택이 검색되었습니다.
+          {/* 연동시 주석해제 */}
+          {/* 총 <b>{resultsListStation.length}</b>건의 스택이 검색되었습니다. */}
+          총 <b>{station.length}</b>건의 스택이 검색되었습니다.
         </div>
       </>
     )
@@ -115,7 +282,6 @@ function SearchView() {
 
   return (
     <div className="search-page">
-      <Header />
       <div className="result">
         <div className="result-tap">
           <div className="tapmenu-ul">
@@ -132,7 +298,6 @@ function SearchView() {
         </div>
         <div className="tab-content">{menuArr[currentTab].content}</div>
       </div>
-      <Footer />
     </div>
   )
 }
