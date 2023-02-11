@@ -82,12 +82,8 @@ public class StationController {
             return new ResponseEntity<>(ErrorCode.INVALID_AUTH_TOKEN, HttpStatus.NOT_FOUND);
         }
 
-        Instrument instrument = null;
-        try {
-            instrument = instrumentService.findById(stationDto.getInstrumentId());
-        } catch (Exception e) {
-            return new ResponseEntity<>("일치하는 악기가 없음", HttpStatus.NOT_FOUND);
-        }
+        // 악기 이름이 악기 배열에 없으면 추가, 있으면 기존 아이디 가져오기
+        Instrument instrument = instrumentService.addInstrument(stationDto.getInstrument());
 
         // 스테이션 저장
         stationService.save(stationDto, file, loginMember, instrument);
@@ -98,6 +94,7 @@ public class StationController {
      * 스테이션 삭제
      * isDelete = 1로 처리 & S3 비디오 정보 삭제
      */
+    @Operation(summary = "스테이션 삭제")
     @DeleteMapping("/{stationid}")
     public ResponseEntity<?> deleteStation(@PathVariable("stationid") int stationId) throws Exception{
         stationService.deleteStation(stationId);
@@ -114,6 +111,7 @@ public class StationController {
     /**
      * 완성 컨테이너 조회 로그인이 되지 않았을 경우에는 stackers 로 사용 -> stackers 막아놔야 됨
      */
+    @Operation(summary = "완성 컨테이너 조회")
     @GetMapping("/completed/{username}")
     public List<MainStationDto> getCompletedStation(@PathVariable("username") String username) {
         List<Station> stations = null;
@@ -131,6 +129,7 @@ public class StationController {
     /**
      * 미완성 컨테이너 조회 로그인이 되지 않았을 경우에는 stackers 로 사용 -> stackers 막아놔야 됨
      */
+    @Operation(summary = "미완성 컨테이너 조회")
     @GetMapping("/uncompleted/{username}")
     public List<MainStationDto> getUnCompletedStation(@PathVariable("username") String username) {
         List<Station> stations = null;
@@ -148,6 +147,7 @@ public class StationController {
     /**
      * 상위 10개 컨테이너 조회
      */
+    @Operation(summary = "상위 컨테이너 조회")
     @GetMapping("/popular")
     public List<MainStationDto> getPopularStation() {
         List<Station> stations = stationService.findTop10Station(true);
@@ -157,6 +157,7 @@ public class StationController {
     /**
      * 마이 페이지 공개 스테이션
      */
+    @Operation(summary = "마이페이지 공개 스테이션 조회")
     @GetMapping("/public")
     public List<MainStationDto> getPublicStation(
         @AuthenticationPrincipal PrincipalDetails principal) {
@@ -168,6 +169,7 @@ public class StationController {
     /**
      * 마이 페이지 바공개 스테이션
      */
+    @Operation(summary = "마이페이지 비공개 스테이션 조회")
     @GetMapping("/private")
     public List<MainStationDto> getPrivateStation(
         @AuthenticationPrincipal PrincipalDetails principal) {
@@ -179,6 +181,7 @@ public class StationController {
     /**
      * 스테이션 댓글 달기
      */
+    @Operation(summary = "스테이션에 댓글 작성")
     @PostMapping("/{stationid}/comment")
     public ResponseEntity<?> writeComment(@PathVariable("stationid") int stationId,
         @RequestBody Comment comment, @AuthenticationPrincipal PrincipalDetails principal) {
@@ -194,9 +197,9 @@ public class StationController {
     /**
      * 스테이션 댓글 삭제
      */
+    @Operation(summary = "스테이션에 댓글 삭제")
     @DeleteMapping("/comment/{commentid}")
     public ResponseEntity<?> deleteComment(@PathVariable("commentid") int commentId) {
-        System.out.println();
         if (commentService.delete((long) commentId)) {
             return new ResponseEntity<>("댓글 삭제 성공", HttpStatus.OK);
         } else {
@@ -207,6 +210,7 @@ public class StationController {
     /**
      * 스테이션 좋아요 작성
      */
+    @Operation(summary = "스테이션에 좋아요 작성")
     @PostMapping("/{stationid}/heart")
     public ResponseEntity<?> writeHeart(@PathVariable("stationid") int stationId,
         @AuthenticationPrincipal PrincipalDetails principal) {
@@ -224,6 +228,7 @@ public class StationController {
     /**
      * 스테이션 좋아요 삭제
      */
+    @Operation(summary = "스테이션에 좋아요 삭제")
     @DeleteMapping("/{stationid}/heart")
     public ResponseEntity<?> deleteHeart(@PathVariable("stationid") int stationId,
         @AuthenticationPrincipal PrincipalDetails principal) {
@@ -238,6 +243,7 @@ public class StationController {
      * @param stationId : 조회할 스테이션 아이디
      * @return
      */
+    @Operation(summary = "스테이션 상세 조회")
     @GetMapping("/{stationid}")
     public ResponseEntity<StationDetailDto> getStationDetail(@PathVariable("stationid") int stationId){
         StationDetailDto station = stationService.getStationDetail((long) stationId);
@@ -245,12 +251,21 @@ public class StationController {
     }
 
     /**
-     * S3 파일 삭제 테스트 컨트롤러
+     * S3 파일 삭제 테스트 컨트롤러 - 테스트용
      */
     @PostMapping("/video/{videoid}")
     public ResponseEntity<?> deleteVideoFromS3(@PathVariable("videoid") int videoId) throws Exception{
         Video video = videoService.findById((long) videoId);
         videoService.deleteVideoFromS3(video.getVideoPath());
         return new ResponseEntity<>("S3 삭제 완료", HttpStatus.OK);
+    }
+
+    /**
+     * 내가 팔로우한 사람들의 스테이션 리스트 조회
+     */
+    @GetMapping("/following")
+    public List<MainStationDto> getFollowingStationList(@AuthenticationPrincipal PrincipalDetails principal){
+        Member member = memberService.getLoginMember(principal.getUsername());
+        return stationService.getFollowingList(member.getId());
     }
 }
