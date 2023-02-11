@@ -124,40 +124,4 @@ public class MemberController {
         return "admin";
     }
 
-    @PostMapping("/playable-instrument")
-    public ResponseEntity<?> createPlayableInstrument(@RequestBody Map<String, String> map,
-                                                      @AuthenticationPrincipal PrincipalDetails principal) {
-        Member member = memberService.getLoginMember(principal.getUsername());
-        Instrument instrument = instrumentService.findByName(map.get("instrument"));
-        playableInstrumentService.save(member, instrument);
-        return new ResponseEntity<>("연주 가능 악기 등록 완료", HttpStatus.OK);
-    }
-
-    @DeleteMapping("/playable-instrument")
-    public ResponseEntity<?> deletePlayableInstrument(@RequestBody Map<String, String> map,
-                                                      @AuthenticationPrincipal PrincipalDetails principal) {
-        Member member = memberService.getLoginMember(principal.getUsername());
-        Instrument instrument = instrumentService.findByName(map.get("instrument"));
-        playableInstrumentService.delete(member, instrument);
-        return new ResponseEntity<>("연주 가능 악기 삭제 완료", HttpStatus.OK);
-    }
-
-    @PostMapping("/party-member")
-    public ResponseEntity<?> createPartyMember(@RequestBody Map<String, String> map,
-                                               @AuthenticationPrincipal PrincipalDetails principal) {
-        Member member = memberService.getLoginMember(principal.getUsername());
-        Party party = partyMemberService.findByName(map.get("party"));
-        partyMemberService.save(member, party);
-        return new ResponseEntity<>("그룹 멤버 등록 완료", HttpStatus.OK);
-    }
-
-    @DeleteMapping("/party-member")
-    public ResponseEntity<?> deletePartyMember(@RequestBody Map<String, String> map,
-                                               @AuthenticationPrincipal PrincipalDetails principal) {
-        Member member = memberService.getLoginMember(principal.getUsername());
-        Party party = partyMemberService.findByName(map.get("party"));
-        partyMemberService.delete(member, party);
-        return new ResponseEntity<>("그룹 멤버 삭제 완료", HttpStatus.OK);
-    }
-
 }
