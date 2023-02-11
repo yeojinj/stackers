@@ -15,16 +15,20 @@ function SignUp() {
   const [isUsername, setIsUsername] = useState(null)
   const [isPassword, setIsPassword] = useState(null)
   const [isEmail, setIsEmail] = useState(null)
+
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
+
   // username 기본 CSS
   const [usernameCSS, setUsernameCSS] = useState({
-    width: '100%',
-    marginBottom: '25px'
+    width: '80%',
+    marginBottom: '8px'
   })
 
   // password 기본 CSS
   const [passwordCSS, setPasswordCSS] = useState({
-    width: '100%',
-    marginBottom: '25px'
+    width: '80%',
+    marginBottom: '8px'
   })
 
   // usernameCSS
@@ -60,8 +64,6 @@ function SignUp() {
       // True일때 css
       setPasswordCSS(() => {
         return {
-          width: '100%',
-          marginBottom: '25px',
           border: '1px solid rgba(42, 32, 150, 1)',
           borderRadius: 4
         }
@@ -70,8 +72,6 @@ function SignUp() {
       // False일때 css
       setPasswordCSS(() => {
         return {
-          width: '100%',
-          marginBottom: '25px',
           border: '1px solid rgba(172, 0, 143, 1)',
           borderRadius: 4
         }
@@ -113,7 +113,6 @@ function SignUp() {
           <input
             className="signup-input"
             placeholder="아이디"
-            size="medium"
             style={usernameCSS}
             name="username"
             value={username}
@@ -132,7 +131,6 @@ function SignUp() {
           <input
             className="signup-input"
             placeholder="비밀번호(알파벳, 특수문자를 포함한 8~10자로 구성)"
-            size="medium"
             style={passwordCSS}
             name="password"
             value={password}
@@ -166,13 +164,6 @@ function SignUp() {
             가입하기
           </button>
         </form>
-      </div>
-      <div>
-        <Modal open={open} onClose={handleClose}>
-          <Box>
-            <LogIn handleClose={handleClose} />
-          </Box>
-        </Modal>
       </div>
     </div>
   )
