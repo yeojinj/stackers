@@ -3,7 +3,7 @@ import '../../styles/stationlistitem.css'
 import profileTest from '../../assets/profileTest.svg'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 
-function StationListItem({ isRanking, isSearch, station }) {
+function StationListItem({ isRanking, isSearch, station, index }) {
   const [staion, setStation] = useState()
 
   // 검색 페이지 조회 연결 후 아래 stationInfo 데이터 삭제
@@ -41,44 +41,42 @@ function StationListItem({ isRanking, isSearch, station }) {
     // 스테이션 랭킹
     if (isRanking) {
       return (
-        <>
-          {/* 썸네일 */}
-          {/* <img
-            src="station.video.thumbnailPath"
-            className="thumbnail-style"
-          ></img> */}
+        <div className="station-item__ranks">
           <video
             ref={videoRef}
             id="staion"
-            className="video-style"
+            className="video-style ranks"
             src={station.video.videoPath}
             autoPlay={false}
             onMouseOver={playVideo}
             onMouseLeave={pauseVideo}
             loop
           ></video>
-        </>
+          <p className="station-rank">{index}</p>
+        </div>
       )
     } else if (!isSearch) {
       // 완성, 미완성, 마이페이지 스테이션
       return (
-        <>
+        <div className="station-item__items">
           <video
             ref={videoRef}
-            className="video-style"
+            className="video-style non-ranks"
             src={station.video.videoPath}
             autoPlay={false}
             onMouseOver={playVideo}
             onMouseLeave={pauseVideo}
             loop
           ></video>
-          <p className="station-description">{station.content}</p>
-          <div className="station-tag">
-            {station.tags.map((tag, i) => {
-              return `#${tag} `
-            })}
+          <div className="video-text">
+            <p className="station-description">{station.content}</p>
+            <div className="station-tag">
+              {station.tags.map((tag, i) => {
+                return `#${tag} `
+              })}
+            </div>
           </div>
-        </>
+        </div>
       )
     }
   }

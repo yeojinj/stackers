@@ -21,6 +21,7 @@ function LogIn(props) {
   const isLogged = useSelector((state) => {
     return state.user.isLogged
   })
+
   return (
     <div>
       <div className="LogIn">
@@ -38,7 +39,7 @@ function LogIn(props) {
         <img src={logo} alt="logo" className="LogIn-logo" />
 
         <form
-          style={{ textAlign: 'center' }}
+          className="login-input-form"
           onSubmit={(event) => {
             event.preventDefault()
             axios({
@@ -61,20 +62,18 @@ function LogIn(props) {
               })
           }}
         >
-          <TextField
+          <input
+            className="login-input"
             placeholder="아이디(닉네임) 또는 아이디"
-            size="medium"
-            className="LogIn-inputBox "
             name="username"
             value={username}
             onChange={(event) => {
               setUsername(event.target.value)
             }}
           />
-          <TextField
+          <input
+            className="login-input"
             placeholder="비밀번호 입력"
-            size="medium"
-            className="LogIn-inputBox "
             name="password"
             value={password}
             type="password"
@@ -82,82 +81,23 @@ function LogIn(props) {
               setPassword(event.target.value)
             }}
           />
+
           <div className="find-password-div">
-            <Link to="/SignUp" style={{ marginLeft: 'auto' }}>
+            <Link
+              to="/SignUp"
+              style={{ marginLeft: 'auto', textDecoration: 'none' }}
+            >
               비밀번호를 잊어버렸나요?
             </Link>
           </div>
 
-          <Button
-            variant="contained"
-            className="LogIn-button"
-            style={{
-              width: '390px',
-              height: '55px',
-              backgroundColor: 'rgba(217, 217, 217, 1)',
-              color: 'black',
-              marginBottom: '30px'
-            }}
-            type="submit"
-          >
+          <button className="login-button" type="submit">
             로그인
-          </Button>
+          </button>
 
-          <div className="SNS-LogIn-buttons">
-            <Button
-              variant="contained"
-              style={{
-                width: '390px',
-                height: '55px',
-                backgroundColor: '#00c73c',
-                color: 'black',
-                marginBottom: '5px'
-              }}
-            >
-              <div className="div-LogIn-Naver">
-                <img src={naverLogo} alt="naverLogo" className="Logo-Naver" />
-                <b style={{ color: 'white' }}>네이버</b>
-                <b style={{ color: 'white' }}>로그인</b>
-              </div>
-            </Button>
-            <Button
-              variant="contained"
-              style={{
-                width: '390px',
-                height: '55px',
-                backgroundColor: '#FEE500',
-                color: 'black',
-                marginBottom: '5px'
-              }}
-            >
-              <div className="div-LogIn-Kakao ">
-                <img src={kakaoLogo} alt="kakaoLogo" className="Logo-Kakao" />
-                <p>카카오</p>
-                <p>로그인</p>
-              </div>
-            </Button>
-            <Button
-              variant="contained"
-              style={{
-                width: '390px',
-                height: '55px',
-                backgroundColor: '#FFFFFF',
-                color: 'black'
-              }}
-            >
-              <div className="div-LogIn-Google">
-                <img
-                  src={GoogleLogo}
-                  alt="GoogleLogo"
-                  className="Logo-Google"
-                />
-                <p style={{ margin: '0 auto 0 auto' }}>Sign in with Google</p>
-              </div>
-            </Button>
-          </div>
-          <div className="div-LogIn-footer">
-            <p style={{ margin: '0 20px 0 0 ' }}>계정이 없으신가요?</p>
-            <Link to="/SignUp" className="move-to-SignUp">
+          <div className="login-footer">
+            <p style={{ margin: '0 10px 0 0 ' }}>계정이 없으신가요?</p>
+            <Link to="/SignUp" className="signup-link-text">
               회원가입
             </Link>
           </div>

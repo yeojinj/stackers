@@ -3,23 +3,14 @@ import React, { useEffect, useState } from 'react'
 import LogoImage from './LogoImage.png'
 import LogoText from './LogoText.png'
 import './SignUp.css'
-import TextField from '@mui/material/TextField'
-import Button from '@mui/material/Button'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-import Box from '@mui/material/Box'
-import Modal from '@mui/material/Modal'
-import LogIn from '../LogIn/LogIn.js'
 
 function SignUp() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
   const navigate = useNavigate()
-
-  const [open, setOpen] = useState(false)
-  const handleOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
 
   const [isUsername, setIsUsername] = useState(null)
   const [isPassword, setIsPassword] = useState(null)
@@ -89,24 +80,16 @@ function SignUp() {
   }, [isPassword])
   return (
     <div>
-      <div className="SignUp">
-        <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-          <p>
-            <img src={LogoImage} alt="LogoImage" />
-          </p>
-          <div style={{ display: 'flex', margin: '0px' }}>
-            <img src={LogoText} alt="LogoText" />
-            <h3
-              style={{
-                margin: '0px',
-                fontSize: '30px'
-              }}
-            >
-              에 오신 것을 환영합니다.
-            </h3>
+      <div className="signup-container">
+        <div className="signup-header">
+          <img src={LogoImage} alt="LogoImage" width="10%" />
+          <div className="signup-header-logo-text">
+            <img src={LogoText} alt="LogoText" width="20%" />에 오신 것을
+            환영합니다.
           </div>
         </div>
         <form
+          className="signup-form"
           onSubmit={(event) => {
             event.preventDefault()
             axios({
@@ -119,15 +102,16 @@ function SignUp() {
               }
             })
               .then((response) => {
-                console.log(response)
+                console.log('[회원가입 성공] : ', response)
                 navigate('/')
               })
               .catch((error) => {
-                console.log(error.response)
+                console.log('[회원가입 실패] : ', error.response)
               })
           }}
         >
-          <TextField
+          <input
+            className="signup-input"
             placeholder="아이디"
             size="medium"
             style={usernameCSS}
@@ -145,7 +129,8 @@ function SignUp() {
               }
             }}
           />
-          <TextField
+          <input
+            className="signup-input"
             placeholder="비밀번호(알파벳, 특수문자를 포함한 8~10자로 구성)"
             size="medium"
             style={passwordCSS}
@@ -163,55 +148,23 @@ function SignUp() {
               }
             }}
           />
-          <TextField
+          <input
+            className="signup-input"
             placeholder="이메일"
-            size="medium"
-            style={{ width: '100%', marginBottom: '25px' }}
             name="email"
             value={email}
             onChange={(event) => {
               setEmail(event.target.value)
             }}
           />
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              marginBottom: '25px'
-            }}
-          >
-            <TextField
-              placeholder="인증번호 입력"
-              size="medium"
-              style={{ width: '85%' }}
-            />
-            <Button
-              variant="contained"
-              className="LogIn-button"
-              style={{
-                height: '55px',
-                backgroundColor: 'rgba(217, 217, 217, 1)',
-                color: 'black'
-              }}
-            >
-              전송
-            </Button>
+          <div className="email-validation-div">
+            <input className="signup-input" placeholder="인증번호 입력" />
+            <button className="email-check-button">전송</button>
           </div>
-          <hr style={{ margin: '0px 0px 25px 0px' }} />
-          <Button
-            variant="contained"
-            className="LogIn-button"
-            style={{
-              width: '100%',
-              height: '55px',
-              backgroundColor: 'rgba(217, 217, 217, 1)',
-              color: 'black',
-              marginBottom: '30px'
-            }}
-            type="submit"
-          >
+          <hr className="signup-line" />
+          <button className="signup-button" type="submit">
             가입하기
-          </Button>
+          </button>
         </form>
       </div>
       <div>

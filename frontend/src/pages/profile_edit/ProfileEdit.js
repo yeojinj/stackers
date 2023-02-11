@@ -116,7 +116,7 @@ function ProfileEdit() {
     formData.append('profile', image)
     console.log(formData)
     axios
-      .put('/api/member/user', formData, {
+      .post('/api/member/user', formData, {
         data: newInfo,
         headers: {
           Authorization: token,
