@@ -15,6 +15,7 @@ import com.ssafy.stackers.service.PartyMemberService;
 import com.ssafy.stackers.service.PartyService;
 import com.ssafy.stackers.service.PlayableInstrumentService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,14 +46,14 @@ public class MemberController {
     private FollowService followService;
 
     @PostMapping("/join")
-    public ResponseEntity<?> join(@RequestBody JoinDto joinDto) {
+    public ResponseEntity<?> join(@RequestBody @Valid JoinDto joinDto) {
         memberService.checkUsernameDuplication(joinDto.getUsername());
         memberService.userJoin(joinDto);
         return new ResponseEntity<>("회원가입 완료", HttpStatus.OK);
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<?> changePassword(@RequestBody Map<String, String> map,
+    public ResponseEntity<?> changePassword(@RequestBody @Valid Map<String, String> map,
                                             @AuthenticationPrincipal PrincipalDetails principal) {
         Member member = memberService.getLoginMember(principal.getUsername());
         memberService.setNewPassword(member.getUsername(), map.get("password"));
@@ -122,42 +123,6 @@ public class MemberController {
     @GetMapping("/admin")
     public String admin() {
         return "admin";
-    }
-
-    @PostMapping("/playable-instrument")
-    public ResponseEntity<?> createPlayableInstrument(@RequestBody Map<String, String> map,
-                                                      @AuthenticationPrincipal PrincipalDetails principal) {
-        Member member = memberService.getLoginMember(principal.getUsername());
-        Instrument instrument = instrumentService.findByName(map.get("instrument"));
-        playableInstrumentService.save(member, instrument);
-        return new ResponseEntity<>("연주 가능 악기 등록 완료", HttpStatus.OK);
-    }
-
-    @DeleteMapping("/playable-instrument")
-    public ResponseEntity<?> deletePlayableInstrument(@RequestBody Map<String, String> map,
-                                                      @AuthenticationPrincipal PrincipalDetails principal) {
-        Member member = memberService.getLoginMember(principal.getUsername());
-        Instrument instrument = instrumentService.findByName(map.get("instrument"));
-        playableInstrumentService.delete(member, instrument);
-        return new ResponseEntity<>("연주 가능 악기 삭제 완료", HttpStatus.OK);
-    }
-
-    @PostMapping("/party-member")
-    public ResponseEntity<?> createPartyMember(@RequestBody Map<String, String> map,
-                                               @AuthenticationPrincipal PrincipalDetails principal) {
-        Member member = memberService.getLoginMember(principal.getUsername());
-        Party party = partyMemberService.findByName(map.get("party"));
-        partyMemberService.save(member, party);
-        return new ResponseEntity<>("그룹 멤버 등록 완료", HttpStatus.OK);
-    }
-
-    @DeleteMapping("/party-member")
-    public ResponseEntity<?> deletePartyMember(@RequestBody Map<String, String> map,
-                                               @AuthenticationPrincipal PrincipalDetails principal) {
-        Member member = memberService.getLoginMember(principal.getUsername());
-        Party party = partyMemberService.findByName(map.get("party"));
-        partyMemberService.delete(member, party);
-        return new ResponseEntity<>("그룹 멤버 삭제 완료", HttpStatus.OK);
     }
 
 }

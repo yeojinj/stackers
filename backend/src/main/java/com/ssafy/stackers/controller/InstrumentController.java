@@ -24,7 +24,7 @@ public class InstrumentController {
     @Operation(summary = "악기 업로드")
     @PostMapping
     public ResponseEntity<?> createInstrument(@RequestBody Instrument instrument) {
-        instrumentService.save(instrument);
+        instrumentService.addInstrument(instrument.getName());
         return new ResponseEntity<>("악기 생성 완료!\uD83D\uDE0D", HttpStatus.OK);
     }
 
