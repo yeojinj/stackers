@@ -28,6 +28,8 @@ public class SearchService {
     private TagService tagService;
     @Autowired
     private TagListService tagListService;
+    @Autowired
+    private PartyMemberService partyMemberService;
 
     public SearchResultDto searchStation(String keyword) {
         // station을 음악으로 검색
@@ -49,8 +51,8 @@ public class SearchService {
             log.info("검색된 멤버 수: " + members.size());
             for (int i = 0; i < members.size() && i < 20; i++) {        // 상위 20개 조회
                 Member m = members.get(i);
-                // 소속 팀 검색 -> 팀 DB 수정 후 추가 예정
-                memberList.add(new SearchMemberDto(m.getId(), m.getImgPath(), m.getUsername(), m.getNickname(), "배도라지"));
+                String teamName = partyMemberService.getParty(m.getId());
+                memberList.add(new SearchMemberDto(m.getId(), m.getImgPath(), m.getUsername(), m.getNickname(), teamName));
             }
         }
 
