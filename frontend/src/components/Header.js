@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { SearchKeyword } from '../store.js'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import logo from '../assets/logo.svg'
@@ -11,9 +10,10 @@ import SearchIcon from '@mui/icons-material/Search'
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
 import LogIn from '../pages/sign_folder/LogIn/LogIn'
+import { SearchKeyword } from '../store'
 // import Button from '@mui/material/Button'
 
-function Header(props) {
+function Header() {
   // const [login, setLogin] = useState(false)
 
   // axios 실행시 주석 해제
@@ -115,6 +115,7 @@ function Header(props) {
   }
 
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   // 로고 클릭시 메인페이지로 이동
   const navigateToMain = () => {
@@ -125,13 +126,15 @@ function Header(props) {
     navigate('/RecordRoom')
   }
 
-  // 클릭 누르면 store 에 검색 키워드나 검색 키워드 결과 저장하고 검색페이지로 이동
-  const dispatch = useDispatch()
+  // 클릭 누르면 검색페이지 이동
   const gotoSearch = () => {
     if (inputValue) {
       dispatch(SearchKeyword(inputValue))
+      navigate(`/SearchView/?${inputValue}`, {
+        state: { keyword: `${inputValue}` }
+      })
+      setIsHaveInputValue(false)
     }
-    navigate('/SearchView')
   }
 
   const showDropDownList = () => {
@@ -164,10 +167,11 @@ function Header(props) {
     if (clickedItem.content) {
       setInputValue(clickedItem.content)
       setIsHaveInputValue(false)
+    } else {
+      // 계정으로 이동
+      navigate(`/MyPage/${clickedItem.username}`)
+      setIsHaveInputValue(false)
     }
-    // else {
-    //   // 계정으로 이동
-    // }
   }
 
   // const handleDropDownKey = (event) => {

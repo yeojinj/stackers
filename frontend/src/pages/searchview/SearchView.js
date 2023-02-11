@@ -3,13 +3,18 @@ import AccountListItem from '../../components/account/AccountListItem'
 import '../../styles/searchview.css'
 import StationListItem from '../../components/station/StationListItem'
 import axios from 'axios'
+// import { useLocation } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 function SearchView() {
   const token = localStorage.getItem('accessToken')
+  // const location = useLocation()
+  // const keyword = location.state.keyword
   const [search, setSearch] = useState([])
-  let searchkeyword = ''
-  // 더미데이터
+  const keyword = useSelector((state) => {
+    return state.SearchKeyword.keyword
+  })
+  // 더미데이터, 연동시 삭제
   const station = [
     {
       id: 5,
@@ -72,11 +77,11 @@ function SearchView() {
       }
     },
     {
-      id: 9,
+      id: 10,
       content: '향기로운 음악의 세계~ 같이 들어요',
       tags: ['smell_so_good', 'umm', 'yahoo'],
       video: {
-        id: 9,
+        id: 10,
         videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
         videoName: null,
         videoOriName: '2023_02_07_11:08',
@@ -84,11 +89,47 @@ function SearchView() {
       }
     },
     {
-      id: 9,
+      id: 11,
       content: '향기로운 음악의 세계~ 같이 들어요',
       tags: ['smell_so_good', 'umm', 'yahoo'],
       video: {
-        id: 9,
+        id: 11,
+        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+        videoName: null,
+        videoOriName: '2023_02_07_11:08',
+        thumbnailPath: null
+      }
+    },
+    {
+      id: 12,
+      content: '향기로운 음악의 세계~ 같이 들어요',
+      tags: ['smell_so_good', 'umm', 'yahoo'],
+      video: {
+        id: 12,
+        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+        videoName: null,
+        videoOriName: '2023_02_07_11:08',
+        thumbnailPath: null
+      }
+    },
+    {
+      id: 13,
+      content: '향기로운 음악의 세계~ 같이 들어요',
+      tags: ['smell_so_good', 'umm', 'yahoo'],
+      video: {
+        id: 13,
+        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+        videoName: null,
+        videoOriName: '2023_02_07_11:08',
+        thumbnailPath: null
+      }
+    },
+    {
+      id: 14,
+      content: '향기로운 음악의 세계~ 같이 들어요',
+      tags: ['smell_so_good', 'umm', 'yahoo'],
+      video: {
+        id: 14,
         videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
         videoName: null,
         videoOriName: '2023_02_07_11:08',
@@ -97,16 +138,9 @@ function SearchView() {
     }
   ]
 
-  // store 에서 검색키워드 가져오기
-  const keyword = useSelector((state) => {
-    const getKeyword = state.SearchKeyword.keyword
-    if (getKeyword) {
-      searchkeyword = getKeyword
-    }
-  })
-
   // 검색키워드로 axios 요청하기
   async function searchList() {
+    console.log('[스토어에서 가져온 키워드]', keyword)
     await axios
       .get(`/api/search/${keyword}`, {
         headers: {
@@ -114,7 +148,7 @@ function SearchView() {
         }
       })
       .then((res) => {
-        // setSearch(res.data)
+        setSearch(res.data)
         console.log('받아온 검색결과들', search)
       })
       .catch((err) => console.log(err))
@@ -122,7 +156,7 @@ function SearchView() {
 
   useEffect(() => {
     searchList()
-  }, [])
+  }, [keyword])
 
   const [currentTab, clickTab] = useState(0)
 
@@ -135,11 +169,16 @@ function SearchView() {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
   }
 
+  // 연동시 주석해제
   const searchResults = () => {
     const resultsListAccount = [1, 2, 3, 4, 5, 6, 7]
+    // const resultsListStation = search.stationList
+    // const resultsListAccount = search.memberList
 
     const cutVideoList = station.slice(0, 8)
     const cutAccountList = resultsListAccount.slice(0, 4)
+    // const cutVideoList = resultsListStation.slice(0, 8)
+    // const cutAccountList = resultsListAccount.slice(0, 4)
 
     return (
       <>
@@ -204,11 +243,12 @@ function SearchView() {
   }
 
   const searchStacks = () => {
-    const resultsListVideo = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
     return (
       <>
         <div className="popular-tap">
           <div className="popular-video">
+            {/* 연동시 주석해제 */}
+            {/* {resultsListStation.map((result, i) => { */}
             {station.map((result, i) => {
               return (
                 <div key={i}>
@@ -223,7 +263,9 @@ function SearchView() {
           </div>
         </div>
         <div className="stack-result">
-          총 <b>{resultsListVideo.length}</b>건의 스택이 검색되었습니다.
+          {/* 연동시 주석해제 */}
+          {/* 총 <b>{resultsListStation.length}</b>건의 스택이 검색되었습니다. */}
+          총 <b>{station.length}</b>건의 스택이 검색되었습니다.
         </div>
       </>
     )
