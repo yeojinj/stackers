@@ -2,9 +2,9 @@ package com.ssafy.stackers.service;
 
 import com.ssafy.stackers.model.Member;
 import com.ssafy.stackers.model.Station;
-import com.ssafy.stackers.model.dto.MainStationDto;
 import com.ssafy.stackers.model.dto.SearchMemberDto;
 import com.ssafy.stackers.model.dto.SearchResultDto;
+import com.ssafy.stackers.model.dto.SearchStationDto;
 import com.ssafy.stackers.repository.MemberRepository;
 import com.ssafy.stackers.repository.StationRepository;
 
@@ -34,13 +34,13 @@ public class SearchService {
     public SearchResultDto searchStation(String keyword) {
         // station을 음악으로 검색
         List<Station> stations = stationRepository.findByContentContainingOrMusicContainingOrderByHeartCnt(keyword, keyword);
-        List<MainStationDto> stationList = new ArrayList<>();
+        List<SearchStationDto> stationList = new ArrayList<>();
         if (!stations.isEmpty()) {
             log.info("검색된 스테이션 수: " + stations.size());
             for (int i = 0; i < stations.size() && i < 20; i++) {       // 상위 20개 조회
                 Station s = stations.get(i);
                 List<String> tags = tagService.findNameById(tagListService.findByStation(s));
-                stationList.add(new MainStationDto(s.getId(), s.getContent(), tags, s.getVideo()));
+                stationList.add(new SearchStationDto(s.getId(), s.getContent(), tags, s.getVideo(), s.getHeartCnt(), s.getMember().getId(), s.getMember().getImgPath(), s.getMember().getUsername()));
             }
         }
 
