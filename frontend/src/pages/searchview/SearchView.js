@@ -10,133 +10,134 @@ function SearchView() {
   const token = localStorage.getItem('accessToken')
   // const location = useLocation()
   // const keyword = location.state.keyword
-  const [search, setSearch] = useState([])
   const keyword = useSelector((state) => {
     return state.SearchKeyword.keyword
   })
+  const [stationList, setStationList] = useState([])
+  const [accountList, setAccountList] = useState([])
   // 더미데이터, 연동시 삭제
-  const station = [
-    {
-      id: 5,
-      content: 'xptms',
-      tags: ['happy', 'mood'],
-      video: {
-        id: 5,
-        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
-        videoName: null,
-        videoOriName: '테스트용 비디',
-        thumbnailPath: null
-      }
-    },
-    {
-      id: 6,
-      content: '향기로운 음악의 세계~',
-      tags: ['smell_so_good', 'umm'],
-      video: {
-        id: 6,
-        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
-        videoName: null,
-        videoOriName: '2023_02_07_11:08',
-        thumbnailPath: null
-      }
-    },
-    {
-      id: 7,
-      content: '향기로운 음악의 세계~',
-      tags: ['smell_so_good', 'umm'],
-      video: {
-        id: 7,
-        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
-        videoName: null,
-        videoOriName: '2023_02_07_11:08',
-        thumbnailPath: null
-      }
-    },
-    {
-      id: 8,
-      content: '향기로운 음악의 세계~',
-      tags: ['smell_so_good', 'umm'],
-      video: {
-        id: 8,
-        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
-        videoName: null,
-        videoOriName: '2023_02_07_11:08',
-        thumbnailPath: null
-      }
-    },
-    {
-      id: 9,
-      content: '향기로운 음악의 세계~ 같이 들어요',
-      tags: ['smell_so_good', 'umm', 'yahoo'],
-      video: {
-        id: 9,
-        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
-        videoName: null,
-        videoOriName: '2023_02_07_11:08',
-        thumbnailPath: null
-      }
-    },
-    {
-      id: 10,
-      content: '향기로운 음악의 세계~ 같이 들어요',
-      tags: ['smell_so_good', 'umm', 'yahoo'],
-      video: {
-        id: 10,
-        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
-        videoName: null,
-        videoOriName: '2023_02_07_11:08',
-        thumbnailPath: null
-      }
-    },
-    {
-      id: 11,
-      content: '향기로운 음악의 세계~ 같이 들어요',
-      tags: ['smell_so_good', 'umm', 'yahoo'],
-      video: {
-        id: 11,
-        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
-        videoName: null,
-        videoOriName: '2023_02_07_11:08',
-        thumbnailPath: null
-      }
-    },
-    {
-      id: 12,
-      content: '향기로운 음악의 세계~ 같이 들어요',
-      tags: ['smell_so_good', 'umm', 'yahoo'],
-      video: {
-        id: 12,
-        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
-        videoName: null,
-        videoOriName: '2023_02_07_11:08',
-        thumbnailPath: null
-      }
-    },
-    {
-      id: 13,
-      content: '향기로운 음악의 세계~ 같이 들어요',
-      tags: ['smell_so_good', 'umm', 'yahoo'],
-      video: {
-        id: 13,
-        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
-        videoName: null,
-        videoOriName: '2023_02_07_11:08',
-        thumbnailPath: null
-      }
-    },
-    {
-      id: 14,
-      content: '향기로운 음악의 세계~ 같이 들어요',
-      tags: ['smell_so_good', 'umm', 'yahoo'],
-      video: {
-        id: 14,
-        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
-        videoName: null,
-        videoOriName: '2023_02_07_11:08',
-        thumbnailPath: null
-      }
-    }
-  ]
+  // const station = [
+  //   {
+  //     id: 5,
+  //     content: 'xptms',
+  //     tags: ['happy', 'mood'],
+  //     video: {
+  //       id: 5,
+  //       videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+  //       videoName: null,
+  //       videoOriName: '테스트용 비디',
+  //       thumbnailPath: null
+  //     }
+  //   },
+  //   {
+  //     id: 6,
+  //     content: '향기로운 음악의 세계~',
+  //     tags: ['smell_so_good', 'umm'],
+  //     video: {
+  //       id: 6,
+  //       videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+  //       videoName: null,
+  //       videoOriName: '2023_02_07_11:08',
+  //       thumbnailPath: null
+  //     }
+  //   },
+  //   {
+  //     id: 7,
+  //     content: '향기로운 음악의 세계~',
+  //     tags: ['smell_so_good', 'umm'],
+  //     video: {
+  //       id: 7,
+  //       videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+  //       videoName: null,
+  //       videoOriName: '2023_02_07_11:08',
+  //       thumbnailPath: null
+  //     }
+  //   },
+  //   {
+  //     id: 8,
+  //     content: '향기로운 음악의 세계~',
+  //     tags: ['smell_so_good', 'umm'],
+  //     video: {
+  //       id: 8,
+  //       videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+  //       videoName: null,
+  //       videoOriName: '2023_02_07_11:08',
+  //       thumbnailPath: null
+  //     }
+  //   },
+  //   {
+  //     id: 9,
+  //     content: '향기로운 음악의 세계~ 같이 들어요',
+  //     tags: ['smell_so_good', 'umm', 'yahoo'],
+  //     video: {
+  //       id: 9,
+  //       videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+  //       videoName: null,
+  //       videoOriName: '2023_02_07_11:08',
+  //       thumbnailPath: null
+  //     }
+  //   },
+  //   {
+  //     id: 10,
+  //     content: '향기로운 음악의 세계~ 같이 들어요',
+  //     tags: ['smell_so_good', 'umm', 'yahoo'],
+  //     video: {
+  //       id: 10,
+  //       videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+  //       videoName: null,
+  //       videoOriName: '2023_02_07_11:08',
+  //       thumbnailPath: null
+  //     }
+  //   },
+  //   {
+  //     id: 11,
+  //     content: '향기로운 음악의 세계~ 같이 들어요',
+  //     tags: ['smell_so_good', 'umm', 'yahoo'],
+  //     video: {
+  //       id: 11,
+  //       videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+  //       videoName: null,
+  //       videoOriName: '2023_02_07_11:08',
+  //       thumbnailPath: null
+  //     }
+  //   },
+  //   {
+  //     id: 12,
+  //     content: '향기로운 음악의 세계~ 같이 들어요',
+  //     tags: ['smell_so_good', 'umm', 'yahoo'],
+  //     video: {
+  //       id: 12,
+  //       videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+  //       videoName: null,
+  //       videoOriName: '2023_02_07_11:08',
+  //       thumbnailPath: null
+  //     }
+  //   },
+  //   {
+  //     id: 13,
+  //     content: '향기로운 음악의 세계~ 같이 들어요',
+  //     tags: ['smell_so_good', 'umm', 'yahoo'],
+  //     video: {
+  //       id: 13,
+  //       videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+  //       videoName: null,
+  //       videoOriName: '2023_02_07_11:08',
+  //       thumbnailPath: null
+  //     }
+  //   },
+  //   {
+  //     id: 14,
+  //     content: '향기로운 음악의 세계~ 같이 들어요',
+  //     tags: ['smell_so_good', 'umm', 'yahoo'],
+  //     video: {
+  //       id: 14,
+  //       videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+  //       videoName: null,
+  //       videoOriName: '2023_02_07_11:08',
+  //       thumbnailPath: null
+  //     }
+  //   }
+  // ]
 
   // 검색키워드로 axios 요청하기
   async function searchList() {
@@ -148,8 +149,11 @@ function SearchView() {
         }
       })
       .then((res) => {
-        setSearch(res.data)
-        console.log('받아온 검색결과들', search)
+        setStationList(res.data.stationList)
+        setAccountList(res.data.memberList)
+        console.log('[스테이션]', res.data.stationList)
+        console.log('[계정]', res.data.memberList)
+        console.log('받아온 검색결과들', res.data)
       })
       .catch((err) => console.log(err))
   }
@@ -157,6 +161,11 @@ function SearchView() {
   useEffect(() => {
     searchList()
   }, [keyword])
+
+  // useEffect(() => {
+  //   setStationList(search.stationList)
+  //   setAccountList(search.memberList)
+  // }, [search])
 
   const [currentTab, clickTab] = useState(0)
 
@@ -169,17 +178,7 @@ function SearchView() {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
   }
 
-  // 연동시 주석해제
   const searchResults = () => {
-    const resultsListAccount = [1, 2, 3, 4, 5, 6, 7]
-    // const resultsListStation = search.stationList
-    // const resultsListAccount = search.memberList
-
-    const cutVideoList = station.slice(0, 8)
-    const cutAccountList = resultsListAccount.slice(0, 4)
-    // const cutVideoList = resultsListStation.slice(0, 8)
-    // const cutAccountList = resultsListAccount.slice(0, 4)
-
     return (
       <>
         <div className="popular-tap">
@@ -190,7 +189,7 @@ function SearchView() {
             </span>
           </div>
           <div className="popular-video">
-            {cutVideoList.map((result, i) => {
+            {stationList.slice(0, 8).map((result, i) => {
               return (
                 <div key={i}>
                   <StationListItem
@@ -201,6 +200,11 @@ function SearchView() {
                 </div>
               )
             })}
+            {Array.isArray(stationList) && stationList.length === 0 && (
+              <div style={{ marginTop: '100px' }}>
+                <b>[{keyword}]</b> 로 조회된 영상이 없습니다.
+              </div>
+            )}
           </div>
         </div>
         <div className="popular-tap">
@@ -210,32 +214,38 @@ function SearchView() {
               더 알아보기
             </span>
           </p>
-          {cutAccountList.map((result, i) => {
-            return (
-              <div key={i}>
-                <AccountListItem />
-              </div>
-            )
-          })}
+          {accountList &&
+            accountList.slice(0, 8).map((result, i) => {
+              return (
+                <div key={i}>
+                  <AccountListItem account={result} />
+                </div>
+              )
+            })}
+          {Array.isArray(accountList) && accountList.length === 0 && (
+            <div style={{ marginTop: '100px' }}>
+              <b>[{keyword}]</b> 로 조회된 계정이 없습니다.
+            </div>
+          )}
         </div>
       </>
     )
   }
 
   const searchAccounts = () => {
-    const resultsListAccount = [1, 2, 3, 4, 5, 6, 7]
     return (
       <>
         <div className="popular-tap">
-          {resultsListAccount.map((result, i) => {
-            return (
-              <div key={i}>
-                <AccountListItem />
-              </div>
-            )
-          })}
+          {accountList &&
+            accountList.map((result, i) => {
+              return (
+                <div key={i}>
+                  <AccountListItem account={result} />
+                </div>
+              )
+            })}
           <div className="account-result">
-            총 <b>{resultsListAccount.length}</b>건의 계정이 검색되었습니다.
+            총 <b>{accountList.length}</b>건의 계정이 검색되었습니다.
           </div>
         </div>
       </>
@@ -247,25 +257,22 @@ function SearchView() {
       <>
         <div className="popular-tap">
           <div className="popular-video">
-            {/* 연동시 주석해제 */}
-            {/* {resultsListStation.map((result, i) => { */}
-            {station.map((result, i) => {
-              return (
-                <div key={i}>
-                  <StationListItem
-                    isSearch={true}
-                    isRanking={false}
-                    station={result}
-                  />
-                </div>
-              )
-            })}
+            {stationList &&
+              stationList.map((result, i) => {
+                return (
+                  <div key={i}>
+                    <StationListItem
+                      isSearch={true}
+                      isRanking={false}
+                      station={result}
+                    />
+                  </div>
+                )
+              })}
           </div>
-        </div>
-        <div className="stack-result">
-          {/* 연동시 주석해제 */}
-          {/* 총 <b>{resultsListStation.length}</b>건의 스택이 검색되었습니다. */}
-          총 <b>{station.length}</b>건의 스택이 검색되었습니다.
+          <div className="stack-result">
+            총 <b>{stationList.length}</b>건의 스택이 검색되었습니다.
+          </div>
         </div>
       </>
     )
