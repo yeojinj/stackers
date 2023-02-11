@@ -1,27 +1,27 @@
 import React from 'react'
-import profileTest from '../../assets/profileTest.svg'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import '../../styles/accountlistitem.css'
 
-function AccountListItem() {
-  const accountInfo = {
-    profile_img: profileTest,
-    username: 'apricot',
-    nickname: '리콧',
-    band: '텐텐'
-  }
+function AccountListItem({ account }) {
+  const accountInfo = account
 
   const IsBand = () => {
-    if (accountInfo.band) {
-      return ` · ${accountInfo.band}`
+    console.log('소속', accountInfo.teamName)
+    if (accountInfo.teamName) {
+      return ` · ${accountInfo.teamName}`
     }
   }
   return (
     <>
       <div className="account-info">
-        <img
-          className="account-profile-img"
-          src={accountInfo.profile_img}
-        ></img>
+        {accountInfo.imgPath !== 'static/s3이미지링크.png' && (
+          <img className="account-profile-img" src={accountInfo.imgPath}></img>
+        )}
+        {accountInfo.imgPath === 'static/s3이미지링크.png' && (
+          <>
+            <AccountCircleIcon style={{ width: '85px', height: '85px' }} />
+          </>
+        )}
         <div className="account-names">
           <div className="account-username">{accountInfo.username}</div>
           <div className="account-nickname">

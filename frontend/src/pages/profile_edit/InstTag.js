@@ -3,12 +3,12 @@ import { Chip } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { TagList } from '../../store.js'
 
-const InstTag = () => {
-  const [tagItem, setTagItem] = useState('')
-  const [tagList, setTagList] = useState([])
+const InstTag = ({ instruments }) => {
   const tags = useSelector((state) => {
     return state.TagList.tags
   })
+  const [tagItem, setTagItem] = useState('')
+  const [tagList, setTagList] = useState(instruments)
   const dispatch = useDispatch()
   const uploadTagHandler = () => {
     if (tagList.length < 3) {
