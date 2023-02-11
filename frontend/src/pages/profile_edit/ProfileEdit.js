@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import './ProfileEdit.css'
+import { useSelector } from 'react-redux'
+import InstTag from './InstTag'
 import NoImg from '../../assets/noImg.svg'
 import TextField from '@mui/material/TextField'
-import Autocomplete from '@mui/material/Autocomplete'
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
 import MyDropzone from './MyDropzone'
@@ -15,7 +16,7 @@ function ProfileEdit() {
   const [email, setEmail] = useState('')
   const [nickname, setNickname] = useState('')
   const [bio, setBio] = useState('')
-  const [instruments, setInstruments] = useState('')
+  const [instruments, setInstruments] = useState([])
   const [parties, setParties] = useState('')
 
   const [open, setOpen] = useState(false)
@@ -24,29 +25,34 @@ function ProfileEdit() {
   const [imageurl, setImageurl] = useState('')
   const [image, setImage] = useState('')
   const token = localStorage.getItem('accessToken')
-  const Instrument = [
-    {
-      name: '기타'
-    },
-    { name: '가야금' },
-    { name: '바이올린' },
-    { name: '첼로' },
-    { name: '비올라' },
-    { name: '콘트라베이스' },
-    { name: '피아노' },
-    { name: '보컬' },
-    { name: '북' },
-    { name: '꽹과리' },
-    { name: '장구' },
-    { name: '징' },
-    { name: '캐스터네츠' },
-    { name: '실로폰' },
-    { name: '비브라폰' },
-    { name: '플룻' },
-    { name: '클라리넷' },
-    { name: '트럼펫' },
-    { name: '하프' }
-  ]
+
+  const inst = useSelector((state) => {
+    return state.TagList.tags
+  })
+
+  // const Instrument = [
+  //   {
+  //     name: '기타'
+  //   },
+  //   { name: '가야금' },
+  //   { name: '바이올린' },
+  //   { name: '첼로' },
+  //   { name: '비올라' },
+  //   { name: '콘트라베이스' },
+  //   { name: '피아노' },
+  //   { name: '보컬' },
+  //   { name: '북' },
+  //   { name: '꽹과리' },
+  //   { name: '장구' },
+  //   { name: '징' },
+  //   { name: '캐스터네츠' },
+  //   { name: '실로폰' },
+  //   { name: '비브라폰' },
+  //   { name: '플룻' },
+  //   { name: '클라리넷' },
+  //   { name: '트럼펫' },
+  //   { name: '하프' }
+  // ]
 
   // 사용자 정보 조회
   async function userInfo() {
@@ -90,9 +96,12 @@ function ProfileEdit() {
   // 415 오류 발생 -> 수정 필요!!!!
   const changeInfo = () => {
     console.log(id)
+    console.log('[악기정보가 잘 들어오는지 확인]', inst)
     const newInfo = {
       nickname,
-      bio
+      bio,
+      instruments: inst,
+      parties
     }
     console.log(newInfo)
     const formData = new FormData()
@@ -107,7 +116,7 @@ function ProfileEdit() {
     formData.append('profile', image)
     console.log(formData)
     axios
-      .put('/api/member/user', formData, {
+      .post('/api/member/user', formData, {
         data: newInfo,
         headers: {
           Authorization: token,
@@ -119,7 +128,6 @@ function ProfileEdit() {
       })
       .catch((err) => console.log(err))
   }
-
   return (
     <div className="ProfileEdit">
       <p className="ProfileEdit-head">프로필 편집</p>
@@ -206,21 +214,7 @@ function ProfileEdit() {
       <div className="ProfileEdit-Instrument">
         <div className="ProfileEdit-first">악기</div>
         <div className="ProfileEdit-content-Bio">
-          <Autocomplete
-            multiple
-            limitTags={2}
-            id="multiple-limit-tags"
-            options={Instrument}
-            getOptionLabel={(option) => option.name}
-            // defaultValue={[Instrument[13], Instrument[12], Instrument[11]]}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                placeholder={params ? '' : '악기를 입력해주세요'}
-              />
-            )}
-            sx={{ width: '100%' }}
-          />
+          <InstTag />
         </div>
       </div>
       <div className="ProfileEdit-group">

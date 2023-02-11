@@ -1,15 +1,10 @@
 /* eslint-disable */
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import LogoImage from './LogoImage.png'
 import LogoText from './LogoText.png'
 import './SignUp.css'
-import TextField from '@mui/material/TextField'
-import Button from '@mui/material/Button'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-import Box from '@mui/material/Box'
-import Modal from '@mui/material/Modal'
-import LogIn from '../LogIn/LogIn.js'
 
 function SignUp() {
   const [username, setUsername] = useState('')
@@ -17,30 +12,84 @@ function SignUp() {
   const [email, setEmail] = useState('')
   const navigate = useNavigate()
 
-  const [open, setOpen] = useState(false)
+  const [isUsername, setIsUsername] = useState(null)
+  const [isPassword, setIsPassword] = useState(null)
+  const [isEmail, setIsEmail] = useState(null)
+
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
+  // username 기본 CSS
+  const [usernameCSS, setUsernameCSS] = useState({
+    width: '80%',
+    marginBottom: '8px'
+  })
+
+  // password 기본 CSS
+  const [passwordCSS, setPasswordCSS] = useState({
+    width: '80%',
+    marginBottom: '8px'
+  })
+
+  // usernameCSS
+  useEffect(() => {
+    if (isUsername === null) {
+    } else if (isUsername) {
+      // True일때 css
+      setUsernameCSS(() => {
+        return {
+          width: '100%',
+          marginBottom: '25px',
+          border: '1px solid rgba(42, 32, 150, 1)',
+          borderRadius: 4
+        }
+      })
+    } else {
+      // False일때 css
+      setUsernameCSS(() => {
+        return {
+          width: '100%',
+          marginBottom: '25px',
+          border: '1px solid rgba(172, 0, 143, 1)',
+          borderRadius: 4
+        }
+      })
+    }
+  }, [isUsername])
+
+  // passwordCSS
+  useEffect(() => {
+    if (isPassword === null) {
+    } else if (isPassword) {
+      // True일때 css
+      setPasswordCSS(() => {
+        return {
+          border: '1px solid rgba(42, 32, 150, 1)',
+          borderRadius: 4
+        }
+      })
+    } else {
+      // False일때 css
+      setPasswordCSS(() => {
+        return {
+          border: '1px solid rgba(172, 0, 143, 1)',
+          borderRadius: 4
+        }
+      })
+    }
+  }, [isPassword])
   return (
     <div>
-      <div className="SignUp">
-        <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-          <p>
-            <img src={LogoImage} alt="LogoImage" />
-          </p>
-          <div style={{ display: 'flex', margin: '0px' }}>
-            <img src={LogoText} alt="LogoText" />
-            <h3
-              style={{
-                margin: '0px',
-                fontSize: '30px'
-              }}
-            >
-              에 오신 것을 환영합니다.
-            </h3>
+      <div className="signup-container">
+        <div className="signup-header">
+          <img src={LogoImage} alt="LogoImage" width="10%" />
+          <div className="signup-header-logo-text">
+            <img src={LogoText} alt="LogoText" width="20%" />에 오신 것을
+            환영합니다.
           </div>
         </div>
         <form
+          className="signup-form"
           onSubmit={(event) => {
             event.preventDefault()
             axios({
@@ -53,95 +102,68 @@ function SignUp() {
               }
             })
               .then((response) => {
-                console.log(response)
+                console.log('[회원가입 성공] : ', response)
                 navigate('/')
               })
               .catch((error) => {
-                console.log(error.response)
+                console.log('[회원가입 실패] : ', error.response)
               })
           }}
         >
-          <TextField
+          <input
+            className="signup-input"
             placeholder="아이디"
-            size="medium"
-            style={{
-              width: '100%',
-              marginBottom: '25px'
-            }}
+            style={usernameCSS}
             name="username"
             value={username}
             onChange={(event) => {
               setUsername(event.target.value)
             }}
+            // usernameCSS 값 변경 조건
+            onBlur={() => {
+              if (1 <= username.length && username.length <= 8) {
+                setIsUsername(true)
+              } else {
+                setIsUsername(false)
+              }
+            }}
           />
-          <TextField
+          <input
+            className="signup-input"
             placeholder="비밀번호(알파벳, 특수문자를 포함한 8~10자로 구성)"
-            size="medium"
-            style={{ width: '100%', marginBottom: '25px' }}
+            style={passwordCSS}
             name="password"
             value={password}
             onChange={(event) => {
               setPassword(event.target.value)
             }}
+            // password 값 변경 조건
+            onBlur={() => {
+              if (8 <= password.length && password.length <= 12) {
+                setIsPassword(true)
+              } else {
+                setIsPassword(false)
+              }
+            }}
           />
-          <TextField
+          <input
+            className="signup-input"
             placeholder="이메일"
-            size="medium"
-            style={{ width: '100%', marginBottom: '25px' }}
             name="email"
             value={email}
             onChange={(event) => {
               setEmail(event.target.value)
             }}
           />
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              marginBottom: '25px'
-            }}
-          >
-            <TextField
-              placeholder="인증번호 입력"
-              size="medium"
-              style={{ width: '85%' }}
-            />
-            <Button
-              variant="contained"
-              className="LogIn-button"
-              style={{
-                height: '55px',
-                backgroundColor: 'rgba(217, 217, 217, 1)',
-                color: 'black'
-              }}
-            >
-              전송
-            </Button>
+          <div className="email-validation-div">
+            <input className="signup-input" placeholder="인증번호 입력" />
+            <button className="email-check-button">전송</button>
           </div>
-          <hr style={{ margin: '0px 0px 25px 0px' }} />
-          <Button
-            variant="contained"
-            className="LogIn-button"
-            style={{
-              width: '100%',
-              height: '55px',
-              backgroundColor: 'rgba(217, 217, 217, 1)',
-              color: 'black',
-              marginBottom: '30px'
-            }}
-            type="submit"
-          >
+          <hr className="signup-line" />
+          <button className="signup-button" type="submit">
             가입하기
-          </Button>
+          </button>
         </form>
-      </div>
-      <div>
-        <Button onClick={handleOpen}>Open modal</Button>
-        <Modal open={open} onClose={handleClose}>
-          <Box>
-            <LogIn handleClose={handleClose} />
-          </Box>
-        </Modal>
       </div>
     </div>
   )
