@@ -197,9 +197,9 @@ public class StationController {
     /**
      * 스테이션 댓글 삭제
      */
+    @Operation(summary = "스테이션에 댓글 삭제")
     @DeleteMapping("/comment/{commentid}")
     public ResponseEntity<?> deleteComment(@PathVariable("commentid") int commentId) {
-        System.out.println();
         if (commentService.delete((long) commentId)) {
             return new ResponseEntity<>("댓글 삭제 성공", HttpStatus.OK);
         } else {
@@ -210,6 +210,7 @@ public class StationController {
     /**
      * 스테이션 좋아요 작성
      */
+    @Operation(summary = "스테이션에 좋아요 작성")
     @PostMapping("/{stationid}/heart")
     public ResponseEntity<?> writeHeart(@PathVariable("stationid") int stationId,
         @AuthenticationPrincipal PrincipalDetails principal) {
@@ -227,6 +228,7 @@ public class StationController {
     /**
      * 스테이션 좋아요 삭제
      */
+    @Operation(summary = "스테이션에 좋아요 삭제")
     @DeleteMapping("/{stationid}/heart")
     public ResponseEntity<?> deleteHeart(@PathVariable("stationid") int stationId,
         @AuthenticationPrincipal PrincipalDetails principal) {
@@ -241,6 +243,7 @@ public class StationController {
      * @param stationId : 조회할 스테이션 아이디
      * @return
      */
+    @Operation(summary = "스테이션 상세 조회")
     @GetMapping("/{stationid}")
     public ResponseEntity<StationDetailDto> getStationDetail(@PathVariable("stationid") int stationId){
         StationDetailDto station = stationService.getStationDetail((long) stationId);
@@ -248,12 +251,21 @@ public class StationController {
     }
 
     /**
-     * S3 파일 삭제 테스트 컨트롤러
+     * S3 파일 삭제 테스트 컨트롤러 - 테스트용
      */
     @PostMapping("/video/{videoid}")
     public ResponseEntity<?> deleteVideoFromS3(@PathVariable("videoid") int videoId) throws Exception{
         Video video = videoService.findById((long) videoId);
         videoService.deleteVideoFromS3(video.getVideoPath());
         return new ResponseEntity<>("S3 삭제 완료", HttpStatus.OK);
+    }
+
+    /**
+     * 내가 팔로우한 사람들의 스테이션 리스트 조회
+     */
+    @GetMapping("/following")
+    public List<MainStationDto> getFollowingStationList(@AuthenticationPrincipal PrincipalDetails principal){
+        Member member = memberService.getLoginMember(principal.getUsername());
+        return stationService.getFollowingList(member.getId());
     }
 }
