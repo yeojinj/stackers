@@ -1,5 +1,5 @@
 import { createSlice, configureStore } from '@reduxjs/toolkit'
-
+import _ from 'lodash'
 const userSlice = createSlice({
   name: 'userSlice',
   initialState: {
@@ -61,7 +61,7 @@ const stackSlice = createSlice({
   initialState: {
     content: '',
     music: '',
-    instrumentId: 0,
+    instrument: '',
     heartCnt: 0,
     remainDepth: 0,
     isPublic: 0,
@@ -75,7 +75,6 @@ const stackSlice = createSlice({
     CreateStack: (state, action) => {
       console.log(action.payload[0], action.payload[1])
       const val = action.payload[1]
-      state.instrumentId = 1
       state.remainDepth = 3
       state.prevStationId = -1
       switch (action.payload[0]) {
@@ -85,8 +84,8 @@ const stackSlice = createSlice({
         case 'music':
           state.music = val
           break
-        case 'instrumentId':
-          state.instrumentId = val
+        case 'instrument':
+          state.instrument = val
           break
         case 'isPublic':
           if (val === 'private') {
@@ -112,12 +111,11 @@ const stackSlice = createSlice({
           state = { ...state }
           break
       }
-      console.log(state)
     },
     ClearStack: (state, action) => {
       state.content = ''
       state.music = ''
-      state.instrumentId = []
+      state.instrument = ''
       state.heartCnt = 0
       state.remainDepth = 0
       state.isPublic = 0
@@ -139,10 +137,9 @@ const CreateInstSlice = createSlice({
     CreateInst: (state, action) => {
       const asdf = action.payload
       const instt = state.inst
-      state.inst = [...instt, ...asdf]
-      state.inst = new Set(state.inst)
-      state.inst = [...state.inst]
-
+      const tmp = [...instt, ...asdf]
+      state.inst = _.uniqBy(tmp, 'id')
+      console.log(state.inst)
       // console.log(action)
     }
   }

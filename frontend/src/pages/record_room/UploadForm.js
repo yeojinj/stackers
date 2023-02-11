@@ -29,10 +29,7 @@ function UploadForm(props) {
   const username = useSelector((state) => {
     return state.user.username
   })
-  const instLst = useSelector((state) => {
-    return state.CreateInst
-  })
-
+  console.log(data)
   const dateNow = Moment().format('YYYYMMDDHHmm')
   dispatch(CreateStack(['videoName', dateNow + username]))
 
@@ -46,7 +43,7 @@ function UploadForm(props) {
   const [values, setValues] = useState({
     content: '',
     music: '',
-    instrumentId: 0,
+    instrument: '',
     heartCnt: 0,
     remainDepth: 0,
     isPublic: 0,
@@ -63,7 +60,9 @@ function UploadForm(props) {
 
     dispatch(CreateStack([e.target.name, e.target.value]))
   }
-
+  useEffect(() => {
+    handleChange
+  }, [values])
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -74,7 +73,7 @@ function UploadForm(props) {
         let testData = {
           content: data.content,
           music: data.music,
-          instrumentId: data.instrumentId,
+          instrument: data.instrument,
           tags: data.tags,
           heartCnt: data.heartCnt,
           remainDepth: data.remainDepth,
@@ -157,15 +156,7 @@ function UploadForm(props) {
         </div>
         <Tag />
         <div className="container">
-          <div className="left">
-            <div className="instForm">
-              <b>연주 악기</b>
-              <IconButton>
-                <AddCircleOutlineIcon />
-              </IconButton>
-              <InstTag inst={instLst.inst} />
-            </div>
-          </div>
+          <InstTag />
           <div className="right">
             <div className="scopeForm">
               <div>

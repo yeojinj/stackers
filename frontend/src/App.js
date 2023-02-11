@@ -61,10 +61,7 @@ function App() {
   useEffect(() => {
     axios({
       method: 'GET',
-      url: '/api/instrument',
-      headers: {
-        'Content-Type': `multipart/form-data`
-      }
+      url: '/api/instrument'
     })
       .then((response) => {
         dispatch(CreateInst(response.data))
@@ -72,7 +69,7 @@ function App() {
       .catch((error) => {
         console.log(error)
       })
-  })
+  }, [])
 
   return (
     <div className="App">
