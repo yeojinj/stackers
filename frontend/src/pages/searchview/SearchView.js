@@ -1,9 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import AccountListItem from '../../components/account/AccountListItem'
 import '../../styles/searchview.css'
 import StationListItem from '../../components/station/StationListItem'
+import axios from 'axios'
+import { useSelector } from 'react-redux'
 
 function SearchView() {
+  const token = localStorage.getItem('accessToken')
+  const [search, setSearch] = useState([])
+  let searchkeyword = ''
   // 더미데이터
   const station = [
     {
@@ -91,6 +96,33 @@ function SearchView() {
       }
     }
   ]
+
+  // store 에서 검색키워드 가져오기
+  const keyword = useSelector((state) => {
+    const getKeyword = state.SearchKeyword.keyword
+    if (getKeyword) {
+      searchkeyword = getKeyword
+    }
+  })
+
+  // 검색키워드로 axios 요청하기
+  async function searchList() {
+    await axios
+      .get(`/api/search/${keyword}`, {
+        headers: {
+          Authorization: token
+        }
+      })
+      .then((res) => {
+        // setSearch(res.data)
+        console.log('받아온 검색결과들', search)
+      })
+      .catch((err) => console.log(err))
+  }
+
+  useEffect(() => {
+    searchList()
+  }, [])
 
   const [currentTab, clickTab] = useState(0)
 

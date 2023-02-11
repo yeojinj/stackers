@@ -10,6 +10,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import Moment from 'moment'
 import { useSelector, useDispatch } from 'react-redux'
 import { CreateStack, ClearStack } from '../../store.js'
+import InstTag from './InstTag.js'
 import axios from 'axios'
 
 const blobFile = (file) =>
@@ -27,6 +28,9 @@ function UploadForm(props) {
   })
   const username = useSelector((state) => {
     return state.user.username
+  })
+  const instLst = useSelector((state) => {
+    return state.CreateInst
   })
 
   const dateNow = Moment().format('YYYYMMDDHHmm')
@@ -159,6 +163,7 @@ function UploadForm(props) {
               <IconButton>
                 <AddCircleOutlineIcon />
               </IconButton>
+              <InstTag inst={instLst.inst} />
             </div>
           </div>
           <div className="right">

@@ -88,6 +88,33 @@
   background-color: rgba(248, 248, 248, 1);
 }
 
+.accounts-title {
+  padding: 5px 16px;
+  font-size: small;
+  color: grey;
+}
+
+.dropdown-img {
+  width: 42px;
+  height: 42px;
+  margin-right: 5px;
+}
+
+.dropdown-accounts {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 5px;
+}
+
+.dropdown-user {
+  font-weight: bold;
+}
+
+.dropdown-nick {
+  font-size: small;
+  color: gray;;
+}
+
 .login-btn {
   width: 7%;
   height: 36px;

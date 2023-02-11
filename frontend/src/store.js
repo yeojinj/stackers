@@ -127,11 +127,12 @@ const CreateInstSlice = createSlice({
   },
   reducers: {
     CreateInst: (state, action) => {
-      console.log(action.payload)
       const asdf = action.payload
       const instt = state.inst
       state.inst = [...instt, ...asdf]
-      console.log(state.inst)
+      state.inst = new Set(state.inst)
+      state.inst = [...state.inst]
+
       // console.log(action)
     }
   }
@@ -152,13 +153,26 @@ const SearchSlice = createSlice({
   }
 })
 
+const TagSlice = createSlice({
+  name: 'TagSlice',
+  initialState: {
+    tags: []
+  },
+  reducers: {
+    TagList: (state, action) => {
+      state.tags = action.payload
+    }
+  }
+})
+
 const store = configureStore({
   reducer: {
     user: userSlice.reducer,
     CreateComments: CreateCommentSlice.reducer,
     stack: stackSlice.reducer,
     CreateInst: CreateInstSlice.reducer,
-    SearchKeyword: SearchSlice.reducer
+    SearchKeyword: SearchSlice.reducer,
+    TagList: TagSlice.reducer
   }
 })
 
@@ -168,3 +182,4 @@ export const { CreateComment } = CreateCommentSlice.actions
 export const { CreateStack, ClearStack } = stackSlice.actions
 export const { CreateInst } = CreateInstSlice.actions
 export const { SearchKeyword } = SearchSlice.actions
+export const { TagList } = TagSlice.actions
