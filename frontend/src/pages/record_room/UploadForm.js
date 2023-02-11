@@ -40,21 +40,6 @@ function UploadForm(props) {
 
   const filedownloadlink = window.URL.createObjectURL(object)
 
-  const [values, setValues] = useState({
-    content: '',
-    music: '',
-    instrument: '',
-    heartCnt: 0,
-    remainDepth: 0,
-    isPublic: 0,
-    isComplete: 0,
-    tags: [''],
-    prevStationId: 0,
-    videoName: '',
-    delete: true,
-    file: filedownloadlink
-  })
-
   const handleChange = (e) => {
     console.log(e.target.name, e.target.value)
 
@@ -62,7 +47,7 @@ function UploadForm(props) {
   }
   useEffect(() => {
     handleChange
-  }, [values])
+  }, [data])
   const handleSubmit = async (e) => {
     e.preventDefault()
 

@@ -63,11 +63,11 @@ const stackSlice = createSlice({
     music: '',
     instrument: '',
     heartCnt: 0,
-    remainDepth: 0,
+    remainDepth: 3,
     isPublic: 0,
     isComplete: 0,
     tags: [],
-    prevStationId: 0,
+    prevStationId: -1,
     videoName: '',
     delete: true
   },
@@ -75,9 +75,13 @@ const stackSlice = createSlice({
     CreateStack: (state, action) => {
       console.log(action.payload[0], action.payload[1])
       const val = action.payload[1]
-      state.remainDepth = 3
-      state.prevStationId = -1
       switch (action.payload[0]) {
+        case 'remainDepth':
+          state.remainDepth = val
+          break
+        case 'prevStationId':
+          state.prevStationId = val
+          break
         case 'content':
           state.content = val
           break
@@ -112,16 +116,17 @@ const stackSlice = createSlice({
           break
       }
     },
+
     ClearStack: (state, action) => {
       state.content = ''
       state.music = ''
       state.instrument = ''
       state.heartCnt = 0
-      state.remainDepth = 0
+      state.remainDepth = 3
       state.isPublic = 0
       state.isComplete = 0
       state.tags = []
-      state.prevStationId = 0
+      state.prevStationId = -1
       state.videoName = ''
       state.delete = true
     }

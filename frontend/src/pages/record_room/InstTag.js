@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { IconButton } from '@mui/material'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { CreateStack } from '../../store.js'
 import axios from 'axios'
 
