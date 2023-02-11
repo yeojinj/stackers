@@ -146,7 +146,7 @@ function MainRoom() {
             <div
               className="chip top"
               style={{
-                marginLeft: '80%'
+                marginLeft: '81%'
               }}
             >
               당신을 기다리는 스테이션 🪐
