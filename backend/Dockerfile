@@ -27,7 +27,6 @@ RUN apt update
 RUN apt install -y ffmpeg
 
 # root 대신 nobody 권한으로 실행
-USER nobody
 ENTRYPOINT [                                                \
     "java",                                                 \
     "-jar",                                                 \
