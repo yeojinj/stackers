@@ -250,8 +250,10 @@ public class StationController {
      */
     @Operation(summary = "스테이션 상세 조회")
     @GetMapping("/{stationid}")
-    public ResponseEntity<StationDetailDto> getStationDetail(@PathVariable("stationid") int stationId){
-        StationDetailDto station = stationService.getStationDetail((long) stationId);
+    public ResponseEntity<StationDetailDto> getStationDetail(@AuthenticationPrincipal PrincipalDetails principal,
+                                                             @PathVariable("stationid") int stationId){
+        Long loginMemberId = memberService.getLoginMember(principal.getUsername()).getId();
+        StationDetailDto station = stationService.getStationDetail((long) stationId, loginMemberId);
         return new ResponseEntity<>(station, HttpStatus.OK);
     }
 
