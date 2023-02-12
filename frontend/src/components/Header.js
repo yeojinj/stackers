@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import logo from '../assets/logo.svg'
 import searchimg from '../assets/search.svg'
-import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import DefaultImg from '../assets/default_profile.png'
 import ProfileFrame from './profileFrame'
 import '../styles/header.css'
 import SearchIcon from '@mui/icons-material/Search'
@@ -12,7 +12,6 @@ import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
 import LogIn from '../pages/sign_folder/LogIn/LogIn'
 import { SearchKeyword } from '../store'
-// import Button from '@mui/material/Button'
 
 function Header() {
   const token = localStorage.getItem('accessToken')
@@ -227,23 +226,13 @@ function Header() {
                   }
                 >
                   <div>
-                    {dropDownItem.imgPath !== 'static/s3이미지링크.png' && (
-                      <img
-                        className="dropdown-img"
-                        src={dropDownItem.imgPath}
-                      ></img>
-                    )}
-                    {dropDownItem.imgPath === 'static/s3이미지링크.png' && (
-                      <>
-                        <AccountCircleIcon
-                          style={{
-                            width: '42px',
-                            height: '42px',
-                            marginRight: '5px'
-                          }}
-                        />
-                      </>
-                    )}
+                    <img
+                      src={
+                        dropDownItem.imgPath ? dropDownItem.imgPath : DefaultImg
+                      }
+                      alt=""
+                      className="dropdown-img"
+                    />
                   </div>
                   <div className="dropdown-accounts">
                     <div className="dropdown-user">{dropDownItem.username}</div>
