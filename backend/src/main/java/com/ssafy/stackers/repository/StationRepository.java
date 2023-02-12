@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface StationRepository extends JpaRepository<Station, Long> {
     Optional<Station> findById(Long id);
-    Optional<Station> findTop1ByMemberAndIsPublicOrderByRegTimeAsc(Member member, boolean isPublic);
+    Optional<Station> findTop1ByMemberAndIsPublicOrderByRegTimeDesc(Member member, boolean isPublic);
     List<Station> findByIsPublicAndIsComplete(boolean isPublic, boolean isComplete);
     List<Station> findByIsPublicAndIsCompleteAndMemberIsNot(boolean isPublic, boolean isComplete, Member member);
     List<Station> findTop10ByIsPublicOrderByHeartCntDescRegTimeAsc(boolean isPublic);

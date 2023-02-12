@@ -3,9 +3,7 @@ package com.ssafy.stackers.controller;
 import com.ssafy.stackers.auth.PrincipalDetails;
 import com.ssafy.stackers.exception.CustomException;
 import com.ssafy.stackers.model.*;
-import com.ssafy.stackers.model.dto.MainStationDto;
-import com.ssafy.stackers.model.dto.StationDetailDto;
-import com.ssafy.stackers.model.dto.StationDto;
+import com.ssafy.stackers.model.dto.*;
 import com.ssafy.stackers.service.*;
 import com.ssafy.stackers.utils.error.ErrorCode;
 import io.swagger.v3.oas.annotations.Operation;
@@ -120,7 +118,7 @@ public class StationController {
             stations = stationService.findByIsPublicAndIsCompleteAndMember(true, true, member);
         }
 
-        return stationService.getStationShortDetail(stations);
+        return stationService.getMainStationList(stations);
     }
 
     /**
@@ -139,7 +137,7 @@ public class StationController {
             stations = stationService.findByIsPublicAndIsCompleteAndMember(true, false, member);
         }
 
-        return stationService.getStationShortDetail(stations);
+        return stationService.getMainStationList(stations);
     }
 
     /**
@@ -147,9 +145,18 @@ public class StationController {
      */
     @Operation(summary = "상위 스테이션 조회")
     @GetMapping("/popular")
-    public List<MainStationDto> getPopularStation() {
+    public List<PopularStationDto> getPopularStation() {
         List<Station> stations = stationService.findTop10Station(true);
-        return stationService.getStationShortDetail(stations);
+        return stationService.getPopularStationList(stations);
+    }
+
+    /**
+     * 내가 팔로우한 사람들의 스테이션 리스트 조회
+     */
+    @GetMapping("/following")
+    public List<FollowersStationDto> getFollowersStation(@AuthenticationPrincipal PrincipalDetails principal){
+        Member member = memberService.getLoginMember(principal.getUsername());
+        return stationService.getFollowersStation(member.getId());
     }
 
     /**
@@ -161,7 +168,7 @@ public class StationController {
         @AuthenticationPrincipal PrincipalDetails principal) {
         List<Station> stations = stationService.findMyStation(true,
             memberService.getLoginMember(principal.getUsername()));
-        return stationService.getStationShortDetail(stations);
+        return stationService.getMainStationList(stations);
     }
 
     /**
@@ -173,7 +180,7 @@ public class StationController {
         @AuthenticationPrincipal PrincipalDetails principal) {
         List<Station> stations = stationService.findMyStation(false,
             memberService.getLoginMember(principal.getUsername()));
-        return stationService.getStationShortDetail(stations);
+        return stationService.getMainStationList(stations);
     }
 
     /**
@@ -258,12 +265,4 @@ public class StationController {
         return new ResponseEntity<>("S3 삭제 완료", HttpStatus.OK);
     }
 
-    /**
-     * 내가 팔로우한 사람들의 스테이션 리스트 조회
-     */
-    @GetMapping("/following")
-    public List<MainStationDto> getFollowingStationList(@AuthenticationPrincipal PrincipalDetails principal){
-        Member member = memberService.getLoginMember(principal.getUsername());
-        return stationService.getFollowingList(member.getId());
-    }
 }
