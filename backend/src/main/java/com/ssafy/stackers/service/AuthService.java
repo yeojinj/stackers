@@ -63,8 +63,13 @@ public class AuthService {
             throw new CustomException(ErrorCode.MISMATCH_REFRESH_TOKEN);
         }
 
-        String newToken = jwtTokenProvider.createRefreshToken(authentication);
-        RefreshRedisToken newRedisToken = RefreshRedisToken.createToken(authentication.getName(), newToken);
+        tokenDto = jwtTokenProvider.generateTokenDto(authentication);
+
+        ValueOperations<String, String> logoutValueOperations = redisTemplate.opsForValue();
+        logoutValueOperations.set(tokenDto.getAccessToken(), tokenDto.getAccessToken());
+
+        RefreshRedisToken newRedisToken = RefreshRedisToken.createToken(authentication.getName(),
+            tokenDto.getRefreshToken());
         refreshRedisRepository.save(newRedisToken);
 
         return tokenDto;
