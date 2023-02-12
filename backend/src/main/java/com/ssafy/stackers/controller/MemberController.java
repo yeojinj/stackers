@@ -4,6 +4,7 @@ import com.ssafy.stackers.auth.PrincipalDetails;
 import com.ssafy.stackers.model.Instrument;
 import com.ssafy.stackers.model.Member;
 import com.ssafy.stackers.model.Party;
+import com.ssafy.stackers.model.dto.ChangePasswordDto;
 import com.ssafy.stackers.model.dto.JoinDto;
 import com.ssafy.stackers.model.dto.LoginMemberDto;
 import com.ssafy.stackers.model.dto.MemberModifyDto;
@@ -53,10 +54,10 @@ public class MemberController {
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<?> changePassword(@RequestBody @Valid Map<String, String> map,
+    public ResponseEntity<?> changePassword(@RequestBody @Valid ChangePasswordDto changePasswordDto,
                                             @AuthenticationPrincipal PrincipalDetails principal) {
         Member member = memberService.getLoginMember(principal.getUsername());
-        memberService.setNewPassword(member.getUsername(), map.get("password"));
+        memberService.setNewPassword(member.getUsername(), changePasswordDto.getPassword());
         return new ResponseEntity<>("비밀번호 변경 완료", HttpStatus.OK);
     }
 
@@ -104,16 +105,19 @@ public class MemberController {
             @RequestPart(value = "profile", required = false) MultipartFile file,
             @AuthenticationPrincipal PrincipalDetails principal) throws Exception {
         Member member = memberService.getLoginMember(principal.getUsername());
+        // 바이오, 이름, 사진 업데이트
         memberService.updateMember(member.getUsername(), memberModifyDto, file);
-        // 악기 등록
+
+        // 연주 악기 삭제 -> 새로운 연주 악기 등록
         playableInstrumentService.deleteByMemberId(member);
         for (String instrumentName: memberModifyDto.getInstruments()) {
-            Instrument instrument = instrumentService.findByName(instrumentName);
+            Instrument instrument = instrumentService.addInstrument(instrumentName);
             playableInstrumentService.save(member, instrument);
         }
-        // 팀 등록
+
+        // 소속 팀 삭제 -> 새로운 팀 등록
         partyMemberService.deleteByMemberId(member);
-        Party party = partyService.findByName(memberModifyDto.getParty());
+        Party party = partyService.addPartyOrReturn(memberModifyDto.getParty());
         partyMemberService.save(member, party);
 
         return new ResponseEntity<>("멤버 수정 완료", HttpStatus.OK);

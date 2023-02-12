@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Optional;
 import java.util.UUID;
 
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,6 @@ import net.bramp.ffmpeg.builder.FFmpegBuilder;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import net.bramp.ffmpeg.builder.FFmpegBuilder.Strict;
-import net.bramp.ffmpeg.probe.FFmpegProbeResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -155,9 +153,9 @@ public class VideoService {
 
         // 동영상 인코딩 명령어
         FFmpegBuilder builder = new FFmpegBuilder()
-            .setInput(localPath)                                    // 영상 파일 경로
-            .overrideOutputFiles(true)                              // 인코딩 파일 존재할 경우 덮어쓰기
-            .addOutput(encodePath)        // 인코딩 파일 경로
+            .setInput(localPath)            // 영상 파일 경로
+            .overrideOutputFiles(true)      // 인코딩 파일 존재할 경우 덮어쓰기
+            .addOutput(encodePath)          // 인코딩 파일 경로
             .setFormat("mp4")               // 인코딩 파일 형식
             .setVideoResolution(1080, 720)
             .setStrict(Strict.EXPERIMENTAL)
@@ -194,7 +192,6 @@ public class VideoService {
                 .addInput(localPath)
                 .addOutput(cropPath)
                 .addExtraArgs("-vf", "crop=405:720")
-//            .addExtraArgs("-vf", "crop=405:720")
                 .done();
 
         FFmpegExecutor executor = new FFmpegExecutor(ffmpeg, ffprobe);
@@ -214,7 +211,6 @@ public class VideoService {
 
     /**
      * 동영상 합치기
-     * ffmpeg 명령어 그대로 사용함 -> 배포 시 수정 필요
      */
     public String mergeVideo(String prevPath, String localPath) throws IOException {
         // 합친 영상 추출 경로

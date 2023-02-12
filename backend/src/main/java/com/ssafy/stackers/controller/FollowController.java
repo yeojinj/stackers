@@ -1,8 +1,6 @@
 package com.ssafy.stackers.controller;
 
 import com.ssafy.stackers.auth.PrincipalDetails;
-import com.ssafy.stackers.model.Instrument;
-import com.ssafy.stackers.model.Member;
 import com.ssafy.stackers.model.dto.FollowInfoDto;
 import com.ssafy.stackers.service.FollowService;
 import com.ssafy.stackers.service.MemberService;
