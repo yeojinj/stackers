@@ -46,6 +46,16 @@ const CreateCommentSlice = createSlice({
   }
 })
 
+const urlSlice = createSlice({
+  name: 'urlSlice',
+  initialState: { preUrl: '/' },
+  reducers: {
+    ChangeUrl: (state, action) => {
+      console.log(action)
+    }
+  }
+})
+
 const stackSlice = createSlice({
   name: 'stackSlice',
   initialState: {
@@ -127,11 +137,12 @@ const CreateInstSlice = createSlice({
   },
   reducers: {
     CreateInst: (state, action) => {
-      console.log(action.payload)
       const asdf = action.payload
       const instt = state.inst
       state.inst = [...instt, ...asdf]
-      console.log(state.inst)
+      state.inst = new Set(state.inst)
+      state.inst = [...state.inst]
+
       // console.log(action)
     }
   }
@@ -171,7 +182,8 @@ const store = configureStore({
     stack: stackSlice.reducer,
     CreateInst: CreateInstSlice.reducer,
     SearchKeyword: SearchSlice.reducer,
-    TagList: TagSlice.reducer
+    TagList: TagSlice.reducer,
+    url: urlSlice.reducer
   }
 })
 
@@ -182,3 +194,4 @@ export const { CreateStack, ClearStack } = stackSlice.actions
 export const { CreateInst } = CreateInstSlice.actions
 export const { SearchKeyword } = SearchSlice.actions
 export const { TagList } = TagSlice.actions
+export const { ChangeUrl } = urlSlice.actions

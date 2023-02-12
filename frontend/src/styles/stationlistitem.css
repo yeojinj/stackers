@@ -2,13 +2,23 @@
   width: 197px;
   height: 331px;
   z-index: 0;
-  /* border-radius: 10px; */
-  /* border: 1px solid black; */
-  margin-bottom: 44px;
+  margin-bottom: 2px;
   float: left;
-  margin-left: 9px;
+  padding: 1.5% 0;
+  margin-right: 0.9%;
 }
-
+.station-item__items:hover {
+  cursor: pointer;
+  transform: scale(1.05);
+  border-radius: 4%;
+  font-weight: 700;
+  transition: 0.4s ease-in-out;
+}
+.station-item__ranks:hover {
+  cursor: pointer;
+  transform: scale(1.03);
+  transition: 0.4s ease-in-out;
+}
 .station-item-search {
   width: 260px;
   height: 428px;
@@ -21,41 +31,67 @@
 .video-style {
   width: 197px;
   height: 287px;
-  border-radius: 10px;
+  border-radius: 4%;
 }
-
+.ranks:hover {
+  transition: 0.2s ease-in-out;
+  box-shadow: rgba(227, 95, 173, 0.4) 5px 5px, rgba(227, 95, 173, 0.3) 10px 10px,
+    rgba(227, 95, 173, 0.2) 15px 15px, rgba(227, 95, 173, 0.1) 20px 20px,
+    rgba(227, 95, 173, 0.05) 25px 25px;
+}
+.non-ranks:hover {
+  transition: 0.3s ease-in-out;
+  box-shadow: rgba(42, 32, 150, 0.6) 5px 5px, rgba(42, 32, 150, 0.3) 10px 10px;
+  /* box-shadow: rgba(136, 38, 136, 0.217) 0px 25px 20px -20px; */
+}
 .video-style-search {
-  width: 260px;
-  height: 343px;
+  width: 261px;
+  height: 464px;
+  object-fit: cover;
   border-radius: 5px;
 }
 
+.station-info {
+  margin-top: 1em;
+}
 .station-description {
-  margin: 0;
+  margin: 0 1%;
   white-space: nowrap;
   overflow: hidden;
   text-align: left;
   text-overflow: ellipsis;
-  font-size: 18px;
+  font-size: 0.95em;
+} 
+.station-tag {
+  margin: 0 1%;
+  width: 261px;
+  height: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  font-weight: 600;
+  color: rgba(42, 32, 150, 0.9);
+  font-size: 0.85em;
 }
 
-.station-tag {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-align: left;
+.station-rank {
+  color: rgba(0, 0, 0, 0.429);
+  font-size: 6em;
   font-weight: bold;
-  color: rgba(42, 32, 150, 1);
-  font-size: 16px;
+  margin-top: -40%;
+  margin-left: -12%;
+  z-index: 100;
+  -webkit-text-stroke: 3.5px rgba(245, 245, 245, 0.759);
 }
 
 .station-account {
-  width: 255px;
   height: 30px;
-  margin-top: 7px;
+  margin-top: 5px;
   margin-bottom: 19px;
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
 }
 
 .profile-box {
@@ -67,14 +103,15 @@
 }
 
 .profile-img {
-  width: 100%;
-  height: 100%;
+  width: 28px;
+  height: 28px;
   object-fit: cover;
 }
 
 .account-name {
   width: 108px;
-  margin-right: 61px;
+  padding-top: 3px;
+  margin-right: 80px;
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: left;

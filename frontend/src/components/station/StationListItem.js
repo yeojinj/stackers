@@ -1,27 +1,18 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import '../../styles/stationlistitem.css'
-import profileTest from '../../assets/profileTest.svg'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
+// import { useNavigate } from 'react-router-dom'
 
-function StationListItem({ isRanking, isSearch, station }) {
-  const [staion, setStation] = useState()
-
-  // 검색 페이지 조회 연결 후 아래 stationInfo 데이터 삭제
-  const stationInfo = {
-    video_url: 'https://webrtc.github.io/samples/src/video/chrome.webm',
-    video_description: '비디오 설명이에요 비디오 설명이에요 비디오 설명이에요',
-    video_tags: ['#disco', '#music', '#dance', '#music', '#guitar'],
-    profile_img: profileTest,
-    username: 'apricot',
-    video_likes: 12000
-  }
+function StationListItem({ isRanking, isSearch, station, index }) {
+  // const [station, setStation] = useState()
 
   const videoRef = useRef(null)
 
-  useEffect(() => {
-    setStation(station)
-    console.log('mainroom 에서 보낸 데이터를 station 변수에 넣기', staion)
-  }, [])
+  // useEffect(() => {
+  //   setStation(station)
+  //   console.log('mainroom 에서 보낸 데이터를 station 변수에 넣기', station)
+  // }, [])
 
   useEffect(() => {
     IsRanking()
@@ -36,49 +27,55 @@ function StationListItem({ isRanking, isSearch, station }) {
     return videoRef.current.pause()
   }
 
-  // 메인페이지 스테이션 조회
+  // const navigate = useNavigate()
+  // const gotoDetail = (id) => {
+  //   navigate(`/StationRoom/${id}`)
+  // }
+
+  // 메인페이지, 마이페이지 스테이션 조회
   const IsRanking = () => {
     // 스테이션 랭킹
     if (isRanking) {
       return (
-        <>
-          {/* 썸네일 */}
-          {/* <img
-            src="station.video.thumbnailPath"
-            className="thumbnail-style"
-          ></img> */}
+        <div className="station-item__ranks">
           <video
             ref={videoRef}
-            id="staion"
-            className="video-style"
+            id="station"
+            className="video-style ranks"
             src={station.video.videoPath}
             autoPlay={false}
             onMouseOver={playVideo}
             onMouseLeave={pauseVideo}
+            // onClick={gotoDetail(station.id)}
             loop
           ></video>
-        </>
+          <p className="station-rank">{index}</p>
+        </div>
       )
     } else if (!isSearch) {
       // 완성, 미완성, 마이페이지 스테이션
       return (
-        <>
+        <div className="station-item__items">
           <video
             ref={videoRef}
-            className="video-style"
+            className="video-style non-ranks"
             src={station.video.videoPath}
             autoPlay={false}
             onMouseOver={playVideo}
             onMouseLeave={pauseVideo}
+            // onClick={gotoDetail(station.id)}
             loop
           ></video>
-          <p className="station-description">{station.content}</p>
-          <div className="station-tag">
-            {station.tags.map((tag, i) => {
-              return `#${tag} `
-            })}
+          <div className="video-text">
+            <p className="station-description">{station.content}</p>
+            <div className="station-tag">
+              {station.tags &&
+                station.tags.map((tag, i) => {
+                  return `#${tag} `
+                })}
+            </div>
           </div>
-        </>
+        </div>
       )
     }
   }
@@ -86,11 +83,13 @@ function StationListItem({ isRanking, isSearch, station }) {
   // 검색페이지에서 데이터 받을 때 다시 해보기
   const IsSearch = () => {
     let likesResult = ''
-    const modifyLikes = stationInfo.video_likes
-    if (modifyLikes >= 1000) {
-      likesResult = `${Math.floor(modifyLikes / 1000)}k`
-    } else {
-      likesResult = modifyLikes
+    if (station.heartCnt) {
+      const modifyLikes = station.heartCnt
+      if (modifyLikes >= 1000) {
+        likesResult = `${Math.floor(modifyLikes / 1000)}k`
+      } else {
+        likesResult = modifyLikes
+      }
     }
     if (isSearch) {
       return (
@@ -99,27 +98,39 @@ function StationListItem({ isRanking, isSearch, station }) {
             ref={videoRef}
             className={isSearch ? 'video-style-search' : 'video-style'}
             src={station.video.videoPath}
-            // src={stationInfo.video_url}
             autoPlay={false}
             onMouseOver={playVideo}
             onMouseLeave={pauseVideo}
+            // onClick={gotoDetail(station.id)}
             loop
           ></video>
-          <p className="station-description">{station.content}</p>
-          <div className="station-tag">
-            {station.tags.map((tag, i) => {
-              return `#${tag} `
-            })}
-          </div>
-          <div className="station-account">
-            <div className="profile-box">
-              <img className="profile-img" src={stationInfo.profile_img}></img>
+          <div className="station-info">
+            <p className="station-description">{station.content}</p>
+            <div className="station-tag">
+              {station.tags &&
+                station.tags.map((tag, i) => {
+                  return `#${tag} `
+                })}
             </div>
-            <div className="account-name">{stationInfo.username}</div>
-            <FavoriteBorderIcon
-              style={{ width: '17px', height: '17px', marginTop: '3px' }}
-            />
-            <div className="video-likes">{likesResult}</div>
+            <div className="station-account">
+              <div className="profile-box">
+                {station.imgPath !== 'static/s3이미지링크.png' && (
+                  <img className="profile-img" src={station.imgPath}></img>
+                )}
+                {station.imgPath === 'static/s3이미지링크.png' && (
+                  <>
+                    <AccountCircleIcon
+                      style={{ width: '28px', height: '28px' }}
+                    />
+                  </>
+                )}
+              </div>
+              <div className="account-name">{station.username}</div>
+              <FavoriteBorderIcon
+                style={{ width: '17px', height: '17px', marginTop: '3px' }}
+              />
+              <div className="video-likes">{likesResult}</div>
+            </div>
           </div>
         </>
       )

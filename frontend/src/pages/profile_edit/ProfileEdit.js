@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './ProfileEdit.css'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import InstTag from './InstTag'
 import NoImg from '../../assets/noImg.svg'
 import TextField from '@mui/material/TextField'
@@ -8,16 +8,20 @@ import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
 import MyDropzone from './MyDropzone'
 import axios from 'axios'
+import { TagList } from '../../store.js'
 // import ImageCrop from './ImageCrop'
 
 function ProfileEdit() {
-  // const [userinfo, setUserInfo] = useState([])
+  const tags = useSelector((state) => {
+    return state.TagList.tags
+  })
   const [id, setId] = useState('')
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [nickname, setNickname] = useState('')
   const [bio, setBio] = useState('')
-  const [parties, setParties] = useState('')
+  const [instruments, setInstruments] = useState(tags)
+  const [party, setParty] = useState('')
 
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
@@ -25,10 +29,6 @@ function ProfileEdit() {
   const [imageurl, setImageurl] = useState('')
   const [image, setImage] = useState('')
   const token = localStorage.getItem('accessToken')
-
-  const inst = useSelector((state) => {
-    return state.TagList.tags
-  })
 
   // const Instrument = [
   //   {
@@ -55,6 +55,7 @@ function ProfileEdit() {
   // ]
 
   // 사용자 정보 조회
+  const dispatch = useDispatch()
   async function userInfo() {
     await axios
       .get('/api/member/user', {
@@ -69,7 +70,9 @@ function ProfileEdit() {
         setEmail(res.data.email)
         setBio(res.data.bio)
         setImageurl(res.data.imgPath)
-        setParties(res.data.parties)
+        dispatch(TagList(res.data.instruments))
+        setInstruments(res.data.instruments)
+        setParty(res.data.party)
       })
       .catch((err) => console.log(err))
   }
@@ -93,27 +96,25 @@ function ProfileEdit() {
   // 415 오류 발생 -> 수정 필요!!!!
   const changeInfo = () => {
     console.log(id)
-    console.log('[악기정보가 잘 들어오는지 확인]', inst)
     const newInfo = {
       nickname,
       bio,
-      instruments: inst,
-      parties
+      instruments,
+      party
     }
     console.log(newInfo)
-    const formData = new FormData()
-    formData.append(
-      'info',
-      new Blob([JSON.stringify(newInfo)], {
-        type: 'application/json'
-      })
-    )
+    // 이미지를 업데이트 했다면
     if (image) {
-      console.log('[axios 로 보낼 이미지 파일 확인]', image)
+      const formData = new FormData()
+      formData.append(
+        'info',
+        new Blob([JSON.stringify(newInfo)], {
+          type: 'application/json'
+        })
+      )
       formData.append('profile', image)
-      console.log(formData)
       axios
-        .put('/api/member/user', formData, {
+        .post('/api/member/user', formData, {
           data: newInfo,
           headers: {
             Authorization: token,
@@ -121,20 +122,20 @@ function ProfileEdit() {
           }
         })
         .then((res) => {
-          console.log(res.data)
+          console.log('[성공]', res.data)
         })
         .catch((err) => console.log(err))
     } else {
+      // 이미지를 업데이트 하지 않았다면
       axios
-        .put('/api/member/user', formData, {
+        .post('api/member/user', {
           data: newInfo,
           headers: {
-            Authorization: token,
-            'Content-Type': 'multipart/form-data'
+            Authorization: token
           }
         })
         .then((res) => {
-          console.log(res.data)
+          console.log('[성공]', res.data)
         })
         .catch((err) => console.log(err))
     }
@@ -225,7 +226,7 @@ function ProfileEdit() {
       <div className="ProfileEdit-Instrument">
         <div className="ProfileEdit-first">악기</div>
         <div className="ProfileEdit-content-Bio">
-          <InstTag />
+          <InstTag instruments={instruments} />
         </div>
       </div>
       <div className="ProfileEdit-group">
@@ -234,12 +235,12 @@ function ProfileEdit() {
           <TextField
             size="small"
             name="group"
-            value={parties || ''}
+            value={party || ''}
             style={{
               width: '100%'
             }}
             onChange={(event) => {
-              setParties(event.target.value)
+              setParty(event.target.value)
             }}
           />
           <p style={{ fontSize: '12px', color: 'gray' }}>
