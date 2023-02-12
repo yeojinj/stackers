@@ -82,7 +82,16 @@
   margin-top: -40%;
   margin-left: -12%;
   z-index: 100;
-  -webkit-text-stroke: 3.5px rgba(245, 245, 245, 0.759);
+  background: -webkit-linear-gradient(
+    -70deg,
+    #2a2096 5%,
+    #ac008f 53%,
+    #e35fad 91%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-stroke: 0.7px rgba(245, 245, 245, 0.759);
+  /* color: ㅅㄱ; */
+  /* -webkit-text-stroke: 3.5px rgba(245, 245, 245, 0.759); */
 }
 
 .station-account {
