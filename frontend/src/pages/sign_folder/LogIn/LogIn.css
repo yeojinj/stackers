@@ -74,6 +74,14 @@
   color: white;
   background: rgba(42, 32, 150, 0.9);
 }
+.login-button-disabled {
+  width: 80%;
+  height: 45px;
+  font-size: 0.9em;
+  border: none;
+  border-radius: 5px;
+  background-color: #b2b2b2a8;
+}
 
 .SNS-LogIn-buttons {
   margin-bottom: 42px;

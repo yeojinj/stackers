@@ -42,6 +42,30 @@
   border-radius: 5px;
   outline: none;
 }
+.signup-input-success {
+  width: 80%;
+  height: 28px;
+  margin-bottom: 8px;
+  border: 1px solid rgba(42, 32, 150, 1);
+  padding: 10px;
+  border-radius: 5px;
+  outline: none;
+  background-image: url('./inputSuccess.svg');
+  background-repeat: no-repeat;
+  background-position: 98%;
+}
+.signup-input-fail {
+  width: 80%;
+  height: 28px;
+  margin-bottom: 8px;
+  border: 1px solid rgba(172, 0, 143, 1);
+  padding: 10px;
+  border-radius: 5px;
+  outline: none;
+  background-image: url('./inputFail.svg');
+  background-repeat: no-repeat;
+  background-position: 98%;
+}
 .email-validation-div {
   width: 85%;
   display: flex;
@@ -55,6 +79,7 @@
   margin-left: 2%;
   border: none;
   border-radius: 10px;
+  cursor: pointer;
 }
 .signup-line {
   width: 85%;
@@ -68,4 +93,15 @@
 
   border: none;
   border-radius: 10px;
+  cursor: pointer;
+}
+.signup-button-able {
+  width: 85%;
+  height: 42px;
+
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: rgba(42, 32, 150, 1);
+  color: white;
 }
