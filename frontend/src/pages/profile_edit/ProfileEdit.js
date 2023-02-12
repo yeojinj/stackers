@@ -1,62 +1,42 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import './ProfileEdit.css'
-import { useSelector } from 'react-redux'
-import InstTag from './InstTag'
+// import { useSelector, useDispatch } from 'react-redux'
+// import InstTag from './InstTag'
 import NoImg from '../../assets/noImg.svg'
 import TextField from '@mui/material/TextField'
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
 import MyDropzone from './MyDropzone'
 import axios from 'axios'
+// import { TagList } from '../../store.js'
 // import ImageCrop from './ImageCrop'
 
 function ProfileEdit() {
+  // const tags = useSelector((state) => {
+  //   return state.TagList.tags
+  // })
   const [id, setId] = useState('')
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [nickname, setNickname] = useState('')
   const [bio, setBio] = useState('')
-  const [instruments, setInstruments] = useState([])
-  const [parties, setParties] = useState('')
+  // const [instruments, setInstruments] = useState(tags)
+  const [party, setParty] = useState('')
 
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
   const [imageurl, setImageurl] = useState('')
   const [image, setImage] = useState('')
+  // onChange로 관리할 문자열
+  const [hashtag, setHashtag] = useState('')
+  // 해시태그를 담을 배열
+  const [hashArr, setHashArr] = useState([])
   const token = localStorage.getItem('accessToken')
 
-  const inst = useSelector((state) => {
-    return state.TagList.tags
-  })
-
-  // const Instrument = [
-  //   {
-  //     name: '기타'
-  //   },
-  //   { name: '가야금' },
-  //   { name: '바이올린' },
-  //   { name: '첼로' },
-  //   { name: '비올라' },
-  //   { name: '콘트라베이스' },
-  //   { name: '피아노' },
-  //   { name: '보컬' },
-  //   { name: '북' },
-  //   { name: '꽹과리' },
-  //   { name: '장구' },
-  //   { name: '징' },
-  //   { name: '캐스터네츠' },
-  //   { name: '실로폰' },
-  //   { name: '비브라폰' },
-  //   { name: '플룻' },
-  //   { name: '클라리넷' },
-  //   { name: '트럼펫' },
-  //   { name: '하프' }
-  // ]
-
   // 사용자 정보 조회
+  // const dispatch = useDispatch()
   async function userInfo() {
-    console.log(token)
     await axios
       .get('/api/member/user', {
         headers: {
@@ -64,15 +44,15 @@ function ProfileEdit() {
         }
       })
       .then((res) => {
-        console.log('[회원정보가져오는거 확인]', res.data)
         setId(res.data.id)
         setUsername(res.data.username)
         setNickname(res.data.nickname)
         setEmail(res.data.email)
         setBio(res.data.bio)
         setImageurl(res.data.imgPath)
-        setInstruments(res.data.Instruments)
-        setParties(res.data.parties)
+        // dispatch(TagList(res.data.instruments))
+        setHashArr(res.data.instruments)
+        setParty(res.data.party)
       })
       .catch((err) => console.log(err))
   }
@@ -80,6 +60,10 @@ function ProfileEdit() {
   useEffect(() => {
     userInfo()
   }, [])
+
+  useEffect(() => {
+    console.log('[악기 리스트에 잘 들어오는지 확인]', hashArr)
+  }, [hashArr])
 
   // mydropzone 컴포넌트에서 보내온 이미지 파일
   const onChangeImage = (uploadedImage) => {
@@ -93,40 +77,84 @@ function ProfileEdit() {
     imgsrc.src = imageurl
   }
 
+  const onChangeHashtag = (e) => {
+    setHashtag(e.target.value)
+  }
+
+  const onKeyUp = useCallback(
+    (e) => {
+      if (hashtag && hashArr.length < 3) {
+        /* 요소 불러오기, 만들기 */
+        const $HashWrapOuter = document.querySelector('.HashWrapOuter')
+        const $HashWrapInner = document.createElement('div')
+        $HashWrapInner.className = 'HashWrapInner'
+
+        /* 태그를 클릭 이벤트 관련 로직 */
+        $HashWrapInner.addEventListener('click', () => {
+          $HashWrapOuter?.removeChild($HashWrapInner)
+          console.log($HashWrapInner.innerHTML)
+          setHashArr(hashArr.filter((hashtag) => hashtag))
+        })
+
+        /* enter 키 코드 :13 */
+        if (e.keyCode === 13 && e.target.value.trim() !== '') {
+          console.log('Enter Key 입력됨!', e.target.value)
+          $HashWrapInner.innerHTML = '#' + e.target.value
+          $HashWrapOuter?.appendChild($HashWrapInner)
+          setHashArr((hashArr) => [...hashArr, hashtag])
+          setHashtag('')
+        }
+      }
+    },
+    [hashtag, hashArr]
+  )
+
   // 415 오류 발생 -> 수정 필요!!!!
   const changeInfo = () => {
     console.log(id)
-    console.log('[악기정보가 잘 들어오는지 확인]', inst)
     const newInfo = {
       nickname,
       bio,
-      instruments: inst,
-      parties
+      instruments: hashArr,
+      party
     }
     console.log(newInfo)
-    const formData = new FormData()
-    formData.append(
-      'info',
-      new Blob([JSON.stringify(newInfo)], {
-        type: 'application/json'
-      })
-    )
-    console.log(instruments)
-    console.log('[axios 로 보낼 이미지 파일 확인]', image)
-    formData.append('profile', image)
-    console.log(formData)
-    axios
-      .post('/api/member/user', formData, {
-        data: newInfo,
-        headers: {
-          Authorization: token,
-          'Content-Type': 'multipart/form-data'
-        }
-      })
-      .then((res) => {
-        console.log(res.data)
-      })
-      .catch((err) => console.log(err))
+    // 이미지를 업데이트 했다면
+    if (image) {
+      const formData = new FormData()
+      formData.append(
+        'info',
+        new Blob([JSON.stringify(newInfo)], {
+          type: 'application/json'
+        })
+      )
+      formData.append('profile', image)
+      axios
+        .post('/api/member/user', formData, {
+          data: newInfo,
+          headers: {
+            Authorization: token,
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+        .then((res) => {
+          console.log('[성공]', res.data)
+        })
+        .catch((err) => console.log(err))
+    } else {
+      // 이미지를 업데이트 하지 않았다면
+      axios
+        .post('api/member/user', {
+          data: newInfo,
+          headers: {
+            Authorization: token
+          }
+        })
+        .then((res) => {
+          console.log('[성공]', res.data)
+        })
+        .catch((err) => console.log(err))
+    }
   }
   return (
     <div className="ProfileEdit">
@@ -213,8 +241,22 @@ function ProfileEdit() {
       {/* 악기는 어떻게 조회해야할까요 */}
       <div className="ProfileEdit-Instrument">
         <div className="ProfileEdit-first">악기</div>
-        <div className="ProfileEdit-content-Bio">
-          <InstTag />
+        <div className="ProfileEdit-content-Inst">
+          {/* <InstTag instruments={instruments} /> */}
+          <div className="HashWrap">
+            <div className="HashWrapOuter"></div>
+            <input
+              className={hashArr.length < 3 ? 'HashInput' : 'HashInput-none'}
+              type="text"
+              value={hashtag}
+              onChange={onChangeHashtag}
+              onKeyUp={onKeyUp}
+              placeholder="악기 태그"
+            />
+          </div>
+          <p style={{ fontSize: '12px', color: 'gray' }}>
+            악기는 최대 3개까지 넣을 수 있어요!
+          </p>
         </div>
       </div>
       <div className="ProfileEdit-group">
@@ -223,12 +265,12 @@ function ProfileEdit() {
           <TextField
             size="small"
             name="group"
-            value={parties || ''}
+            value={party || ''}
             style={{
               width: '100%'
             }}
             onChange={(event) => {
-              setParties(event.target.value)
+              setParty(event.target.value)
             }}
           />
           <p style={{ fontSize: '12px', color: 'gray' }}>

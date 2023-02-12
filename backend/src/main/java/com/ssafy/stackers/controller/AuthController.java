@@ -39,10 +39,10 @@ public class AuthController {
     public ResponseEntity<?> login(HttpServletResponse response,
         @RequestBody LoginDto loginDto) {
         TokenDto tokenDto = authService.login(loginDto);
-        response.setHeader(JwtProperties.AUTHORIZATION_HEADER,
-            tokenDto.getGrantType() + tokenDto.getAccessToken());
-        response.setHeader(JwtProperties.REFRESH_HEADER,
-            tokenDto.getGrantType() + tokenDto.getRefreshToken());
+        response.setHeader(JwtProperties.AUTHORIZATION_HEADER, tokenDto.getAccessToken());
+        response.setHeader(JwtProperties.REFRESH_HEADER, tokenDto.getRefreshToken());
+
+//        return new ResponseEntity<>(tokenDto, HttpStatus.OK);
         return new ResponseEntity<>("로그인 성공", HttpStatus.OK);
     }
 
