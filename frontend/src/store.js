@@ -1,5 +1,5 @@
 import { createSlice, configureStore } from '@reduxjs/toolkit'
-
+import _ from 'lodash'
 const userSlice = createSlice({
   name: 'userSlice',
   initialState: {
@@ -61,13 +61,13 @@ const stackSlice = createSlice({
   initialState: {
     content: '',
     music: '',
-    instrumentId: 0,
+    instrument: '',
     heartCnt: 0,
-    remainDepth: 0,
+    remainDepth: 3,
     isPublic: 0,
     isComplete: 0,
     tags: [],
-    prevStationId: 0,
+    prevStationId: -1,
     videoName: '',
     delete: true
   },
@@ -75,18 +75,21 @@ const stackSlice = createSlice({
     CreateStack: (state, action) => {
       console.log(action.payload[0], action.payload[1])
       const val = action.payload[1]
-      state.instrumentId = 1
-      state.remainDepth = 3
-      state.prevStationId = -1
       switch (action.payload[0]) {
+        case 'remainDepth':
+          state.remainDepth = val
+          break
+        case 'prevStationId':
+          state.prevStationId = val
+          break
         case 'content':
           state.content = val
           break
         case 'music':
           state.music = val
           break
-        case 'instrumentId':
-          state.instrumentId = val
+        case 'instrument':
+          state.instrument = val
           break
         case 'isPublic':
           if (val === 'private') {
@@ -112,18 +115,18 @@ const stackSlice = createSlice({
           state = { ...state }
           break
       }
-      console.log(state)
     },
+
     ClearStack: (state, action) => {
       state.content = ''
       state.music = ''
-      state.instrumentId = []
+      state.instrument = ''
       state.heartCnt = 0
-      state.remainDepth = 0
+      state.remainDepth = 3
       state.isPublic = 0
       state.isComplete = 0
       state.tags = []
-      state.prevStationId = 0
+      state.prevStationId = -1
       state.videoName = ''
       state.delete = true
     }
@@ -139,10 +142,9 @@ const CreateInstSlice = createSlice({
     CreateInst: (state, action) => {
       const asdf = action.payload
       const instt = state.inst
-      state.inst = [...instt, ...asdf]
-      state.inst = new Set(state.inst)
-      state.inst = [...state.inst]
-
+      const tmp = [...instt, ...asdf]
+      state.inst = _.uniqBy(tmp, 'id')
+      console.log(state.inst)
       // console.log(action)
     }
   }

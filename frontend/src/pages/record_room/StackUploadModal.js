@@ -9,12 +9,12 @@ function StackUploadModal(props) {
   }
   const stackUrl = props
   return (
-    <div className="modalBox">
-      <div className="modalHeader">
-        <div>스택 업로드</div>
+    <div className="modal-box">
+      <div className="modal-header">
+        <div className="modal-header-text">스택 업로드</div>
         <CloseIcon onClick={handleClose} />
       </div>
-      <hr></hr>
+      <hr style={{ borderTop: '0.5px solid #c4c4c4e0', width: '100%' }} />
       <UploadForm handle={handleClose} src={stackUrl} />
     </div>
   )
