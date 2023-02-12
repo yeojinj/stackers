@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import '../../styles/stationlistitem.css'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
+// import { useNavigate } from 'react-router-dom'
 
 function StationListItem({ isRanking, isSearch, station, index }) {
   // const [station, setStation] = useState()
@@ -26,7 +27,12 @@ function StationListItem({ isRanking, isSearch, station, index }) {
     return videoRef.current.pause()
   }
 
-  // 메인페이지 스테이션 조회
+  // const navigate = useNavigate()
+  // const gotoDetail = (id) => {
+  //   navigate(`/StationRoom/${id}`)
+  // }
+
+  // 메인페이지, 마이페이지 스테이션 조회
   const IsRanking = () => {
     // 스테이션 랭킹
     if (isRanking) {
@@ -40,6 +46,7 @@ function StationListItem({ isRanking, isSearch, station, index }) {
             autoPlay={false}
             onMouseOver={playVideo}
             onMouseLeave={pauseVideo}
+            // onClick={gotoDetail(station.id)}
             loop
           ></video>
           <p className="station-rank">{index}</p>
@@ -56,6 +63,7 @@ function StationListItem({ isRanking, isSearch, station, index }) {
             autoPlay={false}
             onMouseOver={playVideo}
             onMouseLeave={pauseVideo}
+            // onClick={gotoDetail(station.id)}
             loop
           ></video>
           <div className="video-text">
@@ -93,6 +101,7 @@ function StationListItem({ isRanking, isSearch, station, index }) {
             autoPlay={false}
             onMouseOver={playVideo}
             onMouseLeave={pauseVideo}
+            // onClick={gotoDetail(station.id)}
             loop
           ></video>
           <div className="station-info">
