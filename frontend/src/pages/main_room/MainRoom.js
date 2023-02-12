@@ -210,7 +210,7 @@ function MainRoom() {
               <div
                 className="chip bottom"
                 style={{
-                  marginLeft: '75%',
+                  marginLeft: '73%',
                   transform: 'scale(1.05) rotate(2.5deg)'
                 }}
               >
