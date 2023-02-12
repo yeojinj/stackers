@@ -119,18 +119,25 @@ function StationListItem({ isRanking, isSearch, station, index }) {
                 })}
             </div>
             <div className="station-account">
-              <div className="profile-box">
+              <div className="account-info">
                 <img
                   src={station.imgPath ? station.imgPath : DefaultImg}
                   alt=""
                   className="profile-img"
                 />
+                <div className="account-name">{station.username}</div>
               </div>
-              <div className="account-name">{station.username}</div>
-              <FavoriteBorderIcon
-                style={{ width: '17px', height: '17px', marginTop: '3px' }}
-              />
-              <div className="video-likes">{likesResult}</div>
+              <div className="heart-info">
+                <FavoriteBorderIcon
+                  style={{
+                    width: '17px',
+                    height: '17px',
+                    marginRight: '2px',
+                    color: '#E35FAD'
+                  }}
+                />
+                <div className="video-likes">{likesResult}</div>
+              </div>
             </div>
           </div>
         </>

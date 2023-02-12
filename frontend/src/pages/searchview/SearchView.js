@@ -181,7 +181,7 @@ function SearchView() {
   const searchStacks = () => {
     return (
       <>
-        <div className="popular-tap">
+        <div className="popular-tap horizonal">
           {stationList &&
             stationList.map((result, i) => {
               return (
