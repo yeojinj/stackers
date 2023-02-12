@@ -39,8 +39,10 @@ public class AuthController {
     public ResponseEntity<?> login(HttpServletResponse response,
         @RequestBody LoginDto loginDto) {
         TokenDto tokenDto = authService.login(loginDto);
-        response.setHeader(JwtProperties.AUTHORIZATION_HEADER, tokenDto.getAccessToken());
-        response.setHeader(JwtProperties.REFRESH_HEADER, tokenDto.getRefreshToken());
+        response.setHeader(JwtProperties.AUTHORIZATION_HEADER,
+            tokenDto.getGrantType() + tokenDto.getAccessToken());
+        response.setHeader(JwtProperties.REFRESH_HEADER,
+            tokenDto.getGrantType() + tokenDto.getRefreshToken());
         return new ResponseEntity<>("로그인 성공", HttpStatus.OK);
     }
 
@@ -75,6 +77,9 @@ public class AuthController {
         if (jwt == null || refresh == null) {
             return new ResponseEntity<>("로그아웃 실패.", HttpStatus.BAD_REQUEST);
         }
+
+        logoutValueOperations.set(jwt, jwt);
+        logoutValueOperations.set(refresh, refresh);
 
         log.info("로그아웃 유저 아이디 : '{}'", principal.getUsername());
         return new ResponseEntity<>("로그아웃 성공.", HttpStatus.OK);
