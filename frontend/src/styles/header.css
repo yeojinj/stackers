@@ -61,6 +61,10 @@
   height: 17.49px;
 }
 
+.search-icon:hover {
+  cursor: pointer;
+  color: black;
+}
 .dropdownbox {
   width: 530px;
   max-height: 285px;
@@ -83,7 +87,9 @@
   display: flex;
   align-items: center;
 }
-
+.dropDownItemIndex:hover {
+  cursor: pointer;
+}
 .selected {
   background-color: rgba(248, 248, 248, 1);
 }
@@ -98,6 +104,8 @@
   width: 42px;
   height: 42px;
   margin-right: 5px;
+  border-radius: 50%;
+  border: 0.2px solid rgba(128, 128, 128, 0.318);
 }
 
 .dropdown-accounts {
@@ -112,7 +120,7 @@
 
 .dropdown-nick {
   font-size: small;
-  color: gray;;
+  color: gray;
 }
 
 .login-btn {
