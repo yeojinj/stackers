@@ -1,11 +1,5 @@
 /* eslint-disable */
-import React, {
-  useRef,
-  useState,
-  useEffect,
-  useCallback,
-  useLayoutEffect
-} from 'react'
+import React, { useRef, useState, useEffect, useCallback } from 'react'
 import './Record.css'
 import { ReactMediaRecorder } from 'react-media-recorder'
 import Modal from '@mui/material/Modal'
@@ -25,6 +19,7 @@ function blobToBase64(blob) {
   })
 }
 function setDelay(time) {
+  console.log('delay ' + time)
   return new Promise((resolve) => setTimeout(resolve, time))
 }
 function Record(props) {
@@ -86,9 +81,6 @@ function Record(props) {
     }
   }, [stationId])
   useEffect(() => {
-    setPath((path) => {
-      path = preStackDetail.videoPath
-    })
     if (isStation) {
       dispatch(
         CreateStack(['remainDepth', preStackDetail.stationInfo.remainDepth - 1])
@@ -114,9 +106,9 @@ function Record(props) {
         console.error(err)
       })
   }
-  const [path, setPath] = useState('')
   const [enable, setEnable] = useState(true)
   const [open, setOpen] = useState(false)
+  const [duration, getDuration] = useState(0)
   const handleEnable = () => {
     setEnable(!enable)
   }
@@ -132,6 +124,9 @@ function Record(props) {
   useEffect(() => {
     console.log('rendering?')
   }, [enable])
+  useEffect(() => {
+    console.log(duration)
+  }, [duration])
   const initialValue = 3000
 
   let [active, setActive] = useState(false)
@@ -143,6 +138,10 @@ function Record(props) {
     const tmp = preStackRef.current
     return tmp.play()
   }
+  const delayDuration = async () => {
+    const tmp = preStackRef.current
+    return tmp.duration
+  }
   return (
     <div className="recordRoom">
       <ReactMediaRecorder
@@ -152,7 +151,6 @@ function Record(props) {
           const video = videoRef.current
           video.srcObject = stream
           video.play()
-          handleEnable()
         }}
         video
         blobPropertyBag={{
@@ -209,25 +207,27 @@ function Record(props) {
                   <IconButton
                     fontSize="Large"
                     color="primary"
-                    onClick={() => {
+                    onClick={async () => {
                       handleEnable()
                       activeHandle()
                       handleOpen()
                       getVideo()
-                      setTimeout(handleClose, 3000)
-                      setTimeout(startRecording, 3000)
-                      setTimeout(playVideo, 3000)
+                      console.log('delay start')
+                      await setDelay(3000)
+                      console.log('delay stop')
+                      handleClose()
+                      startRecording()
                       if (isStation) {
-                        if (isPre !== null) {
-                          const preVideo = isPre.current
-                          prevideo.play()
-                          setTimeout(
-                            stopRecording,
-                            preStackRef.current.duration
-                          )
-                        }
+                        playVideo()
+                        const dr = await delayDuration()
+                        const rr = Math.round(dr * 1000)
+                        console.log('duration start')
+                        await setDelay(rr)
+                        stopRecording()
+                        console.log('stop~~~~~~~~~~')
                       } else {
-                        setTimeout(stoprRecording, 60000)
+                        await setDelay(60000)
+                        stopRecording()
                       }
                       setActive(false)
                     }}
