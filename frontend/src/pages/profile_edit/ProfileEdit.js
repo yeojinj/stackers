@@ -12,7 +12,7 @@ import axios from 'axios'
 // import { TagList } from '../../store.js'
 // import ImageCrop from './ImageCrop'
 
-function ProfileEdit() {
+function ProfileEdit(props) {
   // const tags = useSelector((state) => {
   //   return state.TagList.tags
   // })
@@ -141,6 +141,7 @@ function ProfileEdit() {
         console.log('[성공]', res.data)
       })
       .catch((err) => console.log(err))
+    props.handleClose()
 
     // 이미지를 업데이트 했다면
     // if (image) {

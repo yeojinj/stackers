@@ -1,11 +1,23 @@
 .ProfileEdit {
+  background-color: white;
   width: 560px;
+  /* 화면에따라 크기조정 필요 */
+  height: 97%;
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translate(-50%, 0%);
   /* height: 800px; */
-  border: solid 1px black;
   border-radius: 20px;
+  overflow: scroll;
+}
+
+.ProfileEdit::-webkit-scrollbar {
+  display: none;
 }
 
 .ProfileEdit-head {
+  margin-top: 21px;
   text-align: center;
   /* border-bottom: solid 1px black; */
 }
