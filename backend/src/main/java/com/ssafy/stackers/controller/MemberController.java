@@ -53,6 +53,12 @@ public class MemberController {
         return new ResponseEntity<>("회원가입 완료", HttpStatus.OK);
     }
 
+    @GetMapping("/check-username/{username}")
+    public ResponseEntity<?> checkUsername(@PathVariable String username) {
+        return new ResponseEntity<>(memberService.isValidUsername(username),
+            HttpStatus.OK);
+    }
+
     @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(@RequestBody @Valid ChangePasswordDto changePasswordDto,
                                             @AuthenticationPrincipal PrincipalDetails principal) {
