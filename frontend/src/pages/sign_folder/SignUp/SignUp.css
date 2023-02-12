@@ -1,16 +1,107 @@
-.SignUp {
-  width: 500px;
-  height: 1000px;
+.signup-container {
+  width: 400px;
+  height: 100%;
   /* border: 1px solid black; */
   margin: auto;
 }
-
+.signup-header {
+  text-align: center;
+  margin-top: 15%;
+  margin-bottom: 10%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.signup-header-logo-text {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2%;
+  font-size: 1.5em;
+  font-weight: 700;
+}
 .div-center {
   text-align: center;
   margin-bottom: 20px;
 }
-
-.SignUp-Input {
+.signup-form {
   width: 100%;
-  margin-bottom: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.signup-input {
+  width: 80%;
+  height: 28px;
+  margin-bottom: 8px;
+  border: 1px solid #b2b2b2a8;
+  padding: 10px;
+  border-radius: 5px;
+  outline: none;
+}
+.signup-input-success {
+  width: 80%;
+  height: 28px;
+  margin-bottom: 8px;
+  border: 1px solid rgba(42, 32, 150, 1);
+  padding: 10px;
+  border-radius: 5px;
+  outline: none;
+  background-image: url('./inputSuccess.svg');
+  background-repeat: no-repeat;
+  background-position: 98%;
+}
+.signup-input-fail {
+  width: 80%;
+  height: 28px;
+  margin-bottom: 8px;
+  border: 1px solid rgba(172, 0, 143, 1);
+  padding: 10px;
+  border-radius: 5px;
+  outline: none;
+  background-image: url('./inputFail.svg');
+  background-repeat: no-repeat;
+  background-position: 98%;
+}
+.email-validation-div {
+  width: 85%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: stretch;
+}
+.email-check-button {
+  width: 20%;
+  height: 50px;
+  margin-left: 2%;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.signup-line {
+  width: 85%;
+  color: rgb(170, 170, 170);
+  margin: 15px 0;
+  border: 0.5px solid gray;
+}
+.signup-button {
+  width: 85%;
+  height: 42px;
+
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.signup-button-able {
+  width: 85%;
+  height: 42px;
+
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: rgba(42, 32, 150, 1);
+  color: white;
 }

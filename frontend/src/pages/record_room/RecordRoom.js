@@ -5,6 +5,7 @@ import LightIcon from '@mui/icons-material/Light'
 import PhotoCameraFrontIcon from '@mui/icons-material/PhotoCameraFront'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import Modal from '@mui/material/Modal'
+
 function isEmptyObj(obj) {
   if (obj.constructor === Object && Object.keys(obj).length === 0) {
     return true
@@ -22,6 +23,7 @@ function RecordRoom() {
   }
   const [open, setOpen] = useState(false)
   const [stack, setStack] = useState({})
+
   const handleOpen = () => {
     setOpen(true)
   }

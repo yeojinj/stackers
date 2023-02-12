@@ -17,7 +17,7 @@ public class LoginMemberDto {
     private String bio;
     private String imgPath;
     private List<String> instruments;
-    private List<String> parties;
+    private String party;
 
     public LoginMemberDto(Long id, String username, String nickname, String imgPath) {
         this.id = id;

@@ -1,5 +1,5 @@
 import { createSlice, configureStore } from '@reduxjs/toolkit'
-
+import _ from 'lodash'
 const userSlice = createSlice({
   name: 'userSlice',
   initialState: {
@@ -46,18 +46,28 @@ const CreateCommentSlice = createSlice({
   }
 })
 
+const urlSlice = createSlice({
+  name: 'urlSlice',
+  initialState: { preUrl: '/' },
+  reducers: {
+    ChangeUrl: (state, action) => {
+      console.log(action)
+    }
+  }
+})
+
 const stackSlice = createSlice({
   name: 'stackSlice',
   initialState: {
     content: '',
     music: '',
-    instrumentId: 0,
+    instrument: '',
     heartCnt: 0,
-    remainDepth: 0,
+    remainDepth: 3,
     isPublic: 0,
     isComplete: 0,
     tags: [],
-    prevStationId: 0,
+    prevStationId: -1,
     videoName: '',
     delete: true
   },
@@ -65,18 +75,21 @@ const stackSlice = createSlice({
     CreateStack: (state, action) => {
       console.log(action.payload[0], action.payload[1])
       const val = action.payload[1]
-      state.instrumentId = 1
-      state.remainDepth = 3
-      state.prevStationId = -1
       switch (action.payload[0]) {
+        case 'remainDepth':
+          state.remainDepth = val
+          break
+        case 'prevStationId':
+          state.prevStationId = val
+          break
         case 'content':
           state.content = val
           break
         case 'music':
           state.music = val
           break
-        case 'instrumentId':
-          state.instrumentId = val
+        case 'instrument':
+          state.instrument = val
           break
         case 'isPublic':
           if (val === 'private') {
@@ -102,18 +115,18 @@ const stackSlice = createSlice({
           state = { ...state }
           break
       }
-      console.log(state)
     },
+
     ClearStack: (state, action) => {
       state.content = ''
       state.music = ''
-      state.instrumentId = []
+      state.instrument = ''
       state.heartCnt = 0
-      state.remainDepth = 0
+      state.remainDepth = 3
       state.isPublic = 0
       state.isComplete = 0
       state.tags = []
-      state.prevStationId = 0
+      state.prevStationId = -1
       state.videoName = ''
       state.delete = true
     }
@@ -127,10 +140,10 @@ const CreateInstSlice = createSlice({
   },
   reducers: {
     CreateInst: (state, action) => {
-      console.log(action.payload)
       const asdf = action.payload
       const instt = state.inst
-      state.inst = [...instt, ...asdf]
+      const tmp = [...instt, ...asdf]
+      state.inst = _.uniqBy(tmp, 'id')
       console.log(state.inst)
       // console.log(action)
     }
@@ -152,13 +165,27 @@ const SearchSlice = createSlice({
   }
 })
 
+const TagSlice = createSlice({
+  name: 'TagSlice',
+  initialState: {
+    tags: []
+  },
+  reducers: {
+    TagList: (state, action) => {
+      state.tags = action.payload
+    }
+  }
+})
+
 const store = configureStore({
   reducer: {
     user: userSlice.reducer,
     CreateComments: CreateCommentSlice.reducer,
     stack: stackSlice.reducer,
     CreateInst: CreateInstSlice.reducer,
-    SearchKeyword: SearchSlice.reducer
+    SearchKeyword: SearchSlice.reducer,
+    TagList: TagSlice.reducer,
+    url: urlSlice.reducer
   }
 })
 
@@ -168,3 +195,5 @@ export const { CreateComment } = CreateCommentSlice.actions
 export const { CreateStack, ClearStack } = stackSlice.actions
 export const { CreateInst } = CreateInstSlice.actions
 export const { SearchKeyword } = SearchSlice.actions
+export const { TagList } = TagSlice.actions
+export const { ChangeUrl } = urlSlice.actions

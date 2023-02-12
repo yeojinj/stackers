@@ -10,6 +10,7 @@ import MyPage from './pages/my_page/MyPage'
 import ProfileEdit from './pages/profile_edit/ProfileEdit'
 import UploadLoading from './pages/record_room/UploadLoading'
 import HeaderAndFooter from './components/HeaderAndFooter'
+import NotFound from './components/NotFound'
 
 const router = createBrowserRouter([
   {
@@ -31,11 +32,11 @@ const router = createBrowserRouter([
     ]
   },
   {
-    path: '/RecordRoom',
+    path: '/RecordRoom/:preId',
     element: <RecordRoom />
   },
   {
-    path: '/StationRoom',
+    path: '/StationRoom/:id',
     element: <StationRoom />
   },
   {
@@ -43,7 +44,7 @@ const router = createBrowserRouter([
     element: <LogIn />
   },
   {
-    path: '/SearchView',
+    path: '/SearchView/:keyword',
     element: <SearchView />
   },
   {
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
   {
     path: '/UploadLoading',
     element: <UploadLoading />
+  },
+  {
+    path: '*',
+    element: <NotFound />
   }
 ])
 

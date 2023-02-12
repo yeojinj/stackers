@@ -4,12 +4,10 @@ import React, { useState, useEffect } from 'react'
 import './Record'
 import Tag from './ModalTag'
 import './UploadForm.css'
-import TextField from '@mui/material/TextField'
-import { IconButton } from '@mui/material'
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import Moment from 'moment'
 import { useSelector, useDispatch } from 'react-redux'
 import { CreateStack, ClearStack } from '../../store.js'
+import InstTag from './InstTag.js'
 import axios from 'axios'
 
 const blobFile = (file) =>
@@ -28,7 +26,7 @@ function UploadForm(props) {
   const username = useSelector((state) => {
     return state.user.username
   })
-
+  console.log(data)
   const dateNow = Moment().format('YYYYMMDDHHmm')
   dispatch(CreateStack(['videoName', dateNow + username]))
 
@@ -39,27 +37,14 @@ function UploadForm(props) {
 
   const filedownloadlink = window.URL.createObjectURL(object)
 
-  const [values, setValues] = useState({
-    content: '',
-    music: '',
-    instrumentId: 0,
-    heartCnt: 0,
-    remainDepth: 0,
-    isPublic: 0,
-    isComplete: 0,
-    tags: [''],
-    prevStationId: 0,
-    videoName: '',
-    delete: true,
-    file: filedownloadlink
-  })
-
   const handleChange = (e) => {
     console.log(e.target.name, e.target.value)
 
     dispatch(CreateStack([e.target.name, e.target.value]))
   }
-
+  useEffect(() => {
+    handleChange
+  }, [data])
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -70,7 +55,7 @@ function UploadForm(props) {
         let testData = {
           content: data.content,
           music: data.music,
-          instrumentId: data.instrumentId,
+          instrument: data.instrument,
           tags: data.tags,
           heartCnt: data.heartCnt,
           remainDepth: data.remainDepth,
@@ -101,10 +86,8 @@ function UploadForm(props) {
           })
           .then(() => console.log('[스테이션 업로드] >> 성공'))
           .catch((error) => {
-            alert(error)
-            console.log(error)
+            console.error(error)
           })
-        console.log(formData)
       }
       handleClose()
       dispatch(ClearStack())
@@ -112,66 +95,62 @@ function UploadForm(props) {
     }
   }
   return (
-    <div className="upload container">
-      <video
-        className="stackVideo"
-        src={filedownloadlink}
-        width={258}
-        height={402}
-        style={{ objectFit: 'cover' }}
-        controls
-      />
-      <form className="right" onSubmit={handleSubmit}>
-        <div className="item">
-          <b>노래 제목</b>
-        </div>
-        <input
-          type="text"
-          name="music"
-          value={data.music}
-          onChange={handleChange}
-        ></input>
+    <div className="upload-form-container">
+      <div className="section-right">
+        <video
+          className="stack-video"
+          src={filedownloadlink}
+          width={258}
+          height={402}
+          style={{ objectFit: 'cover' }}
+          controls
+        />
         {filedownloadlink && (
           <a href={filedownloadlink} download>
-            Download
+            <button className="button-download">나의 스택 다운로드</button>
           </a>
         )}
-        <div className="infoForm">
-          <b>설명</b>
+      </div>
+      <form className="section-left" onSubmit={handleSubmit}>
+        <div className="input__items">
+          <label className="upload-label">노래 제목</label>
+          <input
+            className="upload-input"
+            type="text"
+            name="music"
+            value={data.music}
+            onChange={handleChange}
+          />
         </div>
-        <input
-          type="text"
-          name="content"
-          value={data.content}
-          onChange={handleChange}
-        ></input>
-        <div className="thumbnailForm">
-          <b>썸네일</b>
+        <div className="input__items">
+          <label className="upload-label">스테이션 설명</label>
+          <textarea
+            className="upload-input"
+            type="text"
+            name="content"
+            value={data.content}
+            onChange={handleChange}
+            style={{ height: '90px' }}
+          />
         </div>
-        <div className="tagForm">
-          <b>태그</b>
+        <div className="input__items">
+          <label className="upload-label">태그</label>
+          <Tag />
         </div>
-        <Tag />
-        <div className="container">
-          <div className="left">
-            <div className="instForm">
-              <b>연주 악기</b>
-              <IconButton>
-                <AddCircleOutlineIcon />
-              </IconButton>
-            </div>
-          </div>
-          <div className="right">
-            <div className="scopeForm">
-              <div>
-                <b>공개 범위</b>
-              </div>
-              <label>
+        <div className="input__items">
+          <InstTag />
+        </div>
+        <div className="checkbox-container">
+          <div className="input__items">
+            <label className="upload-label">공개 범위 설정</label>
+            <div>
+              <label style={{ marginRight: '10px' }}>
                 <input
                   type="radio"
                   name="isPublic"
                   value="public"
                   onChange={handleChange}
+                  defaultChecked
                 />
                 공개
               </label>
@@ -181,22 +160,24 @@ function UploadForm(props) {
                   name="isPublic"
                   value="private"
                   onChange={handleChange}
+                  style={{ fontSize: '0.9em' }}
                 />
                 비공개
               </label>
             </div>
-            <div className="StackForm">
-              <div>
-                <b>이어서 스택 쌓기</b>
-              </div>
-              <label>
+          </div>
+          <div className="input__items">
+            <label className="upload-label">이어서 스택 허용</label>
+            <div>
+              <label style={{ marginRight: '10px' }}>
                 <input
                   type="radio"
                   name="isComplete"
                   value="notCompleted"
                   onChange={handleChange}
+                  defaultChecked
                 />
-                허용
+                네
               </label>
               <label>
                 <input
@@ -205,14 +186,21 @@ function UploadForm(props) {
                   value="completed"
                   onChange={handleChange}
                 />
-                불허용
+                아니요
               </label>
             </div>
           </div>
         </div>
-        <button type="submit" className="uploadButton" onClick={handleSubmit}>
-          업로드
-        </button>
+        <div className="upload-btn-container">
+          <button
+            type="submit"
+            className="button-download button-complete"
+            style={{ width: '20%' }}
+            onClick={handleSubmit}
+          >
+            업로드
+          </button>
+        </div>
       </form>
     </div>
   )

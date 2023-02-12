@@ -8,7 +8,7 @@ import lombok.ToString;
 public class StationDto {
     private String content;
     private String music;
-    private Long instrumentId;
+    private String instrument;
     private int heartCnt;
     private int remainDepth;
     private int isPublic;

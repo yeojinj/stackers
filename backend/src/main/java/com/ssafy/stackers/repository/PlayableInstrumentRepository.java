@@ -17,6 +17,10 @@ public interface PlayableInstrumentRepository extends JpaRepository<PlayableInst
     @Transactional
     void deleteByMemberIdAndInstrumentId(Long memberId, Long instrumentId);
 
+    @Modifying
+    @Transactional
+    void deleteByMemberId(Long memberId);
+
     List<PlayableInstrument> findByMemberId(Long memberId);
 
 }

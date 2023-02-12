@@ -22,8 +22,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${MAIL_USERNAME}
-    password: ${MAIL_PASSWORD}
+    username: www.stackers.site
+    password: pmldwhwltgkldcgb
     properties:
       mail:
         smtp:
@@ -31,6 +31,16 @@ spring:
           auth: true
           starttls:
             enable: true
+  redis:
+    pool:
+      max-active: 10
+      max-idle: 10
+      min-idle: 2
+  data:
+    redis:
+      port: 6379
+      host: 127.0.0.1
+      password: '1234'
 logging:
   level:
     org:
