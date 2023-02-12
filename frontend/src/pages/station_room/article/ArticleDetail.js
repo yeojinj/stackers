@@ -7,7 +7,7 @@ import profile from '../assets/profile.png'
 
 function ArticleDetail(props) {
   const [isfollowing, setIsfollow] = useState(true)
-  const writer = props.Info.writer
+  const writer = props.info.writer
   let followbutton = null
   if (!isfollowing) {
     followbutton = (
@@ -22,14 +22,13 @@ function ArticleDetail(props) {
       </Button>
     )
   }
-  const stationInformation = `안녕하세요. 이것은 나의 첫 비디오입니다.
-만나서 반갑습니다~~ #첫인사 #새해복많이받으세요`
+  const stationInformation = props.info.stationInfo.content
   const createDate =
-    props.Info.regTime.substr(0, 4) +
+    props.info.regTime.substr(0, 4) +
     '.' +
-    props.Info.regTime.substr(5, 2) +
+    props.info.regTime.substr(5, 2) +
     '.' +
-    props.Info.regTime.substr(8, 2)
+    props.info.regTime.substr(8, 2)
   return (
     <div className="information">
       <div className="station-information">
@@ -52,7 +51,7 @@ function ArticleDetail(props) {
         <p className="station-usercontent">{stationInformation}</p>
         <p style={{ color: 'gray' }}>{createDate}</p>
       </div>
-      <StackerListItem musicians={props.Info.musicians}></StackerListItem>
+      <StackerListItem musicians={props.info.musicians}></StackerListItem>
     </div>
   )
 }

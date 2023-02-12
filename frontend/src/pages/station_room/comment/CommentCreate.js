@@ -1,29 +1,60 @@
-/* eslint-disable */
-import React from 'react'
-import TextField from '@mui/material/TextField'
-import Button from '@mui/material/Button'
-import CreateComment from '../../../store.js'
+import React, { useState } from 'react'
+import axios from 'axios'
+import { CreateComment } from '../../../store'
+import { useDispatch } from 'react-redux'
+import { useParams } from 'react-router-dom'
 
 function CommentCreate() {
+  const params = useParams()
+  const dispatch = useDispatch()
+  const [content, setContent] = useState('')
+  const stationId = params.id
   return (
-    <div className="createComment">
-      <TextField
-        placeholder="댓글 작성"
-        size="small"
-        style={{
-          width: '88%',
-          height: '40px'
+    <div>
+      <form
+        className="createComment"
+        onSubmit={(event) => {
+          event.preventDefault()
+          // 댓글 작성 하기전에, accessToken부터 갱신하자.
+          axios({
+            method: 'post',
+            url: `/api/station/${stationId}/comment`,
+            data: {
+              content
+            },
+            headers: {
+              Authorization: localStorage.getItem('accessToken')
+            }
+          })
+            .then((response) => {
+              console.log(response.data)
+              dispatch(CreateComment(1)) // 댓글을 다시 불러오기 위함
+            })
+            .catch((error) => {
+              console.error(error)
+            })
         }}
-      />
-      <Button
-        variant="outlined"
-        style={{
-          height: '40px'
-        }}
-        onClick={() => {}}
       >
-        작성
-      </Button>
+        <input
+          placeholder="댓글 작성"
+          style={{
+            width: '88%',
+            height: '40px'
+          }}
+          value={content}
+          onChange={(event) => {
+            setContent(event.target.value)
+          }}
+        />
+        <button
+          type="submit"
+          style={{
+            height: '40px'
+          }}
+        >
+          작성
+        </button>
+      </form>
     </div>
   )
 }
