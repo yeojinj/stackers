@@ -42,8 +42,8 @@ public class StationService {
         return stationRepository.findById(id).get();
     }
 
-    public Station findTop1ByMemberAndIsPublicOrderByRegTimeAsc(Member member, boolean isPublic){
-        return stationRepository.findTop1ByMemberAndIsPublicOrderByRegTimeAsc(member, isPublic).get();
+    public Station findTop1ByMemberAndIsPublicOrderByRegTimeDesc(Member member, boolean isPublic) {
+        return stationRepository.findTop1ByMemberAndIsPublicOrderByRegTimeDesc(member, isPublic).get();
     }
 
     public boolean existsById(Long id) {
@@ -54,7 +54,7 @@ public class StationService {
      * 스테이션 업로드
      */
     @Transactional
-    public Station save(StationDto stationDto, MultipartFile file, Member member, Instrument instrument){
+    public Station save(StationDto stationDto, MultipartFile file, Member member, Instrument instrument) {
         // 태그 저장
         List<Tag> tags = tagService.save(stationDto.getTags());
 
@@ -79,7 +79,7 @@ public class StationService {
         Long prevStationId = s.getPrevStationId();
         String prevPath = null;
         // 이전 스테이션이 있을 경우 해당 스테이션의 비디오 경로 가져오기
-        if(prevStationId != -1) {
+        if (prevStationId != -1) {
             Station ps = findById(prevStationId);
             prevPath = ps.getVideo().getVideoPath();
         }
@@ -102,7 +102,7 @@ public class StationService {
     public StationDetailDto getStationDetail(Long id) {
 
         Station s = findById(id);
-        StationDto stationInfo = getStationShortInfo(id);
+        StationDto stationInfo = getStationDto(id);
 
         Member w = s.getMember();
         LoginMemberDto writer = new LoginMemberDto(w.getId(), w.getUsername(), w.getNickname(),
@@ -112,6 +112,17 @@ public class StationService {
         List<MusicianDto> musicians = getMusicians(s);
 
         return new StationDetailDto(id, stationInfo, s.getRegTime(), s.getVideo().getVideoPath(), comments.size(), comments, musicians, writer);
+    }
+
+    /**
+     * StationDto 추출 함수
+     */
+    public StationDto getStationDto(Long id) {
+        Station s = findById(id);
+        List<String> tags = tagService.findNameById(tagListService.findByStation(s));
+        return new StationDto(s.getContent(), s.getMusic(), s.getHeartCnt(), s.getRemainDepth(),
+                s.isPublic() ? 1 : 0, s.isComplete() ? 1 : 0, s.isComplete(), tags,
+                s.getPrevStationId(), s.getVideo().getVideoName());
     }
 
     /**
@@ -145,9 +156,9 @@ public class StationService {
     }
 
     /**
-     * Station을 MainStationDto로 변환하는 함수
+     * Station List를 MainStationDto List로 변환하는 함수
      */
-    public List<MainStationDto> getStationShortDetail(List<Station> stations) {
+    public List<MainStationDto> getMainStationList(List<Station> stations) {
         List<MainStationDto> stationList = new ArrayList<>();
 
         for (int i = 0; i < stations.size(); i++) {
@@ -159,26 +170,52 @@ public class StationService {
     }
 
     /**
-     * 메인페이지에 뿌릴 dto 변환 함수
+     * Station List를 PopularStationDto List로 변환하는 함수
      */
-    public StationDto getStationShortInfo(Long id) {
-        Station s = findById(id);
-        List<String> tags = tagService.findNameById(tagListService.findByStation(s));
-        return new StationDto(s.getContent(), s.getMusic(), s.getHeartCnt(), s.getRemainDepth(),
-                s.isPublic() ? 1 : 0, s.isComplete() ? 1 : 0, s.isComplete(), tags,
-                s.getPrevStationId(), s.getVideo().getVideoName());
+
+    public List<PopularStationDto> getPopularStationList(List<Station> stations) {
+        List<PopularStationDto> stationList = new ArrayList<>();
+
+        for (int i = 0; i < stations.size(); i++) {
+            Station s = stations.get(i);
+            stationList.add(new PopularStationDto(s.getId(), s.getVideo(), s.getHeartCnt()));
+        }
+        return stationList;
+    }
+
+    /**
+     * 로그인 된 회원이 팔로우하는 가장 최근의 스테이션 리스트 가져오기
+     */
+    public List<FollowersStationDto> getFollowersStation(Long id) {
+        List<FollowersStationDto> stationList = new ArrayList<>();
+        List<FollowInfoDto> followings = followService.getFollowingList(id);
+
+        log.info(String.valueOf(followings.size()));
+
+        for (int i = 0; i < followings.size(); i++) {
+            Member m = memberService.findByUsername(followings.get(i).getUsername());
+            try {
+                Station s = findTop1ByMemberAndIsPublicOrderByRegTimeDesc(m, true);
+                List<String> tags = tagService.findNameById(tagListService.findByStation(s));
+                stationList.add(new FollowersStationDto(s.getId(), s.getContent(), tags, s.getVideo(),
+                        s.getMember().getId(), s.getMember().getImgPath(), s.getMember().getUsername()));
+            } catch (Exception e) {
+
+            }
+        }
+        return stationList;
     }
 
     /**
      * 연주자 목록 추출 메서드
      */
-    public List<MusicianDto> getMusicians(Station start){
+    public List<MusicianDto> getMusicians(Station start) {
         List<MusicianDto> musicians = new ArrayList<>();
-        while (true){
+        while (true) {
             Member m = start.getMember();
             musicians.add(new MusicianDto(start.getInstrument().getId(), start.getInstrument().getName(), m.getUsername(), m.getImgPath()));
 
-            if(start.getPrevStationId() == -1) break;
+            if (start.getPrevStationId() == -1) break;
             start = findById(start.getPrevStationId());
         }
         return musicians;
@@ -191,25 +228,4 @@ public class StationService {
         videoService.deleteVideoFromS3(station.getVideo().getVideoPath());
     }
 
-    /**
-     * 로그인 된 회원이 팔로우하는 가장 최근의 리스트를 가져오기
-     */
-    public List<MainStationDto> getFollowingList(Long id){
-        List<MainStationDto> stationList = new ArrayList<>();
-        List<FollowInfoDto> followings = followService.getFollowingList(id);
-
-        log.info(String.valueOf(followings.size()));
-
-        for(int i = 0; i < followings.size(); i++){
-            Member m = memberService.findByUsername(followings.get(i).getUsername());
-            try{
-                Station s = findTop1ByMemberAndIsPublicOrderByRegTimeAsc(m, true);
-                stationList.add(new MainStationDto(s.getId(), s.getContent(), null, s.getVideo()));
-            } catch (Exception e){
-
-            }
-        }
-
-        return stationList;
-    }
 }
