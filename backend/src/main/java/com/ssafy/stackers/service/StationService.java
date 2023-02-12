@@ -6,6 +6,7 @@ import com.ssafy.stackers.model.dto.*;
 import com.ssafy.stackers.repository.StationRepository;
 import com.ssafy.stackers.utils.error.ErrorCode;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,12 +86,12 @@ public class StationService {
 
         // 비디오 저장
         Video video = null;
-//        try {
-//            video = videoService.uploadVideoToS3(file, stationDto.getVideoName(), s.getPrevStationId(), s.getRemainDepth(), prevPath);
-//            s.updateVideo(video);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
+        try {
+            video = videoService.uploadVideoToS3(file, stationDto.getVideoName(), s.getPrevStationId(), s.getRemainDepth(), prevPath);
+            s.updateVideo(video);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         return s;
     }
