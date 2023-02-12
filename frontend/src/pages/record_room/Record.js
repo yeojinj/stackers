@@ -56,12 +56,13 @@ function Record(props) {
   const [preStackDetail, setPreStack] = useState({})
 
   const getPreStack = async () => {
+    console.log(stationId)
     await axios({
       method: 'GET',
-      url: '/api/' + { stationId }
+      url: `/api/station/${stationId}`
     })
       .then((response) => {
-        setPreStack((preStackDetail) => response.data)
+        setPreStack((preStackDetail) => (preStackDetail = { ...response.data }))
         console.log('axios 통신 완료')
         console.log(response.data)
         console.log(preStackDetail)
