@@ -51,14 +51,17 @@ function LogIn(props) {
               }
             })
               .then((response) => {
-                localStorage.setItem('accessToken', response.data.accessToken)
-                localStorage.setItem('refreshToken', response.data.refreshToken)
+                localStorage.setItem(
+                  'accessToken',
+                  response.headers.authorization
+                )
+                localStorage.setItem('refreshToken', response.headers.refresh)
                 dispatch(logIn())
                 navigate('/')
                 props.handleClose()
               })
               .catch((error) => {
-                console.log(error.response)
+                console.error(error)
               })
           }}
         >

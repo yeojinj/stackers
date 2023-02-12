@@ -125,7 +125,16 @@ function MainRoom() {
     <div className="main-room">
       <div className="main">
         <div className="station-center">
-          <div className="chip top">⚡️ 당신이 놓친 스테이션</div>
+          <div
+            className="chip top"
+            style={
+              {
+                // marginLeft: '81%'
+              }
+            }
+          >
+            당신을 기다리는 스테이션 🪐
+          </div>
           <div className="parent">
             <Carousel>
               {completedStation.map((station, i) => {
@@ -138,18 +147,18 @@ function MainRoom() {
                 )
               })}
             </Carousel>
-            {/* <StationList /> */}
           </div>
         </div>
+
         <FadeContent>
           <div className="station-center">
             <div
               className="chip top"
               style={{
-                marginLeft: '81%'
+                marginLeft: '84%'
               }}
             >
-              당신을 기다리는 스테이션 🪐
+              ⚡️ 당신이 놓친 스테이션
             </div>
             <div className="parent">
               <Carousel>
@@ -163,6 +172,7 @@ function MainRoom() {
                   )
                 })}
               </Carousel>
+              {/* <StationList /> */}
             </div>
           </div>
         </FadeContent>

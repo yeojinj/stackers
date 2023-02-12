@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import '../../styles/stationlistitem.css'
-import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import DefaultImg from '../../assets/default_profile.png'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 // import { useNavigate } from 'react-router-dom'
 
@@ -114,16 +114,11 @@ function StationListItem({ isRanking, isSearch, station, index }) {
             </div>
             <div className="station-account">
               <div className="profile-box">
-                {station.imgPath !== 'static/s3이미지링크.png' && (
-                  <img className="profile-img" src={station.imgPath}></img>
-                )}
-                {station.imgPath === 'static/s3이미지링크.png' && (
-                  <>
-                    <AccountCircleIcon
-                      style={{ width: '28px', height: '28px' }}
-                    />
-                  </>
-                )}
+                <img
+                  src={station.imgPath ? station.imgPath : DefaultImg}
+                  alt=""
+                  className="profile-img"
+                />
               </div>
               <div className="account-name">{station.username}</div>
               <FavoriteBorderIcon
