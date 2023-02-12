@@ -1,3 +1,8 @@
+.MyPage {
+  width: 1280px;
+  margin: auto;
+}
+
 .div-profile {
   /* height: 600px; */
   /* border-bottom: 1px solid black; */
@@ -37,7 +42,7 @@
   border-radius: 10px;
 }
 
-.result {
+.mypage-result {
   width: 1128px;
   margin-top: 0px;
   margin-bottom: 271px;
@@ -64,8 +69,8 @@
 
 .mystation {
   display: flex;
-  width: 73px;
-  padding: 10px 10px 10px 10px;
+  width: auto;
+  padding: 10px 20px 10px 20px;
   font-size: 21px;
   transition: 0.5s;
 }
