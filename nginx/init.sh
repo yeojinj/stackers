@@ -1,4 +1,4 @@
-#!bin/bsdh
+#!bin/bash
 mkdir /etc/nginx/sites-available
 mkdir /etc/nginx/sites-enabled
 

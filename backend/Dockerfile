@@ -22,8 +22,11 @@ COPY --from=builder /build/build/libs/stackers-0.0.1-SNAPSHOT.jar .
 
 EXPOSE 5000
 
+# ffmpeg
+RUN apt update
+RUN apt install -y ffmpeg
+
 # root 대신 nobody 권한으로 실행
-USER nobody
 ENTRYPOINT [                                                \
     "java",                                                 \
     "-jar",                                                 \
