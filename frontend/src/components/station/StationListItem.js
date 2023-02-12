@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import '../../styles/stationlistitem.css'
 import DefaultImg from '../../assets/default_profile.png'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
+import logo from '../../assets/image_logo.png'
 import { useNavigate } from 'react-router-dom'
 
 function StationListItem({ isRanking, isSearch, station, index }) {
@@ -109,7 +110,10 @@ function StationListItem({ isRanking, isSearch, station, index }) {
               gotoDetail(station)
             }}
             loop
-          ></video>
+          />
+          {!station.complete && (
+            <img src={logo} width={38} className="icon-is-not-complete" />
+          )}
           <div className="station-info">
             <p className="station-description">{station.content}</p>
             <div className="station-tag">
