@@ -2,7 +2,6 @@ package com.ssafy.stackers.service;
 
 import com.ssafy.stackers.exception.CustomException;
 import com.ssafy.stackers.model.Member;
-import com.ssafy.stackers.model.Station;
 import com.ssafy.stackers.model.dto.JoinDto;
 import com.ssafy.stackers.model.dto.MemberModifyDto;
 import com.ssafy.stackers.repository.MemberRepository;
@@ -11,7 +10,6 @@ import com.ssafy.stackers.utils.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

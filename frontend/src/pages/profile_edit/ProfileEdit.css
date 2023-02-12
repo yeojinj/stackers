@@ -52,7 +52,63 @@
   height: 110px;
   border-top: 1px solid gray;
   display: flex;
+  overflow: hidden;
 }
+
+.ProfileEdit-content-Inst {
+  margin: auto 0;
+  width: 50%;
+}
+
+.HashWrap {
+  /* margin-top: 24px; */
+  color: rgb(52, 58, 64);
+  font-size: 1.125rem;
+  display: flex;
+  flex-wrap: wrap;
+  letter-spacing: -0.6px;
+  color: #444241;
+  border-bottom: 1.6px solid grey;
+  padding: 2px 2px 2px 2px;
+}
+
+.HashWrapOuter {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.HashWrapInner {
+  /* margin-top: 20px; */
+  background: #ffe9fa;
+  border-radius: 20px;
+  padding: 8px 8px;
+  color: rgba(172, 0, 143, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 0.8em;
+  line-height: 20px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.HashInput {
+  width: 100px;
+  height: 30px;
+  margin-bottom: 0px;
+  display: inline-flex;
+  align-self: flex-end;
+  outline: none;
+  cursor: text;
+  /* line-height: 2rem; */
+  border: none;
+}
+
+.HashInput-none {
+  display: none;
+}
+
 .ProfileEdit-group {
   height: 120px;
   border-top: 1px solid gray;

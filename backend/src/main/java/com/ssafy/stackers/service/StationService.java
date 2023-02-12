@@ -2,16 +2,10 @@ package com.ssafy.stackers.service;
 
 import com.ssafy.stackers.exception.CustomException;
 import com.ssafy.stackers.model.*;
-import com.ssafy.stackers.model.dto.CommentDetailDto;
-import com.ssafy.stackers.model.dto.LoginMemberDto;
-import com.ssafy.stackers.model.dto.MainStationDto;
-import com.ssafy.stackers.model.dto.MusicianDto;
-import com.ssafy.stackers.model.dto.StationDetailDto;
-import com.ssafy.stackers.model.dto.StationDto;
+import com.ssafy.stackers.model.dto.*;
 import com.ssafy.stackers.repository.StationRepository;
 import com.ssafy.stackers.utils.error.ErrorCode;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +23,7 @@ public class StationService {
     @Autowired
     private StationRepository stationRepository;
     @Autowired
-    private InstrumentService instrumentService;
+    private MemberService memberService;
     @Autowired
     private TagService tagService;
     @Autowired
@@ -38,11 +32,17 @@ public class StationService {
     private CommentService commentService;
     @Autowired
     private VideoService videoService;
+    @Autowired
+    private FollowService followService;
 
     public Station findById(Long id) {
         stationRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
         return stationRepository.findById(id).get();
+    }
+
+    public Station findTop1ByMemberAndIsPublicOrderByRegTimeAsc(Member member, boolean isPublic){
+        return stationRepository.findTop1ByMemberAndIsPublicOrderByRegTimeAsc(member, isPublic).get();
     }
 
     public boolean existsById(Long id) {
@@ -85,12 +85,12 @@ public class StationService {
 
         // 비디오 저장
         Video video = null;
-        try {
-            video = videoService.uploadVideoToS3(file, stationDto.getVideoName(), s.getPrevStationId(), s.getRemainDepth(), prevPath);
-            s.updateVideo(video);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            video = videoService.uploadVideoToS3(file, stationDto.getVideoName(), s.getPrevStationId(), s.getRemainDepth(), prevPath);
+//            s.updateVideo(video);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
 
         return s;
     }
@@ -188,5 +188,27 @@ public class StationService {
         Station station = findById((long) stationId);
         station.deleteStation(true);
         videoService.deleteVideoFromS3(station.getVideo().getVideoPath());
+    }
+
+    /**
+     * 로그인 된 회원이 팔로우하는 가장 최근의 리스트를 가져오기
+     */
+    public List<MainStationDto> getFollowingList(Long id){
+        List<MainStationDto> stationList = new ArrayList<>();
+        List<FollowInfoDto> followings = followService.getFollowingList(id);
+
+        log.info(String.valueOf(followings.size()));
+
+        for(int i = 0; i < followings.size(); i++){
+            Member m = memberService.findByUsername(followings.get(i).getUsername());
+            try{
+                Station s = findTop1ByMemberAndIsPublicOrderByRegTimeAsc(m, true);
+                stationList.add(new MainStationDto(s.getId(), s.getContent(), null, s.getVideo()));
+            } catch (Exception e){
+
+            }
+        }
+
+        return stationList;
     }
 }
