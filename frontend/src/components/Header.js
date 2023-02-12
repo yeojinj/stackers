@@ -20,7 +20,6 @@ function Header() {
   const [inputValue, setInputValue] = useState('')
   const [isHaveInputValue, setIsHaveInputValue] = useState(false)
 
-  // wholeTextArray 대신 search 넣기
   const [stationdropDownList, setStationDropDownList] = useState([])
   const [AccountdropDownList, setAccountDropDownList] = useState([])
   const [stationdropDownItemIndex, setStationDropDownItemIndex] = useState(-1)
@@ -78,11 +77,13 @@ function Header() {
 
   // 로고 클릭시 메인페이지로 이동
   const navigateToMain = () => {
+    setInputValue('')
     navigate('/')
   }
 
   // 업로드 버튼 클릭 -> 녹화페이지로 이동
   const goRecordRoom = () => {
+    setInputValue('')
     navigate('/RecordRoom')
   }
 
