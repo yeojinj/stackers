@@ -40,7 +40,7 @@ public class SearchService {
             for (int i = 0; i < stations.size() && i < 20; i++) {       // 상위 20개 조회
                 Station s = stations.get(i);
                 List<String> tags = tagService.findNameById(tagListService.findByStation(s));
-                stationList.add(new SearchStationDto(s.getId(), s.getContent(), tags, s.getVideo(), s.getHeartCnt(), s.getMember().getId(), s.getMember().getImgPath(), s.getMember().getUsername()));
+                stationList.add(new SearchStationDto(s.getId(), s.getContent(), tags, s.getVideo(), s.getHeartCnt(), s.isComplete(), s.getMember().getId(), s.getMember().getImgPath(), s.getMember().getUsername()));
             }
         }
 
