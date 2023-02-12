@@ -3,9 +3,7 @@ package com.ssafy.stackers.service;
 import com.ssafy.stackers.config.jwt.JwtProperties;
 import com.ssafy.stackers.config.jwt.JwtTokenProvider;
 import com.ssafy.stackers.exception.CustomException;
-import com.ssafy.stackers.model.Member;
 import com.ssafy.stackers.model.RefreshToken;
-import com.ssafy.stackers.model.dto.JoinDto;
 import com.ssafy.stackers.model.dto.LoginDto;
 import com.ssafy.stackers.model.dto.TokenDto;
 import com.ssafy.stackers.repository.MemberRepository;
@@ -15,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
