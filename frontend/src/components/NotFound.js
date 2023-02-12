@@ -3,7 +3,7 @@ import '../styles/notfound.css'
 import logo from '../assets/logo_white.png'
 function NotFound() {
   return (
-    <div>
+    <div className="not-found">
       <div className="stars"></div>
       <div className="twinkling"></div>
       <div className="wrapper">
