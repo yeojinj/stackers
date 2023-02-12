@@ -83,7 +83,7 @@ function Header() {
   // 업로드 버튼 클릭 -> 녹화페이지로 이동
   const goRecordRoom = () => {
     setInputValue('')
-    navigate('/RecordRoom')
+    navigate('/RecordRoom/-1')
   }
 
   // 검색 아이콘 클릭 -> 검색결과페이지 이동
