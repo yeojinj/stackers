@@ -33,7 +33,7 @@ public class SearchService {
 
     public SearchResultDto searchStation(String keyword) {
         // station을 음악으로 검색
-        List<Station> stations = stationRepository.findByContentContainingOrMusicContainingOrderByHeartCnt(keyword, keyword);
+        List<Station> stations = stationRepository.findByContentContainingOrMusicContainingOrderByHeartCntDesc(keyword, keyword);
         List<SearchStationDto> stationList = new ArrayList<>();
         if (!stations.isEmpty()) {
             log.info("검색된 스테이션 수: " + stations.size());
