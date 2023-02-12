@@ -1,56 +1,90 @@
-import { React, useState } from 'react'
-import { useParams, useNavigate } from 'react-router'
+import { React, useState, useEffect } from 'react'
+import { useParams } from 'react-router'
 import { useSelector } from 'react-redux'
-// import axios from 'axios'
+import axios from 'axios'
 import './MyPage.css'
+import DefaultImg from '../../assets/default_profile.png'
 import StationListItem from '../../components/station/StationListItem'
-import profile from '../../assets/profileTest.svg'
 import Button from '@mui/material/Button'
 import MailOutlineIcon from '@mui/icons-material/MailOutline'
-// import Box from '@mui/material/Box'
-// import Modal from '@mui/material/Modal'
-// import ProfileEdit from '../profile_edit/ProfileEdit'
+import Box from '@mui/material/Box'
+import Modal from '@mui/material/Modal'
+import ProfileEdit from '../profile_edit/ProfileEdit'
 
 function MyPage() {
-  const navigate = useNavigate()
+  const token = localStorage.getItem('accessToken')
   const [isfollowing, setIsfollow] = useState(true)
-  // axios 연결시 주석 해제
-  // const [resultsListVideo, setStation] = useState([])
+
+  const [publicStation, setPublicStation] = useState([])
+  const [privateStation, setPrivateStation] = useState([])
   const [currentTab, clickTab] = useState(0)
   const params = useParams()
   const profileUsername = params.username // 프로필페이지 유저
+  const [mypageInfo, setMypageInfo] = useState([])
   const loginUser = useSelector((state) => {
     // 현재 로그인한 유저
     return state.user
   })
-  // const [open, setOpen] = useState(false)
-  // const handleOpen = () => setOpen(true)
-  // const handleClose = () => setOpen(false)
+  const [open, setOpen] = useState(false)
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
 
-  // async function stationList() {
-  //   await axios
-  //     .get('/api/station/popular')
-  //     .then((res) => {
-  //       console.log('[사용자 스테이션 조회] ', res.data)
-  //       // 서버 통신 되면 아래 주석 풀고 그 아래 리스트 지우기
-  //       // setStation(res.data)
-  //     })
-  //     .catch((err) => {
-  //       console.log(err)
-  //     })
-  // }
-  // useEffect(() => {
-  //   stationList()
-  // }, [])
+  // 마이페이지 정보 조회
+  async function getUserInfo() {
+    await axios
+      .get(`/api/member/${profileUsername}`, {
+        headers: {
+          Authorization: token
+        }
+      })
+      .then((res) => {
+        setMypageInfo(res.data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
 
-  // useEffect(() => {
-  //   console.log('[useEffect 실행]]', resultsListVideo)
-  // }, [resultsListVideo])
-  // 일단 더미 데이터로 해보고 있음
-  // axios 데이터 형식 보고 수정하기
+  // 마이페이지 공개 스테이션 조회
+  async function publicStationList() {
+    await axios
+      .get('/api/station/public', {
+        headers: {
+          Authorization: token
+        }
+      })
+      .then((res) => {
+        setPublicStation(res.data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
 
-  // 후에 useMemo 로 저장하기
-  const resultsListVideo = [
+  // 마이페이지 비공개 스테이션 조회
+  async function privateStationList() {
+    await axios
+      .get('/api/station/private', {
+        headers: {
+          Authorization: token
+        }
+      })
+      .then((res) => {
+        setPrivateStation(res.data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+  useEffect(() => {
+    getUserInfo()
+    publicStationList()
+    privateStationList()
+  }, [])
+
+  // 더미데이터
+  const dummy = [
     {
       id: 5,
       content: 'xptms',
@@ -58,11 +92,10 @@ function MyPage() {
       video: {
         id: 5,
         videoPath:
-          'https://stackers.bucket.s3.ap-northeast-2.amazonaws.com/static/videos/2fefd436-35c9-4f55-a2e3-cfe6328e3d13a.mp4',
+          'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
         videoName: null,
         videoOriName: '테스트용 비디',
-        thumbnailPath: null,
-        isPrivate: false // 공개/비공개 여부, 후에 데이터 형식 보고 변경
+        thumbnailPath: null
       }
     },
     {
@@ -72,11 +105,10 @@ function MyPage() {
       video: {
         id: 6,
         videoPath:
-          'https://stackers.bucket.s3.ap-northeast-2.amazonaws.com/static/videos/7bdc5892-05c4-4547-b3e0-41d87397579dbJVSGr8VTiyz7a31JmZDLYCHMJtY0ySLZyY2ImqYWIojM9nUVTJGQNu8GKy8Zrdt.mp4',
+          'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
         videoName: null,
         videoOriName: '2023_02_07_11:08',
-        thumbnailPath: null,
-        isPrivate: false
+        thumbnailPath: null
       }
     },
     {
@@ -86,11 +118,10 @@ function MyPage() {
       video: {
         id: 7,
         videoPath:
-          'https://stackers.bucket.s3.ap-northeast-2.amazonaws.com/static/videos/215eaa7d-8d58-4de2-a495-2931db5bbb37bJVSGr8VTiyz7a31JmZDLYCHMJtY0ySLZyY2ImqYWIojM9nUVTJGQNu8GKy8Zrdt.mp4',
+          'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
         videoName: null,
         videoOriName: '2023_02_07_11:08',
-        thumbnailPath: null,
-        isPrivate: true
+        thumbnailPath: null
       }
     },
     {
@@ -100,11 +131,10 @@ function MyPage() {
       video: {
         id: 8,
         videoPath:
-          'https://stackers.bucket.s3.ap-northeast-2.amazonaws.com/static/videos/215eaa7d-8d58-4de2-a495-2931db5bbb37bJVSGr8VTiyz7a31JmZDLYCHMJtY0ySLZyY2ImqYWIojM9nUVTJGQNu8GKy8Zrdt.mp4',
+          'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
         videoName: null,
         videoOriName: '2023_02_07_11:08',
-        thumbnailPath: null,
-        isPrivate: true
+        thumbnailPath: null
       }
     },
     {
@@ -114,24 +144,46 @@ function MyPage() {
       video: {
         id: 9,
         videoPath:
-          'https://stackers.bucket.s3.ap-northeast-2.amazonaws.com/static/videos/215eaa7d-8d58-4de2-a495-2931db5bbb37bJVSGr8VTiyz7a31JmZDLYCHMJtY0ySLZyY2ImqYWIojM9nUVTJGQNu8GKy8Zrdt.mp4',
+          'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
         videoName: null,
         videoOriName: '2023_02_07_11:08',
-        thumbnailPath: null,
-        isPrivate: true
+        thumbnailPath: null
+      }
+    },
+    {
+      id: 9,
+      content: '향기로운 음악의 세계~ 같이 들어요',
+      tags: ['smell_so_good', 'umm', 'yahoo'],
+      video: {
+        id: 9,
+        videoPath:
+          'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
+        videoName: null,
+        videoOriName: '2023_02_07_11:08',
+        thumbnailPath: null
+      }
+    },
+    {
+      id: 9,
+      content: '향기로운 음악의 세계~ 같이 들어요',
+      tags: ['smell_so_good', 'umm', 'yahoo'],
+      video: {
+        id: 9,
+        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+        videoName: null,
+        videoOriName: '2023_02_07_11:08',
+        thumbnailPath: null
       }
     }
   ]
   // 공개 스테이션
   const viewStation = () => {
-    const canView = resultsListVideo.filter((station) => {
-      return !station.video.isPrivate
-    })
     return (
       <>
         <div className="mystation-tap">
           <div className="popular-video">
-            {canView.map((result, i) => {
+            {/* {publicStation.map((result, i) => { */}
+            {dummy.map((result, i) => {
               return (
                 <div key={i}>
                   <StationListItem
@@ -148,12 +200,13 @@ function MyPage() {
     )
   }
   // 비공개 스테이션
-  const privateStation = () => {
+  const noViewStation = () => {
     return (
       <>
         <div className="mystation-tap">
           <div className="popular-video">
-            {resultsListVideo.map((result, i) => {
+            {/* {privateStation.map((result, i) => { */}
+            {dummy.map((result, i) => {
               return (
                 <div key={i}>
                   <StationListItem
@@ -173,7 +226,7 @@ function MyPage() {
   // 공개/비공개 탭 메뉴
   const menuArr = [
     { i: 1, name: '공개', content: viewStation() },
-    { i: 2, name: '비공개', content: privateStation() }
+    { i: 2, name: '비공개🔒', content: noViewStation() }
   ]
 
   // 팔로우 버튼, 프로필 편집 버튼
@@ -188,9 +241,7 @@ function MyPage() {
           color: 'rgba(73, 73, 73, 1)',
           fontWeight: 'bold'
         }}
-        onClick={() => {
-          navigate('/ProfileEdit')
-        }}
+        onClick={handleOpen}
       >
         프로필 편집
       </Button>
@@ -210,8 +261,6 @@ function MyPage() {
       )
     }
   }
-  const introduce = `안녕하세요~ 기타로 일상의 행복을 배달하는 기타리스트 @dearsanta입니다.
-  문의는 dearsanta@gmail.com으로 부탁드려요~`
 
   const selectMenuHandler = (index) => {
     clickTab(index)
@@ -219,11 +268,21 @@ function MyPage() {
   return (
     <>
       <div className="MyPage">
+        <Modal open={open} onClose={handleClose}>
+          <Box>
+            <ProfileEdit handleClose={handleClose} />
+          </Box>
+        </Modal>
         <div className="div-profile">
-          <div style={{ display: 'flex' }}>
+          {/* css 손보기 */}
+          <div style={{ display: 'flex', width: 'auto' }}>
             <div style={{ marginRight: '53px' }}>
               <img
-                src={profile}
+                src={
+                  mypageInfo.imgPath === 'path'
+                    ? DefaultImg
+                    : mypageInfo.imgPath
+                }
                 alt="profile"
                 style={{ width: '220px', margin: '0px' }}
               />
@@ -231,59 +290,57 @@ function MyPage() {
             <div style={{ marginLeft: '100px' }}>
               <div className="div-profile-notPicture">
                 <div>
-                  <b>dearSanta</b>
-                  <p>김산타</p>
+                  <b>{mypageInfo.nickname}</b>
+                  <p>{mypageInfo.username}</p>
                   <div className="div-profile-Count">
                     <div style={{ display: 'flex' }}>
                       <p className="profile-Count-content">영상</p>
-                      <b>8</b>
+                      <b>{publicStation.length + privateStation.length}</b>
                     </div>
                     <div style={{ display: 'flex' }}>
                       <p className="profile-Count-content">팔로워</p>
-                      <b>13K</b>
+                      <b>{mypageInfo.followerCnt}</b>
                     </div>
                     <div style={{ display: 'flex' }}>
                       <p className="profile-Count-content">팔로잉</p>
-                      <b>342</b>
+                      <b>{mypageInfo.followingCnt}</b>
                     </div>
                   </div>
                   <div
                     style={{
-                      display: 'flex',
-                      justifyContent: 'space-between'
+                      display: 'flex'
+                      // justifyContent: 'space-between'
                     }}
                   >
-                    <p
-                      style={{
-                        backgroundColor: 'rgba(227, 95, 173, 1)',
-                        color: 'white',
-                        padding: '5px',
-                        borderRadius: '5px'
-                      }}
-                    >
-                      소속 밴드
-                    </p>
-                    <p> |</p>
-                    <p
-                      style={{
-                        backgroundColor: 'rgba(245, 245, 245, 1)',
-                        color: 'rgba(80, 80, 80, 1)',
-                        padding: '5px',
-                        borderRadius: '10px'
-                      }}
-                    >
-                      악기 1
-                    </p>
-                    <p
-                      style={{
-                        backgroundColor: 'rgba(245, 245, 245, 1)',
-                        color: 'rgba(80, 80, 80, 1)',
-                        padding: '5px',
-                        borderRadius: '10px'
-                      }}
-                    >
-                      악기 2
-                    </p>
+                    {mypageInfo.party && (
+                      <p
+                        style={{
+                          backgroundColor: 'rgba(227, 95, 173, 1)',
+                          color: 'white',
+                          padding: '5px',
+                          borderRadius: '5px'
+                        }}
+                      >
+                        {mypageInfo.party}
+                      </p>
+                    )}
+                    {mypageInfo.party && mypageInfo.instruments && <p> | </p>}
+                    {mypageInfo.instruments &&
+                      mypageInfo.instruments.map((inst, i) => {
+                        return (
+                          <p
+                            key={i}
+                            style={{
+                              backgroundColor: 'rgba(245, 245, 245, 1)',
+                              color: 'rgba(80, 80, 80, 1)',
+                              padding: '5px',
+                              borderRadius: '10px'
+                            }}
+                          >
+                            {inst}
+                          </p>
+                        )
+                      })}
                   </div>
                 </div>
                 <div style={{ display: 'flex', marginLeft: '100px' }}>
@@ -303,13 +360,13 @@ function MyPage() {
                 </div>
               </div>
               <div>
-                <p style={{ whiteSpace: 'pre-wrap' }}>{introduce}</p>
+                <p style={{ whiteSpace: 'pre-wrap' }}>{mypageInfo.bio}</p>
               </div>
             </div>
           </div>
         </div>
         <div>
-          <div className="result">
+          <div className="mypage-result">
             <div className="station-tap">
               <div className="tapmenu-ul">
                 {menuArr.map((el, index) => (
@@ -318,7 +375,11 @@ function MyPage() {
                     className={
                       index === currentTab ? 'mystation focused' : 'mystation'
                     }
-                    onClick={() => selectMenuHandler(index)}
+                    onClick={() => {
+                      if (profileUsername === loginUser.username) {
+                        selectMenuHandler(index)
+                      }
+                    }}
                   >
                     {el.name}
                   </li>
@@ -328,11 +389,6 @@ function MyPage() {
             <div className="tab-content">{menuArr[currentTab].content}</div>
           </div>
         </div>
-        {/* <Modal open={open} onClose={handleClose}>
-          <Box>
-            <ProfileEdit handleClose={handleClose} className="LogIn" />
-          </Box>
-        </Modal> */}
       </div>
     </>
   )
