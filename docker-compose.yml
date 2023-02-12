@@ -3,6 +3,14 @@
 version: "3.7"
 
 services:
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - 6379:6379
+    networks:
+      - stackers
+    restart: always
   mariadb:
     container_name: mariadb
     build:
@@ -23,6 +31,7 @@ services:
     ports:
       - 5000:5000
     depends_on:
+      - redis
       - mariadb
     networks:
       - stackers
