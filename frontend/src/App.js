@@ -58,21 +58,6 @@ function App() {
         })
     }
   })
-  useEffect(() => {
-    axios({
-      method: 'GET',
-      url: '/api/instrument',
-      headers: {
-        'Content-Type': `multipart/form-data`
-      }
-    })
-      .then((response) => {
-        dispatch(CreateInst(response.data))
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-  })
 
   return (
     <div className="App">
