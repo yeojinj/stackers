@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useEffect, useCallback } from 'react'
 import './ProfileEdit.css'
 // import { useSelector, useDispatch } from 'react-redux'
@@ -51,7 +52,7 @@ function ProfileEdit() {
         setBio(res.data.bio)
         setImageurl(res.data.imgPath)
         // dispatch(TagList(res.data.instruments))
-        setHashArr(res.data.instruments)
+        // setHashArr(res.data.instruments)
         setParty(res.data.party)
       })
       .catch((err) => console.log(err))
@@ -111,50 +112,73 @@ function ProfileEdit() {
 
   // 415 오류 발생 -> 수정 필요!!!!
   const changeInfo = () => {
-    console.log(id)
     const newInfo = {
       nickname,
       bio,
       instruments: hashArr,
       party
     }
-    console.log(newInfo)
+    console.log('[새로 들어온 정보] : ', newInfo)
+
+    /* axios 통신 코드~ */
+    const formData = new FormData()
+    formData.append(
+      'info',
+      new Blob([JSON.stringify(newInfo)], {
+        type: 'application/json'
+      })
+    )
+    formData.append('profile', image)
+    axios
+      .post('/api/member/user', formData, {
+        data: newInfo,
+        headers: {
+          Authorization: token,
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      .then((res) => {
+        console.log('[성공]', res.data)
+      })
+      .catch((err) => console.log(err))
+
     // 이미지를 업데이트 했다면
-    if (image) {
-      const formData = new FormData()
-      formData.append(
-        'info',
-        new Blob([JSON.stringify(newInfo)], {
-          type: 'application/json'
-        })
-      )
-      formData.append('profile', image)
-      axios
-        .post('/api/member/user', formData, {
-          data: newInfo,
-          headers: {
-            Authorization: token,
-            'Content-Type': 'multipart/form-data'
-          }
-        })
-        .then((res) => {
-          console.log('[성공]', res.data)
-        })
-        .catch((err) => console.log(err))
-    } else {
-      // 이미지를 업데이트 하지 않았다면
-      axios
-        .post('api/member/user', {
-          data: newInfo,
-          headers: {
-            Authorization: token
-          }
-        })
-        .then((res) => {
-          console.log('[성공]', res.data)
-        })
-        .catch((err) => console.log(err))
-    }
+    // if (image) {
+    //   const formData = new FormData()
+    //   formData.append(
+    //     'info',
+    //     new Blob([JSON.stringify(newInfo)], {
+    //       type: 'application/json'
+    //     })
+    //   )
+    //   formData.append('profile', image)
+    //   axios
+    //     .post('/api/member/user', formData, {
+    //       data: newInfo,
+    //       headers: {
+    //         Authorization: token,
+    //         'Content-Type': 'multipart/form-data'
+    //       }
+    //     })
+    //     .then((res) => {
+    //       console.log('[성공]', res.data)
+    //     })
+    //     .catch((err) => console.log(err))
+    // } else {
+    //   // 이미지를 업데이트 하지 않았다면
+    //   axios
+    //     .post('api/member/user', {
+    //       data: newInfo,
+    //       headers: {
+    //         Authorization: token,
+    //         'Content-Type': 'multipart/form-data'
+    //       }
+    //     })
+    //     .then((res) => {
+    //       console.log('[성공]', res.data)
+    //     })
+    //     .catch((err) => console.log(err))
+    // }
   }
   return (
     <div className="ProfileEdit">

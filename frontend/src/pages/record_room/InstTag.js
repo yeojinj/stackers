@@ -1,11 +1,34 @@
+/* eslint-disable */
 import React, { useState, useEffect } from 'react'
-// import axios from 'axios'
-import SearchIcon from '@mui/icons-material/Search'
-// import Button from '@mui/material/Button'
+import { IconButton } from '@mui/material'
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
+import { useDispatch } from 'react-redux'
+import { CreateStack } from '../../store.js'
+import axios from 'axios'
 
-function InstTag(props) {
-  const wholeTextArray = props.inst
-  console.log(wholeTextArray)
+function InstTag() {
+  const getInst = async () => {
+    await axios({
+      method: 'GET',
+      url: '/api/instrument'
+    })
+      .then((response) => {
+        setInstLst(response.data)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+  const dispatch = useDispatch()
+  const [instLst, setInstLst] = useState([])
+  useEffect(() => {
+    getInst()
+  }, [])
+  const wholeTextArray = []
+
+  for (const item in instLst) {
+    wholeTextArray.push(instLst[item].name)
+  }
   const [inputValue, setInputValue] = useState('')
   const [isHaveInputValue, setIsHaveInputValue] = useState(false)
   const [dropDownList, setDropDownList] = useState(wholeTextArray)
@@ -31,10 +54,13 @@ function InstTag(props) {
 
   const changeInputValue = (event) => {
     setInputValue(event.target.value)
+    dispatch(CreateStack(['instrument', event.target.value]))
   }
 
   const clickDropDownItem = (clickedItem) => {
     setInputValue(clickedItem)
+
+    dispatch(CreateStack(['instrument', clickedItem]))
     setIsHaveInputValue(false)
   }
 
@@ -62,16 +88,18 @@ function InstTag(props) {
 
   return (
     <div>
-      <div>
+      <div className="input__items" style={{ marginTop: '2%' }}>
+        <label className="upload-label">연주 악기</label>
         <input
+          placeholder="어떤 악기로 연주했나요?"
+          className="upload-input"
           type="text"
           value={inputValue}
           onChange={changeInputValue}
-          onKeyUp={handleDropDownKey}
         />
       </div>
       {isHaveInputValue && (
-        <ul className="dropdownbox">
+        <ul>
           {dropDownList.map((dropDownItem, dropDownIndex) => {
             return (
               <li
@@ -84,13 +112,6 @@ function InstTag(props) {
                     : 'dropDownItemIndex'
                 }
               >
-                <SearchIcon
-                  style={{
-                    width: '16px',
-                    height: '16px',
-                    marginRight: '5px'
-                  }}
-                />
                 {dropDownItem}
               </li>
             )
