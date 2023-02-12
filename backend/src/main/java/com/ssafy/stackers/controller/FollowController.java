@@ -68,4 +68,14 @@ public class FollowController {
         return new ResponseEntity<>(followingList, HttpStatus.OK);
     }
 
+    @Operation(summary = "팔로잉 여부 조회")
+    @GetMapping("isfollowing/{username}")
+    public ResponseEntity<?> isFollowing(@AuthenticationPrincipal PrincipalDetails principal,
+        @PathVariable String username) {
+        Long followerId = memberService.getLoginMember(principal.getUsername()).getId();
+        Long followingId = memberService.findByUsername(username).getId();
+        return new ResponseEntity<>(followService.isFollowing(followerId, followingId),
+            HttpStatus.OK);
+    }
+
 }

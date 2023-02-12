@@ -24,7 +24,7 @@ public class FollowService {
     private PartyMemberService partyMemberService;
 
     @Transactional
-    public void save(Long followerId, Long followingId){
+    public void save(Long followerId, Long followingId) {
         if (followerId == followingId) {
             throw new CustomException(ErrorCode.CANNOT_FOLLOW_MYSELF);
         }
@@ -38,7 +38,7 @@ public class FollowService {
     }
 
     @Transactional
-    public void delete(Long followerId, Long followingId){
+    public void delete(Long followerId, Long followingId) {
         if (!followRepository.existsByFollowerIdAndFollowingId(followerId, followingId)) {
             throw new CustomException(ErrorCode.NOT_FOLLOW);
         }
@@ -52,6 +52,11 @@ public class FollowService {
     public Long countByFollowingId(Long id) {
         return followRepository.countByFollowerId(id);
     }
+
+    public boolean isFollowing(Long followerId, Long followingId) {
+        return followRepository.existsByFollowerIdAndFollowingId(followerId, followingId);
+    }
+
 
     private FollowInfoDto getFollowInfo(Member member) {
         FollowInfoDto followInfoDto = FollowInfoDto
