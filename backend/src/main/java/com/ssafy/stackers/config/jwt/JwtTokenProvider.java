@@ -3,8 +3,8 @@ package com.ssafy.stackers.config.jwt;
 import com.ssafy.stackers.auth.PrincipalDetails;
 import com.ssafy.stackers.exception.CustomException;
 import com.ssafy.stackers.model.Member;
-import com.ssafy.stackers.model.RefreshToken;
-import com.ssafy.stackers.repository.RefreshTokenRepository;
+import com.ssafy.stackers.model.RefreshRedisToken;
+import com.ssafy.stackers.repository.RefreshRedisRepository;
 import com.ssafy.stackers.utils.error.ErrorCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -32,7 +32,7 @@ import org.springframework.stereotype.Component;
 public class JwtTokenProvider implements InitializingBean {
 
     @Autowired
-    private RefreshTokenRepository refreshTokenRepository;
+    private RefreshRedisRepository refreshTokenRedisRepository;
 
     private final long tokenValidityInMs = 1000 * 60 * 1;
     private final long refreshTokenValidityInMs = 1000 * 60 * 30;
@@ -78,13 +78,13 @@ public class JwtTokenProvider implements InitializingBean {
     public String reissueRefreshToken(String refreshToken) throws RuntimeException {
         Authentication authentication = getAuthenticationWithNoAuth(refreshToken);
 
-        RefreshToken findRefreshToken = refreshTokenRepository.findByUserId(
+        RefreshRedisToken findRefreshToken = refreshTokenRedisRepository.findById(
                 authentication.getName())
             .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
         if (findRefreshToken.getToken().equals(refreshToken)) {
             String newRefreshToken = createRefreshToken(authentication);
-            findRefreshToken.changeToken(newRefreshToken);
+            findRefreshToken.reissue(newRefreshToken);
             return newRefreshToken;
         } else {
             log.info("refresh 토큰이 일치하지 않습니다. ");
@@ -97,18 +97,18 @@ public class JwtTokenProvider implements InitializingBean {
         String newRefreshToken = createRefreshToken(authentication);
 
         // 기존것이 있다면 바꿔주고, 없다면 만들어줌
-        refreshTokenRepository.findByUserId(authentication.getName())
+        refreshTokenRedisRepository.findById(authentication.getName())
             .ifPresentOrElse(
                 r -> {
-                    r.changeToken(newRefreshToken);
+                    r.reissue(newRefreshToken);
                     log.info("issueRefreshToken method | change token ");
                 },
                 () -> {
-                    RefreshToken token = RefreshToken.createToken(authentication.getName(),
+                    RefreshRedisToken token = RefreshRedisToken.createToken(authentication.getName(),
                         newRefreshToken);
                     log.info(" issueRefreshToken method | save tokenID : {}, token : {}",
-                        token.getUserId(), token.getToken());
-                    refreshTokenRepository.save(token);
+                        token.getMemberId(), token.getToken());
+                    refreshTokenRedisRepository.save(token);
                 });
 
         return newRefreshToken;

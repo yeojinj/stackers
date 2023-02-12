@@ -3,11 +3,11 @@ package com.ssafy.stackers.service;
 import com.ssafy.stackers.config.jwt.JwtProperties;
 import com.ssafy.stackers.config.jwt.JwtTokenProvider;
 import com.ssafy.stackers.exception.CustomException;
-import com.ssafy.stackers.model.RefreshToken;
+import com.ssafy.stackers.model.RefreshRedisToken;
 import com.ssafy.stackers.model.dto.LoginDto;
 import com.ssafy.stackers.model.dto.TokenDto;
 import com.ssafy.stackers.repository.MemberRepository;
-import com.ssafy.stackers.repository.RefreshTokenRepository;
+import com.ssafy.stackers.repository.RefreshRedisRepository;
 import com.ssafy.stackers.utils.error.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,7 +23,7 @@ public class AuthService {
     @Autowired
     private final MemberRepository memberRepository = null;
     @Autowired
-    private final RefreshTokenRepository refreshTokenRepository = null;
+    private final RefreshRedisRepository refreshRedisRepository = null;
     @Autowired
     private final AuthenticationManagerBuilder authenticationManagerBuilder = null;
     @Autowired
@@ -37,9 +37,13 @@ public class AuthService {
         Authentication authentication = authenticationManagerBuilder.getObject()
             .authenticate(authenticationToken);
 
+        String newToken = jwtTokenProvider.createRefreshToken(authentication);
+        RefreshRedisToken newRedisToken = RefreshRedisToken.createToken(authentication.getName(), newToken);
+        refreshRedisRepository.save(newRedisToken);
+
         TokenDto tokenDto = new TokenDto(
             JwtProperties.TOKEN_PREFIX + jwtTokenProvider.createAccessToken(authentication),
-            JwtProperties.TOKEN_PREFIX + jwtTokenProvider.issueRefreshToken(authentication));
+            JwtProperties.TOKEN_PREFIX + newToken);
 
         setLastLogin(loginDto.getUsername());
         return tokenDto;
@@ -52,7 +56,7 @@ public class AuthService {
         jwtTokenProvider.validateToken(resolveToken);       //토큰 검증
 
         Authentication authentication = jwtTokenProvider.getAuthenticationWithNoAuth(resolveToken);
-        RefreshToken refreshToken = refreshTokenRepository.findByUserId(
+        RefreshRedisToken refreshToken = refreshRedisRepository.findById(
             authentication.getName()).get();
 
         if (!resolveToken.equals(refreshToken.getToken())) {
@@ -60,7 +64,8 @@ public class AuthService {
         }
 
         String newToken = jwtTokenProvider.createRefreshToken(authentication);
-        refreshToken.changeToken(newToken);
+        RefreshRedisToken newRedisToken = RefreshRedisToken.createToken(authentication.getName(), newToken);
+        refreshRedisRepository.save(newRedisToken);
 
         TokenDto tokenDto = new TokenDto(
             JwtProperties.TOKEN_PREFIX + jwtTokenProvider.createAccessToken(authentication),
