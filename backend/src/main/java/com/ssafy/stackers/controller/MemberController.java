@@ -104,16 +104,19 @@ public class MemberController {
             @RequestPart(value = "profile", required = false) MultipartFile file,
             @AuthenticationPrincipal PrincipalDetails principal) throws Exception {
         Member member = memberService.getLoginMember(principal.getUsername());
+        // 바이오, 이름, 사진 업데이트
         memberService.updateMember(member.getUsername(), memberModifyDto, file);
-        // 악기 등록
+
+        // 연주 악기 삭제 -> 새로운 연주 악기 등록
         playableInstrumentService.deleteByMemberId(member);
         for (String instrumentName: memberModifyDto.getInstruments()) {
-            Instrument instrument = instrumentService.findByName(instrumentName);
+            Instrument instrument = instrumentService.addInstrument(instrumentName);
             playableInstrumentService.save(member, instrument);
         }
-        // 팀 등록
+
+        // 소속 팀 삭제 -> 새로운 팀 등록
         partyMemberService.deleteByMemberId(member);
-        Party party = partyService.findByName(memberModifyDto.getParty());
+        Party party = partyService.addPartyOrReturn(memberModifyDto.getParty());
         partyMemberService.save(member, party);
 
         return new ResponseEntity<>("멤버 수정 완료", HttpStatus.OK);
