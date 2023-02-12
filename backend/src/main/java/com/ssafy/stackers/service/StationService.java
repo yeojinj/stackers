@@ -41,7 +41,7 @@ public class StationService {
         return stationRepository.findById(id).get();
     }
 
-    public Station findTop1ByMemberAndIsPublicOrderByRegTimeAsc(Member member, boolean isPublic){
+    public Station findTop1ByMemberAndIsPublicOrderByRegTimeAsc(Member member, boolean isPublic) {
         return stationRepository.findTop1ByMemberAndIsPublicOrderByRegTimeAsc(member, isPublic).get();
     }
 
@@ -53,7 +53,7 @@ public class StationService {
      * 스테이션 업로드
      */
     @Transactional
-    public Station save(StationDto stationDto, MultipartFile file, Member member, Instrument instrument){
+    public Station save(StationDto stationDto, MultipartFile file, Member member, Instrument instrument) {
         // 태그 저장
         List<Tag> tags = tagService.save(stationDto.getTags());
 
@@ -78,7 +78,7 @@ public class StationService {
         Long prevStationId = s.getPrevStationId();
         String prevPath = null;
         // 이전 스테이션이 있을 경우 해당 스테이션의 비디오 경로 가져오기
-        if(prevStationId != -1) {
+        if (prevStationId != -1) {
             Station ps = findById(prevStationId);
             prevPath = ps.getVideo().getVideoPath();
         }
@@ -171,13 +171,13 @@ public class StationService {
     /**
      * 연주자 목록 추출 메서드
      */
-    public List<MusicianDto> getMusicians(Station start){
+    public List<MusicianDto> getMusicians(Station start) {
         List<MusicianDto> musicians = new ArrayList<>();
-        while (true){
+        while (true) {
             Member m = start.getMember();
             musicians.add(new MusicianDto(start.getInstrument().getId(), start.getInstrument().getName(), m.getUsername(), m.getImgPath()));
 
-            if(start.getPrevStationId() == -1) break;
+            if (start.getPrevStationId() == -1) break;
             start = findById(start.getPrevStationId());
         }
         return musicians;
