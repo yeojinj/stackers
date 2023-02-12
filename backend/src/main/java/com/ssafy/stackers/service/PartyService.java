@@ -15,7 +15,7 @@ public class PartyService {
     private PartyRepository partyRepository;
 
     @Transactional
-    public void save(String name){
+    public Party save(String name){
         if (partyRepository.existsByName(name)) {
             throw new CustomException(ErrorCode.PARTY_ALREADY_EXIST);
         }
@@ -25,6 +25,7 @@ public class PartyService {
                 .name(name)
                 .build();
         partyRepository.save(party);
+        return party;
     }
 
     @Transactional
@@ -40,5 +41,12 @@ public class PartyService {
             ErrorCode.ENTITY_NOT_FOUND));
 
         return party;
+    }
+
+    public Party addPartyOrReturn(String partyName){
+        if(partyRepository.existsByName(partyName)){
+            return findByName(partyName);
+        }
+        return save(partyName);
     }
 }
