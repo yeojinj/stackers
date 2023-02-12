@@ -154,9 +154,11 @@ function MainRoom() {
           <div className="station-center">
             <div
               className="chip top"
-              style={{
-                marginLeft: '84%'
-              }}
+              style={
+                {
+                  // marginLeft: '84%'
+                }
+              }
             >
               ⚡️ 당신이 놓친 스테이션
             </div>

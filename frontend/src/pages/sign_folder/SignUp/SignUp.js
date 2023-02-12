@@ -1,7 +1,8 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react'
 import LogoImage from './LogoImage.png'
-import LogoText from './LogoText.png'
+import LogoText from './LogoText.svg'
+
 import './SignUp.css'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
@@ -10,50 +11,63 @@ function SignUp() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
+  const [mailConfirm, setMailConfirm] = useState('') // 입력하는 인증번호
+  const [authentication, setAuthentication] = useState(null) // 받아온 인증번호
   const navigate = useNavigate()
+  const [pwType, setPwType] = useState('text')
 
+  const [isSend, setIsSend] = useState(false) // 메일 전송했는지
   const [isUsername, setIsUsername] = useState(null)
   const [isPassword, setIsPassword] = useState(null)
-  const [isEmail, setIsEmail] = useState(null)
+  const [isEmail, setIsEmail] = useState(null) // 인증번호 일치여부
+  var test_spc = /\W|\s/g // 특수문자, 띄어쓰기
+  var password_spc1 = /[a-z]/g // 영어 소문자
+  var password_spc5 = /[A-Z]/g // 영어 대문자
+  var password_spc2 = /[0-9]/g // 숫자
+  var password_spc3 = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/g // 특수문자
+  var password_spc4 = /\s/g // 공백
 
-  const handleOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
+  // 가입버튼 활성화
+  const [membership, setMembership] = useState(true)
+  useEffect(() => {
+    if (
+      0 < username.length &&
+      0 < password.length &&
+      0 < email.length &&
+      0 < mailConfirm.length
+    ) {
+      if (isUsername && isPassword && isEmail) {
+        setMembership(false)
+        console.log('버튼활성화 됨')
+      } else {
+        console.log('버튼활성화 안됨.')
+      }
+    } else {
+      console.log('버튼활성화 안됨.')
+    }
+  }, [isUsername, isPassword, isEmail])
 
   // username 기본 CSS
-  const [usernameCSS, setUsernameCSS] = useState({
-    width: '80%',
-    marginBottom: '8px'
-  })
+  const [usernameCSS, setUsernameCSS] = useState('signup-input')
 
   // password 기본 CSS
-  const [passwordCSS, setPasswordCSS] = useState({
-    width: '80%',
-    marginBottom: '8px'
-  })
+  const [passwordCSS, setPasswordCSS] = useState('signup-input')
+
+  // email 기본 CSS
+  const [emailCSS, setEmailCSS] = useState('signup-input')
+
+  // 인증번호 확인 CSS
+  const [secuCSS, setSecuCSS] = useState('signup-input')
 
   // usernameCSS
   useEffect(() => {
     if (isUsername === null) {
     } else if (isUsername) {
       // True일때 css
-      setUsernameCSS(() => {
-        return {
-          width: '100%',
-          marginBottom: '25px',
-          border: '1px solid rgba(42, 32, 150, 1)',
-          borderRadius: 4
-        }
-      })
+      setUsernameCSS('signup-input-success')
     } else {
       // False일때 css
-      setUsernameCSS(() => {
-        return {
-          width: '100%',
-          marginBottom: '25px',
-          border: '1px solid rgba(172, 0, 143, 1)',
-          borderRadius: 4
-        }
-      })
+      setUsernameCSS('signup-input-fail')
     }
   }, [isUsername])
 
@@ -62,29 +76,113 @@ function SignUp() {
     if (isPassword === null) {
     } else if (isPassword) {
       // True일때 css
-      setPasswordCSS(() => {
-        return {
-          border: '1px solid rgba(42, 32, 150, 1)',
-          borderRadius: 4
-        }
-      })
+      setPasswordCSS('signup-input-success')
     } else {
       // False일때 css
-      setPasswordCSS(() => {
-        return {
-          border: '1px solid rgba(172, 0, 143, 1)',
-          borderRadius: 4
-        }
-      })
+      setPasswordCSS('signup-input-fail')
     }
   }, [isPassword])
+
+  // emailCSS
+  useEffect(() => {
+    if (isSend === false) {
+    } else if (isSend) {
+      setEmailCSS('signup-input-success')
+    } else {
+      setEmailCSS('signup-input-fail')
+    }
+  }, [isSend])
+
+  // 인증번호 확인 CSS
+  useEffect(() => {
+    if (isEmail === null) {
+    } else if (isEmail) {
+      setSecuCSS('signup-input-success')
+    } else {
+      setSecuCSS('signup-input-fail')
+    }
+  }, [isEmail])
+
+  //password type
+  useEffect(() => {
+    if (!membership) {
+      setPwType('password')
+    } else {
+      setPwType('text')
+    }
+  }, [membership])
+  // 전송, 확인 버튼
+  let emailButton = null
+  if (!isSend) {
+    emailButton = (
+      <button
+        className="email-check-button"
+        type="button"
+        onClick={() => {
+          axios({
+            method: 'post',
+            url: '/api/mail/mail-confirm',
+            data: {
+              email: email
+            }
+          })
+            .then((response) => {
+              console.log('[인증번호 전송] : ', response.data)
+              setAuthentication(response.data)
+              setIsSend(true)
+            })
+            .catch((error) => {
+              console.log('[인증번호 전송 실패] : ', error.response)
+              console.log('올바른 이메일 양식으로 적어주세요.')
+            })
+        }}
+      >
+        전송
+      </button>
+    )
+  } else if (isSend) {
+    emailButton = (
+      <button
+        className="email-check-button"
+        type="button"
+        onClick={() => {
+          if (mailConfirm === authentication) {
+            setIsEmail(true)
+            console.log('인증번호 통과')
+          } else {
+            setIsEmail(false)
+            console.log('인증번호 탈락')
+          }
+        }}
+      >
+        확인
+      </button>
+    )
+  }
+
+  //signup-button
+  let signupButton = null
+  if (membership) {
+    signupButton = (
+      <button className="signup-button" type="submit" disabled={membership}>
+        가입하기
+      </button>
+    )
+  } else if (!membership) {
+    signupButton = (
+      <button className="signup-button-able" type="submit">
+        가입하기
+      </button>
+    )
+  }
+
   return (
     <div>
       <div className="signup-container">
         <div className="signup-header">
           <img src={LogoImage} alt="LogoImage" width="10%" />
           <div className="signup-header-logo-text">
-            <img src={LogoText} alt="LogoText" width="20%" />에 오신 것을
+            <img src={LogoText} alt="LogoText" width="27%" />에 오신 것을
             환영합니다.
           </div>
         </div>
@@ -111,9 +209,8 @@ function SignUp() {
           }}
         >
           <input
-            className="signup-input"
-            placeholder="아이디"
-            style={usernameCSS}
+            className={usernameCSS}
+            placeholder="아이디(5~20자 영어 소문자, 숫자로 구성)"
             name="username"
             value={username}
             onChange={(event) => {
@@ -121,33 +218,65 @@ function SignUp() {
             }}
             // usernameCSS 값 변경 조건
             onBlur={() => {
-              if (1 <= username.length && username.length <= 8) {
-                setIsUsername(true)
+              if (5 <= username.length && username.length <= 20) {
+                console.log('username 아이디 길이 통과')
+                if (!test_spc.test(username)) {
+                  // 특수문자, 공백 미포함시
+                  console.log('username 특수문자, 공백 없어요 통과')
+                  if (username === username.toLowerCase()) {
+                    // 소문자만 있는지.
+                    setIsUsername(true)
+                    console.log('username 최종통과')
+                  } else {
+                    setIsUsername(false)
+                    console.log('username 대문자 빼세요')
+                  }
+                } else {
+                  console.log('username 특수문자, 공백, 한글이 있어요.')
+                  setIsUsername(false)
+                }
               } else {
+                console.log('username 길이 탈락')
                 setIsUsername(false)
               }
             }}
           />
           <input
-            className="signup-input"
-            placeholder="비밀번호(알파벳, 특수문자를 포함한 8~10자로 구성)"
-            style={passwordCSS}
+            className={passwordCSS}
+            placeholder="비밀번호(알파벳, 숫자, 특수문자를 포함한 8~16자로 구성)"
             name="password"
+            type={pwType}
             value={password}
             onChange={(event) => {
               setPassword(event.target.value)
             }}
             // password 값 변경 조건
             onBlur={() => {
-              if (8 <= password.length && password.length <= 12) {
-                setIsPassword(true)
+              if (8 <= password.length && password.length <= 16) {
+                console.log('비밀번호 길이 통과')
+                if (
+                  password_spc1.test(password) &&
+                  password_spc2.test(password) &&
+                  password_spc3.test(password) &&
+                  !password_spc4.test(password) &&
+                  password_spc5.test(password)
+                ) {
+                  setIsPassword(true)
+                  console.log('비밀번호 통화')
+                } else {
+                  console.log(
+                    'password에 영어소문자, 영어대문자, 숫자, 특수문자를 포함시켜주세요. 공백은 제외!'
+                  )
+                  setIsPassword(false)
+                }
               } else {
+                console.log('비밀번호 탈락')
                 setIsPassword(false)
               }
             }}
           />
           <input
-            className="signup-input"
+            className={emailCSS}
             placeholder="이메일"
             name="email"
             value={email}
@@ -156,13 +285,18 @@ function SignUp() {
             }}
           />
           <div className="email-validation-div">
-            <input className="signup-input" placeholder="인증번호 입력" />
-            <button className="email-check-button">전송</button>
+            <input
+              className={secuCSS}
+              placeholder="인증번호 입력"
+              value={mailConfirm}
+              onChange={(event) => {
+                setMailConfirm(event.target.value)
+              }}
+            />
+            {emailButton}
           </div>
           <hr className="signup-line" />
-          <button className="signup-button" type="submit">
-            가입하기
-          </button>
+          {signupButton}
         </form>
       </div>
     </div>
