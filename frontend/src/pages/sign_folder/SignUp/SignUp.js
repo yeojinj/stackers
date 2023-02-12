@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react'
-import LogoImage from './LogoImage.png'
+import LogoImage from './LogoImage.svg'
 import LogoText from './LogoText.svg'
 
 import './SignUp.css'

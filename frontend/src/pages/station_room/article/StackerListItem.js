@@ -9,6 +9,7 @@ import profile4 from '../assets/profilePicture3.png'
 function StackerListItem(props) {
   const musicians = props.musicians
   // console.log(musicians)
+  // musicians이 데이터별 한명이라 일단 아래와같이 넣었습니다.
   const Participant = [
     {
       id: 1,
