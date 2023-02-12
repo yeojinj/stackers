@@ -32,7 +32,7 @@ function StationListItem({ isRanking, isSearch, station, index }) {
   //   navigate(`/StationRoom/${id}`)
   // }
 
-  // 메인페이지 스테이션 조회
+  // 메인페이지, 마이페이지 스테이션 조회
   const IsRanking = () => {
     // 스테이션 랭킹
     if (isRanking) {
