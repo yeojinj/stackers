@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useEffect } from 'react'
 import { IconButton } from '@mui/material'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
@@ -62,26 +63,6 @@ function InstTag() {
     dispatch(CreateStack(['instrument', clickedItem]))
     setIsHaveInputValue(false)
   }
-  const handleInst = async () => {
-    const instData = {
-      name: inputValue
-    }
-    await axios
-      .post('/api/instrument', instData, {
-        headers: {
-          Authorization: localStorage.getItem('accessToken')
-        }
-      })
-      .then(() => {
-        console.log('[악기업로드]] >> 성공')
-        dispatch(CreateStack(['instrument', inputValue]))
-      })
-      .catch((error) => {
-        alert('이미 존재하는 악기입니다')
-        console.log(error)
-      })
-    console.log(instData)
-  }
 
   const handleDropDownKey = (event) => {
     // input에 값이 있을때만 작동
@@ -107,20 +88,16 @@ function InstTag() {
 
   return (
     <div>
-      <div>
-        <div className="instForm">
-          <b>연주 악기</b>
-          <IconButton>
-            <AddCircleOutlineIcon onClick={handleInst} />
-          </IconButton>
-        </div>
+      <div className="input__items" style={{ marginTop: '2%' }}>
+        <label className="upload-label">연주 악기</label>
+        <input
+          placeholder="어떤 악기로 연주했나요?"
+          className="upload-input"
+          type="text"
+          value={inputValue}
+          onChange={changeInputValue}
+        />
       </div>
-      <input
-        type="text"
-        value={inputValue}
-        onChange={changeInputValue}
-        onKeyUp={handleDropDownKey}
-      />
       {isHaveInputValue && (
         <ul>
           {dropDownList.map((dropDownItem, dropDownIndex) => {

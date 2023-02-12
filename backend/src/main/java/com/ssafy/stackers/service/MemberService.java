@@ -54,6 +54,11 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
+    public boolean isValidUsername(String username) {
+        return !memberRepository.existsByUsername(username);
+    }
+
+    @Transactional(readOnly = true)
     public void checkUsernameAndEmail(String username, String email) {
         boolean exists = memberRepository.existsByUsernameAndEmail(username, email);
         if (!exists) {

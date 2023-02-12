@@ -6,6 +6,7 @@ import { CreateStack } from '../../store.js'
 const Tag = () => {
   const [tagItem, setTagItem] = useState('')
   const [tagList, setTagList] = useState([])
+
   const dispatch = useDispatch()
   const uploadTagHandler = () => {
     dispatch(CreateStack(['tags', [...tagList, tagItem]]))
@@ -24,9 +25,10 @@ const Tag = () => {
   }
 
   return (
-    <div>
-      <div>
+    <div className="tag-container">
+      <div className="tag-upper-input">
         <input
+          className="upload-input tag"
           type="text"
           tabIndex={2}
           onChange={(e) => setTagItem(e.target.value)}
@@ -34,24 +36,19 @@ const Tag = () => {
         />
         {/* onKeyDown이 이슈가 많아서 버튼 이벤트와 함께 사용 & 하지만, 보이지는 않게 설정함 */}
         <button
+          className="button-download tag-btn"
+          style={{ fontWeight: 'bold' }}
           onClick={(e) => {
             e.preventDefault()
             uploadTagHandler()
           }}
         >
-          upload!
+          #
         </button>
+      </div>
+      <div className="tag-chips">
         {tagList.map((tagItem, index) => {
-          return (
-            <div key={index}>
-              <Chip
-                label={tagItem}
-                onDelete={deleteTagItem}
-                variant="outlined"
-                color="primary"
-              />
-            </div>
-          )
+          return <Chip key={index} label={tagItem} onDelete={deleteTagItem} />
         })}
       </div>
     </div>
