@@ -2,9 +2,9 @@ package com.ssafy.stackers.service;
 
 import com.ssafy.stackers.model.Member;
 import com.ssafy.stackers.model.Station;
-import com.ssafy.stackers.model.dto.MainStationDto;
 import com.ssafy.stackers.model.dto.SearchMemberDto;
 import com.ssafy.stackers.model.dto.SearchResultDto;
+import com.ssafy.stackers.model.dto.SearchStationDto;
 import com.ssafy.stackers.repository.MemberRepository;
 import com.ssafy.stackers.repository.StationRepository;
 
@@ -28,17 +28,19 @@ public class SearchService {
     private TagService tagService;
     @Autowired
     private TagListService tagListService;
+    @Autowired
+    private PartyMemberService partyMemberService;
 
     public SearchResultDto searchStation(String keyword) {
         // station을 음악으로 검색
         List<Station> stations = stationRepository.findByContentContainingOrMusicContainingOrderByHeartCnt(keyword, keyword);
-        List<MainStationDto> stationList = new ArrayList<>();
+        List<SearchStationDto> stationList = new ArrayList<>();
         if (!stations.isEmpty()) {
             log.info("검색된 스테이션 수: " + stations.size());
             for (int i = 0; i < stations.size() && i < 20; i++) {       // 상위 20개 조회
                 Station s = stations.get(i);
                 List<String> tags = tagService.findNameById(tagListService.findByStation(s));
-                stationList.add(new MainStationDto(s.getId(), s.getContent(), tags, s.getVideo()));
+                stationList.add(new SearchStationDto(s.getId(), s.getContent(), tags, s.getVideo(), s.getHeartCnt(), s.getMember().getId(), s.getMember().getImgPath(), s.getMember().getUsername()));
             }
         }
 
@@ -49,8 +51,8 @@ public class SearchService {
             log.info("검색된 멤버 수: " + members.size());
             for (int i = 0; i < members.size() && i < 20; i++) {        // 상위 20개 조회
                 Member m = members.get(i);
-                // 소속 팀 검색 -> 팀 DB 수정 후 추가 예정
-                memberList.add(new SearchMemberDto(m.getId(), m.getImgPath(), m.getUsername(), m.getNickname(), "배도라지"));
+                String teamName = partyMemberService.getParty(m.getId());
+                memberList.add(new SearchMemberDto(m.getId(), m.getImgPath(), m.getUsername(), m.getNickname(), teamName));
             }
         }
 

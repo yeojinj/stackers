@@ -5,10 +5,10 @@ import lombok.Getter;
 
 @Getter
 public class SearchResultDto {
-    private List<MainStationDto> stationList;
+    private List<SearchStationDto> stationList;
     private List<SearchMemberDto> memberList;
 
-    public SearchResultDto(List<MainStationDto> stationList, List<SearchMemberDto> memberList) {
+    public SearchResultDto(List<SearchStationDto> stationList, List<SearchMemberDto> memberList) {
         this.stationList = stationList;
         this.memberList = memberList;
     }
