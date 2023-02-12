@@ -22,6 +22,41 @@ function LogIn(props) {
     return state.user.isLogged
   })
 
+  const [useButton, setUseButton] = useState(false)
+
+  useEffect(() => {
+    if (0 < username.length && 0 < password.length) {
+      setUseButton(true)
+    } else {
+      setUseButton(false)
+    }
+
+    // console.log(useButton)
+  }, [username, password])
+
+  const [loginButton, setLoginButton] = useState(
+    <button className="login-button-disabled" type="submit" disabled>
+      로그인
+    </button>
+  )
+
+  useEffect(() => {
+    if (useButton) {
+      setLoginButton(
+        <button className="login-button" type="submit">
+          로그인
+        </button>
+      )
+    } else {
+      setLoginButton(
+        <button className="login-button-disabled" type="submit" disabled>
+          로그인
+        </button>
+      )
+    }
+    console.log(useButton)
+  }, [useButton])
+
   return (
     <div>
       <div className="LogIn">
@@ -94,9 +129,7 @@ function LogIn(props) {
             </Link>
           </div>
 
-          <button className="login-button" type="submit">
-            로그인
-          </button>
+          {loginButton}
 
           <div className="login-footer">
             <p style={{ margin: '0 10px 0 0 ' }}>계정이 없으신가요?</p>

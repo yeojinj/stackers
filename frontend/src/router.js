@@ -32,7 +32,7 @@ const router = createBrowserRouter([
     ]
   },
   {
-    path: '/RecordRoom',
+    path: '/RecordRoom/:preId',
     element: <RecordRoom />
   },
   {
