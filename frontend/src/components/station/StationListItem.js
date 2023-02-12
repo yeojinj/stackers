@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import '../../styles/stationlistitem.css'
 import DefaultImg from '../../assets/default_profile.png'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
-// import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 function StationListItem({ isRanking, isSearch, station, index }) {
   // const [station, setStation] = useState()
@@ -27,10 +27,10 @@ function StationListItem({ isRanking, isSearch, station, index }) {
     return videoRef.current.pause()
   }
 
-  // const navigate = useNavigate()
-  // const gotoDetail = (id) => {
-  //   navigate(`/StationRoom/${id}`)
-  // }
+  const navigate = useNavigate()
+  const gotoDetail = (station) => {
+    navigate(`/StationRoom/${station.id}`)
+  }
 
   // 메인페이지, 마이페이지 스테이션 조회
   const IsRanking = () => {
@@ -46,7 +46,9 @@ function StationListItem({ isRanking, isSearch, station, index }) {
             autoPlay={false}
             onMouseOver={playVideo}
             onMouseLeave={pauseVideo}
-            // onClick={gotoDetail(station.id)}
+            onClick={() => {
+              gotoDetail(station)
+            }}
             loop
           ></video>
           <p className="station-rank">{index}</p>
@@ -63,7 +65,9 @@ function StationListItem({ isRanking, isSearch, station, index }) {
             autoPlay={false}
             onMouseOver={playVideo}
             onMouseLeave={pauseVideo}
-            // onClick={gotoDetail(station.id)}
+            onClick={() => {
+              gotoDetail(station)
+            }}
             loop
           ></video>
           <div className="video-text">
@@ -80,7 +84,7 @@ function StationListItem({ isRanking, isSearch, station, index }) {
     }
   }
 
-  // 검색페이지에서 데이터 받을 때 다시 해보기
+  // 검색페이지 스테이션
   const IsSearch = () => {
     let likesResult = ''
     if (station.heartCnt) {
@@ -101,7 +105,9 @@ function StationListItem({ isRanking, isSearch, station, index }) {
             autoPlay={false}
             onMouseOver={playVideo}
             onMouseLeave={pauseVideo}
-            // onClick={gotoDetail(station.id)}
+            onClick={() => {
+              gotoDetail(station)
+            }}
             loop
           ></video>
           <div className="station-info">

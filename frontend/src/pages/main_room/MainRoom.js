@@ -6,121 +6,215 @@ import '../../styles/mainroom.css'
 import './carousel-style.css'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-// import axios from 'axios'
+import axios from 'axios'
 
+const dummy = [
+  {
+    id: 5,
+    content: 'xptms',
+    tags: ['happy', 'mood'],
+    video: {
+      id: 5,
+      videoPath:
+        'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
+      videoName: null,
+      videoOriName: '테스트용 비디',
+      thumbnailPath: null
+    }
+  },
+  {
+    id: 6,
+    content: '향기로운 음악의 세계~',
+    tags: ['smell_so_good', 'umm'],
+    video: {
+      id: 6,
+      videoPath:
+        'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
+      videoName: null,
+      videoOriName: '2023_02_07_11:08',
+      thumbnailPath: null
+    }
+  },
+  {
+    id: 7,
+    content: '향기로운 음악의 세계~',
+    tags: ['smell_so_good', 'umm'],
+    video: {
+      id: 7,
+      videoPath:
+        'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
+      videoName: null,
+      videoOriName: '2023_02_07_11:08',
+      thumbnailPath: null
+    }
+  },
+  {
+    id: 8,
+    content: '향기로운 음악의 세계~',
+    tags: ['smell_so_good', 'umm'],
+    video: {
+      id: 8,
+      videoPath:
+        'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
+      videoName: null,
+      videoOriName: '2023_02_07_11:08',
+      thumbnailPath: null
+    }
+  },
+  {
+    id: 9,
+    content: '향기로운 음악의 세계~ 같이 들어요',
+    tags: ['smell_so_good', 'umm', 'yahoo'],
+    video: {
+      id: 9,
+      videoPath:
+        'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
+      videoName: null,
+      videoOriName: '2023_02_07_11:08',
+      thumbnailPath: null
+    }
+  },
+  {
+    id: 9,
+    content: '향기로운 음악의 세계~ 같이 들어요',
+    tags: ['smell_so_good', 'umm', 'yahoo'],
+    video: {
+      id: 9,
+      videoPath:
+        'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
+      videoName: null,
+      videoOriName: '2023_02_07_11:08',
+      thumbnailPath: null
+    }
+  },
+  {
+    id: 9,
+    content: '향기로운 음악의 세계~ 같이 들어요',
+    tags: ['smell_so_good', 'umm', 'yahoo'],
+    video: {
+      id: 9,
+      videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
+      videoName: null,
+      videoOriName: '2023_02_07_11:08',
+      thumbnailPath: null
+    }
+  }
+]
 function MainRoom() {
-  const [completedStation, setStation] = useState([])
+  const token = localStorage.getItem('accessToken')
+  const [username, setUsername] = useState('')
+  const [completedStation, setCompletedStation] = useState([])
+  const [uncompletedStation, setUncompletedStation] = useState([])
+  const [rankingStation, setRankingStation] = useState([])
+  const [followerStation, setFollwerStation] = useState([])
 
-  // 처음에 useState 로 station 빈 배열
-  // axios 로 setStation 함수로 station에 조회 데이터 넣기
-  // station.map으로 하나씩 props 로 stastionListItem 에 전달
+  // user 조회 axios
+  async function getUser() {
+    await axios({
+      method: 'GET',
+      url: '/api/member/user',
+      headers: {
+        Authorization: token
+      }
+    })
+      .then((res) => {
+        setUsername(res.data.username)
+      })
+      .catch((err) => {
+        console.log(err)
+        // user 정보 없으면 stacker로 설정
+        setUsername('stackers')
+      })
+  }
 
   // 스테이션 조회 axios
-  // 현재 영상이 없어서 더미데이터 넣어줌
-  // 서버와 다시 통신 후, 아래 주석풀기
-  async function stationList() {
-    setStation([
-      {
-        id: 5,
-        content: 'xptms',
-        tags: ['happy', 'mood'],
-        video: {
-          id: 5,
-          videoPath:
-            'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
-          videoName: null,
-          videoOriName: '테스트용 비디',
-          thumbnailPath: null
-        }
-      },
-      {
-        id: 6,
-        content: '향기로운 음악의 세계~',
-        tags: ['smell_so_good', 'umm'],
-        video: {
-          id: 6,
-          videoPath:
-            'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
-          videoName: null,
-          videoOriName: '2023_02_07_11:08',
-          thumbnailPath: null
-        }
-      },
-      {
-        id: 7,
-        content: '향기로운 음악의 세계~',
-        tags: ['smell_so_good', 'umm'],
-        video: {
-          id: 7,
-          videoPath:
-            'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
-          videoName: null,
-          videoOriName: '2023_02_07_11:08',
-          thumbnailPath: null
-        }
-      },
-      {
-        id: 8,
-        content: '향기로운 음악의 세계~',
-        tags: ['smell_so_good', 'umm'],
-        video: {
-          id: 8,
-          videoPath:
-            'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
-          videoName: null,
-          videoOriName: '2023_02_07_11:08',
-          thumbnailPath: null
-        }
-      },
-      {
-        id: 9,
-        content: '향기로운 음악의 세계~ 같이 들어요',
-        tags: ['smell_so_good', 'umm', 'yahoo'],
-        video: {
-          id: 9,
-          videoPath:
-            'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
-          videoName: null,
-          videoOriName: '2023_02_07_11:08',
-          thumbnailPath: null
-        }
-      },
-      {
-        id: 9,
-        content: '향기로운 음악의 세계~ 같이 들어요',
-        tags: ['smell_so_good', 'umm', 'yahoo'],
-        video: {
-          id: 9,
-          videoPath:
-            'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
-          videoName: null,
-          videoOriName: '2023_02_07_11:08',
-          thumbnailPath: null
-        }
-      },
-      {
-        id: 9,
-        content: '향기로운 음악의 세계~ 같이 들어요',
-        tags: ['smell_so_good', 'umm', 'yahoo'],
-        video: {
-          id: 9,
-          videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
-          videoName: null,
-          videoOriName: '2023_02_07_11:08',
-          thumbnailPath: null
-        }
-      }
-    ])
+
+  // 완성된 스테이션 조회
+  async function completeStationList() {
+    console.log('[완성 스테이션]', username)
+    // await axios
+    //   .get(`/api/station/completed/${username}`, {
+    //     headers: {
+    //       Authorization: token
+    //     }
+    //   })
+    //   .then((res) => {
+    //     setCompletedStation(res.data)
+    //   })
+    //   .catch((err) => console.log(err))
+    setCompletedStation(dummy)
   }
+
+  // 미완성된 스테이션 조회
+  async function uncompleteStationList() {
+    console.log('[미완성 스테이션]', username)
+    // await axios
+    //   .get(`/api/station/uncompleted/${username}`, {
+    //     headers: {
+    //       Authorization: token
+    //     }
+    //   })
+    //   .then((res) => {
+    //     setUncompletedStation(res.data)
+    //   })
+    //   .catch((err) => console.log(err))
+    setUncompletedStation(dummy)
+  }
+
+  // 인기 TOP 10 스테이션 조회
+  async function rankingStationList() {
+    await axios
+      .get('/api/station/popular', {
+        headers: {
+          Authorization: token
+        }
+      })
+      .then((res) => {
+        setRankingStation(res.data)
+      })
+      .catch((err) => console.log(err))
+  }
+
+  // 팔로잉하는 사람의 스테이션 조회
+  async function followerStationList() {
+    // await axios
+    //   .get('/api/station/following', {
+    //     headers: {
+    //       Authorization: token
+    //     }
+    //   })
+    //   .then((res) => {
+    //     setFollwerStation(res.data)
+    //   })
+    //   .catch((err) => console.log(err))
+    setFollwerStation(dummy)
+  }
+
   // 렌더링 후 한번 실행(axios)
   useEffect(() => {
-    stationList()
+    getUser()
+    completeStationList()
+    uncompleteStationList()
+    rankingStationList()
+    followerStationList()
+    // 더미데이터 실행 함수
+    // stationList()
   }, [])
 
-  // completedStation 값 변경시 재 렌더링
-  useEffect(() => {
-    console.log('[useEffect 실행]]', completedStation)
-  }, [completedStation])
+  // Station 값 변경시 재 렌더링
+  useEffect(
+    () => {
+      console.log('[useEffect 실행]]', completedStation)
+      console.log('[useEffect 실행]]', uncompletedStation)
+      console.log('[useEffect 실행]]', rankingStation)
+      console.log('[useEffect 실행]]', followerStation)
+    },
+    [completedStation],
+    [uncompletedStation],
+    [rankingStation],
+    [followerStation]
+  )
+
   return (
     <div className="main-room">
       <div className="main">
@@ -137,7 +231,7 @@ function MainRoom() {
           </div>
           <div className="parent">
             <Carousel>
-              {completedStation.map((station, i) => {
+              {uncompletedStation.map((station, i) => {
                 return (
                   <StationListItem
                     key={i}
@@ -154,11 +248,9 @@ function MainRoom() {
           <div className="station-center">
             <div
               className="chip top"
-              style={
-                {
-                  // marginLeft: '84%'
-                }
-              }
+              style={{
+                marginLeft: '84%'
+              }}
             >
               ⚡️ 당신이 놓친 스테이션
             </div>
@@ -174,7 +266,6 @@ function MainRoom() {
                   )
                 })}
               </Carousel>
-              {/* <StationList /> */}
             </div>
           </div>
         </FadeContent>
@@ -191,7 +282,7 @@ function MainRoom() {
               </div>
               <div className="parent">
                 <Carousel>
-                  {completedStation.map((station, i) => {
+                  {rankingStation.map((station, i) => {
                     return (
                       <StationListItem
                         key={i}
@@ -218,7 +309,7 @@ function MainRoom() {
               </div>
               <div className="parent">
                 <Carousel>
-                  {completedStation.map((station, i) => {
+                  {followerStation.map((station, i) => {
                     return (
                       <StationListItem
                         key={i}
