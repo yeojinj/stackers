@@ -1,5 +1,11 @@
 /* eslint-disable */
-import React, { useRef, useState, useEffect, useCallback } from 'react'
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  useCallback,
+  useLayoutEffect
+} from 'react'
 import './Record.css'
 import { ReactMediaRecorder } from 'react-media-recorder'
 import Modal from '@mui/material/Modal'
@@ -7,7 +13,7 @@ import { IconButton } from '@mui/material'
 import StopCircleIcon from '@mui/icons-material/StopCircle'
 import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite'
 import Timer from './Timer'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { CreateStack } from '../../store.js'
 import axios from 'axios'
 
@@ -22,6 +28,7 @@ function setDelay(time) {
   return new Promise((resolve) => setTimeout(resolve, time))
 }
 function Record(props) {
+  const stationId = props.preId
   const dummy = {
     id: 5,
     stationInfo: {
@@ -44,13 +51,14 @@ function Record(props) {
   }
 
   const dispatch = useDispatch()
-
+  const data = useSelector((state) => {
+    return state.stack
+  })
   const videoRef = useRef(null)
   const stackRef = useRef(null)
-  const [isStation, setStation] = useState(true)
-  const preStackRef = useRef(null)
-  const [preStackDetail, setPreStack] = useState(dummy)
-  const stationId = 5
+  const [isStation, setStation] = useState(false)
+  let preStackRef = useRef(null)
+  const [preStackDetail, setPreStack] = useState({})
 
   const getPreStack = async () => {
     await axios({
@@ -58,30 +66,34 @@ function Record(props) {
       url: '/api/' + { stationId }
     })
       .then((response) => {
-        setPreStack(response.data)
+        setPreStack((preStackDetail) => response.data)
+        console.log('axios 통신 완료')
+        console.log(response.data)
+        console.log(preStackDetail)
       })
       .catch((error) => {
-        console.log(error)
+        console.error(error)
       })
   }
+
   useEffect(() => {
-    setPreStack(dummy)
-    if (stationId) {
+    setPreStack((preStackDetail) => (preStackDetail = { ...dummy }))
+    if (stationId > -1) {
       setStation(true)
       getPreStack()
     } else {
       setStation(false)
     }
-    console.log('[useEffect 실행]', preStackDetail)
-  }, [])
+  }, [stationId])
   useEffect(() => {
-    console.log(preStackDetail)
-    if (preStackDetail) {
+    setPath((path) => {
+      path = preStackDetail.videoPath
+    })
+    if (isStation) {
       dispatch(
-        CreateStack('remainDepth'),
-        preStackDetail.stationInfo.remainDepth - 1
+        CreateStack(['remainDepth', preStackDetail.stationInfo.remainDepth - 1])
       )
-      dispatch(CreateStack('prevStationId', preStackDetail.id))
+      dispatch(CreateStack(['prevStationId', preStackDetail.id]))
     }
   }, [preStackDetail])
 
@@ -102,6 +114,7 @@ function Record(props) {
         console.error(err)
       })
   }
+  const [path, setPath] = useState('')
   const [enable, setEnable] = useState(true)
   const [open, setOpen] = useState(false)
   const handleEnable = () => {
@@ -116,21 +129,30 @@ function Record(props) {
   const handleClose = () => {
     setOpen(false)
   }
+  useEffect(() => {
+    console.log('rendering?')
+  }, [enable])
   const initialValue = 3000
 
   let [active, setActive] = useState(false)
   const activeHandle = () => {
+    console.log(active)
     setActive(!active)
   }
-
+  const playVideo = () => {
+    const tmp = preStackRef.current
+    return tmp.play()
+  }
   return (
     <div className="recordRoom">
       <ReactMediaRecorder
         onStop={async (blobUrl, blob) => {
+          console.log('stop?')
           await setStack(blob)
           const video = videoRef.current
           video.srcObject = stream
           video.play()
+          handleEnable()
         }}
         video
         blobPropertyBag={{
@@ -153,9 +175,16 @@ function Record(props) {
                 />
               </Modal>
               {isStation && (
-                <video useRef={preStackRef} src={preStackDetail.videoPath} />
+                <video
+                  width={198}
+                  height={352}
+                  style={{ objectFit: 'cover' }}
+                  ref={preStackRef}
+                  src={preStackDetail.videoPath}
+                  controls
+                />
               )}
-              {active && (
+              {!active && (
                 <video
                   className="stackVideo"
                   ref={stackRef}
@@ -166,7 +195,7 @@ function Record(props) {
                   controls
                 />
               )}
-              {!active && (
+              {active && (
                 <video
                   className="streamingRef"
                   ref={videoRef}
@@ -185,20 +214,22 @@ function Record(props) {
                       activeHandle()
                       handleOpen()
                       getVideo()
-                      setDelay(3000)
-                      handleClose()
-                      startRecording()
+                      setTimeout(handleClose, 3000)
+                      setTimeout(startRecording, 3000)
+                      setTimeout(playVideo, 3000)
                       if (isStation) {
-                        console.log(preStackRef)
-                        preStackRef.current.play()
-                        setDelay(preStackRef.current.duration)
-                        stopRecording()
-                        setActive(false)
+                        if (isPre !== null) {
+                          const preVideo = isPre.current
+                          prevideo.play()
+                          setTimeout(
+                            stopRecording,
+                            preStackRef.current.duration
+                          )
+                        }
                       } else {
-                        setDelay(60000)
-                        stopRecording()
-                        setActive(false)
+                        setTimeout(stoprRecording, 60000)
                       }
+                      setActive(false)
                     }}
                   >
                     <PlayCircleFilledWhiteIcon />
@@ -209,7 +240,6 @@ function Record(props) {
                     fontSize="Large"
                     color="primary"
                     onClick={() => {
-                      handleEnable()
                       activeHandle()
                       stopRecording()
                     }}

@@ -1,5 +1,6 @@
 import Record from './Record.js'
 import React, { useState } from 'react'
+import { useParams } from 'react-router-dom'
 import StackUploadModal from './StackUploadModal'
 import LightIcon from '@mui/icons-material/Light'
 import PhotoCameraFrontIcon from '@mui/icons-material/PhotoCameraFront'
@@ -16,7 +17,8 @@ function isEmptyObj(obj) {
 
 function RecordRoom() {
   // const navigate = useNavigate()
-
+  const params = useParams()
+  const stationId = params.preId
   const goBack = () => {
     // // 이전 페이지로 이동
     // navigate(-1)
@@ -51,7 +53,7 @@ function RecordRoom() {
           <InfoOutlinedIcon className="box" onClick={showToolTip} />
         </div>
         <div className="box">
-          <Record stack={getVideo} />
+          <Record stack={getVideo} preId={stationId} />
         </div>
         <div className="stack">
           <p></p>
