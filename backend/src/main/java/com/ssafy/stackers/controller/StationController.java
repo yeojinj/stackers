@@ -104,13 +104,11 @@ public class StationController {
      * 스테이션 수정 : [가능한 정보] content,
      */
 
-
-
-
     /**
-     * 완성 컨테이너 조회 로그인이 되지 않았을 경우에는 stackers 로 사용 -> stackers 막아놔야 됨
+     * 완성 스테이션 조회
+     * 완성 스테이션 조회 로그인이 되지 않았을 경우에는 stackers 로 사용 -> stackers 막아놔야 됨
      */
-    @Operation(summary = "완성 컨테이너 조회")
+    @Operation(summary = "완성 스테이션 조회")
     @GetMapping("/completed/{username}")
     public List<MainStationDto> getCompletedStation(@PathVariable("username") String username) {
         List<Station> stations = null;
@@ -126,9 +124,10 @@ public class StationController {
     }
 
     /**
-     * 미완성 컨테이너 조회 로그인이 되지 않았을 경우에는 stackers 로 사용 -> stackers 막아놔야 됨
+     * 미완성 스테이션 조회
+     * 미완성 스테이션 조회 로그인이 되지 않았을 경우에는 stackers 로 사용 -> stackers 막아놔야 됨
      */
-    @Operation(summary = "미완성 컨테이너 조회")
+    @Operation(summary = "미완성 스테이션 조회")
     @GetMapping("/uncompleted/{username}")
     public List<MainStationDto> getUnCompletedStation(@PathVariable("username") String username) {
         List<Station> stations = null;
@@ -144,9 +143,9 @@ public class StationController {
     }
 
     /**
-     * 상위 10개 컨테이너 조회
+     * 상위 10개 스테이션 조회
      */
-    @Operation(summary = "상위 컨테이너 조회")
+    @Operation(summary = "상위 스테이션 조회")
     @GetMapping("/popular")
     public List<MainStationDto> getPopularStation() {
         List<Station> stations = stationService.findTop10Station(true);
@@ -166,7 +165,7 @@ public class StationController {
     }
 
     /**
-     * 마이 페이지 바공개 스테이션
+     * 마이 페이지 비공개 스테이션
      */
     @Operation(summary = "마이페이지 비공개 스테이션 조회")
     @GetMapping("/private")

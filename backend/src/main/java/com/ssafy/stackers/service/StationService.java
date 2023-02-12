@@ -144,7 +144,7 @@ public class StationService {
     }
 
     /**
-     * Station을 MainStationDto로 변환하는 함수
+     * Station List를 MainStationDto List로 변환하는 함수
      */
     public List<MainStationDto> getStationShortDetail(List<Station> stations) {
         List<MainStationDto> stationList = new ArrayList<>();
@@ -158,7 +158,7 @@ public class StationService {
     }
 
     /**
-     * 메인페이지에 뿌릴 dto 변환 함수
+     * Station List를 PopularStationDto List로 변환하는 함수
      */
     public StationDto getStationShortInfo(Long id) {
         Station s = findById(id);
