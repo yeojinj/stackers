@@ -6,7 +6,6 @@ import com.ssafy.stackers.model.dto.*;
 import com.ssafy.stackers.repository.StationRepository;
 import com.ssafy.stackers.utils.error.ErrorCode;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

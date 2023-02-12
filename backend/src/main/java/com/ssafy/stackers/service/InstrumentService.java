@@ -2,7 +2,6 @@ package com.ssafy.stackers.service;
 
 import com.ssafy.stackers.exception.CustomException;
 import com.ssafy.stackers.model.Instrument;
-import com.ssafy.stackers.model.Station;
 import com.ssafy.stackers.repository.InstrumentRepository;
 import com.ssafy.stackers.utils.error.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
