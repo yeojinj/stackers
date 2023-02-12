@@ -1,5 +1,5 @@
 import React from 'react'
-import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import DefaultImg from '../../assets/default_profile.png'
 import '../../styles/accountlistitem.css'
 
 function AccountListItem({ account }) {
@@ -14,14 +14,11 @@ function AccountListItem({ account }) {
   return (
     <>
       <div className="account-info">
-        {accountInfo.imgPath !== 'static/s3이미지링크.png' && (
-          <img className="account-profile-img" src={accountInfo.imgPath}></img>
-        )}
-        {accountInfo.imgPath === 'static/s3이미지링크.png' && (
-          <>
-            <AccountCircleIcon style={{ width: '85px', height: '85px' }} />
-          </>
-        )}
+        <img
+          src={accountInfo.imgPath ? accountInfo.imgPath : DefaultImg}
+          alt=""
+          className="account-profile-img"
+        />
         <div className="account-names">
           <div className="account-username">{accountInfo.username}</div>
           <div className="account-nickname">
