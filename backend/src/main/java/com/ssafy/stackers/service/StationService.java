@@ -198,7 +198,7 @@ public class StationService {
         List<MainStationDto> stationList = new ArrayList<>();
         List<FollowInfoDto> followings = followService.getFollowingList(id);
 
-        System.out.println(followings.size());
+        log.info(String.valueOf(followings.size()));
 
         for(int i = 0; i < followings.size(); i++){
             Member m = memberService.findByUsername(followings.get(i).getUsername());

@@ -5,12 +5,14 @@ import com.ssafy.stackers.model.Instrument;
 import com.ssafy.stackers.model.Station;
 import com.ssafy.stackers.repository.InstrumentRepository;
 import com.ssafy.stackers.utils.error.ErrorCode;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional
 public class InstrumentService {
@@ -19,7 +21,7 @@ public class InstrumentService {
 
     @Transactional
     public Instrument save(String instrumentname){
-        System.out.println(instrumentname);
+        log.info(instrumentname);
         Instrument i = Instrument.builder().name(instrumentname).build();
         instrumentRepository.save(i);
         return i;
