@@ -1,7 +1,7 @@
 import React from 'react'
 import StationControlButton from './StationControlButton'
 // import Video from '../../../components/Video'
-import station from '../assets/station.png'
+// import station from '../assets/station.png'
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined'
 import ArrowCircleUpOutlinedIcon from '@mui/icons-material/ArrowCircleUpOutlined'
 import ArrowCircleDownOutlinedIcon from '@mui/icons-material/ArrowCircleDownOutlined'
@@ -13,6 +13,7 @@ function StationView(props) {
   const preUrl = useSelector((state) => {
     return state.url.preUrl
   })
+  const Info = props.info
 
   return (
     <div className="LeftStyle">
@@ -24,10 +25,17 @@ function StationView(props) {
       />
       <div className="contentBox">
         <div className="videoBox">
-          <img src={station} alt="station" className="videoBox" />
+          <video
+            src={Info.videoPath}
+            alt="station"
+            className="videoBox"
+            controls
+          />
         </div>
         <div className="stationControlButton">
-          <StationControlButton></StationControlButton>
+          <StationControlButton
+            stationId={props.stationId}
+          ></StationControlButton>
         </div>
       </div>
       <div className="prevnextbutton">

@@ -7,7 +7,7 @@ function Article(props) {
   // console.log(props.Info)
   return (
     <div className="RightStyle">
-      <ArticleDetail Info={props.Info}></ArticleDetail>
+      <ArticleDetail info={props.info}></ArticleDetail>
       <CommentList></CommentList>
       {/* <CommentCreate></CommentCreate> */}
     </div>

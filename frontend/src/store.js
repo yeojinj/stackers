@@ -41,7 +41,7 @@ const CreateCommentSlice = createSlice({
   initialState: { value: 0 },
   reducers: {
     CreateComment: (state, action) => {
-      console.log(action)
+      state.value = state.value + action.payload
     }
   }
 })
