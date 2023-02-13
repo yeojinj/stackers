@@ -5,10 +5,12 @@ import profile1 from '../assets/profile.png'
 import profile2 from '../assets/profilePicture1.png'
 import profile3 from '../assets/profilePicture2.png'
 import profile4 from '../assets/profilePicture3.png'
+import { useNavigate } from 'react-router-dom'
 
 function StackerListItem(props) {
   const musicians = props.musicians
-  console.log(musicians)
+  const navigate = useNavigate()
+  // console.log(musicians)
   // console.log(musicians)
 
   // musicians.push(musicians[0])
@@ -21,7 +23,14 @@ function StackerListItem(props) {
     lst.push(
       <div className="station-Participant" key={i}>
         <p className="station-user">
-          <img src={profileImage} alt="profile" />
+          <img
+            src={profileImage}
+            alt="profile"
+            onClick={() => {
+              navigate(`Mypage/${musicians[i].username}`)
+            }}
+            style={{ cursor: 'pointer' }}
+          />
         </p>
         <p className="station-Participant-name">
           {musicians[i].instrumentName}
