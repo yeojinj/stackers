@@ -7,13 +7,24 @@ import ArrowCircleUpOutlinedIcon from '@mui/icons-material/ArrowCircleUpOutlined
 import ArrowCircleDownOutlinedIcon from '@mui/icons-material/ArrowCircleDownOutlined'
 import '../Station.css'
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { CountBackNum } from '../../../store'
+// import { ChangeUrl } from '../../../store'
 
 function StationView(props) {
   const navigate = useNavigate()
-  const preUrl = useSelector((state) => {
-    return state.url.preUrl
+  const dispatch = useDispatch()
+  // const preUrl = useSelector((state) => {
+  //   console.log(state.url.preUrl)
+  //   return state.url.preUrl
+  // })
+
+  const backNumber = useSelector((state) => {
+    return state.url.backNumber
   })
+
+  // dispatch(ChangeUrl('/mypage/test6'))
+  // console.log(preUrl)
   const Info = props.info
   const videoRef = useRef(null)
   // const [auto, setAuto] = useState(false)
@@ -32,7 +43,8 @@ function StationView(props) {
       <CloseOutlinedIcon
         className="stationOutButton"
         onClick={() => {
-          navigate(preUrl)
+          dispatch(CountBackNum(0))
+          navigate(-backNumber)
         }}
       />
       <div className="contentBox">

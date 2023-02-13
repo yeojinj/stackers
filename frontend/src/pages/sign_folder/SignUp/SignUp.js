@@ -119,6 +119,8 @@ function SignUp() {
         className="email-check-button"
         type="button"
         onClick={() => {
+          alert(`전송중입니다.
+입력 후 확인해주세요.`)
           axios({
             method: 'post',
             url: '/api/mail/mail-confirm',
@@ -132,6 +134,7 @@ function SignUp() {
               setIsSend(true)
             })
             .catch((error) => {
+              alert('이메일 주소를 다시 입력해주세요.')
               console.log('[인증번호 전송 실패] : ', error.response)
               console.log('올바른 이메일 양식으로 적어주세요.')
             })
