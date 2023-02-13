@@ -1,7 +1,5 @@
 /* eslint-disable */
 import React, { useState, useEffect } from 'react'
-import { IconButton } from '@mui/material'
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import { useDispatch } from 'react-redux'
 import { CreateStack } from '../../store.js'
 import axios from 'axios'
@@ -98,26 +96,28 @@ function InstTag() {
           onChange={changeInputValue}
         />
       </div>
-      {isHaveInputValue && (
-        <ul>
-          {dropDownList.map((dropDownItem, dropDownIndex) => {
-            return (
-              <li
-                key={dropDownIndex}
-                onClick={() => clickDropDownItem(dropDownItem)}
-                onMouseOver={() => setDropDownItemIndex(dropDownIndex)}
-                className={
-                  dropDownItemIndex === dropDownIndex
-                    ? 'dropDownItemIndex selected'
-                    : 'dropDownItemIndex'
-                }
-              >
-                {dropDownItem}
-              </li>
-            )
-          })}
-        </ul>
-      )}
+      <div className="inst-tags">
+        {isHaveInputValue && (
+          <>
+            {dropDownList.map((dropDownItem, dropDownIndex) => {
+              return (
+                <div
+                  key={dropDownIndex}
+                  onClick={() => clickDropDownItem(dropDownItem)}
+                  onMouseOver={() => setDropDownItemIndex(dropDownIndex)}
+                  className={
+                    dropDownItemIndex === dropDownIndex
+                      ? 'dropdown-item-index selected-inst'
+                      : 'dropdown-item-index'
+                  }
+                >
+                  {dropDownItem}
+                </div>
+              )
+            })}
+          </>
+        )}
+      </div>
     </div>
   )
 }
