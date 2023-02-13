@@ -156,22 +156,24 @@
   margin-top: 35px;
   border-radius: 3px;
 
+  border: 0.8px solid rgb(245, 245, 245);
+
   filter: drop-shadow(0px 0px 10px #4535c8);
   animation: glow 4s linear infinite;
 }
 
 @keyframes glow {
   0% {
-    filter: drop-shadow(0 0 5em rgba(175, 177, 255, 0.5));
+    filter: drop-shadow(0 0 4em rgba(42, 32, 150, 0.9));
   }
   33% {
-    filter: drop-shadow(0 0 5em rgba(1, 6, 255, 0.5));
+    filter: drop-shadow(0 0 4em rgba(172, 0, 143, 0.7));
   }
   66% {
-    filter: drop-shadow(0 0 5em rgba(43, 46, 255, 0.5));
+    filter: drop-shadow(0 0 4em rgba(227, 95, 173, 0.5));
   }
   100% {
-    filter: drop-shadow(0 0 5em rgba(118, 207, 255, 0.5));
+    filter: drop-shadow(0 0 4em rgba(42, 32, 150, 0.9));
   }
 }
 
