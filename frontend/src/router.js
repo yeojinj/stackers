@@ -64,6 +64,10 @@ const router = createBrowserRouter([
     element: <UploadLoading />
   },
   {
+    path: '/NotFound',
+    element: <NotFound />
+  },
+  {
     path: '*',
     element: <NotFound />
   }

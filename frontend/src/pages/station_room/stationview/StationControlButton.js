@@ -1,22 +1,37 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import '../Station.css'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import IosShareRoundedIcon from '@mui/icons-material/IosShareRounded'
 import stacking from '../assets/stacking.png'
 import IconButton from '@mui/material/IconButton'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
-
 function StationControlButton(props) {
-  const [heartCnt, setHeartCnt] = useState(
-    Number(props.Info.stationInfo.heartCnt)
-  )
-  const inComplete = props.Info.stationInfo.isComplete
+  const params = useParams()
+  const stationId = Number(params.id)
+  // console.log(params)
+  const [heartCnt, setHeartCnt] = useState(null)
+  const [isliked, setIsliked] = useState(null)
+  const [isComplete, setIsComplete] = useState(null)
+  useEffect(() => {
+    axios({
+      method: 'GET',
+      url: `/api/station/${stationId}`,
+      headers: { Authorization: localStorage.getItem('accessToken') }
+    })
+      .then((response) => {
+        setHeartCnt(response.data.stationInfo.heartCnt)
+        setIsliked(response.data.heart)
+        setIsComplete(response.data.stationInfo.isComplete)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    setHeartCnt(Number(props.Info.stationInfo.heartCnt))
+  }, [params.id])
 
   const navigate = useNavigate()
-  const [isliked, setIsliked] = useState(props.Info.heart)
-
   let likeStation = null
   if (isliked) {
     likeStation = (
@@ -37,7 +52,7 @@ function StationControlButton(props) {
 
   // 완성된 영상이면 참여하기 버튼이 보이지 않습니다
   let recordIcon = null
-  if (!inComplete) {
+  if (!isComplete) {
     recordIcon = (
       <IconButton
         style={{
