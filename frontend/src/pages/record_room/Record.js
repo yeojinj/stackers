@@ -96,7 +96,7 @@ function Record(props) {
   const getVideo = () => {
     navigator.mediaDevices
       .getUserMedia({
-        video: { width: 405, height: 720 }
+        video: { width: 333, height: 592 }
       })
       .then((stream) => {
         const video = videoRef.current
@@ -144,115 +144,109 @@ function Record(props) {
     return tmp.duration
   }
   return (
-    <div className="recordRoom">
-      <ReactMediaRecorder
-        onStop={async (blobUrl, blob) => {
-          console.log('stop?')
-          await setStack(blob)
-          const video = videoRef.current
-          video.srcObject = stream
-          video.play()
-        }}
-        video
-        blobPropertyBag={{
-          type: 'video/mp4'
-        }}
-        render={({
-          previewStream,
-          status,
-          startRecording,
-          stopRecording,
-          mediaBlobUrl
-        }) => {
-          return (
-            <div className="recordRoom">
-              <Modal className="recordModal" open={open}>
-                <Timer
-                  classNAme="recordTimer"
-                  active={open}
-                  initialValue={initialValue}
-                />
-              </Modal>
-              {isStation && (
-                <video
-                  width={198}
-                  height={352}
-                  style={{ objectFit: 'cover' }}
-                  ref={preStackRef}
-                  src={preStackDetail.videoPath}
-                  controls
-                />
-              )}
-              {!active && (
-                <video
-                  className="stackVideo"
-                  ref={stackRef}
-                  src={mediaBlobUrl}
-                  width={405}
-                  height={720}
-                  style={{ objectFit: 'cover' }}
-                  controls
-                />
-              )}
-              {active && (
-                <video
-                  className="streamingRef"
-                  ref={videoRef}
-                  src={previewStream}
-                  autoPlay
-                />
-              )}
-              {/* {enable && <VideoPreview stream={previewStream} />} */}
-              <div className="box">
-                {enable && (
-                  <IconButton
-                    fontSize="Large"
-                    color="primary"
-                    onClick={async () => {
-                      handleEnable()
-                      activeHandle()
-                      handleOpen()
-                      getVideo()
-                      console.log('delay start')
-                      await setDelay(3000)
-                      console.log('delay stop')
-                      handleClose()
-                      startRecording()
-                      if (isStation) {
-                        playVideo()
-                        const dr = await delayDuration()
-                        const rr = Math.round(dr * 1000)
-                        console.log('duration start')
-                        await setDelay(rr)
-                        stopRecording()
-                        console.log('stop~~~~~~~~~~')
-                      } else {
-                        await setDelay(60000)
-                        stopRecording()
-                      }
-                      setActive(false)
-                    }}
-                  >
-                    <PlayCircleFilledWhiteIcon />
-                  </IconButton>
+    <div className="record-video-section">
+      <div>
+        <ReactMediaRecorder
+          onStop={async (blobUrl, blob) => {
+            console.log('stop?')
+            await setStack(blob)
+            const video = videoRef.current
+            video.srcObject = stream
+            video.play()
+          }}
+          video
+          blobPropertyBag={{
+            type: 'video/mp4'
+          }}
+          render={({
+            previewStream,
+            startRecording,
+            stopRecording,
+            mediaBlobUrl
+          }) => {
+            return (
+              <div className="recordRoom">
+                <Modal className="recordModal" open={open}>
+                  <Timer
+                    classNAme="recordTimer"
+                    active={open}
+                    initialValue={initialValue}
+                  />
+                </Modal>
+                {isStation && (
+                  <video
+                    width={198}
+                    height={352}
+                    style={{ objectFit: 'cover' }}
+                    ref={preStackRef}
+                    src={preStackDetail.videoPath}
+                    controls
+                  />
                 )}
-                {!enable && (
-                  <IconButton
-                    fontSize="Large"
-                    color="primary"
-                    onClick={() => {
-                      activeHandle()
-                      stopRecording()
-                    }}
-                  >
-                    <StopCircleIcon />
-                  </IconButton>
+                {!active && (
+                  <video
+                    className="stackVideo"
+                    ref={stackRef}
+                    src={mediaBlobUrl}
+                    width={333}
+                    height={592}
+                    style={{ objectFit: 'cover' }}
+                    controls
+                  />
                 )}
+                {active && (
+                  <video
+                    className="streamingRef"
+                    ref={videoRef}
+                    src={previewStream}
+                    autoPlay
+                  />
+                )}
+                <div className="box">
+                  {enable && (
+                    <button
+                      fontSize="Large"
+                      color="primary"
+                      onClick={async () => {
+                        handleEnable()
+                        activeHandle()
+                        handleOpen()
+                        getVideo()
+                        await setDelay(3000)
+                        handleClose()
+                        startRecording()
+                        if (isStation) {
+                          playVideo()
+                          const dr = await delayDuration()
+                          const rr = Math.round(dr * 1000)
+                          await setDelay(rr)
+                          stopRecording()
+                        } else {
+                          await setDelay(60000)
+                          stopRecording()
+                        }
+                        setActive(false)
+                      }}
+                    >
+                      <PlayCircleFilledWhiteIcon />
+                    </button>
+                  )}
+                  {!enable && (
+                    <button
+                      onClick={() => {
+                        activeHandle()
+                        stopRecording()
+                      }}
+                    >
+                      <StopCircleIcon />
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
-          )
-        }}
-      />
+            )
+          }}
+        />
+      </div>
     </div>
   )
 }
