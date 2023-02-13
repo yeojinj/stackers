@@ -1,11 +1,11 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import { useDropzone } from 'react-dropzone'
 import profileEdit from '../../assets/profileEdit.svg'
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined'
 import './mydropzone.css'
 
-function MyDropzone({ onChangeImage, handleClose }) {
-  const [img, setImage] = useState(false)
+function MyDropzone({ onChangeImage, handleClose, profileImg }) {
+  const [img, setImage] = useState([])
   const [imgblob, setImageBlob] = useState('')
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -16,9 +16,8 @@ function MyDropzone({ onChangeImage, handleClose }) {
       type: 'image/png'
     })
     setImageBlob(blob)
-    const url = window.URL.createObjectURL(blob)
     const imgsrc = document.getElementById('dropimg')
-    imgsrc.src = url
+    imgsrc.src = window.URL.createObjectURL(imgblob)
     setImage(true)
   }, onChangeImage)
 
@@ -27,6 +26,10 @@ function MyDropzone({ onChangeImage, handleClose }) {
     onChangeImage(imgblob)
     handleClose()
   }
+
+  useEffect(() => {
+    setImage(profileImg)
+  }, [profileImg])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
 
@@ -49,7 +52,7 @@ function MyDropzone({ onChangeImage, handleClose }) {
             <img
               className={!img ? 'dropzone-img-style' : 'dropzone-img'}
               id="dropimg"
-              src={profileEdit}
+              src={img || profileEdit}
               alt="프로필 사진"
             ></img>
           </div>
