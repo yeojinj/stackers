@@ -102,6 +102,12 @@ function Header() {
     }
   }
 
+  const movetoSearch = (e) => {
+    if (e.key === 'Enter') {
+      gotoSearch()
+    }
+  }
+
   const showDropDownList = () => {
     if (inputValue === '') {
       setIsHaveInputValue(false)
@@ -189,7 +195,7 @@ function Header() {
             onChange={(e) => {
               changeInputValue(e)
             }}
-            // onKeyUp={handleDropDownKey}
+            onKeyUp={movetoSearch}
           />
           <img onClick={gotoSearch} className="search-icon" src={searchimg} />
         </div>

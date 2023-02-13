@@ -174,11 +174,11 @@ function Record(props) {
               </Modal>
               {isStation && (
                 <video
-                  width={198}
-                  height={352}
+                  className="prev-stacker-video"
+                  width={117}
+                  height={208}
                   style={{
-                    objectFit: 'contain',
-                    objectPosition: '10% center'
+                    objectFit: 'cover'
                   }}
                   ref={preStackRef}
                   src={preStackDetail.videoPath}
@@ -192,16 +192,20 @@ function Record(props) {
                   src={mediaBlobUrl}
                   width={333}
                   height={592}
-                  style={{ objectFit: 'cover', marginTop: '12%' }}
+                  style={{
+                    objectFit: 'cover',
+                    marginTop: '35px',
+                    // border: '2px solid rgba(227, 95, 173, 0.5)',
+                    borderRadius: '3px'
+                  }}
                   controls
                 />
               )}
               {!enable && (
                 <video
-                  className="streamingRef"
+                  className="streaming-video"
                   ref={videoRef}
                   src={previewStream}
-                  style={{ objectFit: 'cover', marginTop: '12%' }}
                   autoPlay
                 />
               )}

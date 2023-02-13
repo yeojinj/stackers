@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class CommentDetailDto {
 
+    private Long commentId;           // 댓글 아이디
     private String commenterUsername;   // 댓글 작성자 아이디
     private String commenterImgPath;    // 댓글 작성자 프사
     private String commentContent;      // 댓글 내용
