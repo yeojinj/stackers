@@ -249,7 +249,7 @@ function MainRoom() {
             <div
               className="chip top"
               style={{
-                marginLeft: '84%'
+                marginLeft: '82%'
               }}
             >
               ⚡️ 당신이 놓친 스테이션
