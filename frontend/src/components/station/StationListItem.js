@@ -125,7 +125,9 @@ function StationListItem({ isRanking, isSearch, station, index }) {
             <div className="station-account">
               <div className="account-info">
                 <img
-                  src={station.imgPath ? station.imgPath : DefaultImg}
+                  src={
+                    station.imgPath !== 'path' ? station.imgPath : DefaultImg
+                  }
                   alt=""
                   className="profile-img"
                 />
