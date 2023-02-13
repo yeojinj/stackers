@@ -1,6 +1,7 @@
 import { React, useState, useEffect } from 'react'
 import { useParams } from 'react-router'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { SavePublic, SavePrivate } from '../../store.js'
 import axios from 'axios'
 import './MyPage.css'
 import DefaultImg from '../../assets/default_profile.png'
@@ -68,6 +69,8 @@ function MyPage() {
     }
   }
 
+  const dispatch = useDispatch()
+
   // 마이페이지 공개 스테이션 조회
   async function publicStationList() {
     // 내가 나의 마이페이지 볼때
@@ -80,6 +83,7 @@ function MyPage() {
         })
         .then((res) => {
           setPublicStation(res.data)
+          dispatch(SavePublic(res.data))
         })
         .catch((err) => {
           console.log(err)
@@ -94,6 +98,7 @@ function MyPage() {
         })
         .then((res) => {
           setPublicStation(res.data)
+          dispatch(SavePublic(res.data))
         })
         .catch((err) => {
           console.log(err)
@@ -112,6 +117,7 @@ function MyPage() {
     })
       .then((res) => {
         setPrivateStation(res.data)
+        dispatch(SavePrivate(res.data))
       })
       .catch((err) => {
         console.log(err)
