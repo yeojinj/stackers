@@ -1,11 +1,10 @@
+/* eslint-disable */
 import Record from './Record.js'
 import React, { useState, useSelector } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import StackUploadModal from './StackUploadModal'
-import LightIcon from '@mui/icons-material/Light'
-import PhotoCameraFrontIcon from '@mui/icons-material/PhotoCameraFront'
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import Modal from '@mui/material/Modal'
+import './Record.css'
 import { useDispatch } from 'react-redux'
 
 function isEmptyObj(obj) {
@@ -36,36 +35,25 @@ function RecordRoom() {
   const handleClose = () => {
     setOpen(false)
   }
-  const setNoneStack = () => {}
-  const showToolTip = () => {}
+
   async function getVideo(src) {
     await setStack((preSrc) => {
       return { ...preSrc, src }
     })
   }
   return (
-    <div className="recordRoom">
-      <LightIcon></LightIcon>
-      <div className="container">
-        <div className="stack">
-          <p className="box"></p>
-          <PhotoCameraFrontIcon
-            className="box"
-            onClick={setNoneStack}
-          ></PhotoCameraFrontIcon>
-          <InfoOutlinedIcon className="box" onClick={showToolTip} />
-        </div>
-        <div className="box">
+    <div className="record-room">
+      <div className="stars"></div>
+      <div className="twinkling"></div>
+      <div className="wrapper">
+        <div className="inside-container">
           <Record stack={getVideo} preId={stationId} />
-        </div>
-        <div className="stack">
-          <p></p>
-          <p></p>
-          <div className="box">
-            <button className="box" onClick={goBack}>
+          <div className="upload-btns">
+            <button className="upload-btn-station" onClick={goBack}>
               취소
             </button>
             <button
+              className="upload-btn-station"
               onClick={() => {
                 if (!isEmptyObj(stack)) {
                   handleOpen()
@@ -74,10 +62,10 @@ function RecordRoom() {
             >
               업로드
             </button>
-            <Modal open={open} onClose={handleClose}>
-              <StackUploadModal handle={handleClose} src={stack} />
-            </Modal>
           </div>
+          <Modal open={open} onClose={handleClose}>
+            <StackUploadModal handle={handleClose} src={stack} />
+          </Modal>
         </div>
       </div>
     </div>
