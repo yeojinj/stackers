@@ -59,13 +59,12 @@ function Record(props) {
     console.log(stationId)
     await axios({
       method: 'GET',
-      url: `/api/station/${stationId}`
+      url: `/api/station/${stationId}`,
+      headers: { Authorization: localStorage.getItem('accessToken') }
     })
       .then((response) => {
         setPreStack((preStackDetail) => (preStackDetail = { ...response.data }))
         console.log('axios 통신 완료')
-        console.log(response.data)
-        console.log(preStackDetail)
       })
       .catch((error) => {
         console.error(error)
@@ -109,9 +108,10 @@ function Record(props) {
   }
   const [enable, setEnable] = useState(true)
   const [open, setOpen] = useState(false)
-  const [duration, getDuration] = useState(0)
+
+  let [act, setActive] = useState(false)
   const handleEnable = () => {
-    setEnable(!enable)
+    setEnable((enable) => !enable)
   }
   const setStack = (src) => {
     props.stack(src)
@@ -125,15 +125,10 @@ function Record(props) {
   useEffect(() => {
     console.log('rendering?')
   }, [enable])
-  useEffect(() => {
-    console.log(duration)
-  }, [duration])
   const initialValue = 3000
 
-  let [active, setActive] = useState(false)
   const activeHandle = () => {
-    console.log(active)
-    setActive(!active)
+    setActive(!act)
   }
   const playVideo = () => {
     const tmp = preStackRef.current
@@ -146,12 +141,16 @@ function Record(props) {
   return (
     <div className="recordRoom">
       <ReactMediaRecorder
+        stopStreamsOnStop
         onStop={async (blobUrl, blob) => {
           console.log('stop?')
+          await handleEnable()
           await setStack(blob)
-          const video = videoRef.current
+          const video = stackRef.current
           video.srcObject = stream
           video.play()
+          playVideo()
+          console.log(stackRef)
         }}
         video
         blobPropertyBag={{
@@ -177,13 +176,16 @@ function Record(props) {
                 <video
                   width={198}
                   height={352}
-                  style={{ objectFit: 'cover' }}
+                  style={{
+                    objectFit: 'contain',
+                    objectPosition: '10% center'
+                  }}
                   ref={preStackRef}
                   src={preStackDetail.videoPath}
                   controls
                 />
               )}
-              {!active && (
+              {enable && (
                 <video
                   className="stackVideo"
                   ref={stackRef}
@@ -194,7 +196,7 @@ function Record(props) {
                   controls
                 />
               )}
-              {active && (
+              {!enable && (
                 <video
                   className="streamingRef"
                   ref={videoRef}
@@ -210,7 +212,6 @@ function Record(props) {
                     color="primary"
                     onClick={async () => {
                       handleEnable()
-                      activeHandle()
                       handleOpen()
                       getVideo()
                       console.log('delay start')
@@ -224,13 +225,14 @@ function Record(props) {
                         const rr = Math.round(dr * 1000)
                         console.log('duration start')
                         await setDelay(rr)
+
                         stopRecording()
                         console.log('stop~~~~~~~~~~')
                       } else {
                         await setDelay(60000)
+
                         stopRecording()
                       }
-                      setActive(false)
                     }}
                   >
                     <PlayCircleFilledWhiteIcon />
@@ -243,6 +245,7 @@ function Record(props) {
                     onClick={() => {
                       activeHandle()
                       stopRecording()
+                      handleEnable()
                     }}
                   >
                     <StopCircleIcon />
