@@ -11,7 +11,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
 import LogIn from '../pages/sign_folder/LogIn/LogIn'
-import { SearchKeyword } from '../store'
+import { ChangeUrl, SearchKeyword } from '../store'
 
 function Header() {
   const token = localStorage.getItem('accessToken')
@@ -83,6 +83,7 @@ function Header() {
   // 업로드 버튼 클릭 -> 녹화페이지로 이동
   const goRecordRoom = () => {
     setInputValue('')
+    dispatch(ChangeUrl())
     navigate('/RecordRoom/-1')
   }
 
