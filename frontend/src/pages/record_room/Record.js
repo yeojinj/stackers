@@ -205,6 +205,8 @@ function Record(props) {
                 <video
                   className="streaming-video"
                   ref={videoRef}
+                  width={333}
+                  height={592}
                   src={previewStream}
                   autoPlay
                 />
