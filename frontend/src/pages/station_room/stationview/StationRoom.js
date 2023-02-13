@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react'
 import StationView from './StationView'
 import Article from '../article/Article'
 import '../Station.css'
-import { useParams } from 'react-router'
+import { useParams, useNavigate } from 'react-router'
 import axios from 'axios'
 
 function StationRoom() {
   const params = useParams()
+  const navigate = useNavigate()
   const stationId = Number(params.id)
   const [info, setInfo] = useState(null)
 
@@ -21,6 +22,7 @@ function StationRoom() {
       })
       .catch((error) => {
         console.log(error)
+        navigate('/NotFound')
       })
   }, [stationId])
 
