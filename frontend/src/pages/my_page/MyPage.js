@@ -288,7 +288,7 @@ function MyPage() {
                   </p>
                   <p>
                     <button className="button-profile">
-                      <a href="mailto:johndoe@fakeemail.com">
+                      <a href={'mailto:' + mypageInfo.email}>
                         <MarkunreadIcon
                           style={{
                             color: 'whitesmoke'
