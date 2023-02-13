@@ -49,6 +49,20 @@
   margin: auto 0;
 }
 
+.profileedit-img {
+  width: 113px;
+  height: 110px;
+  border-radius: 70%;
+}
+
+.profileedit-noimg {
+  width: 113px;
+  height: 110px;
+  border-radius: 70%;
+  opacity: 0.4;
+}
+
+
 .ProfileEdit-content-Bio {
   margin: auto 0;
   width: 50%;
