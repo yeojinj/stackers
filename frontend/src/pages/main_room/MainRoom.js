@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
-
+import { useDispatch, useSelector } from 'react-redux'
+import { SaveCom, SaveUnCom, SaveRank, SaveFollower } from '../../store.js'
 // import StationList from '../../components/station/StationList'
 import StationListItem from '../../components/station/StationListItem'
 import '../../styles/mainroom.css'
@@ -102,11 +103,20 @@ const dummy = [
 ]
 function MainRoom() {
   const token = localStorage.getItem('accessToken')
+  const [isloggin, setLogin] = useState('')
   const [username, setUsername] = useState('')
   const [completedStation, setCompletedStation] = useState([])
   const [uncompletedStation, setUncompletedStation] = useState([])
   const [rankingStation, setRankingStation] = useState([])
   const [followerStation, setFollwerStation] = useState([])
+
+  const login = useSelector((state) => {
+    return state.user.isLogged
+  })
+
+  useEffect(() => {
+    setLogin(login)
+  }, [login])
 
   // user 조회 axios
   async function getUser() {
@@ -122,42 +132,43 @@ function MainRoom() {
       })
       .catch((err) => {
         console.log(err)
-        // user 정보 없으면 stacker로 설정
-        setUsername('stackers')
       })
   }
 
+  const dispatch = useDispatch()
   // 스테이션 조회 axios
 
   // 완성된 스테이션 조회
   async function completeStationList() {
     console.log('[완성 스테이션]', username)
-    // await axios
-    //   .get(`/api/station/completed/${username}`, {
-    //     headers: {
-    //       Authorization: token
-    //     }
-    //   })
-    //   .then((res) => {
-    //     setCompletedStation(res.data)
-    //   })
-    //   .catch((err) => console.log(err))
+    await axios
+      .get('/api/station/completed/stackers', {
+        headers: {
+          Authorization: token
+        }
+      })
+      .then((res) => {
+        setCompletedStation(res.data)
+        dispatch(SaveCom(res.data))
+      })
+      .catch((err) => console.log(err))
     setCompletedStation(dummy)
   }
 
   // 미완성된 스테이션 조회
   async function uncompleteStationList() {
     console.log('[미완성 스테이션]', username)
-    // await axios
-    //   .get(`/api/station/uncompleted/${username}`, {
-    //     headers: {
-    //       Authorization: token
-    //     }
-    //   })
-    //   .then((res) => {
-    //     setUncompletedStation(res.data)
-    //   })
-    //   .catch((err) => console.log(err))
+    await axios
+      .get('/api/station/uncompleted/stackers', {
+        headers: {
+          Authorization: token
+        }
+      })
+      .then((res) => {
+        setUncompletedStation(res.data)
+        dispatch(SaveUnCom(res.data))
+      })
+      .catch((err) => console.log(err))
     setUncompletedStation(dummy)
   }
 
@@ -171,22 +182,23 @@ function MainRoom() {
       })
       .then((res) => {
         setRankingStation(res.data)
+        dispatch(SaveRank(res.data))
       })
       .catch((err) => console.log(err))
   }
 
   // 팔로잉하는 사람의 스테이션 조회
   async function followerStationList() {
-    // await axios
-    //   .get('/api/station/following', {
-    //     headers: {
-    //       Authorization: token
-    //     }
-    //   })
-    //   .then((res) => {
-    //     setFollwerStation(res.data)
-    //   })
-    //   .catch((err) => console.log(err))
+    await axios
+      .get('/api/station/following', {
+        headers: {
+          Authorization: token
+        }
+      })
+      .then((res) => {
+        dispatch(SaveFollower(res.data))
+      })
+      .catch((err) => console.log(err))
     setFollwerStation(dummy)
   }
 
@@ -199,7 +211,7 @@ function MainRoom() {
     followerStationList()
     // 더미데이터 실행 함수
     // stationList()
-  }, [])
+  }, [username])
 
   // Station 값 변경시 재 렌더링
   useEffect(
@@ -304,15 +316,21 @@ function MainRoom() {
               </div>
               <div className="parent">
                 <Carousel>
-                  {followerStation.map((station, i) => {
-                    return (
-                      <StationListItem
-                        key={i}
-                        isRanking={true}
-                        station={station}
-                      />
-                    )
-                  })}
+                  {isloggin &&
+                    followerStation.map((station, i) => {
+                      return (
+                        <StationListItem
+                          key={i}
+                          isRanking={true}
+                          station={station}
+                        />
+                      )
+                    })}
+                  {!isloggin && (
+                    <div style={{ textAlign: 'center' }}>
+                      더 보려면 로그인하세요!
+                    </div>
+                  )}
                 </Carousel>
               </div>
             </div>

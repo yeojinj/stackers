@@ -57,6 +57,25 @@ const urlSlice = createSlice({
   }
 })
 
+const CreateStationSlice = createSlice({
+  name: 'CreateStationSlice',
+  initialState: { completed: [], uncompleted: [], ranking: [], follwer: [] },
+  reducers: {
+    SaveCom: (state, action) => {
+      state.completed = action.payload
+    },
+    SaveUnCom: (state, action) => {
+      state.uncompleted = action.payload
+    },
+    SaveRank: (state, action) => {
+      state.ranking = action.payload
+    },
+    SaveFollower: (state, action) => {
+      state.follwer = action.payload
+    }
+  }
+})
+
 const stackSlice = createSlice({
   name: 'stackSlice',
   initialState: {
@@ -186,7 +205,8 @@ const store = configureStore({
     CreateInst: CreateInstSlice.reducer,
     SearchKeyword: SearchSlice.reducer,
     TagList: TagSlice.reducer,
-    url: urlSlice.reducer
+    url: urlSlice.reducer,
+    station: CreateStationSlice.reducer
   }
 })
 
@@ -198,3 +218,7 @@ export const { CreateInst } = CreateInstSlice.actions
 export const { SearchKeyword } = SearchSlice.actions
 export const { TagList } = TagSlice.actions
 export const { ChangeUrl } = urlSlice.actions
+export const { SaveCom } = CreateStationSlice.actions
+export const { SaveUnCom } = CreateStationSlice.actions
+export const { SaveRank } = CreateStationSlice.actions
+export const { SaveFollower } = CreateStationSlice.actions
