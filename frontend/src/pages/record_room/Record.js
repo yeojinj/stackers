@@ -134,10 +134,11 @@ function Record(props) {
     const tmp = preStackRef.current
     return tmp.play()
   }
-  const delayDuration = async () => {
+  const delayDuration = () => {
     const tmp = preStackRef.current
     return tmp.duration
   }
+
   return (
     <div className="record-video-section">
       <ReactMediaRecorder
@@ -240,24 +241,44 @@ function Record(props) {
                     />
                   </button>
                 )}
-                {!enable && (
-                  <button
-                    className="control-btn enable"
-                    onClick={() => {
-                      activeHandle()
-                      stopRecording()
-                      handleEnable()
-                    }}
-                  >
-                    <StopCircleIcon
-                      style={{
-                        width: '45px',
-                        height: '45px',
-                        color: '#c4c4c4e0'
+                {!enable &&
+                  (isStation ? (
+                    <button
+                      className="control-btn enable"
+                      disabled={true}
+                      onClick={() => {
+                        activeHandle()
+                        stopRecording()
+                        handleEnable()
                       }}
-                    />
-                  </button>
-                )}
+                    >
+                      <StopCircleIcon
+                        style={{
+                          width: '45px',
+                          height: '45px',
+                          color: '#c4c4c4e0'
+                        }}
+                      />
+                    </button>
+                  ) : (
+                    <button
+                      className="control-btn enable"
+                      disabled={false}
+                      onClick={() => {
+                        activeHandle()
+                        stopRecording()
+                        handleEnable()
+                      }}
+                    >
+                      <StopCircleIcon
+                        style={{
+                          width: '45px',
+                          height: '45px',
+                          color: '#c4c4c4e0'
+                        }}
+                      />
+                    </button>
+                  ))}
               </div>
             </div>
           )
