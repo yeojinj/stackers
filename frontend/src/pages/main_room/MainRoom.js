@@ -203,12 +203,7 @@ function MainRoom() {
 
   // Station 값 변경시 재 렌더링
   useEffect(
-    () => {
-      console.log('[useEffect 실행]]', completedStation)
-      console.log('[useEffect 실행]]', uncompletedStation)
-      console.log('[useEffect 실행]]', rankingStation)
-      console.log('[useEffect 실행]]', followerStation)
-    },
+    () => {},
     [completedStation],
     [uncompletedStation],
     [rankingStation],
