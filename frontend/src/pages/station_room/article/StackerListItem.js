@@ -8,42 +8,27 @@ import profile4 from '../assets/profilePicture3.png'
 
 function StackerListItem(props) {
   const musicians = props.musicians
+  console.log(musicians)
   // console.log(musicians)
-  // musicians이 데이터별 한명이라 일단 아래와같이 넣었습니다.
-  const Participant = [
-    {
-      id: 1,
-      username: 'ricot',
-      profilePicture: { profile1 }
-    },
-    {
-      id: 2,
-      username: 'flamingo',
-      profilePicture: { profile2 }
-    },
-    {
-      id: 3,
-      username: 'piece',
-      profilePicture: { profile3 }
-    },
-    {
-      id: 4,
-      username: 'LeeCM',
-      profilePicture: { profile4 }
+
+  // musicians.push(musicians[0])
+  const lst = []
+  for (let i = 0; i < musicians.length; i++) {
+    let profileImage = musicians[i].profileImg
+    if (profileImage === 'path') {
+      profileImage = profile1
     }
-  ]
-  // for (let i = 0; i < Participant.length; i++) {
-  //   const picture = Participant[i].profilePicture
-  //   const name = Participant[i].username
-  //   console.log(picture)
-  //   lst.push(
-  //     <div key={Participant[i].id}>
-  //       <img src={picture} alt="picture" />
-  //       <p>{name}</p>
-  //     </div>
-  //   )
-  // }
-  // console.log(lst)
+    lst.push(
+      <div className="station-Participant" key={i}>
+        <p className="station-user">
+          <img src={profileImage} alt="profile" />
+        </p>
+        <p className="station-Participant-name">
+          {musicians[i].instrumentName}
+        </p>
+      </div>
+    )
+  }
 
   return (
     <div className="station-Participants">
@@ -68,30 +53,7 @@ function StackerListItem(props) {
             />
           </svg>
         </div>
-        <div className="station-Participant">
-          <p className="station-writer">
-            <img src={profile1} alt="profile" />
-          </p>
-          <p className="station-Participant-name">{Participant[0].username}</p>
-        </div>
-        <div className="station-Participant">
-          <p className="station-user">
-            <img src={profile2} alt="profile" />
-          </p>
-          <p className="station-Participant-name">{Participant[1].username}</p>
-        </div>
-        <div className="station-Participant">
-          <p className="station-user">
-            <img src={profile3} alt="profile" />
-          </p>
-          <p className="station-Participant-name">{Participant[2].username}</p>
-        </div>
-        <div className="station-Participant">
-          <p className="station-user">
-            <img src={profile4} alt="profile" />
-          </p>
-          <p className="station-Participant-name">{Participant[3].username}</p>
-        </div>
+        {lst}
       </div>
     </div>
   )
