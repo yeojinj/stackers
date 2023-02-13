@@ -31,6 +31,8 @@ function profileFrame() {
       // 비밀번호 변경 페이지로 이동시키기
       // navigate('')
       console.log(page)
+    } else if (page === '관리자 연결') {
+      window.location.href = 'mailto:www.stackers.site@gmail.com'
     } else if (page === '로그아웃') {
       // 로그아웃 시키기
       dispatch(LogOutState())
