@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { CreateStack, ClearStack } from '../../store.js'
 import InstTag from './InstTag.js'
 import axios from 'axios'
+import CheckComplete from './CheckComplete'
 
 const blobFile = (file) =>
   new Promise((resolve, reject) => {
@@ -38,13 +39,18 @@ function UploadForm(props) {
   const filedownloadlink = window.URL.createObjectURL(object)
 
   const handleChange = (e) => {
+    console.log(e)
+    console.log(e.target)
     console.log(e.target.name, e.target.value)
-
     dispatch(CreateStack([e.target.name, e.target.value]))
   }
+  const [enable, setEnable] = useState(true)
   useEffect(() => {
-    handleChange
+    if (data.remainDepth === 0) {
+      setEnable((enable) => false)
+    }
   }, [data])
+
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -119,7 +125,7 @@ function UploadForm(props) {
             type="text"
             name="music"
             value={data.music}
-            onChange={handleChange}
+            onChange={(e) => handleChange(e)}
           />
         </div>
         <div className="input__items">
@@ -129,7 +135,7 @@ function UploadForm(props) {
             type="text"
             name="content"
             value={data.content}
-            onChange={handleChange}
+            onChange={(e) => handleChange(e)}
             style={{ height: '90px' }}
           />
         </div>
@@ -149,7 +155,7 @@ function UploadForm(props) {
                   type="radio"
                   name="isPublic"
                   value="public"
-                  onChange={handleChange}
+                  onChange={(e) => handleChange(e)}
                   defaultChecked
                 />
                 공개
@@ -159,37 +165,14 @@ function UploadForm(props) {
                   type="radio"
                   name="isPublic"
                   value="private"
-                  onChange={handleChange}
+                  onChange={(e) => handleChange(e)}
                   style={{ fontSize: '0.9em' }}
                 />
                 비공개
               </label>
             </div>
           </div>
-          <div className="input__items">
-            <label className="upload-label">이어서 스택 허용</label>
-            <div>
-              <label style={{ marginRight: '10px' }}>
-                <input
-                  type="radio"
-                  name="isComplete"
-                  value="notCompleted"
-                  onChange={handleChange}
-                  defaultChecked
-                />
-                네
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="isComplete"
-                  value="completed"
-                  onChange={handleChange}
-                />
-                아니요
-              </label>
-            </div>
-          </div>
+          {enable && <CheckComplete />}
         </div>
         <div className="upload-btn-container">
           <button
