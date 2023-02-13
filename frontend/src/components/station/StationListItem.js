@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom'
 
 function StationListItem({ isRanking, isSearch, station, index }) {
   // const [station, setStation] = useState()
-
   const videoRef = useRef(null)
 
   // useEffect(() => {
@@ -88,7 +87,7 @@ function StationListItem({ isRanking, isSearch, station, index }) {
   // 검색페이지 스테이션
   const IsSearch = () => {
     let likesResult = ''
-    if (station.heartCnt) {
+    if (station.heartCnt >= 0) {
       const modifyLikes = station.heartCnt
       if (modifyLikes >= 1000) {
         likesResult = `${Math.floor(modifyLikes / 1000)}k`
@@ -98,10 +97,14 @@ function StationListItem({ isRanking, isSearch, station, index }) {
     }
     if (isSearch) {
       return (
-        <>
+        <div className="station-item__items">
           <video
             ref={videoRef}
-            className={isSearch ? 'video-style-search' : 'video-style'}
+            className={
+              isSearch && station.heartCnt
+                ? 'video-style-search'
+                : 'video-style non-ranks'
+            }
             src={station.video.videoPath}
             autoPlay={false}
             onMouseOver={playVideo}
@@ -111,7 +114,7 @@ function StationListItem({ isRanking, isSearch, station, index }) {
             }}
             loop
           />
-          {!station.complete && (
+          {!station.complete && station.heartCnt >= 0 && (
             <img src={logo} width={38} className="icon-is-not-complete" />
           )}
           <div className="station-info">
@@ -131,28 +134,42 @@ function StationListItem({ isRanking, isSearch, station, index }) {
                   alt=""
                   className="profile-img"
                 />
-                <div className="account-name">{station.username}</div>
+                <div
+                  className={
+                    station.heartCnt >= 0 ? 'account-name' : 'account-name-main'
+                  }
+                >
+                  {station.username}
+                </div>
               </div>
-              <div className="heart-info">
-                <FavoriteBorderIcon
-                  style={{
-                    width: '17px',
-                    height: '17px',
-                    marginRight: '2px',
-                    color: '#E35FAD'
-                  }}
-                />
-                <div className="video-likes">{likesResult}</div>
-              </div>
+              {station.heartCnt >= 0 && (
+                <div className="heart-info">
+                  <FavoriteBorderIcon
+                    style={{
+                      width: '17px',
+                      height: '17px',
+                      marginRight: '2px',
+                      color: '#E35FAD'
+                    }}
+                  />
+                  <div className="video-likes">{likesResult}</div>
+                </div>
+              )}
             </div>
           </div>
-        </>
+        </div>
       )
     }
   }
 
   return (
-    <div className={isSearch ? 'station-item-search' : 'station-item'}>
+    <div
+      className={
+        isSearch && station.heartCnt >= 0
+          ? 'station-item-search'
+          : 'station-item'
+      }
+    >
       <IsRanking />
       <IsSearch />
     </div>

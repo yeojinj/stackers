@@ -21,7 +21,9 @@ const dummy = [
       videoName: null,
       videoOriName: '테스트용 비디',
       thumbnailPath: null
-    }
+    },
+    username: 'boyoung',
+    imgPath: 'path'
   },
   {
     id: 6,
@@ -34,7 +36,9 @@ const dummy = [
       videoName: null,
       videoOriName: '2023_02_07_11:08',
       thumbnailPath: null
-    }
+    },
+    username: 'boyoung',
+    imgPath: 'path'
   },
   {
     id: 7,
@@ -47,7 +51,9 @@ const dummy = [
       videoName: null,
       videoOriName: '2023_02_07_11:08',
       thumbnailPath: null
-    }
+    },
+    username: 'boyoung',
+    imgPath: 'path'
   },
   {
     id: 8,
@@ -60,7 +66,9 @@ const dummy = [
       videoName: null,
       videoOriName: '2023_02_07_11:08',
       thumbnailPath: null
-    }
+    },
+    username: 'boyoung',
+    imgPath: 'path'
   },
   {
     id: 9,
@@ -73,7 +81,9 @@ const dummy = [
       videoName: null,
       videoOriName: '2023_02_07_11:08',
       thumbnailPath: null
-    }
+    },
+    username: 'boyoung',
+    imgPath: 'path'
   },
   {
     id: 9,
@@ -86,7 +96,9 @@ const dummy = [
       videoName: null,
       videoOriName: '2023_02_07_11:08',
       thumbnailPath: null
-    }
+    },
+    username: 'boyoung',
+    imgPath: 'path'
   },
   {
     id: 9,
@@ -98,7 +110,9 @@ const dummy = [
       videoName: null,
       videoOriName: '2023_02_07_11:08',
       thumbnailPath: null
-    }
+    },
+    username: 'boyoung',
+    imgPath: 'path'
   }
 ]
 function MainRoom() {
@@ -141,45 +155,50 @@ function MainRoom() {
   // 완성된 스테이션 조회
   async function completeStationList() {
     console.log('[완성 스테이션]', username)
-    await axios
-      .get('/api/station/completed/stackers', {
-        headers: {
-          Authorization: token
-        }
-      })
+    await axios({
+      method: 'get',
+      url: '/api/station/completed/stackers',
+      headers: {
+        Authorization: token
+      }
+    })
       .then((res) => {
-        setCompletedStation(res.data)
+        // setCompletedStation(res.data)
+        setCompletedStation(dummy)
         dispatch(SaveCom(res.data))
       })
-      .catch((err) => console.log(err))
-    setCompletedStation(dummy)
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   // 미완성된 스테이션 조회
   async function uncompleteStationList() {
     console.log('[미완성 스테이션]', username)
-    await axios
-      .get('/api/station/uncompleted/stackers', {
-        headers: {
-          Authorization: token
-        }
-      })
+    await axios({
+      method: 'get',
+      url: '/api/station/uncompleted/stackers',
+      headers: {
+        Authorization: token
+      }
+    })
       .then((res) => {
-        setUncompletedStation(res.data)
+        // setUncompletedStation(res.data)
+        setUncompletedStation(dummy)
         dispatch(SaveUnCom(res.data))
       })
       .catch((err) => console.log(err))
-    setUncompletedStation(dummy)
   }
 
   // 인기 TOP 10 스테이션 조회
   async function rankingStationList() {
-    await axios
-      .get('/api/station/popular', {
-        headers: {
-          Authorization: token
-        }
-      })
+    await axios({
+      method: 'get',
+      url: '/api/station/popular',
+      headers: {
+        Authorization: token
+      }
+    })
       .then((res) => {
         setRankingStation(res.data)
         dispatch(SaveRank(res.data))
@@ -189,17 +208,19 @@ function MainRoom() {
 
   // 팔로잉하는 사람의 스테이션 조회
   async function followerStationList() {
-    await axios
-      .get('/api/station/following', {
-        headers: {
-          Authorization: token
-        }
-      })
+    await axios({
+      method: 'get',
+      url: '/api/station/following',
+      headers: {
+        Authorization: token
+      }
+    })
       .then((res) => {
+        // setFollwerStation(res.data)
+        setFollwerStation(dummy)
         dispatch(SaveFollower(res.data))
       })
       .catch((err) => console.log(err))
-    setFollwerStation(dummy)
   }
 
   // 렌더링 후 한번 실행(axios)
@@ -321,8 +342,9 @@ function MainRoom() {
                       return (
                         <StationListItem
                           key={i}
-                          isRanking={true}
+                          isRanking={false}
                           station={station}
+                          isSearch={true}
                         />
                       )
                     })}
