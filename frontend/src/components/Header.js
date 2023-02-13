@@ -228,7 +228,9 @@ function Header() {
                   <div>
                     <img
                       src={
-                        dropDownItem.imgPath ? dropDownItem.imgPath : DefaultImg
+                        dropDownItem.imgPath !== 'path'
+                          ? dropDownItem.imgPath
+                          : DefaultImg
                       }
                       alt=""
                       className="dropdown-img"

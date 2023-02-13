@@ -191,15 +191,12 @@ function ProfileEdit(props) {
         <div className="ProfileEdit-content">
           {/* 파일 클릭하면 dropzone 모달 띄우기 */}
           <img
-            id="profileedit-img"
+            className={
+              imageurl !== 'path' ? 'profileedit-img' : 'profileedit-noimg'
+            }
             onClick={handleOpen}
-            src={imageurl === 'path' ? NoImg : imageurl}
+            src={imageurl !== 'path' ? imageurl : NoImg}
             alt="profileTest"
-            style={{
-              width: '113px',
-              height: '110px',
-              borderRadius: '70%'
-            }}
           />
           <Modal open={open} onClose={handleClose}>
             <Box>

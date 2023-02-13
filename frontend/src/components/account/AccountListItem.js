@@ -15,7 +15,9 @@ function AccountListItem({ account }) {
     <>
       <div className="account-info">
         <img
-          src={accountInfo.imgPath ? accountInfo.imgPath : DefaultImg}
+          src={
+            accountInfo.imgPath !== 'path' ? accountInfo.imgPath : DefaultImg
+          }
           alt=""
           className="account-profile-img"
         />
