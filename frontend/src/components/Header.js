@@ -53,7 +53,7 @@ function Header() {
     }
   }
 
-  const searchList = () => {
+  const searchList = (inputValue) => {
     console.log('axios로 보낼 키워드', inputValue)
     axios
       // 검색 api 주소
@@ -161,7 +161,8 @@ function Header() {
 
   useEffect(() => {
     if (inputValue) {
-      searchList()
+      setInputValue(inputValue)
+      searchList(inputValue)
     }
   }, [inputValue])
 
@@ -180,7 +181,9 @@ function Header() {
             placeholder="검색어를 입력해주세요."
             type="text"
             value={inputValue}
-            onChange={changeInputValue}
+            onChange={(e) => {
+              changeInputValue(e)
+            }}
             // onKeyUp={handleDropDownKey}
           />
           <img onClick={gotoSearch} className="search-icon" src={searchimg} />
