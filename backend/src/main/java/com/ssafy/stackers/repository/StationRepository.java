@@ -15,6 +15,7 @@ public interface StationRepository extends JpaRepository<Station, Long> {
     List<Station> findTop10ByIsPublicOrderByHeartCntDescRegTimeAsc(boolean isPublic);
     List<Station> findByIsPublicAndMember(boolean isPublic, Member member);
     List<Station> findByContentContainingOrMusicContainingOrderByHeartCntDesc(String keyword1, String keyword2);
+    List<Station> findByMemberAndIsPublic(Member member, boolean isPublic);
     @Override
     boolean existsById(Long id);
 }
