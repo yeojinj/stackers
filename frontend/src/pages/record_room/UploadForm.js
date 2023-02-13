@@ -5,6 +5,7 @@ import './Record'
 import Tag from './ModalTag'
 import './UploadForm.css'
 import Moment from 'moment'
+import { useNavigate } from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
 import { CreateStack, ClearStack } from '../../store.js'
 import InstTag from './InstTag.js'
@@ -20,6 +21,7 @@ const blobFile = (file) =>
     reader.readAsDataURL(file)
   })
 function UploadForm(props) {
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const data = useSelector((state) => {
     return state.stack
@@ -39,9 +41,6 @@ function UploadForm(props) {
   const filedownloadlink = window.URL.createObjectURL(object)
 
   const handleChange = (e) => {
-    console.log(e)
-    console.log(e.target)
-    console.log(e.target.name, e.target.value)
     dispatch(CreateStack([e.target.name, e.target.value]))
   }
   const [enable, setEnable] = useState(true)
@@ -53,7 +52,6 @@ function UploadForm(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-
     if (!data.content || !data.music) {
       alert('빈칸을 입력해주세요')
     } else {
@@ -83,7 +81,7 @@ function UploadForm(props) {
 
         // 파일 정보
         formData.append('file', object)
-        await axios
+        axios
           .post(`/api/station/upload`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
@@ -95,6 +93,8 @@ function UploadForm(props) {
             console.error(error)
           })
       }
+      navigate('/UploadLoading')
+
       handleClose()
       dispatch(ClearStack())
       window.URL.revokeObjectUrl(filedownloadlink)

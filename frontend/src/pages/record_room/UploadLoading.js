@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import Header from '../../components/Header'
 import { useNavigate } from 'react-router-dom'
 import '../../styles/uploadloading.css'
@@ -6,16 +7,24 @@ import '../../styles/uploadloading.css'
 function UpladLoading() {
   const [page, moveToMain] = useState(false)
   const navigate = useNavigate()
-  const navigateToMain = () => {
+  const username = useSelector((state) => {
+    return state.user.username
+  })
+  // const navigateToMain = () => {
+  //   if (page) {
+  //     navigate('/Mainroom')
+  //   }
+  // }
+  const navigateToProfile = () => {
     if (page) {
-      navigate('/Mainroom')
+      navigate('/MyPage/' + { username })
     }
   }
   setTimeout(() => {
     moveToMain(true)
-  }, 10000)
+  }, 3000)
 
-  useEffect(navigateToMain, [page])
+  useEffect(navigateToProfile, [page])
 
   return (
     <>
