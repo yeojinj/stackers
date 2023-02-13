@@ -276,7 +276,7 @@ function MyPage() {
           <div className="div-text-container">
             <div className="div-profile-notPicture">
               <div className="div-items__1">
-                <p className="p-nickname-bold">{mypageInfo.nickname}</p>
+                <p className="p-nickname-bold">{mypageInfo.username}</p>
                 <div className="div-buttons">
                   <p
                     onClick={(event) => {
@@ -342,7 +342,7 @@ function MyPage() {
             </div>
             <div style={{ fontSize: '0.95em' }}>
               <span style={{ fontWeight: '600', fontSize: '1.1em' }}>
-                {mypageInfo.username}
+                {mypageInfo.nickname}
               </span>
               <p style={{ whiteSpace: 'pre-wrap', marginTop: '1px' }}>
                 {mypageInfo.bio}
