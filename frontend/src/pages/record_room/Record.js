@@ -124,6 +124,7 @@ function Record(props) {
   }
   useEffect(() => {
     console.log('rendering?')
+    console.log(enable)
   }, [enable])
   const initialValue = 3000
 
@@ -145,7 +146,6 @@ function Record(props) {
         stopStreamsOnStop
         onStop={async (blobUrl, blob) => {
           console.log('stop?')
-          await handleEnable()
           await setStack(blob)
           const video = stackRef.current
           video.srcObject = stream
@@ -226,6 +226,7 @@ function Record(props) {
                         const rr = Math.round(dr * 1000)
                         await setDelay(rr)
                         stopRecording()
+                        handleEnable()
                       } else {
                         await setDelay(60000)
                         stopRecording()
