@@ -5,10 +5,10 @@ import axios from 'axios'
 import './MyPage.css'
 import DefaultImg from '../../assets/default_profile.png'
 import StationListItem from '../../components/station/StationListItem'
-import Button from '@mui/material/Button'
-import MailOutlineIcon from '@mui/icons-material/MailOutline'
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
+import MarkunreadIcon from '@mui/icons-material/Markunread'
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator'
 import ProfileEdit from '../profile_edit/ProfileEdit'
 
 function MyPage() {
@@ -182,7 +182,6 @@ function MyPage() {
       <>
         <div className="mystation-tap">
           <div className="popular-video">
-            {/* {publicStation.map((result, i) => { */}
             {dummy.map((result, i) => {
               return (
                 <div key={i}>
@@ -205,7 +204,6 @@ function MyPage() {
       <>
         <div className="mystation-tap">
           <div className="popular-video">
-            {/* {privateStation.map((result, i) => { */}
             {dummy.map((result, i) => {
               return (
                 <div key={i}>
@@ -226,16 +224,15 @@ function MyPage() {
   // 공개/비공개 탭 메뉴
   const menuArr = [
     { i: 1, name: '공개', content: viewStation() },
-    { i: 2, name: '비공개🔒', content: noViewStation() }
+    { i: 2, name: '비공개', content: noViewStation() }
   ]
 
   // 팔로우 버튼, 프로필 편집 버튼
   let followbutton = null
   if (loginUser.username === profileUsername) {
     followbutton = (
-      <Button
-        variant="contained"
-        size="small"
+      <button
+        className="button-profile"
         style={{
           backgroundColor: 'rgba(217, 217, 217, 1)',
           color: 'rgba(73, 73, 73, 1)',
@@ -244,21 +241,13 @@ function MyPage() {
         onClick={handleOpen}
       >
         프로필 편집
-      </Button>
+      </button>
     )
   } else {
     if (!isfollowing) {
-      followbutton = (
-        <Button variant="outlined" size="small" color="secondary">
-          팔로우
-        </Button>
-      )
+      followbutton = <button className="button-profile">팔로우</button>
     } else if (isfollowing) {
-      followbutton = (
-        <Button variant="contained" size="small" color="secondary">
-          팔로잉
-        </Button>
-      )
+      followbutton = <button className="button-profile">팔로잉</button>
     }
   }
 
@@ -266,84 +255,29 @@ function MyPage() {
     clickTab(index)
   }
   return (
-    <>
-      <div className="MyPage">
-        <Modal open={open} onClose={handleClose}>
-          <Box>
-            <ProfileEdit handleClose={handleClose} />
-          </Box>
-        </Modal>
-        <div className="div-profile">
-          {/* css 손보기 */}
-          <div style={{ display: 'flex', width: 'auto' }}>
-            <div style={{ marginRight: '53px' }}>
-              <img
-                src={
-                  mypageInfo.imgPath === 'path'
-                    ? DefaultImg
-                    : mypageInfo.imgPath
-                }
-                alt="profile"
-                style={{ width: '220px', margin: '0px' }}
-              />
-            </div>
-            <div style={{ marginLeft: '100px' }}>
-              <div className="div-profile-notPicture">
-                <div>
-                  <b>{mypageInfo.nickname}</b>
-                  <p>{mypageInfo.username}</p>
-                  <div className="div-profile-Count">
-                    <div style={{ display: 'flex' }}>
-                      <p className="profile-Count-content">영상</p>
-                      <b>{publicStation.length + privateStation.length}</b>
-                    </div>
-                    <div style={{ display: 'flex' }}>
-                      <p className="profile-Count-content">팔로워</p>
-                      <b>{mypageInfo.followerCnt}</b>
-                    </div>
-                    <div style={{ display: 'flex' }}>
-                      <p className="profile-Count-content">팔로잉</p>
-                      <b>{mypageInfo.followingCnt}</b>
-                    </div>
-                  </div>
-                  <div
-                    style={{
-                      display: 'flex'
-                      // justifyContent: 'space-between'
-                    }}
-                  >
-                    {mypageInfo.party && (
-                      <p
-                        style={{
-                          backgroundColor: 'rgba(227, 95, 173, 1)',
-                          color: 'white',
-                          padding: '5px',
-                          borderRadius: '5px'
-                        }}
-                      >
-                        {mypageInfo.party}
-                      </p>
-                    )}
-                    {mypageInfo.party && mypageInfo.instruments && <p> | </p>}
-                    {mypageInfo.instruments &&
-                      mypageInfo.instruments.map((inst, i) => {
-                        return (
-                          <p
-                            key={i}
-                            style={{
-                              backgroundColor: 'rgba(245, 245, 245, 1)',
-                              color: 'rgba(80, 80, 80, 1)',
-                              padding: '5px',
-                              borderRadius: '10px'
-                            }}
-                          >
-                            {inst}
-                          </p>
-                        )
-                      })}
-                  </div>
-                </div>
-                <div style={{ display: 'flex', marginLeft: '100px' }}>
+    <div className="my-page-container">
+      <Modal open={open} onClose={handleClose}>
+        <Box>
+          <ProfileEdit handleClose={handleClose} />
+        </Box>
+      </Modal>
+      <div className="div-profile">
+        {/* css 손보기 */}
+        <div style={{ display: 'flex', width: 'auto' }}>
+          <div className="div-img-container">
+            <img
+              src={
+                mypageInfo.imgPath === 'path' ? DefaultImg : mypageInfo.imgPath
+              }
+              alt="profile"
+              className="mypage-profile-img"
+            />
+          </div>
+          <div className="div-text-container">
+            <div className="div-profile-notPicture">
+              <div className="div-items__1">
+                <p className="p-nickname-bold">{mypageInfo.nickname}</p>
+                <div className="div-buttons">
                   <p
                     onClick={(event) => {
                       event.preventDefault()
@@ -353,44 +287,97 @@ function MyPage() {
                     {followbutton}
                   </p>
                   <p>
-                    <Button variant="outlined" size="small" color="secondary">
-                      <MailOutlineIcon></MailOutlineIcon>
-                    </Button>
+                    <button className="button-profile">
+                      <a href="mailto:johndoe@fakeemail.com">
+                        <MarkunreadIcon
+                          style={{
+                            color: 'whitesmoke'
+                          }}
+                        />
+                      </a>
+                    </button>
                   </p>
                 </div>
               </div>
+
               <div>
-                <p style={{ whiteSpace: 'pre-wrap' }}>{mypageInfo.bio}</p>
+                <div className="div-profile-Count">
+                  <div style={{ display: 'flex', marginRight: '8%' }}>
+                    <p className="profile-Count-content">스테이션</p>
+                    <b>{publicStation.length + privateStation.length}</b>
+                  </div>
+                  <div style={{ display: 'flex', marginRight: '8%' }}>
+                    <p className="profile-Count-content">팔로워</p>
+                    <b>{mypageInfo.followerCnt}</b>
+                  </div>
+                  <div style={{ display: 'flex' }}>
+                    <p className="profile-Count-content">팔로잉</p>
+                    <b>{mypageInfo.followingCnt}</b>
+                  </div>
+                </div>
+                <div className="extra-info-container">
+                  {mypageInfo.party && (
+                    <p
+                      className="extra-info-party"
+                      style={{ marginRight: '0' }}
+                    >
+                      {mypageInfo.party}
+                    </p>
+                  )}
+                  <DragIndicatorIcon />
+                  {mypageInfo.instruments &&
+                    mypageInfo.instruments.map((inst, i) => {
+                      return (
+                        <p
+                          key={i}
+                          className="extra-info-party"
+                          style={{ color: 'black', background: '#c4c4c4e0' }}
+                        >
+                          {inst}
+                        </p>
+                      )
+                    })}
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div>
-          <div className="mypage-result">
-            <div className="station-tap">
-              <div className="tapmenu-ul">
-                {menuArr.map((el, index) => (
-                  <li
-                    key={el.i}
-                    className={
-                      index === currentTab ? 'mystation focused' : 'mystation'
-                    }
-                    onClick={() => {
-                      if (profileUsername === loginUser.username) {
-                        selectMenuHandler(index)
-                      }
-                    }}
-                  >
-                    {el.name}
-                  </li>
-                ))}
-              </div>
+            <div style={{ fontSize: '0.95em' }}>
+              <span style={{ fontWeight: '600', fontSize: '1.1em' }}>
+                {mypageInfo.username}
+              </span>
+              <p style={{ whiteSpace: 'pre-wrap', marginTop: '1px' }}>
+                {mypageInfo.bio}
+              </p>
             </div>
-            <div className="tab-content">{menuArr[currentTab].content}</div>
           </div>
         </div>
       </div>
-    </>
+      <div>
+        <div className="mypage-result">
+          <div className="station-tap">
+            <div className="tapmenu-ul">
+              {menuArr.map((el, index) => (
+                <li
+                  key={el.i}
+                  className={
+                    index === currentTab ? 'mystation focused' : 'mystation'
+                  }
+                  onClick={() => {
+                    if (profileUsername === loginUser.username) {
+                      selectMenuHandler(index)
+                    } else {
+                      alert('비공개는 본인만 확인할 수 있습니다')
+                    }
+                  }}
+                >
+                  {el.name}
+                </li>
+              ))}
+            </div>
+          </div>
+          <div className="tab-content">{menuArr[currentTab].content}</div>
+        </div>
+      </div>
+    </div>
   )
 }
 
