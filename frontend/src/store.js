@@ -48,11 +48,16 @@ const CreateCommentSlice = createSlice({
 
 const urlSlice = createSlice({
   name: 'urlSlice',
-  initialState: { preUrl: '/' },
+  initialState: { preUrl: '/', backNumber: 0 },
   reducers: {
     ChangeUrl: (state, action) => {
       state.preUrl = `${action.payload.pathname}${action.payload.search}`
-      console.log(state.preUrl)
+      // state.preUrl = action.payload
+      // console.log(state.preUrl)
+    },
+    CountBackNum: (state, action) => {
+      state.backNumber = action.payload
+      // console.log(state.backNumber)
     }
   }
 })
@@ -217,7 +222,7 @@ export const { CreateStack, ClearStack } = stackSlice.actions
 export const { CreateInst } = CreateInstSlice.actions
 export const { SearchKeyword } = SearchSlice.actions
 export const { TagList } = TagSlice.actions
-export const { ChangeUrl } = urlSlice.actions
+export const { ChangeUrl, CountBackNum } = urlSlice.actions
 export const { SaveCom } = CreateStationSlice.actions
 export const { SaveUnCom } = CreateStationSlice.actions
 export const { SaveRank } = CreateStationSlice.actions

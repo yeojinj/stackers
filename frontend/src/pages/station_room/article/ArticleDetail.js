@@ -1,25 +1,87 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Button from '@mui/material/Button'
 import StackerListItem from './StackerListItem'
 // import profile from '../assets/profile.png'
 import '../Station.css'
 import profile from '../assets/profile.png'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 function ArticleDetail(props) {
   const navigate = useNavigate()
   const [isfollowing, setIsfollow] = useState(true)
   const writer = props.info.writer
+  useEffect(() => {
+    axios({
+      method: 'get',
+      url: `/api/follow/isfollowing/${writer.username}`,
+      headers: {
+        Authorization: localStorage.getItem('accessToken')
+      }
+    })
+      .then((response) => {
+        setIsfollow(response.data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [writer.username])
   let followbutton = null
   if (!isfollowing) {
     followbutton = (
-      <Button variant="outlined" size="small" color="secondary">
+      <Button
+        variant="outlined"
+        size="small"
+        color="secondary"
+        onClick={() => {
+          axios({
+            method: 'post',
+            url: '/api/follow',
+            data: {
+              username: writer.username
+            },
+            headers: {
+              Authorization: localStorage.getItem('accessToken')
+            }
+          })
+            .then((res) => {
+              // console.log('[팔로잉이 되었습니다!]', res.data)
+              setIsfollow(true)
+            })
+            .catch((err) => {
+              console.log(err)
+            })
+        }}
+      >
         팔로우
       </Button>
     )
   } else if (isfollowing) {
     followbutton = (
-      <Button variant="contained" size="small" color="secondary">
+      <Button
+        variant="contained"
+        size="small"
+        color="secondary"
+        onClick={() => {
+          axios({
+            method: 'delete',
+            url: '/api/follow',
+            data: {
+              username: writer.username
+            },
+            headers: {
+              Authorization: localStorage.getItem('accessToken')
+            }
+          })
+            .then((res) => {
+              // console.log('[팔로잉이 취소되었습니다!]', res.data)
+              setIsfollow(false)
+            })
+            .catch((err) => {
+              console.log(err)
+            })
+        }}
+      >
         팔로잉
       </Button>
     )

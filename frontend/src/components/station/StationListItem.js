@@ -4,12 +4,18 @@ import DefaultImg from '../../assets/default_profile.png'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import logo from '../../assets/image_logo.png'
 import { useNavigate } from 'react-router-dom'
-
+import { useDispatch, useSelector } from 'react-redux'
+import { CountBackNum } from '../../store'
 function StationListItem({ isRanking, isSearch, station, index }) {
   // const [station, setStation] = useState()
 
   const videoRef = useRef(null)
-
+  const dispatch = useDispatch()
+  const backNumber = useSelector((state) => {
+    return state.url.backNumber
+  })
+  // const location = useLocation()
+  // console.log(location)
   // useEffect(() => {
   //   setStation(station)
   //   console.log('mainroom 에서 보낸 데이터를 station 변수에 넣기', station)
@@ -30,6 +36,9 @@ function StationListItem({ isRanking, isSearch, station, index }) {
 
   const navigate = useNavigate()
   const gotoDetail = (station) => {
+    if (backNumber !== 0) {
+      dispatch(CountBackNum(0))
+    }
     navigate(`/StationRoom/${station.id}`)
   }
 
