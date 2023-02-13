@@ -13,8 +13,11 @@ import ProfileEdit from '../profile_edit/ProfileEdit'
 
 function MyPage() {
   const token = localStorage.getItem('accessToken')
-  const [isfollowing, setIsfollow] = useState(true)
-
+  // 팔로잉/팔로우
+  const [isfollowing, setIsFollowwing] = useState(false)
+  const [followingCnt, setFollowingCnt] = useState(0)
+  const [followerCnt, setFollwerCnt] = useState(0)
+  // 공개/비공개 스테이션
   const [publicStation, setPublicStation] = useState([])
   const [privateStation, setPrivateStation] = useState([])
   const [currentTab, clickTab] = useState(0)
@@ -25,50 +28,88 @@ function MyPage() {
     // 현재 로그인한 유저
     return state.user
   })
+  // 프로필 편집 모달 열기, 닫기
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
   // 마이페이지 정보 조회
   async function getUserInfo() {
-    await axios
-      .get(`/api/member/${profileUsername}`, {
-        headers: {
-          Authorization: token
-        }
-      })
-      .then((res) => {
-        setMypageInfo(res.data)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+    if (profileUsername === loginUser.username) {
+      await axios
+        .get(`/api/member/${loginUser.username}`, {
+          headers: {
+            Authorization: token
+          }
+        })
+        .then((res) => {
+          setMypageInfo(res.data)
+          setFollowingCnt(res.data.followingCnt)
+          setFollwerCnt(res.data.followerCnt)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    } else {
+      await axios
+        .get(`/api/member/${profileUsername}`, {
+          headers: {
+            Authorization: token
+          }
+        })
+        .then((res) => {
+          setMypageInfo(res.data)
+          setFollowingCnt(res.data.followingCnt)
+          setFollwerCnt(res.data.followerCnt)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
   }
 
   // 마이페이지 공개 스테이션 조회
   async function publicStationList() {
-    await axios
-      .get('/api/station/public', {
-        headers: {
-          Authorization: token
-        }
-      })
-      .then((res) => {
-        setPublicStation(res.data)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+    // 내가 나의 마이페이지 볼때
+    if (profileUsername === loginUser.username) {
+      await axios
+        .get('/api/station/public', {
+          headers: {
+            Authorization: token
+          }
+        })
+        .then((res) => {
+          setPublicStation(res.data)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    } else {
+      // 다른사람의 마이페이지를 볼때
+      await axios
+        .get(`/api/station/${profileUsername}/public`, {
+          headers: {
+            Authorization: token
+          }
+        })
+        .then((res) => {
+          setPublicStation(res.data)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
   }
 
   // 마이페이지 비공개 스테이션 조회
   async function privateStationList() {
-    await axios
-      .get('/api/station/private', {
-        headers: {
-          Authorization: token
-        }
-      })
+    await axios({
+      method: 'get',
+      url: '/api/station/private',
+      headers: {
+        Authorization: token
+      }
+    })
       .then((res) => {
         setPrivateStation(res.data)
       })
@@ -77,11 +118,80 @@ function MyPage() {
       })
   }
 
+  // 현재 사용자가 현재 마이페이지 계정 주인을 팔로우하고 있는지 조회
+  async function isFollowing() {
+    await axios({
+      method: 'get',
+      url: `/api/follow/isfollowing/${profileUsername}`,
+      headers: {
+        Authorization: token
+      }
+    })
+      .then((res) => {
+        console.log('[현재 마이페이지 주인의 팔로우 여부]', res.data)
+        setIsFollowwing(res.data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+  // 팔로잉 요청
+  async function wantfollowing() {
+    await axios({
+      method: 'post',
+      url: '/api/follow',
+      data: {
+        username: profileUsername
+      },
+      headers: {
+        Authorization: token
+      }
+    })
+      .then((res) => {
+        console.log('[팔로잉이 되었습니다!]', res.data)
+        setIsFollowwing(true)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+  // 팔로잉 취소
+  async function unfollowing() {
+    await axios({
+      method: 'delete',
+      url: '/api/follow',
+      data: {
+        username: profileUsername
+      },
+      headers: {
+        Authorization: token
+      }
+    })
+      .then((res) => {
+        console.log('[팔로잉이 취소되었습니다!]', res.data)
+        setIsFollowwing(false)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
   useEffect(() => {
-    getUserInfo()
-    publicStationList()
-    privateStationList()
-  }, [])
+    if (profileUsername !== loginUser.username) {
+      console.log('다른사람의 페이지를 보고잇어요')
+      getUserInfo()
+      publicStationList()
+      privateStationList()
+      isFollowing()
+      clickTab(0)
+    } else {
+      getUserInfo()
+      publicStationList()
+      privateStationList()
+    }
+  }, [profileUsername])
 
   // 더미데이터
   const dummy = [
@@ -245,9 +355,31 @@ function MyPage() {
     )
   } else {
     if (!isfollowing) {
-      followbutton = <button className="button-profile">팔로우</button>
+      followbutton = (
+        <button
+          className="button-profile"
+          onClick={(event) => {
+            setIsFollowwing(true)
+            setFollwerCnt((followerCnt) => followerCnt + 1)
+            wantfollowing()
+          }}
+        >
+          팔로우
+        </button>
+      )
     } else if (isfollowing) {
-      followbutton = <button className="button-profile">팔로잉</button>
+      followbutton = (
+        <button
+          className="button-profile"
+          onClick={(event) => {
+            setIsFollowwing(false)
+            setFollwerCnt((followerCnt) => followerCnt - 1)
+            unfollowing()
+          }}
+        >
+          팔로우 취소
+        </button>
+      )
     }
   }
 
@@ -278,14 +410,7 @@ function MyPage() {
               <div className="div-items__1">
                 <p className="p-nickname-bold">{mypageInfo.username}</p>
                 <div className="div-buttons">
-                  <p
-                    onClick={(event) => {
-                      event.preventDefault()
-                      setIsfollow(!isfollowing)
-                    }}
-                  >
-                    {followbutton}
-                  </p>
+                  <p>{followbutton}</p>
                   <p>
                     <button className="button-profile">
                       <a href={'mailto:' + mypageInfo.email}>
@@ -308,11 +433,11 @@ function MyPage() {
                   </div>
                   <div style={{ display: 'flex', marginRight: '8%' }}>
                     <p className="profile-Count-content">팔로워</p>
-                    <b>{mypageInfo.followerCnt}</b>
+                    <b>{followerCnt}</b>
                   </div>
                   <div style={{ display: 'flex' }}>
                     <p className="profile-Count-content">팔로잉</p>
-                    <b>{mypageInfo.followingCnt}</b>
+                    <b>{followingCnt}</b>
                   </div>
                 </div>
                 <div className="extra-info-container">
