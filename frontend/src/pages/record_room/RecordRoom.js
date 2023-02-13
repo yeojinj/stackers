@@ -1,11 +1,11 @@
 /* eslint-disable */
 import Record from './Record.js'
-import React, { useState, useSelector } from 'react'
+import React, { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import StackUploadModal from './StackUploadModal'
 import Modal from '@mui/material/Modal'
 import './Record.css'
-import { useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 function isEmptyObj(obj) {
   if (obj.constructor === Object && Object.keys(obj).length === 0) {
@@ -18,6 +18,7 @@ function isEmptyObj(obj) {
 function RecordRoom() {
   const navigate = useNavigate()
   const preUrl = useSelector((state) => {
+    console.log('preUrl1', state.url.preUrl)
     return state.url.preUrl
   })
   const params = useParams()

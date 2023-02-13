@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import axios from 'axios'
 import logo from '../assets/logo.svg'
 import searchimg from '../assets/search.svg'
@@ -15,6 +15,7 @@ import { ChangeUrl, SearchKeyword } from '../store'
 
 function Header() {
   const token = localStorage.getItem('accessToken')
+  const location = useLocation()
   const [search, setSearch] = useState([])
   const [inputValue, setInputValue] = useState('')
   const [isHaveInputValue, setIsHaveInputValue] = useState(false)
@@ -83,7 +84,10 @@ function Header() {
   // 업로드 버튼 클릭 -> 녹화페이지로 이동
   const goRecordRoom = () => {
     setInputValue('')
-    dispatch(ChangeUrl())
+    console.log(location)
+    if (location) {
+      dispatch(ChangeUrl(location))
+    }
     navigate('/RecordRoom/-1')
   }
 
