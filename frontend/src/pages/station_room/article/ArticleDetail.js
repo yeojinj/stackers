@@ -4,8 +4,10 @@ import StackerListItem from './StackerListItem'
 // import profile from '../assets/profile.png'
 import '../Station.css'
 import profile from '../assets/profile.png'
+import { useNavigate } from 'react-router-dom'
 
 function ArticleDetail(props) {
+  const navigate = useNavigate()
   const [isfollowing, setIsfollow] = useState(true)
   const writer = props.info.writer
   let followbutton = null
@@ -23,6 +25,15 @@ function ArticleDetail(props) {
     )
   }
   const stationInformation = props.info.stationInfo.content
+  const tags = []
+  for (let i = 0; i < props.info.stationInfo.tags.length; i++) {
+    tags.push(
+      <span key={i} style={{ fontWeight: 'bold' }}>
+        {' '}
+        # {props.info.stationInfo.tags[i]}
+      </span>
+    )
+  }
   const createDate =
     props.info.regTime.substr(0, 4) +
     '.' +
@@ -33,7 +44,14 @@ function ArticleDetail(props) {
     <div className="information">
       <div className="station-information">
         <div className="station-profile">
-          <img src={profile} alt="profile" />
+          <img
+            src={profile}
+            alt="profile"
+            onClick={() => {
+              navigate(`/MyPage/${writer.username}`)
+            }}
+            style={{ cursor: 'pointer' }}
+          />
           <div className="station-profile-name_nickname">
             <p className="station-profile-id">{writer.username}</p>
             <p className="station-profile-nickname">{writer.nickname}</p>
@@ -48,7 +66,10 @@ function ArticleDetail(props) {
             {followbutton}
           </div>
         </div>
-        <p className="station-usercontent">{stationInformation}</p>
+        <p className="station-usercontent">
+          {stationInformation}
+          <span>{tags}</span>
+        </p>
         <p style={{ color: 'gray' }}>{createDate}</p>
       </div>
       <StackerListItem musicians={props.info.musicians}></StackerListItem>

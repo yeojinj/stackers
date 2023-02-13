@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
 // import { useSelector } from 'react-redux'
-import { useParams } from 'react-router'
+import { useParams, useNavigate } from 'react-router'
 import profilePicture1 from '../assets/profilePicture1.png'
 import CommentCreate from '../comment/CommentCreate'
 import axios from 'axios'
 import { useSelector } from 'react-redux'
 
 function Comments(props) {
+  const navigate = useNavigate()
   const params = useParams()
   const stationId = Number(params.id)
   const [Comments, setComment] = useState(null)
@@ -50,7 +51,15 @@ function Comments(props) {
             <img
               src={profileImage} //
               alt="profilePicture"
-              style={{ width: '50px', heigth: '50px', marginRight: '10px' }}
+              style={{
+                width: '50px',
+                heigth: '50px',
+                marginRight: '10px',
+                cursor: 'pointer'
+              }}
+              onClick={() => {
+                navigate(`/MyPage/${username}`)
+              }}
             />
             <div
               style={{
@@ -61,7 +70,14 @@ function Comments(props) {
               }}
             >
               <div>
-                <h4 style={{ margin: '0px' }}>{username}</h4>
+                <h4
+                  style={{ margin: '0px', cursor: 'pointer' }}
+                  onClick={() => {
+                    navigate(`/MyPage/${username}`)
+                  }}
+                >
+                  {username}
+                </h4>
                 <p style={{ margin: '0px' }}>{content}</p>
                 <p
                   style={{

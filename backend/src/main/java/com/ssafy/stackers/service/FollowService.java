@@ -29,6 +29,10 @@ public class FollowService {
             throw new CustomException(ErrorCode.CANNOT_FOLLOW_MYSELF);
         }
 
+        if (followRepository.existsByFollowerIdAndFollowingId(followerId, followingId)) {
+            throw new CustomException(ErrorCode.ALREADY_FOLLOWING);
+        }
+
         Follow follow =
             Follow.builder()
                 .follower(memberService.findById(followerId))
