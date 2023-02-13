@@ -74,7 +74,7 @@ function ProfileEdit(props) {
     )
     setImage(uploadedImage)
     const imgsrc = document.getElementById('profileedit-img')
-    setImageurl(URL.createObjectURL(uploadedImage))
+    setImageurl(uploadedImage)
     imgsrc.src = imageurl
   }
 
@@ -203,6 +203,7 @@ function ProfileEdit(props) {
               <MyDropzone
                 onChangeImage={onChangeImage}
                 handleClose={handleClose}
+                profileImg={imageurl}
               />
             </Box>
           </Modal>
