@@ -95,7 +95,7 @@ function Record(props) {
   const getVideo = () => {
     navigator.mediaDevices
       .getUserMedia({
-        video: { width: 405, height: 720 }
+        video: { width: 333, height: 592 }
       })
       .then((stream) => {
         const video = videoRef.current
@@ -139,7 +139,7 @@ function Record(props) {
     return tmp.duration
   }
   return (
-    <div className="recordRoom">
+    <div className="record-video-section">
       <ReactMediaRecorder
         stopStreamsOnStop
         onStop={async (blobUrl, blob) => {
@@ -158,13 +158,12 @@ function Record(props) {
         }}
         render={({
           previewStream,
-          status,
           startRecording,
           stopRecording,
           mediaBlobUrl
         }) => {
           return (
-            <div className="recordRoom">
+            <div>
               <Modal className="recordModal" open={open}>
                 <Timer
                   classNAme="recordTimer"
@@ -190,9 +189,9 @@ function Record(props) {
                   className="stackVideo"
                   ref={stackRef}
                   src={mediaBlobUrl}
-                  width={405}
-                  height={720}
-                  style={{ objectFit: 'cover' }}
+                  width={333}
+                  height={592}
+                  style={{ objectFit: 'cover', marginTop: '12%' }}
                   controls
                 />
               )}
@@ -201,55 +200,59 @@ function Record(props) {
                   className="streamingRef"
                   ref={videoRef}
                   src={previewStream}
+                  style={{ objectFit: 'cover', marginTop: '12%' }}
                   autoPlay
                 />
               )}
-              {/* {enable && <VideoPreview stream={previewStream} />} */}
-              <div className="box">
+              <div className="control-btns">
                 {enable && (
-                  <IconButton
-                    fontSize="Large"
-                    color="primary"
+                  <button
+                    className="control-btn"
                     onClick={async () => {
                       handleEnable()
                       handleOpen()
                       getVideo()
-                      console.log('delay start')
                       await setDelay(3000)
-                      console.log('delay stop')
                       handleClose()
                       startRecording()
                       if (isStation) {
                         playVideo()
                         const dr = await delayDuration()
                         const rr = Math.round(dr * 1000)
-                        console.log('duration start')
                         await setDelay(rr)
-
                         stopRecording()
-                        console.log('stop~~~~~~~~~~')
                       } else {
                         await setDelay(60000)
-
                         stopRecording()
                       }
                     }}
                   >
-                    <PlayCircleFilledWhiteIcon />
-                  </IconButton>
+                    <PlayCircleFilledWhiteIcon
+                      style={{
+                        width: '45px',
+                        height: '45px',
+                        color: '#c4c4c4e0'
+                      }}
+                    />
+                  </button>
                 )}
                 {!enable && (
-                  <IconButton
-                    fontSize="Large"
-                    color="primary"
+                  <button
+                    className="control-btn enable"
                     onClick={() => {
                       activeHandle()
                       stopRecording()
                       handleEnable()
                     }}
                   >
-                    <StopCircleIcon />
-                  </IconButton>
+                    <StopCircleIcon
+                      style={{
+                        width: '45px',
+                        height: '45px',
+                        color: '#c4c4c4e0'
+                      }}
+                    />
+                  </button>
                 )}
               </div>
             </div>

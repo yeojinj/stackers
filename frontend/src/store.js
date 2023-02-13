@@ -51,7 +51,8 @@ const urlSlice = createSlice({
   initialState: { preUrl: '/' },
   reducers: {
     ChangeUrl: (state, action) => {
-      console.log(action)
+      state.preUrl = `${action.payload.pathname}${action.payload.search}`
+      console.log(state.preUrl)
     }
   }
 })
