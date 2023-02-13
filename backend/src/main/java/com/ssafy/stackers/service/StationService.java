@@ -163,6 +163,10 @@ public class StationService {
         return stationRepository.findByIsPublicAndMember(isPublic, member);
     }
 
+    public List<Station> findByMemberAndIsPublic(Member member, boolean isPublic){
+        return stationRepository.findByMemberAndIsPublic(member, isPublic);
+    }
+
     /**
      * Station List를 MainStationDto List로 변환하는 함수
      */
