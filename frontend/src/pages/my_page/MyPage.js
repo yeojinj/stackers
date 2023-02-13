@@ -292,6 +292,7 @@ function MyPage() {
       <>
         <div className="mystation-tap">
           <div className="popular-video">
+            {/* {publicStation.map((result, i) => { */}
             {dummy.map((result, i) => {
               return (
                 <div key={i}>
@@ -314,6 +315,7 @@ function MyPage() {
       <>
         <div className="mystation-tap">
           <div className="popular-video">
+            {/* {privateStation.map((result, i) => { */}
             {dummy.map((result, i) => {
               return (
                 <div key={i}>
