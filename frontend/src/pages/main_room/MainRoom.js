@@ -327,7 +327,17 @@ function MainRoom() {
                       )
                     })}
                   {!isloggin && (
-                    <div style={{ textAlign: 'center' }}>
+                    <div
+                      style={{
+                        fontSize: '1.8rem',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        textAlign: '',
+                        width: '1280px',
+                        height: '363px'
+                      }}
+                    >
                       더 보려면 로그인하세요!
                     </div>
                   )}
