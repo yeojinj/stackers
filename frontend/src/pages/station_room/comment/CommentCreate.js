@@ -27,7 +27,7 @@ function CommentCreate() {
             }
           })
             .then((response) => {
-              console.log(response.data)
+              setContent('')
               dispatch(CreateComment(1)) // 댓글을 다시 불러오기 위함
             })
             .catch((error) => {

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import StationControlButton from './StationControlButton'
 // import Video from '../../../components/Video'
 // import station from '../assets/station.png'
@@ -8,12 +8,24 @@ import ArrowCircleDownOutlinedIcon from '@mui/icons-material/ArrowCircleDownOutl
 import '../Station.css'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+
 function StationView(props) {
   const navigate = useNavigate()
   const preUrl = useSelector((state) => {
     return state.url.preUrl
   })
   const Info = props.info
+  const videoRef = useRef(null)
+  // const [auto, setAuto] = useState(false)
+
+  // function playVideo() {
+  //   return videoRef.current.play()
+  // }
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     playVideo()
+  //   }, [2000])
+  // })
 
   return (
     <div className="LeftStyle">
@@ -28,13 +40,18 @@ function StationView(props) {
           <video
             src={Info.videoPath}
             alt="station"
+            ref={videoRef}
             className="videoBox"
+            muted
+            autoPlay
             controls
+            loop
           />
         </div>
         <div className="stationControlButton">
           <StationControlButton
             stationId={props.stationId}
+            Info={Info}
           ></StationControlButton>
         </div>
       </div>

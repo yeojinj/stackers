@@ -13,7 +13,8 @@ function StationRoom() {
   useEffect(() => {
     axios({
       method: 'GET',
-      url: `/api/station/${stationId}`
+      url: `/api/station/${stationId}`,
+      headers: { Authorization: localStorage.getItem('accessToken') }
     })
       .then((response) => {
         setInfo(response.data)
