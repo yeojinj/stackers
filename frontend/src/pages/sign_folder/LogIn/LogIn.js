@@ -18,9 +18,6 @@ function LogIn(props) {
   const [password, setPassword] = useState('')
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const isLogged = useSelector((state) => {
-    return state.user.isLogged
-  })
 
   const [useButton, setUseButton] = useState(false)
 

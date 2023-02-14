@@ -17,6 +17,23 @@ function isEmptyObj(obj) {
 
 function RecordRoom() {
   const navigate = useNavigate()
+  const token = localStorage.getItem('accessToken')
+  const [username, setName] = useState('')
+  const checkToken = async () => {
+    await axios({
+      method: 'get',
+      url: `/api/member/user`,
+      headers: { Authorization: token }
+    })
+      .then((response) => {
+        console.log(response)
+      })
+      .catch((error) => {
+        console.error(error)
+        alert('로그인이 필요한 서비스입니다.')
+        navigate('/')
+      })
+  }
   const preUrl = useSelector((state) => {
     return state.url.preUrl
   })
@@ -36,16 +53,10 @@ function RecordRoom() {
   const handleClose = () => {
     setOpen(false)
   }
-  const userLogin = useSelector((state) => {
-    return state.user.isLogged
-  })
-
   useEffect(() => {
-    if (!userLogin) {
-      alert('로그인이 필요한 서비스입니다')
-      navigate('/')
-    }
-  }, [])
+    console.log('useCheckToken')
+    checkToken
+  }, [username])
 
   async function getVideo(src) {
     await setStack((preSrc) => {
