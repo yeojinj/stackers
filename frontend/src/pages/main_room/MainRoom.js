@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import StationListItem from '../../components/station/StationListItem'
-import '../../styles/mainroom.css'
-import './carousel-style.css'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
 import axios from 'axios'
 import LogIn from '../sign_folder/LogIn/LogIn'
+import '../../styles/mainroom.css'
+import './carousel-style.css'
 
 const dummy = [
   {
@@ -278,7 +278,7 @@ function MainRoom() {
             <div
               className="chip top"
               style={{
-                marginLeft: 'auto'
+                marginLeft: '82%'
               }}
             >
               ⚡️ 당신이 놓친 스테이션
@@ -305,7 +305,8 @@ function MainRoom() {
               <div
                 className="chip bottom"
                 style={{
-                  transform: ' scale(1.05) rotate(-2.5deg)'
+                  transform: ' scale(1.05) rotate(-2.5deg)',
+                  marginTop: '20px'
                 }}
               >
                 🔥 지금 가장 뜨거운 스테이션
@@ -328,11 +329,15 @@ function MainRoom() {
             </div>
           </FadeContent>
           <FadeContent>
-            <div className="station-center" style={{ color: 'white' }}>
+            <div
+              className="station-center popular-section"
+              style={{ color: 'white' }}
+            >
               <div
                 className="chip bottom"
                 style={{
-                  marginLeft: 'auto',
+                  marginLeft: '73%',
+                  marginBottom: '-30px',
                   transform: 'scale(1.05) rotate(2.5deg)'
                 }}
               >
@@ -355,7 +360,7 @@ function MainRoom() {
                   {!isloggin && (
                     <div className="non-login-section-div">
                       <button className="login-btn-main" onClick={handleOpen}>
-                        로그인 후 확인해주세요
+                        로그인 후 확인해보세요
                       </button>
                     </div>
                   )}

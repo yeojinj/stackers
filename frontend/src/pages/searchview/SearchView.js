@@ -250,7 +250,7 @@ function SearchView() {
             ))}
           </div>
         </div>
-        <div className="tab-content">{menuArr[currentTab].content}</div>
+        <div className="tab-content-1">{menuArr[currentTab].content}</div>
       </div>
     </div>
   )
