@@ -26,7 +26,10 @@ function UploadForm(props) {
   const data = useSelector((state) => {
     return state.stack
   })
+
   const musicName = data.music
+
+  console.log(musicName)
   const username = useSelector((state) => {
     return state.user.username
   })
@@ -40,8 +43,11 @@ function UploadForm(props) {
   const object = props.src.src.src
 
   const filedownloadlink = window.URL.createObjectURL(object)
-
+  const [music, setMusic] = useState('')
   const handleChange = (e) => {
+    if (e.target.name === 'music') {
+      setMusic((music) => e.target.value)
+    }
     dispatch(CreateStack([e.target.name, e.target.value]))
   }
   const [enable, setEnable] = useState(true)
@@ -119,7 +125,7 @@ function UploadForm(props) {
         )}
       </div>
       <form className="section-left" onSubmit={handleSubmit}>
-        {musicName !== '' ? (
+        {musicName !== '' && music === '' ? (
           <div className="input__items">
             <label className="upload-label">노래 제목</label>
             <input
@@ -137,8 +143,8 @@ function UploadForm(props) {
               className="upload-input"
               type="text"
               name="music"
-              value={data.music}
-              onClick={(e) => handleChange(e)}
+              value={music}
+              onChange={(e) => handleChange(e)}
             />
           </div>
         )}
