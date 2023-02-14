@@ -278,7 +278,7 @@ function MainRoom() {
             <div
               className="chip top"
               style={{
-                marginLeft: '82%'
+                marginLeft: 'auto'
               }}
             >
               ⚡️ 당신이 놓친 스테이션
@@ -332,7 +332,7 @@ function MainRoom() {
               <div
                 className="chip bottom"
                 style={{
-                  marginLeft: '73%',
+                  marginLeft: 'auto',
                   transform: 'scale(1.05) rotate(2.5deg)'
                 }}
               >
