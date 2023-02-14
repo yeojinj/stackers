@@ -26,6 +26,7 @@ function UploadForm(props) {
   const data = useSelector((state) => {
     return state.stack
   })
+  const musicName = data.music
   const username = useSelector((state) => {
     return state.user.username
   })
@@ -118,16 +119,29 @@ function UploadForm(props) {
         )}
       </div>
       <form className="section-left" onSubmit={handleSubmit}>
-        <div className="input__items">
-          <label className="upload-label">노래 제목</label>
-          <input
-            className="upload-input"
-            type="text"
-            name="music"
-            value={data.music}
-            onChange={(e) => handleChange(e)}
-          />
-        </div>
+        {musicName !== '' ? (
+          <div className="input__items">
+            <label className="upload-label">노래 제목</label>
+            <input
+              className="upload-input"
+              type="text"
+              name="music"
+              disabled={true}
+              defaultValue={musicName}
+            ></input>
+          </div>
+        ) : (
+          <div className="input__items">
+            <label className="upload-label">노래 제목</label>
+            <input
+              className="upload-input"
+              type="text"
+              name="music"
+              value={data.music}
+              onClick={(e) => handleChange(e)}
+            />
+          </div>
+        )}
         <div className="input__items">
           <label className="upload-label">스테이션 설명</label>
           <textarea
