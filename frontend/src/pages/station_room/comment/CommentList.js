@@ -4,15 +4,20 @@ import { useParams, useNavigate } from 'react-router'
 import profilePicture1 from '../assets/profilePicture1.png'
 import CommentCreate from '../comment/CommentCreate'
 import axios from 'axios'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { CreateComment } from '../../../store'
 
 function Comments(props) {
   const navigate = useNavigate()
   const params = useParams()
+  const dispatch = useDispatch()
   const stationId = Number(params.id)
   const [Comments, setComment] = useState(null)
   const reload = useSelector((state) => {
     return state.CreateComments.value
+  })
+  const loginUser = useSelector((state) => {
+    return state.user
   })
   useEffect(() => {
     axios({
@@ -44,6 +49,32 @@ function Comments(props) {
       if (profileImage === 'path') {
         profileImage = profilePicture1
       }
+      // 만약 사용중인 유저가 댓글 작성자면
+      let deleteButton = null
+      if (loginUser.username === Comments[i].commenterUsername) {
+        console.log(Comments[i])
+        deleteButton = (
+          <button
+            onClick={() => {
+              axios({
+                method: 'delete',
+                url: `/api/station/comment/${Comments[i].commentId}`,
+                headers: { Authorization: localStorage.getItem('accessToken') }
+              })
+                .then((response) => {
+                  alert('댓글이 삭제 되었습니다.')
+                  dispatch(CreateComment(1))
+                })
+                .catch((error) => {
+                  console.log(error)
+                })
+            }}
+          >
+            삭제
+          </button>
+        )
+      }
+      console.log(deleteButton)
       commentLst.push(
         // 댓글 각각 추가
         <div key={i} style={{ margin: '10px' }}>
@@ -88,6 +119,7 @@ function Comments(props) {
                   {releaseDate}
                 </p>
               </div>
+              {deleteButton}
             </div>
           </div>
         </div>

@@ -38,12 +38,12 @@ function SignUp() {
     ) {
       if (isUsername && isPassword && isEmail) {
         setMembership(false)
-        console.log('버튼활성화 됨')
+        // console.log('버튼활성화 됨')
       } else {
-        console.log('버튼활성화 안됨.')
+        // console.log('버튼활성화 안됨.')
       }
     } else {
-      console.log('버튼활성화 안됨.')
+      // console.log('버튼활성화 안됨.')
     }
   }, [isUsername, isPassword, isEmail])
 
@@ -120,7 +120,7 @@ function SignUp() {
         type="button"
         onClick={() => {
           alert(`전송중입니다.
-입력 후 확인해주세요.`)
+확인 후 입력해주세요.`)
           axios({
             method: 'post',
             url: '/api/mail/mail-confirm',
@@ -151,10 +151,11 @@ function SignUp() {
         onClick={() => {
           if (mailConfirm === authentication) {
             setIsEmail(true)
-            console.log('인증번호 통과')
+            // console.log('인증번호 통과')
           } else {
             setIsEmail(false)
-            console.log('인증번호 탈락')
+            // console.log('인증번호 탈락')
+            alert('인증번호를 다시 입력해주세요.')
           }
         }}
       >
@@ -179,6 +180,8 @@ function SignUp() {
     )
   }
 
+  const [idMessage, setIdMessage] = useState(null)
+  const [pwMessage, setPwMessage] = useState(null)
   return (
     <div>
       <div className="signup-container">
@@ -222,28 +225,50 @@ function SignUp() {
             // usernameCSS 값 변경 조건
             onBlur={() => {
               if (5 <= username.length && username.length <= 20) {
-                console.log('username 아이디 길이 통과')
+                // console.log('username 아이디 길이 통과')
                 if (!test_spc.test(username)) {
                   // 특수문자, 공백 미포함시
-                  console.log('username 특수문자, 공백 없어요 통과')
+                  // console.log('username 특수문자, 공백 없어요 통과')
                   if (username === username.toLowerCase()) {
                     // 소문자만 있는지.
-                    setIsUsername(true)
-                    console.log('username 최종통과')
+                    // console.log('username 조건 최종통과')
+                    axios({
+                      method: 'get',
+                      url: `/api/member/check-username/${username}`
+                    })
+                      .then((response) => {
+                        // console.log(response.data)
+                        if (response.data) {
+                          setIdMessage('사용가능한 아이디입니다.')
+                          setIsUsername(true)
+                        } else {
+                          setIdMessage('이미 존재하는 아이디입니다.')
+                          setIsUsername(false)
+                        }
+                      })
+                      .catch((error) => {
+                        // console.log(error)
+                      })
                   } else {
                     setIsUsername(false)
-                    console.log('username 대문자 빼세요')
+                    setIdMessage(
+                      '아이디는 5~20자 영어 소문자, 숫자로 구성해야 합니다.'
+                    )
                   }
                 } else {
-                  console.log('username 특수문자, 공백, 한글이 있어요.')
+                  setIdMessage('아이디에 특수문자, 공백, 한글이 있어요.')
                   setIsUsername(false)
                 }
               } else {
                 console.log('username 길이 탈락')
+                setIdMessage(
+                  '아이디는 5~20자 영어 소문자, 숫자로 구성해야 합니다.'
+                )
                 setIsUsername(false)
               }
             }}
           />
+          <span>{idMessage}</span>
           <input
             className={passwordCSS}
             placeholder="비밀번호(알파벳, 숫자, 특수문자를 포함한 8~16자로 구성)"
@@ -255,8 +280,12 @@ function SignUp() {
             }}
             // password 값 변경 조건
             onBlur={() => {
-              if (8 <= password.length && password.length <= 16) {
-                console.log('비밀번호 길이 통과')
+              if (
+                8 <= password.length &&
+                password.length <= 16 &&
+                password.length !== 0
+              ) {
+                // console.log('비밀번호 길이 통과')
                 if (
                   password_spc1.test(password) &&
                   password_spc2.test(password) &&
@@ -265,19 +294,22 @@ function SignUp() {
                   password_spc5.test(password)
                 ) {
                   setIsPassword(true)
-                  console.log('비밀번호 통화')
+                  // console.log('비밀번호 통화')
                 } else {
-                  console.log(
-                    'password에 영어소문자, 영어대문자, 숫자, 특수문자를 포함시켜주세요. 공백은 제외!'
+                  setPwMessage(
+                    '비밀번호는 영어소문자, 영어대문자, 숫자, 특수문자를 포함시켜주세요. 공백은 제외!'
                   )
                   setIsPassword(false)
                 }
               } else {
-                console.log('비밀번호 탈락')
+                setPwMessage(
+                  '비밀번호는 영어소문자, 영어대문자, 숫자, 특수문자를 포함시켜주세요. 공백은 제외!'
+                )
                 setIsPassword(false)
               }
             }}
           />
+          <span>{pwMessage}</span>
           <input
             className={emailCSS}
             placeholder="이메일"

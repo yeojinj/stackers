@@ -54,7 +54,7 @@ function LogIn(props) {
         </button>
       )
     }
-    console.log(useButton)
+    // console.log(useButton)
   }, [useButton])
 
   return (
@@ -96,7 +96,21 @@ function LogIn(props) {
                 props.handleClose()
               })
               .catch((error) => {
-                console.error(error)
+                // console.error(error)
+                axios({
+                  method: 'get',
+                  url: `/api/member/check-username/${username}`
+                })
+                  .then((response) => {
+                    if (response.data) {
+                      alert('존재하지 않는 아이디입니다.')
+                    } else {
+                      alert('비밀번호가 틀렸습니다.')
+                    }
+                  })
+                  .catch((error) => {
+                    // console.error(error)
+                  })
               })
           }}
         >
