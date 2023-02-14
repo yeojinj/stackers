@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, memo } from 'react'
 import './Record'
 import Tag from './ModalTag'
 import './UploadForm.css'
@@ -108,104 +108,87 @@ function UploadForm(props) {
     }
   }
   return (
-    <div className="upload-form-container">
-      <div className="section-right">
-        <video
-          className="stack-video"
-          src={filedownloadlink}
-          width={258}
-          height={402}
-          style={{ objectFit: 'cover' }}
-          controls
-        />
-        {filedownloadlink && (
-          <a href={filedownloadlink} download>
-            <button className="button-download">나의 스택 다운로드</button>
-          </a>
-        )}
-      </div>
-      <form className="section-left" onSubmit={handleSubmit}>
-        {musicName !== '' && music === '' ? (
-          <div className="input__items">
-            <label className="upload-label">노래 제목</label>
-            <input
-              className="upload-input"
-              type="text"
-              name="music"
-              disabled={true}
-              defaultValue={musicName}
-            ></input>
-          </div>
-        ) : (
-          <div className="input__items">
-            <label className="upload-label">노래 제목</label>
-            <input
-              className="upload-input"
-              type="text"
-              name="music"
-              value={music}
-              onChange={(e) => handleChange(e)}
-            />
-          </div>
-        )}
+    <form className="section-left" onSubmit={handleSubmit}>
+      {musicName !== '' && music === '' ? (
         <div className="input__items">
-          <label className="upload-label">스테이션 설명</label>
-          <textarea
+          <label className="upload-label">노래 제목</label>
+          <input
             className="upload-input"
             type="text"
-            name="content"
-            value={data.content}
+            name="music"
+            disabled={true}
+            defaultValue={musicName}
+          ></input>
+        </div>
+      ) : (
+        <div className="input__items">
+          <label className="upload-label">노래 제목</label>
+          <input
+            className="upload-input"
+            type="text"
+            name="music"
+            value={music}
             onChange={(e) => handleChange(e)}
-            style={{ height: '90px', fontFamily: 'Pretendard' }}
           />
         </div>
+      )}
+      <div className="input__items">
+        <label className="upload-label">스테이션 설명</label>
+        <textarea
+          className="upload-input"
+          type="text"
+          name="content"
+          value={data.content}
+          onChange={(e) => handleChange(e)}
+          style={{ height: '90px', fontFamily: 'Pretendard' }}
+        />
+      </div>
+      <div className="input__items">
+        <label className="upload-label">태그</label>
+        <Tag />
+      </div>
+      <div className="input__items">
+        <InstTag />
+      </div>
+      <div className="checkbox-container">
         <div className="input__items">
-          <label className="upload-label">태그</label>
-          <Tag />
-        </div>
-        <div className="input__items">
-          <InstTag />
-        </div>
-        <div className="checkbox-container">
-          <div className="input__items">
-            <label className="upload-label">공개 범위 설정</label>
-            <div>
-              <label style={{ marginRight: '10px' }}>
-                <input
-                  type="radio"
-                  name="isPublic"
-                  value="public"
-                  onChange={(e) => handleChange(e)}
-                  defaultChecked
-                />
-                공개
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="isPublic"
-                  value="private"
-                  onChange={(e) => handleChange(e)}
-                  style={{ fontSize: '0.9em' }}
-                />
-                비공개
-              </label>
-            </div>
+          <label className="upload-label">공개 범위 설정</label>
+          <div>
+            <label style={{ marginRight: '10px' }}>
+              <input
+                type="radio"
+                name="isPublic"
+                value="public"
+                onChange={(e) => handleChange(e)}
+                defaultChecked
+              />
+              공개
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="isPublic"
+                value="private"
+                onChange={(e) => handleChange(e)}
+                style={{ fontSize: '0.9em' }}
+              />
+              비공개
+            </label>
           </div>
-          {enable && <CheckComplete />}
         </div>
-        <div className="upload-btn-container">
-          <button
-            type="submit"
-            className="button-download button-complete"
-            style={{ width: '20%' }}
-            onClick={handleSubmit}
-          >
-            업로드
-          </button>
-        </div>
-      </form>
-    </div>
+        {enable && <CheckComplete />}
+      </div>
+      <div className="upload-btn-container">
+        <button
+          type="submit"
+          className="button-download button-complete"
+          style={{ width: '20%' }}
+          onClick={handleSubmit}
+        >
+          업로드
+        </button>
+      </div>
+    </form>
   )
 }
-export default UploadForm
+export default UploadForm = memo(UploadForm)
