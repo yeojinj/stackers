@@ -278,7 +278,7 @@ function MainRoom() {
             <div
               className="chip top"
               style={{
-                marginLeft: '82%'
+                marginLeft: 'auto'
               }}
             >
               ⚡️ 당신이 놓친 스테이션
@@ -336,7 +336,7 @@ function MainRoom() {
               <div
                 className="chip bottom"
                 style={{
-                  marginLeft: '73%',
+                  marginLeft: 'auto',
                   marginBottom: '-30px',
                   transform: 'scale(1.05) rotate(2.5deg)'
                 }}
@@ -360,7 +360,7 @@ function MainRoom() {
                   {!isloggin && (
                     <div className="non-login-section-div">
                       <button className="login-btn-main" onClick={handleOpen}>
-                        로그인 후 확인해보세요
+                        더 보려면 로그인하세요!
                       </button>
                     </div>
                   )}

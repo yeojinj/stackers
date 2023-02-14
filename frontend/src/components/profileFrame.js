@@ -27,11 +27,7 @@ function profileFrame() {
     const page = e.target.textContent
     if (page === '내 프로필') {
       navigate(`/MyPage/${loginUser.username}`)
-    } else if (page === '비밀번호 변경') {
-      // 비밀번호 변경 페이지로 이동시키기
-      // navigate('')
-      console.log(page)
-    } else if (page === '관리자 연결') {
+    } else if (page === '의견 보내기') {
       window.location.href = 'mailto:www.stackers.site@gmail.com'
     } else if (page === '로그아웃') {
       // 로그아웃 시키기
@@ -39,13 +35,7 @@ function profileFrame() {
       navigate('/')
     }
   }
-  const profileList = [
-    '내 프로필',
-    '비밀번호 변경',
-    '도움말',
-    '관리자 연결',
-    '로그아웃'
-  ]
+  const profileList = ['내 프로필', '의견 보내기', '로그아웃']
 
   return (
     <div>

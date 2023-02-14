@@ -1,6 +1,6 @@
 /* eslint-disable */
 import Record from './Record.js'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import StackUploadModal from './StackUploadModal'
 import Modal from '@mui/material/Modal'
@@ -18,9 +18,9 @@ function isEmptyObj(obj) {
 function RecordRoom() {
   const navigate = useNavigate()
   const preUrl = useSelector((state) => {
-    console.log('preUrl1', state.url.preUrl)
     return state.url.preUrl
   })
+
   const params = useParams()
   const stationId = params.preId
   const goBack = () => {
@@ -30,12 +30,22 @@ function RecordRoom() {
   const [stack, setStack] = useState({})
 
   const handleOpen = () => {
-    setOpen(true)
+    return setOpen(true)
   }
 
   const handleClose = () => {
     setOpen(false)
   }
+  const userLogin = useSelector((state) => {
+    return state.user.isLogged
+  })
+
+  useEffect(() => {
+    if (!userLogin) {
+      alert('로그인이 필요한 서비스입니다')
+      navigate('/')
+    }
+  }, [])
 
   async function getVideo(src) {
     await setStack((preSrc) => {
