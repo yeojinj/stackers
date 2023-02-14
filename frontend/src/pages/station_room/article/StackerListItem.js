@@ -29,7 +29,7 @@ function StackerListItem(props) {
             onClick={() => {
               navigate(`/Mypage/${musicians[i].username}`)
             }}
-            style={{ cursor: 'pointer' }}
+            className="profile-participant"
           />
         </p>
         <p className="station-Participant-name">
