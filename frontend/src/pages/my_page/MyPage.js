@@ -40,6 +40,11 @@ function MyPage() {
 
   const navigate = useNavigate()
 
+  const gotoFollow = () => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+    navigate(`/Follow/${profileUsername}/`)
+  }
+
   // 있는 유저인지 확인
   function isOurUser() {
     axios({
@@ -433,6 +438,7 @@ function MyPage() {
   const selectMenuHandler = (index) => {
     clickTab(index)
   }
+
   return (
     <div className="my-page-container">
       <Modal open={open} onClose={handleClose}>
@@ -477,12 +483,22 @@ function MyPage() {
                     <p className="profile-Count-content">스테이션</p>
                     <b>{publicStation.length + privateStation.length}</b>
                   </div>
-                  <div style={{ display: 'flex', marginRight: '8%' }}>
-                    <p className="profile-Count-content">팔로워</p>
+                  <div
+                    style={{
+                      display: 'flex',
+                      marginRight: '8%',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <p className="profile-Count-content" onClick={gotoFollow}>
+                      팔로워
+                    </p>
                     <b>{followerCnt}</b>
                   </div>
-                  <div style={{ display: 'flex' }}>
-                    <p className="profile-Count-content">팔로잉</p>
+                  <div style={{ display: 'flex', cursor: 'pointer' }}>
+                    <p className="profile-Count-content" onClick={gotoFollow}>
+                      팔로잉
+                    </p>
                     <b>{followingCnt}</b>
                   </div>
                 </div>
