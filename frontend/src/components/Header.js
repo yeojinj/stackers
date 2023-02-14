@@ -77,6 +77,7 @@ function Header() {
 
   // 로고 클릭시 메인페이지로 이동
   const navigateToMain = () => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
     setInputValue('')
     navigate('/')
   }
@@ -93,6 +94,7 @@ function Header() {
 
   // 검색 아이콘 클릭 -> 검색결과페이지 이동
   const gotoSearch = () => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
     if (inputValue) {
       dispatch(SearchKeyword(inputValue))
       navigate(`/SearchView/?${inputValue}`, {

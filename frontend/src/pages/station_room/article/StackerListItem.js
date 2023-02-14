@@ -27,7 +27,7 @@ function StackerListItem(props) {
             src={profileImage}
             alt="profile"
             onClick={() => {
-              navigate(`Mypage/${musicians[i].username}`)
+              navigate(`/Mypage/${musicians[i].username}`)
             }}
             style={{ cursor: 'pointer' }}
           />

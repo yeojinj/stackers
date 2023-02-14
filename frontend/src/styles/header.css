@@ -1,6 +1,6 @@
 .header {
   position: fixed;
-  z-index: 2;
+  z-index: 20;
   left: 0;
   top: 0;
   width: 100%;
@@ -92,6 +92,7 @@
   cursor: pointer;
 }
 .selected {
+  border-radius: 8px;
   background-color: rgba(248, 248, 248, 1);
 }
 

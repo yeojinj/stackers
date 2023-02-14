@@ -55,7 +55,7 @@ function SearchView() {
     return (
       <>
         <div className="popular-tap">
-          <div className="popular-title-video">
+          <div className="popular-title-account">
             <span className="popular-title-style">스테이션</span>
             {Array.isArray(stationList) && stationList.length !== 0 && (
               <span className="popular-more" onClick={moveStack}>
@@ -250,7 +250,7 @@ function SearchView() {
             ))}
           </div>
         </div>
-        <div className="tab-content">{menuArr[currentTab].content}</div>
+        <div className="tab-content-1">{menuArr[currentTab].content}</div>
       </div>
     </div>
   )

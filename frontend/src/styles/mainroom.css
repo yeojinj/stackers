@@ -22,9 +22,10 @@
   margin-bottom: 10%;
   display: flex;
   flex-wrap: wrap;
-  /* padding-right: 2%; */
 }
-
+.popular-section {
+  height: 490px;
+}
 .rank-number {
   color: white;
   font-size: 6em;
