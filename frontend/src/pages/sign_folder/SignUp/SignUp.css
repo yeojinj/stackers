@@ -1,8 +1,9 @@
 .signup-container {
-  width: 400px;
+  width: 500px;
   height: 100%;
   /* border: 1px solid black; */
   margin: auto;
+  font-family: Pretendard;
 }
 .signup-header {
   text-align: center;
@@ -104,4 +105,18 @@
   cursor: pointer;
   background-color: rgba(42, 32, 150, 1);
   color: white;
+}
+.input-and-messages {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.small-message {
+  font-size: 0.8em;
+  margin-bottom: 5px;
+  width: 400px;
+  display: flex;
+  justify-content: flex-end;
 }
