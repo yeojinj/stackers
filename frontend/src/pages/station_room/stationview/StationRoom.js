@@ -24,11 +24,9 @@ function StationRoom() {
       headers: { Authorization: localStorage.getItem('accessToken') }
     })
       .then((response) => {
-        // console.log('새로 실행')
         setInfo(response.data)
       })
-      .catch((error) => {
-        console.log(error)
+      .catch(() => {
         navigate('/NotFound')
       })
   }, [stationId])

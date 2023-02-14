@@ -14,7 +14,7 @@ function SignUp() {
   const [mailConfirm, setMailConfirm] = useState('') // 입력하는 인증번호
   const [authentication, setAuthentication] = useState(null) // 받아온 인증번호
   const navigate = useNavigate()
-  const [pwType, setPwType] = useState('text')
+  const [pwType, setPwType] = useState('password')
 
   const [isSend, setIsSend] = useState(false) // 메일 전송했는지
   const [isUsername, setIsUsername] = useState(null)

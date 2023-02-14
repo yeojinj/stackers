@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import Button from '@mui/material/Button'
-import StackerListItem from './StackerListItem'
-// import profile from '../assets/profile.png'
-import '../Station.css'
-import profile from '../assets/profile.png'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+
+import Button from '@mui/material/Button'
+import StackerListItem from './StackerListItem'
+import profile from '../assets/profile.png'
+
+import '../Station.css'
 
 function ArticleDetail(props) {
   const navigate = useNavigate()
@@ -29,10 +30,8 @@ function ArticleDetail(props) {
   let followbutton = null
   if (!isfollowing) {
     followbutton = (
-      <Button
-        variant="outlined"
-        size="small"
-        color="secondary"
+      <button
+        className="article-follow-button"
         onClick={() => {
           axios({
             method: 'post',
@@ -44,8 +43,7 @@ function ArticleDetail(props) {
               Authorization: localStorage.getItem('accessToken')
             }
           })
-            .then((res) => {
-              // console.log('[팔로잉이 되었습니다!]', res.data)
+            .then(() => {
               setIsfollow(true)
             })
             .catch((err) => {
@@ -54,7 +52,7 @@ function ArticleDetail(props) {
         }}
       >
         팔로우
-      </Button>
+      </button>
     )
   } else if (isfollowing) {
     followbutton = (
@@ -74,7 +72,6 @@ function ArticleDetail(props) {
             }
           })
             .then((res) => {
-              // console.log('[팔로잉이 취소되었습니다!]', res.data)
               setIsfollow(false)
             })
             .catch((err) => {
@@ -115,8 +112,8 @@ function ArticleDetail(props) {
             style={{ cursor: 'pointer' }}
           />
           <div className="station-profile-name_nickname">
-            <p className="station-profile-id">{writer.username}</p>
-            <p className="station-profile-nickname">{writer.nickname}</p>
+            <div className="station-profile-id">{writer.username}</div>
+            <div className="station-profile-nickname">{writer.nickname}</div>
           </div>
           <div
             className="station-follow"
@@ -132,7 +129,7 @@ function ArticleDetail(props) {
           {stationInformation}
           <span>{tags}</span>
         </p>
-        <p style={{ color: 'gray' }}>{createDate}</p>
+        <p style={{ color: 'gray', fontSize: '0.85em' }}>{createDate}</p>
       </div>
       <StackerListItem musicians={props.info.musicians}></StackerListItem>
     </div>

@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, { useState, useEffect, useCallback } from 'react'
 import './ProfileEdit.css'
+import { useNavigate } from 'react-router'
 // import { useSelector, useDispatch } from 'react-redux'
 // import InstTag from './InstTag'
 import NoImg from '../../assets/noImg.svg'
@@ -9,13 +10,8 @@ import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
 import MyDropzone from './MyDropzone'
 import axios from 'axios'
-// import { TagList } from '../../store.js'
-// import ImageCrop from './ImageCrop'
 
 function ProfileEdit(props) {
-  // const tags = useSelector((state) => {
-  //   return state.TagList.tags
-  // })
   const [id, setId] = useState('')
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
@@ -23,6 +19,8 @@ function ProfileEdit(props) {
   const [bio, setBio] = useState('')
   // const [instruments, setInstruments] = useState(tags)
   const [party, setParty] = useState('')
+
+  const navigate = useNavigate()
 
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
@@ -140,6 +138,7 @@ function ProfileEdit(props) {
       })
       .then((res) => {
         console.log('[성공]', res.data)
+        navigate(`/MyPage/${username}`)
       })
       .catch((err) => console.log(err))
     props.handleClose()

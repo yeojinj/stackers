@@ -366,8 +366,8 @@ function MainRoom() {
                   )}
                   {isloggin && followerStation.length === 0 && (
                     <div className="non-login-section-div">
-                      <div style={{ fontSize: '1.8em' }}>
-                        아직 스테이션이 없네요ㅠ.ㅠ
+                      <div style={{ fontSize: '1.2em' }}>
+                        아직 팔로잉 스태커들의 영상이 없네요ㅠ.ㅠ
                       </div>
                     </div>
                   )}
