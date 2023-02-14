@@ -43,6 +43,10 @@ function StationListItem({ isRanking, isSearch, station, index, saveList }) {
     navigate(`/StationRoom/${station.id}`)
   }
 
+  const gotoRecord = (id) => {
+    navigate(`/RecordRoom/${id}`)
+  }
+
   // 메인페이지, 마이페이지 스테이션 조회
   const IsRanking = () => {
     // 스테이션 랭킹
@@ -126,7 +130,14 @@ function StationListItem({ isRanking, isSearch, station, index, saveList }) {
             loop
           />
           {!station.complete && (
-            <img src={logo} width={38} className="icon-is-not-complete" />
+            <img
+              src={logo}
+              width={38}
+              className="icon-is-not-complete"
+              onClick={() => {
+                gotoRecord(station.id)
+              }}
+            />
           )}
           <div className="station-info">
             <p className="station-description">{station.content}</p>
