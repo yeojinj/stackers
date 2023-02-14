@@ -28,8 +28,15 @@ function StationRoom() {
         setInfo(response.data)
       })
       .catch((error) => {
-        console.log(error)
-        navigate('/NotFound')
+        console.log(error.response.status)
+        if (error.response.status === 500 || error.response.status === '500') {
+          navigate('/Forbidden')
+        } else if (
+          error.response.status === 404 ||
+          error.response.status === '404'
+        ) {
+          navigate('/NotFound')
+        }
       })
   }, [stationId])
 

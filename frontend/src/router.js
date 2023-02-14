@@ -11,7 +11,7 @@ import ProfileEdit from './pages/profile_edit/ProfileEdit'
 import UploadLoading from './pages/record_room/UploadLoading'
 import HeaderAndFooter from './components/HeaderAndFooter'
 import NotFound from './components/NotFound'
-
+import Forbidden from './components/Forbidden'
 const router = createBrowserRouter([
   {
     path: '/',
@@ -62,6 +62,10 @@ const router = createBrowserRouter([
   {
     path: '/UploadLoading',
     element: <UploadLoading />
+  },
+  {
+    path: '/Forbidden',
+    element: <Forbidden />
   },
   // {
   //   path: '/NotFound',
