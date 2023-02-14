@@ -1,13 +1,17 @@
 import React from 'react'
 import '../styles/notfound.css'
 import logo from '../assets/logo_white.png'
+import { useNavigate } from 'react-router-dom'
+
 function NotFound() {
+  const navigate = useNavigate()
+
   return (
     <div className="not-found">
       <div className="stars"></div>
       <div className="twinkling"></div>
       <div className="wrapper">
-        <ul id="scene" className="scene">
+        <ul id="scene" className="scene" onClick={() => navigate('/')}>
           <li className="layer" data-depth="0.00"></li>
           <li className="layer" data-depth="0.30">
             <a href="#0">
