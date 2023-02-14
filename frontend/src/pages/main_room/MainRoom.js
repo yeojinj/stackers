@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { SaveCom, SaveUnCom, SaveRank, SaveFollower } from '../../store.js'
-// import StationList from '../../components/station/StationList'
 import StationListItem from '../../components/station/StationListItem'
 import '../../styles/mainroom.css'
 import './carousel-style.css'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import Box from '@mui/material/Box'
+import Modal from '@mui/material/Modal'
 import axios from 'axios'
+import LogIn from '../sign_folder/LogIn/LogIn'
 
 const dummy = [
   {
@@ -127,6 +129,10 @@ function MainRoom() {
   const login = useSelector((state) => {
     return state.user.isLogged
   })
+
+  const [open, setOpen] = useState(false)
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
 
   useEffect(() => {
     setLogin(login)
@@ -349,18 +355,10 @@ function MainRoom() {
                       )
                     })}
                   {!isloggin && (
-                    <div
-                      style={{
-                        fontSize: '1.8rem',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        textAlign: '',
-                        width: '1280px',
-                        height: '363px'
-                      }}
-                    >
-                      더 보려면 로그인하세요!
+                    <div className="non-login-section-div">
+                      <button className="login-btn-main" onClick={handleOpen}>
+                        더 보려면 로그인하세요!
+                      </button>
                     </div>
                   )}
                 </Carousel>
@@ -369,6 +367,11 @@ function MainRoom() {
           </FadeContent>
         </div>
       </div>
+      <Modal open={open} onClose={handleClose}>
+        <Box>
+          <LogIn handleClose={handleClose} />
+        </Box>
+      </Modal>
     </div>
   )
 }
