@@ -2,11 +2,6 @@
 import React, { useEffect, useState } from 'react'
 import './LogIn.css'
 import logo from '../../../assets/logo.svg'
-import TextField from '@mui/material/TextField'
-import Button from '@mui/material/Button'
-import naverLogo from './naverLogo.svg'
-import kakaoLogo from './kakaoLogo.png'
-import GoogleLogo from './GoogleLogo.png'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
@@ -134,15 +129,8 @@ function LogIn(props) {
             }}
           />
 
-          <div className="find-password-div">
-            <Link
-              to="/SignUp"
-              style={{ marginLeft: 'auto', textDecoration: 'none' }}
-            >
-              비밀번호를 잊어버렸나요?
-            </Link>
-          </div>
-
+          <hr />
+          <hr />
           {loginButton}
 
           <div className="login-footer">

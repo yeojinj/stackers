@@ -125,7 +125,7 @@ function StationListItem({ isRanking, isSearch, station, index, saveList }) {
             }}
             loop
           />
-          {!station.complete && station.heartCnt >= 0 && (
+          {!station.complete && (
             <img src={logo} width={38} className="icon-is-not-complete" />
           )}
           <div className="station-info">
@@ -137,7 +137,7 @@ function StationListItem({ isRanking, isSearch, station, index, saveList }) {
                 })}
             </div>
             <div className="station-account">
-              <div className="account-info">
+              <div className="account-info" style={{ border: 'none' }}>
                 <img
                   src={
                     station.imgPath !== 'path' ? station.imgPath : DefaultImg
