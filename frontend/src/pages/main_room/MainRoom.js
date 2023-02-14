@@ -355,7 +355,7 @@ function MainRoom() {
                   {!isloggin && (
                     <div className="non-login-section-div">
                       <button className="login-btn-main" onClick={handleOpen}>
-                        더 보려면 로그인하세요!
+                        로그인 후 확인해주세요
                       </button>
                     </div>
                   )}
