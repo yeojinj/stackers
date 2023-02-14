@@ -82,7 +82,7 @@ const stackSlice = createSlice({
     instrument: '',
     heartCnt: 0,
     remainDepth: 3,
-    isPublic: 0,
+    isPublic: 1,
     isComplete: 0,
     tags: [],
     prevStationId: -1,
@@ -141,7 +141,7 @@ const stackSlice = createSlice({
       state.instrument = ''
       state.heartCnt = 0
       state.remainDepth = 3
-      state.isPublic = 0
+      state.isPublic = 1
       state.isComplete = 0
       state.tags = []
       state.prevStationId = -1
