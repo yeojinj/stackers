@@ -217,8 +217,8 @@ function MainRoom() {
       }
     })
       .then((res) => {
-        // setFollwerStation(res.data)
-        setFollwerStation(dummy)
+        setFollwerStation(res.data)
+        // setFollwerStation(dummy)
       })
       .catch((err) => console.log(err))
   }
@@ -357,6 +357,13 @@ function MainRoom() {
                       <button className="login-btn-main" onClick={handleOpen}>
                         로그인 후 확인해주세요
                       </button>
+                    </div>
+                  )}
+                  {isloggin && followerStation.length === 0 && (
+                    <div className="non-login-section-div">
+                      <div style={{ fontSize: '1.8em' }}>
+                        아직 스테이션이 없네요ㅠ.ㅠ
+                      </div>
                     </div>
                   )}
                 </Carousel>
