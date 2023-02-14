@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { SaveCom, SaveUnCom, SaveRank, SaveFollower } from '../../store.js'
+import { useSelector } from 'react-redux'
 import StationListItem from '../../components/station/StationListItem'
 import '../../styles/mainroom.css'
 import './carousel-style.css'
@@ -155,7 +154,6 @@ function MainRoom() {
       })
   }
 
-  const dispatch = useDispatch()
   // 스테이션 조회 axios
 
   // 완성된 스테이션 조회
@@ -171,7 +169,6 @@ function MainRoom() {
       .then((res) => {
         // setCompletedStation(res.data)
         setCompletedStation(dummy)
-        dispatch(SaveCom(res.data))
       })
       .catch((err) => {
         console.log(err)
@@ -191,7 +188,6 @@ function MainRoom() {
       .then((res) => {
         // setUncompletedStation(res.data)
         setUncompletedStation(dummy)
-        dispatch(SaveUnCom(res.data))
       })
       .catch((err) => console.log(err))
   }
@@ -207,7 +203,6 @@ function MainRoom() {
     })
       .then((res) => {
         setRankingStation(res.data)
-        dispatch(SaveRank(res.data))
       })
       .catch((err) => console.log(err))
   }
@@ -224,7 +219,6 @@ function MainRoom() {
       .then((res) => {
         // setFollwerStation(res.data)
         setFollwerStation(dummy)
-        dispatch(SaveFollower(res.data))
       })
       .catch((err) => console.log(err))
   }
@@ -271,6 +265,7 @@ function MainRoom() {
                     key={i}
                     isRanking={false}
                     station={station}
+                    saveList={uncompletedStation}
                   />
                 )
               })}
@@ -296,6 +291,7 @@ function MainRoom() {
                       key={i}
                       isRanking={false}
                       station={station}
+                      saveList={completedStation}
                     />
                   )
                 })}
@@ -323,6 +319,7 @@ function MainRoom() {
                         index={i + 1}
                         isRanking={true}
                         station={station}
+                        saveList={rankingStation}
                       />
                     )
                   })}
@@ -351,6 +348,7 @@ function MainRoom() {
                           isRanking={false}
                           station={station}
                           isSearch={true}
+                          saveList={followerStation}
                         />
                       )
                     })}
