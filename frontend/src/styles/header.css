@@ -92,6 +92,7 @@
   cursor: pointer;
 }
 .selected {
+  border-radius: 8px;
   background-color: rgba(248, 248, 248, 1);
 }
 
