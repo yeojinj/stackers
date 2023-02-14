@@ -121,7 +121,7 @@
   object-fit: cover;
   margin-right: 5px;
   border-radius: 50%;
-  border: 0.8px solid gray;
+  border: 0.8px solid rgba(128, 128, 128, 0.392);
 }
 
 .account-name {
@@ -144,12 +144,11 @@
 }
 .icon-is-not-complete {
   background: white;
-  padding: 3px;
   border-radius: 50%;
-  margin-left: -0.8%;
-  margin-top: -0.8%;
   z-index: 10;
   position: absolute;
+  margin-left: -210px;
+  margin-top: -10px;
 }
 .icon-is-not-complete:hover {
   cursor: pointer;
