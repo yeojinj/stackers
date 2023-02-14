@@ -86,6 +86,7 @@ function Record(props) {
         CreateStack(['remainDepth', preStackDetail.stationInfo.remainDepth - 1])
       )
       dispatch(CreateStack(['prevStationId', preStackDetail.id]))
+      dispatch(CreateStack(['music', preStackDetail.stationInfo.music]))
     }
   }, [preStackDetail])
 
