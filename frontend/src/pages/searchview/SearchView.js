@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { SaveSearch } from '../../store.js'
 import AccountListItem from '../../components/account/AccountListItem'
 import '../../styles/searchview.css'
 import StationListItem from '../../components/station/StationListItem'
@@ -13,6 +15,8 @@ function SearchView() {
   const [stationList, setStationList] = useState([])
   const [accountList, setAccountList] = useState([])
 
+  const dispatch = useDispatch()
+
   // 검색키워드로 axios 요청하기
   async function searchList() {
     await axios
@@ -24,6 +28,7 @@ function SearchView() {
       .then((res) => {
         setStationList(res.data.stationList)
         setAccountList(res.data.memberList)
+        dispatch(SaveSearch(res.data.stationList))
         console.log('[스테이션]', res.data.stationList)
         console.log('[계정]', res.data.memberList)
         console.log('받아온 검색결과들', res.data)
