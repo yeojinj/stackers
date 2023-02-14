@@ -52,7 +52,7 @@ function Comments(props) {
       // 만약 사용중인 유저가 댓글 작성자면
       let deleteButton = null
       if (loginUser.username === Comments[i].commenterUsername) {
-        console.log(Comments[i])
+        // console.log(Comments[i])
         deleteButton = (
           <button
             onClick={() => {
@@ -74,7 +74,7 @@ function Comments(props) {
           </button>
         )
       }
-      console.log(deleteButton)
+      // console.log(deleteButton)
       commentLst.push(
         // 댓글 각각 추가
         <div key={i} style={{ margin: '10px' }}>

@@ -43,7 +43,7 @@ function StationView(props) {
   })
 
   console.log('[스테이션 정보가 저장되었어요]', isSave)
-
+  const stationLst = [1, 2]
   return (
     <div className="LeftStyle">
       <CloseOutlinedIcon
@@ -79,7 +79,13 @@ function StationView(props) {
           style={{ cursor: 'pointer' }}
           onClick={() => {
             // 이전 페이지 이동 url
-            navigate(`/StationRoom/${(props.stationId % 2) + 1}`)
+            navigate(
+              `/StationRoom/${
+                stationLst[
+                  (stationLst.indexOf(props.stationId) + 1) % stationLst.length
+                ]
+              }`
+            )
           }}
         />
         <ArrowCircleDownOutlinedIcon
@@ -87,7 +93,16 @@ function StationView(props) {
           style={{ cursor: 'pointer' }}
           onClick={() => {
             // 다음 페이지 이동 url
-            navigate(`/StationRoom/${(props.stationId % 2) + 1}`)
+            navigate(
+              `/StationRoom/${
+                stationLst[
+                  (stationLst.length +
+                    stationLst.indexOf(props.stationId) -
+                    1) %
+                    stationLst.length
+                ]
+              }`
+            )
           }}
         />
       </div>

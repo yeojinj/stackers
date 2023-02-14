@@ -98,9 +98,9 @@ function LogIn(props) {
                 })
                   .then((response) => {
                     if (response.data) {
-                      alert('존재하지 않는 아이디입니다.')
+                      alert('아이디, 비밀번호를 다시 한번 확인해주세요.')
                     } else {
-                      alert('비밀번호가 틀렸습니다.')
+                      alert('아이디, 비밀번호를 다시 한번 확인해주세요.')
                     }
                   })
                   .catch((error) => {
