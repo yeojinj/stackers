@@ -22,15 +22,16 @@
 }
 /* 상단 프로필 이미지(왼쪽) */
 .div-img-container {
-  width: 20%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .mypage-profile-img {
-  height: 180px;
+  width: 181.6px;
+  height: 181.6px;
   border-radius: 50%;
+  object-fit: cover;
   border: 0.8px solid #c4c4c4e0;
   background: tan;
 }
