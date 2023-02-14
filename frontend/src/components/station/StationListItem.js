@@ -5,8 +5,9 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import logo from '../../assets/image_logo.png'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { CountBackNum } from '../../store'
-function StationListItem({ isRanking, isSearch, station, index }) {
+import { SaveStation, CountBackNum } from '../../store.js'
+
+function StationListItem({ isRanking, isSearch, station, index, saveList }) {
   // const [station, setStation] = useState()
   const videoRef = useRef(null)
   const dispatch = useDispatch()
@@ -35,6 +36,7 @@ function StationListItem({ isRanking, isSearch, station, index }) {
 
   const navigate = useNavigate()
   const gotoDetail = (station) => {
+    dispatch(SaveStation(saveList))
     if (backNumber !== 0) {
       dispatch(CountBackNum(0))
     }

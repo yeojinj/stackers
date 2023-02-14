@@ -38,6 +38,12 @@ function StationView(props) {
   //   }, [2000])
   // })
 
+  const isSave = useSelector((state) => {
+    return state.station.station
+  })
+
+  console.log('[스테이션 정보가 저장되었어요]', isSave)
+
   return (
     <div className="LeftStyle">
       <CloseOutlinedIcon
