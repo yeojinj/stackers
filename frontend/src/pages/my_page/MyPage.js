@@ -439,7 +439,6 @@ function MyPage() {
         </Box>
       </Modal>
       <div className="div-profile">
-        {/* css 손보기 */}
         <div style={{ display: 'flex', width: 'auto' }}>
           <div className="div-img-container">
             <img
