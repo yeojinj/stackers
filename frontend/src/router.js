@@ -7,6 +7,7 @@ import LogIn from './pages/sign_folder/LogIn/LogIn'
 import SignUp from './pages/sign_folder/SignUp/SignUp'
 import SearchView from './pages/searchview/SearchView'
 import MyPage from './pages/my_page/MyPage'
+import AccountList from './components/account/AccountList'
 import ProfileEdit from './pages/profile_edit/ProfileEdit'
 import UploadLoading from './pages/record_room/UploadLoading'
 import HeaderAndFooter from './components/HeaderAndFooter'
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
       {
         path: 'MyPage/:username',
         element: <MyPage />
+      },
+      {
+        path: '/Follow/:username',
+        element: <AccountList />
       }
     ]
   },
