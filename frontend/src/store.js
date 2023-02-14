@@ -65,35 +65,11 @@ const urlSlice = createSlice({
 const CreateStationSlice = createSlice({
   name: 'CreateStationSlice',
   initialState: {
-    completed: [],
-    uncompleted: [],
-    ranking: [],
-    follwer: [],
-    search: [],
-    public: [],
-    private: []
+    station: []
   },
   reducers: {
-    SaveCom: (state, action) => {
-      state.completed = action.payload
-    },
-    SaveUnCom: (state, action) => {
-      state.uncompleted = action.payload
-    },
-    SaveRank: (state, action) => {
-      state.ranking = action.payload
-    },
-    SaveFollower: (state, action) => {
-      state.follwer = action.payload
-    },
-    SaveSearch: (state, action) => {
-      state.search = action.payload
-    },
-    SavePublic: (state, action) => {
-      state.public = action.payload
-    },
-    SavePrivate: (state, action) => {
-      state.private = action.payload
+    SaveStation: (state, action) => {
+      state.station = action.payload
     }
   }
 })
@@ -240,10 +216,4 @@ export const { CreateInst } = CreateInstSlice.actions
 export const { SearchKeyword } = SearchSlice.actions
 export const { TagList } = TagSlice.actions
 export const { ChangeUrl, CountBackNum } = urlSlice.actions
-export const { SaveCom } = CreateStationSlice.actions
-export const { SaveUnCom } = CreateStationSlice.actions
-export const { SaveRank } = CreateStationSlice.actions
-export const { SaveFollower } = CreateStationSlice.actions
-export const { SaveSearch } = CreateStationSlice.actions
-export const { SavePublic } = CreateStationSlice.actions
-export const { SavePrivate } = CreateStationSlice.actions
+export const { SaveStation } = CreateStationSlice.actions
