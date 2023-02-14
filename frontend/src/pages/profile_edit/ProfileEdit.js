@@ -74,7 +74,8 @@ function ProfileEdit(props) {
     )
     setImage(uploadedImage)
     const imgsrc = document.getElementById('profileedit-img')
-    setImageurl(uploadedImage)
+    setImageurl(URL.createObjectURL(uploadedImage))
+    console.log('[프로필 이미지 url]', imgsrc)
     imgsrc.src = imageurl
   }
 
@@ -191,6 +192,7 @@ function ProfileEdit(props) {
         <div className="ProfileEdit-content">
           {/* 파일 클릭하면 dropzone 모달 띄우기 */}
           <img
+            id="profileedit-img"
             className={
               imageurl !== 'path' ? 'profileedit-img' : 'profileedit-noimg'
             }

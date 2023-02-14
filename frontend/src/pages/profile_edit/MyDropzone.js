@@ -17,7 +17,7 @@ function MyDropzone({ onChangeImage, handleClose, profileImg }) {
     })
     setImageBlob(blob)
     const imgsrc = document.getElementById('dropimg')
-    imgsrc.src = window.URL.createObjectURL(imgblob)
+    imgsrc.src = window.URL.createObjectURL(blob)
     setImage(true)
   }, onChangeImage)
 
