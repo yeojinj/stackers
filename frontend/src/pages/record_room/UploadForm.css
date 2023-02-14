@@ -143,6 +143,9 @@
 .inst-tags {
   width: 100%;
   height: 25px;
+
+  display: flex;
+  flex-direction: row;
 }
 .dropdown-item-index {
   width: fit-content;

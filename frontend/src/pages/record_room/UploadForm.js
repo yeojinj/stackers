@@ -156,7 +156,7 @@ function UploadForm(props) {
             name="content"
             value={data.content}
             onChange={(e) => handleChange(e)}
-            style={{ height: '90px' }}
+            style={{ height: '90px', fontFamily: 'Pretendard' }}
           />
         </div>
         <div className="input__items">

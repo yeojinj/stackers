@@ -48,7 +48,16 @@ const Tag = () => {
       </div>
       <div className="tag-chips">
         {tagList.map((tagItem, index) => {
-          return <Chip key={index} label={tagItem} onDelete={deleteTagItem} />
+          return (
+            <Chip
+              key={index}
+              label={tagItem}
+              variant="outlined"
+              color="secondary"
+              onDelete={deleteTagItem}
+              style={{ color: 'whitesmoke' }}
+            />
+          )
         })}
       </div>
     </div>
