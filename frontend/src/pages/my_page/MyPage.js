@@ -210,17 +210,19 @@ function MyPage() {
   }
 
   useEffect(() => {
-    if (profileUsername !== loginUser.username) {
-      console.log('다른사람의 페이지를 보고잇어요')
-      getUserInfo()
-      publicStationList()
-      privateStationList()
-      isFollowing()
-      clickTab(0)
-    } else {
-      getUserInfo()
-      publicStationList()
-      privateStationList()
+    if (profileUsername) {
+      if (profileUsername !== loginUser.username) {
+        console.log('다른사람의 페이지를 보고잇어요')
+        getUserInfo()
+        publicStationList()
+        privateStationList()
+        isFollowing()
+        clickTab(0)
+      } else {
+        getUserInfo()
+        publicStationList()
+        privateStationList()
+      }
     }
   }, [profileUsername])
 
