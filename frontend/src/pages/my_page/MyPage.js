@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from 'react'
-import { useParams } from 'react-router'
+import { useParams, useNavigate } from 'react-router'
 import { useSelector } from 'react-redux'
 import axios from 'axios'
 import './MyPage.css'
@@ -28,20 +28,48 @@ function MyPage() {
     // 현재 로그인한 유저
     return state.user
   })
+
+  const isLogin = useSelector((state) => {
+    return state.user.isLogged
+  })
+
   // 프로필 편집 모달 열기, 닫기
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
+  const navigate = useNavigate()
+
+  // 있는 유저인지 확인
+  function isOurUser() {
+    axios({
+      method: 'get',
+      url: `/api/member/check-username/${profileUsername}`,
+      headers: {
+        Authorization: token
+      }
+    })
+      .then((res) => {
+        console.log('[없는 유저입니다.]', res.data)
+        if (res.data) {
+          navigate('*')
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
   // 마이페이지 정보 조회
   async function getUserInfo() {
     if (profileUsername === loginUser.username) {
-      await axios
-        .get(`/api/member/${loginUser.username}`, {
-          headers: {
-            Authorization: token
-          }
-        })
+      await axios({
+        method: 'get',
+        url: `/api/member/${loginUser.username}`,
+        headers: {
+          Authorization: token
+        }
+      })
         .then((res) => {
           setMypageInfo(res.data)
           setFollowingCnt(res.data.followingCnt)
@@ -51,12 +79,13 @@ function MyPage() {
           console.log(err)
         })
     } else {
-      await axios
-        .get(`/api/member/${profileUsername}`, {
-          headers: {
-            Authorization: token
-          }
-        })
+      await axios({
+        method: 'get',
+        url: `/api/member/${profileUsername}`,
+        headers: {
+          Authorization: token
+        }
+      })
         .then((res) => {
           setMypageInfo(res.data)
           setFollowingCnt(res.data.followingCnt)
@@ -72,12 +101,13 @@ function MyPage() {
   async function publicStationList() {
     // 내가 나의 마이페이지 볼때
     if (profileUsername === loginUser.username) {
-      await axios
-        .get('/api/station/public', {
-          headers: {
-            Authorization: token
-          }
-        })
+      await axios({
+        method: 'get',
+        url: '/api/station/public',
+        headers: {
+          Authorization: token
+        }
+      })
         .then((res) => {
           setPublicStation(res.data)
         })
@@ -86,12 +116,13 @@ function MyPage() {
         })
     } else {
       // 다른사람의 마이페이지를 볼때
-      await axios
-        .get(`/api/station/${profileUsername}/public`, {
-          headers: {
-            Authorization: token
-          }
-        })
+      await axios({
+        method: 'get',
+        url: `/api/station/${profileUsername}/public`,
+        headers: {
+          Authorization: token
+        }
+      })
         .then((res) => {
           setPublicStation(res.data)
         })
@@ -193,6 +224,9 @@ function MyPage() {
     }
   }, [profileUsername])
 
+  useEffect(() => {
+    isOurUser()
+  }, [])
   // 더미데이터
   const dummy = [
     {
@@ -365,9 +399,11 @@ function MyPage() {
         <button
           className="button-profile"
           onClick={(event) => {
-            setIsFollowwing(true)
-            setFollwerCnt((followerCnt) => followerCnt + 1)
-            wantfollowing()
+            if (isLogin) {
+              setIsFollowwing(true)
+              setFollwerCnt((followerCnt) => followerCnt + 1)
+              wantfollowing()
+            }
           }}
         >
           팔로우
@@ -378,9 +414,12 @@ function MyPage() {
         <button
           className="button-profile"
           onClick={(event) => {
-            setIsFollowwing(false)
-            setFollwerCnt((followerCnt) => followerCnt - 1)
-            unfollowing()
+            console.log('[현재 로그인했나요?]', isLogin)
+            if (isLogin) {
+              setIsFollowwing(false)
+              setFollwerCnt((followerCnt) => followerCnt - 1)
+              unfollowing()
+            }
           }}
         >
           팔로우 취소
