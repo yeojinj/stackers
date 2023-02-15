@@ -22,11 +22,6 @@ function StationView(props) {
       return ele.id
     })
   })
-  console.log(stationList)
-
-  const isSave = useSelector((state) => {
-    return state.station.station
-  })
 
   return (
     <div className="left-style">

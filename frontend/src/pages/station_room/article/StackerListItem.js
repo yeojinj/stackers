@@ -2,6 +2,7 @@
 import React from 'react'
 import '../Station.css'
 import profile1 from '../assets/profile.png'
+import StarIcon from '@mui/icons-material/Star'
 import { useNavigate } from 'react-router-dom'
 
 function StackerListItem(props) {
@@ -15,36 +16,33 @@ function StackerListItem(props) {
       profileImage = profile1
     }
     lst.push(
-      <div className="station-Participant" key={i}>
-        <p className="station-user">
-          <img
-            src={profileImage}
-            alt="profile"
-            onClick={() => {
-              navigate(`/Mypage/${musicians[i].username}`)
+      <div className="station-participant" key={i}>
+        {i == 0 && (
+          <StarIcon
+            style={{
+              color: 'rgba(250, 247, 76, 0.8)',
+              marginBottom: '-12px'
             }}
-            className="profile-participant"
           />
-        </p>
-        <p className="station-Participant-name">
+        )}
+        <img
+          src={profileImage}
+          alt="profile"
+          onClick={() => {
+            navigate(`/Mypage/${musicians[i].username}`)
+          }}
+          className={
+            i == 0 ? 'profile-participant owner' : 'profile-participant'
+          }
+        />
+        <div className="station-Participant-name">
           {musicians[i].instrumentName}
-        </p>
+        </div>
       </div>
     )
   }
 
-  return (
-    <div
-      className="station-participants"
-      style={{
-        display: 'flex',
-        width: '100%',
-        height: '100%'
-      }}
-    >
-      {lst}
-    </div>
-  )
+  return <div className="station-participants">{lst}</div>
 }
 
 export default StackerListItem

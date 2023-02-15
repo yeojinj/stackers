@@ -10,9 +10,9 @@ function CommentCreate() {
   const [content, setContent] = useState('')
   const stationId = params.id
   return (
-    <div>
+    <>
       <form
-        className="createComment"
+        className="create-comment"
         onSubmit={(event) => {
           event.preventDefault()
           // 댓글 작성 하기전에, accessToken부터 갱신하자.
@@ -36,11 +36,8 @@ function CommentCreate() {
         }}
       >
         <input
-          placeholder="댓글 작성"
-          style={{
-            width: '88%',
-            height: '40px'
-          }}
+          placeholder="클린 댓글 챌린지! 기분 좋은 댓글을 남겨주세요"
+          className="input-comment"
           value={content}
           onChange={(event) => {
             setContent(event.target.value)
@@ -48,14 +45,13 @@ function CommentCreate() {
         />
         <button
           type="submit"
-          style={{
-            height: '40px'
-          }}
+          className="article-follow-button"
+          style={{ height: '40px', background: 'rgba(172, 0, 143, 0.8)' }}
         >
           작성
         </button>
       </form>
-    </div>
+    </>
   )
 }
 

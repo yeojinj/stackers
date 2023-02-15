@@ -119,13 +119,12 @@
 
 .information {
   height: 40%;
-  /* border: 1px black solid; */
+  margin-bottom: 3%;
 }
 
 .comment {
-  height: 50%;
-  /* border: 1px black solid; */
-  background-color: rgba(245, 245, 245, 1);
+  height: 390px;
+  background: rgb(248, 248, 248);
   overflow: auto;
 }
 
@@ -133,12 +132,24 @@
   display: none;
 }
 
-.createComment {
+.create-comment {
+  width: 96%;
   height: 6%;
-  /* border: 1px black solid; */
+  /* position: fixed; */
   display: flex;
   justify-content: space-between;
   padding: 2%;
+}
+
+.input-comment {
+  width: 90%;
+  height: 40px;
+  border-radius: 4px;
+  border: 1px solid rgb(208, 208, 208);
+  outline: none;
+  padding-left: 5px;
+
+  font-family: Pretendard;
 }
 
 .station-close-btn {
@@ -148,9 +159,16 @@
 
 .station-information {
   height: 50%;
-  margin: 5%;
+  margin: 4%;
 }
+.station-profile-picture {
+  cursor: pointer;
+  width: 55px;
+  height: 55px;
 
+  border: 0.8px solid #c4c4c4e0;
+  border-radius: 50%;
+}
 .station-profile {
   display: flex;
   align-items: center;
@@ -185,28 +203,92 @@
 }
 
 .station-participants {
-  height: 40%;
+  width: 95%;
+  height: 100%;
 
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
-
-  margin-right: 30px;
 }
+
+.station-participant {
+  width: fit-content;
+  height: 100%;
+
+  margin-right: 10px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .profile-participant {
   width: 43px;
   height: 43px;
   object-fit: cover;
-  margin-right: 5px;
   border-radius: 50%;
   border: 0.8px solid rgba(128, 128, 128, 0.392);
   cursor: pointer;
 }
 
-.comment-list {
-  margin: 10px;
-  /* border: 1px black solid; */
+.owner {
+  border: 3px solid rgba(250, 247, 76, 0.8);
+  box-shadow: rgba(250, 247, 76, 0.8) 0px 2px 8px 0px;
+}
+
+.station-Participant-name {
+  margin-top: 4px;
+  font-size: 0.8em;
+}
+
+.commenter-list {
+  width: 100%;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.commenter-profile {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.commenter-info {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 8px;
+}
+
+.commenter-date-delete {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  color: #595959e0;
+
+  font-size: 0.8em;
+  font-family: Pretendard;
+}
+
+.delete-btn-text-form {
+  border: none;
+  background-color: transparent;
+  font-family: Pretendard;
+  color: #c4c4c4e0;
+}
+
+.delete-btn-text-form:hover {
+  cursor: pointer;
+  color: #2e2e2ee0;
+
+  transition: 0.2s ease-in-out;
 }
 
 .station-Participant {
@@ -225,10 +307,4 @@
   height: 50px;
   margin: auto;
   margin-top: 10px;
-}
-
-.station-Participant-name {
-  margin-top: -5px;
-  font-size: 0.9em;
-  text-align: center;
 }
