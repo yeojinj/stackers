@@ -29,11 +29,9 @@ function UploadForm(props) {
 
   const musicName = data.music
 
-  console.log(musicName)
   const username = useSelector((state) => {
     return state.user.username
   })
-  console.log(data)
   const dateNow = Moment().format('YYYYMMDDHHmm')
   dispatch(CreateStack(['videoName', dateNow + username]))
 
@@ -76,7 +74,6 @@ function UploadForm(props) {
           videoName: data.videoName
           // delete: true
         }
-        console.log(testData)
         const formData = new FormData()
         // 기본 정보
         formData.append(

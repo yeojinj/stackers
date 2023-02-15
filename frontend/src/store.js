@@ -12,16 +12,13 @@ const userSlice = createSlice({
   },
   reducers: {
     logIn: (state, action) => {
-      // console.log(action)
       state.isLogged = true
     },
     LogInState: (state, action) => {
-      // console.log(action.payload)
       state.username = action.payload.username
       state.nickname = action.payload.nickname
       state.email = action.payload.email
       state.imgPath = action.payload.imgPath
-      // state.bio = state.payload.bio
     },
     LogOutState: (state, action) => {
       state.isLogged = false
@@ -48,16 +45,15 @@ const CreateCommentSlice = createSlice({
 
 const urlSlice = createSlice({
   name: 'urlSlice',
-  initialState: { preUrl: '/', backNumber: 0 },
+  initialState: { preUrl: '/', backNumber: 0, keyword: '' },
   reducers: {
     ChangeUrl: (state, action) => {
-      state.preUrl = `${action.payload.pathname}${action.payload.search}`
-      // state.preUrl = action.payload
-      // console.log(state.preUrl)
+      console.log(action.payload)
+      state.keyword = action.payload.state.keyword
+      state.preUrl = `${action.payload.pathname}`
     },
     CountBackNum: (state, action) => {
       state.backNumber = action.payload
-      // console.log(state.backNumber)
     }
   }
 })
@@ -91,7 +87,6 @@ const stackSlice = createSlice({
   },
   reducers: {
     CreateStack: (state, action) => {
-      console.log(action.payload[0], action.payload[1])
       const val = action.payload[1]
       switch (action.payload[0]) {
         case 'remainDepth':
@@ -162,8 +157,6 @@ const CreateInstSlice = createSlice({
       const instt = state.inst
       const tmp = [...instt, ...asdf]
       state.inst = _.uniqBy(tmp, 'id')
-      console.log(state.inst)
-      // console.log(action)
     }
   }
 })
