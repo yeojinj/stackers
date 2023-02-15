@@ -56,7 +56,6 @@ function Record(props) {
   const [preStackDetail, setPreStack] = useState({})
 
   const getPreStack = async () => {
-    console.log(stationId)
     await axios({
       method: 'GET',
       url: `/api/station/${stationId}`,
@@ -124,7 +123,6 @@ function Record(props) {
     setOpen(false)
   }
   useEffect(() => {
-    console.log('rendering?')
     console.log(enable)
   }, [enable])
   const initialValue = 3000
@@ -146,13 +144,11 @@ function Record(props) {
       <ReactMediaRecorder
         stopStreamsOnStop
         onStop={async (blobUrl, blob) => {
-          console.log('stop?')
           await setStack(blob)
           const video = stackRef.current
           video.srcObject = stream
           video.play()
           playVideo()
-          console.log(stackRef)
         }}
         video
         blobPropertyBag={{
