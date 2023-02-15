@@ -7,7 +7,7 @@ import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
 import axios from 'axios'
 import LogIn from '../sign_folder/LogIn/LogIn'
-import '../../styles/mainroom.css'
+import './mainroom.css'
 import './carousel-style.css'
 
 function MainRoom() {

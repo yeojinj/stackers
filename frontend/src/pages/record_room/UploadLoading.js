@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import Header from '../../components/Header'
 import { useNavigate } from 'react-router-dom'
-import '../../styles/uploadloading.css'
+import './uploadloading.css'
 
 function UpladLoading() {
   const [page, moveToMain] = useState(false)

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import AccountListItem from '../../components/account/AccountListItem'
-import '../../styles/searchview.css'
+import './searchview.css'
 import StationListItem from '../../components/station/StationListItem'
 import axios from 'axios'
 import { useLocation } from 'react-router-dom'

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import DefaultImg from '../assets/default_profile.png'
-import '../styles/profileframe.css'
+import './profileframe.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { LogOutState } from '../store'
 

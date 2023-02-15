@@ -1,7 +1,7 @@
 import React from 'react'
 import logo from '../assets/logo.svg'
 import github from '../assets/github.svg'
-import '../styles/footer.css'
+import './footer.css'
 
 function Footer() {
   return (
