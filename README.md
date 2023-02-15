@@ -56,27 +56,25 @@
 
 - **Java SE Development Kit**: v 17
 
-- **Postman** : v
+- **Postman** : v10.9.4
 
-- **Spring Boot** : v
+- **Spring Boot** : v3.0.2
 
-- **Spring Data** : v
+- **Spring Security** : v3.0.2
 
-- **Spring Security** : v
+- **JWT** : v0.11.5
 
-- **JWT** : v
+- **JPA** : v3.0.2
 
-- **OAuth** : v
+- **MariaDB** : v10.10.2
 
-- **JPA** : v
+- **Redis** : v7.0.8
 
-- **MariaDB** : v
+- **S3** : v2.2.6
 
-- **Redis** : v
+- **Swagger** : v2.0.2
 
-- **Swagger** : v
-
-- **ffmpeg** (동영상, 이미지 파일 업로드를 위한 라이브러리)
+- **ffmpeg** (동영상, 이미지 파일 업로드를 위한 라이브러리) : v0.7.0
 
 ### Frontend
 
