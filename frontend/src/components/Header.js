@@ -55,7 +55,6 @@ function Header() {
   }
 
   const searchList = (inputValue) => {
-    console.log('axios로 보낼 키워드', inputValue)
     axios
       // 검색 api 주소
       .get(`/api/search/${inputValue}`, {
@@ -67,7 +66,6 @@ function Header() {
         setSearch(res.data)
         setStationDropDownList(res.data.stationList)
         setAccountDropDownList(res.data.memberList)
-        console.log('받아온 검색결과들', search)
       })
       .catch((err) => console.log(err))
   }
@@ -85,7 +83,6 @@ function Header() {
   // 업로드 버튼 클릭 -> 녹화페이지로 이동
   const goRecordRoom = () => {
     setInputValue('')
-    console.log(location)
     if (location) {
       dispatch(ChangeUrl(location))
     }
