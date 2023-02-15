@@ -11,15 +11,23 @@ import { CountBackNum } from '../../../store'
 function StationView(props) {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-
   const backNumber = useSelector((state) => {
     return state.url.backNumber
   })
-
   const Info = props.info
   const videoRef = useRef(null)
 
-  const stationLst = [1, 2]
+  const stationList = useSelector((state) => {
+    return state.station.station.map((ele) => {
+      return ele.id
+    })
+  })
+  console.log(stationList)
+
+  const isSave = useSelector((state) => {
+    return state.station.station
+  })
+
   return (
     <div className="left-style">
       <CloseOutlinedIcon
@@ -55,8 +63,9 @@ function StationView(props) {
             // 이전 페이지 이동 url
             navigate(
               `/StationRoom/${
-                stationLst[
-                  (stationLst.indexOf(props.stationId) + 1) % stationLst.length
+                stationList[
+                  (stationList.indexOf(props.stationId) - 1) %
+                    stationList.length
                 ]
               }`
             )
@@ -69,11 +78,11 @@ function StationView(props) {
             // 다음 페이지 이동 url
             navigate(
               `/StationRoom/${
-                stationLst[
-                  (stationLst.length +
-                    stationLst.indexOf(props.stationId) -
+                stationList[
+                  (stationList.length +
+                    stationList.indexOf(props.stationId) +
                     1) %
-                    stationLst.length
+                    stationList.length
                 ]
               }`
             )

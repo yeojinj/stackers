@@ -6,7 +6,7 @@ import logo from '../assets/logo.svg'
 import searchimg from '../assets/search.svg'
 import DefaultImg from '../assets/default_profile.png'
 import ProfileFrame from './profileFrame'
-import '../styles/header.css'
+import './header.css'
 import SearchIcon from '@mui/icons-material/Search'
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
@@ -55,7 +55,6 @@ function Header() {
   }
 
   const searchList = (inputValue) => {
-    console.log('axios로 보낼 키워드', inputValue)
     axios
       // 검색 api 주소
       .get(`/api/search/${inputValue}`, {
@@ -67,7 +66,6 @@ function Header() {
         setSearch(res.data)
         setStationDropDownList(res.data.stationList)
         setAccountDropDownList(res.data.memberList)
-        console.log('받아온 검색결과들', search)
       })
       .catch((err) => console.log(err))
   }
@@ -85,7 +83,6 @@ function Header() {
   // 업로드 버튼 클릭 -> 녹화페이지로 이동
   const goRecordRoom = () => {
     setInputValue('')
-    console.log(location)
     if (location) {
       dispatch(ChangeUrl(location))
     }
@@ -149,26 +146,6 @@ function Header() {
       setIsHaveInputValue(false)
     }
   }
-
-  // const handleDropDownKey = (event) => {
-  //   // input에 값이 있을때만 작동
-  //   if (isHaveInputValue) {
-  //     if (
-  //       event.key === 'ArrowDown' &&
-  //       dropDownList.length - 1 > dropDownItemIndex
-  //     ) {
-  //       setDropDownItemIndex(dropDownItemIndex + 1)
-  //     }
-
-  //     if (event.key === 'ArrowUp' && dropDownItemIndex >= 0) {
-  //       setDropDownItemIndex(dropDownItemIndex - 1)
-  //     }
-  //     if (event.key === 'Enter' && dropDownItemIndex >= 0) {
-  //       clickDropDownItem(dropDownList[dropDownItemIndex])
-  //       setDropDownItemIndex(-1)
-  //     }
-  //   }
-  // }
 
   useEffect(showDropDownList, [inputValue], [isHaveInputValue])
 

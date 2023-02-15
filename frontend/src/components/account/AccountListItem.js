@@ -1,13 +1,12 @@
 import React from 'react'
 import { useNavigate } from 'react-router'
 import DefaultImg from '../../assets/default_profile.png'
-import '../../styles/accountlistitem.css'
+import './accountlistitem.css'
 
 function AccountListItem({ account }) {
   const accountInfo = account
 
   const IsBand = () => {
-    console.log('소속', accountInfo.teamName)
     if (accountInfo.teamName) {
       return ` · ${accountInfo.teamName}`
     }

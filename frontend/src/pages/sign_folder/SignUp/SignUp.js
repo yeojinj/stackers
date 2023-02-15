@@ -261,7 +261,7 @@ function SignUp() {
                     setIsUsername(false)
                   }
                 } else {
-                  console.log('username 길이 탈락')
+                  // console.log('username 길이 탈락')
                   setIdMessage(
                     '아이디는 5~20자 영어 소문자, 숫자로 구성해야 합니다.'
                   )

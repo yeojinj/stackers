@@ -40,6 +40,11 @@ function MyPage() {
 
   const navigate = useNavigate()
 
+  const gotoFollow = () => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+    navigate(`/Follow/${profileUsername}/`)
+  }
+
   // 있는 유저인지 확인
   function isOurUser() {
     axios({
@@ -50,7 +55,6 @@ function MyPage() {
       }
     })
       .then((res) => {
-        console.log('[없는 유저입니다.]', res.data)
         if (res.data) {
           navigate('*')
         }
@@ -159,7 +163,6 @@ function MyPage() {
       }
     })
       .then((res) => {
-        console.log('[현재 마이페이지 주인의 팔로우 여부]', res.data)
         setIsFollowwing(res.data)
       })
       .catch((err) => {
@@ -180,7 +183,6 @@ function MyPage() {
       }
     })
       .then((res) => {
-        console.log('[팔로잉이 되었습니다!]', res.data)
         setIsFollowwing(true)
       })
       .catch((err) => {
@@ -201,7 +203,6 @@ function MyPage() {
       }
     })
       .then((res) => {
-        console.log('[팔로잉이 취소되었습니다!]', res.data)
         setIsFollowwing(false)
       })
       .catch((err) => {
@@ -212,7 +213,6 @@ function MyPage() {
   useEffect(() => {
     if (profileUsername) {
       if (profileUsername !== loginUser.username) {
-        console.log('다른사람의 페이지를 보고잇어요')
         getUserInfo()
         publicStationList()
         privateStationList()
@@ -229,115 +229,21 @@ function MyPage() {
   useEffect(() => {
     isOurUser()
   }, [])
-  // 더미데이터
-  const dummy = [
-    {
-      id: 5,
-      content: 'xptms',
-      tags: ['happy', 'mood'],
-      video: {
-        id: 5,
-        videoPath:
-          'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
-        videoName: null,
-        videoOriName: '테스트용 비디',
-        thumbnailPath: null
-      }
-    },
-    {
-      id: 6,
-      content: '향기로운 음악의 세계~',
-      tags: ['smell_so_good', 'umm'],
-      video: {
-        id: 6,
-        videoPath:
-          'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
-        videoName: null,
-        videoOriName: '2023_02_07_11:08',
-        thumbnailPath: null
-      }
-    },
-    {
-      id: 7,
-      content: '향기로운 음악의 세계~',
-      tags: ['smell_so_good', 'umm'],
-      video: {
-        id: 7,
-        videoPath:
-          'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
-        videoName: null,
-        videoOriName: '2023_02_07_11:08',
-        thumbnailPath: null
-      }
-    },
-    {
-      id: 8,
-      content: '향기로운 음악의 세계~',
-      tags: ['smell_so_good', 'umm'],
-      video: {
-        id: 8,
-        videoPath:
-          'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
-        videoName: null,
-        videoOriName: '2023_02_07_11:08',
-        thumbnailPath: null
-      }
-    },
-    {
-      id: 9,
-      content: '향기로운 음악의 세계~ 같이 들어요',
-      tags: ['smell_so_good', 'umm', 'yahoo'],
-      video: {
-        id: 9,
-        videoPath:
-          'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
-        videoName: null,
-        videoOriName: '2023_02_07_11:08',
-        thumbnailPath: null
-      }
-    },
-    {
-      id: 9,
-      content: '향기로운 음악의 세계~ 같이 들어요',
-      tags: ['smell_so_good', 'umm', 'yahoo'],
-      video: {
-        id: 9,
-        videoPath:
-          'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
-        videoName: null,
-        videoOriName: '2023_02_07_11:08',
-        thumbnailPath: null
-      }
-    },
-    {
-      id: 9,
-      content: '향기로운 음악의 세계~ 같이 들어요',
-      tags: ['smell_so_good', 'umm', 'yahoo'],
-      video: {
-        id: 9,
-        videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
-        videoName: null,
-        videoOriName: '2023_02_07_11:08',
-        thumbnailPath: null
-      }
-    }
-  ]
+
   // 공개 스테이션
   const viewStation = () => {
     return (
       <>
         <div className="mystation-tap">
           <div className="popular-video">
-            {/* {publicStation.map((result, i) => { */}
-            {dummy.map((result, i) => {
+            {publicStation.map((result, i) => {
               return (
                 <div key={i}>
                   <StationListItem
                     isRanking={false}
                     isSearch={false}
                     station={result}
-                    // saveList={publicStation}
-                    saveList={dummy}
+                    saveList={publicStation}
                   />
                 </div>
               )
@@ -353,16 +259,14 @@ function MyPage() {
       <>
         <div className="mystation-tap">
           <div className="popular-video">
-            {/* {privateStation.map((result, i) => { */}
-            {dummy.map((result, i) => {
+            {privateStation.map((result, i) => {
               return (
                 <div key={i}>
                   <StationListItem
                     isRanking={false}
                     isSearch={false}
                     station={result}
-                    // saveList={privateStation}
-                    saveList={dummy}
+                    saveList={privateStation}
                   />
                 </div>
               )
@@ -415,8 +319,7 @@ function MyPage() {
       followbutton = (
         <button
           className="button-profile"
-          onClick={(event) => {
-            console.log('[현재 로그인했나요?]', isLogin)
+          onClick={() => {
             if (isLogin) {
               setIsFollowwing(false)
               setFollwerCnt((followerCnt) => followerCnt - 1)
@@ -433,6 +336,7 @@ function MyPage() {
   const selectMenuHandler = (index) => {
     clickTab(index)
   }
+
   return (
     <div className="my-page-container">
       <Modal open={open} onClose={handleClose}>
@@ -477,12 +381,22 @@ function MyPage() {
                     <p className="profile-Count-content">스테이션</p>
                     <b>{publicStation.length + privateStation.length}</b>
                   </div>
-                  <div style={{ display: 'flex', marginRight: '8%' }}>
-                    <p className="profile-Count-content">팔로워</p>
+                  <div
+                    style={{
+                      display: 'flex',
+                      marginRight: '8%',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <p className="profile-Count-content" onClick={gotoFollow}>
+                      팔로워
+                    </p>
                     <b>{followerCnt}</b>
                   </div>
-                  <div style={{ display: 'flex' }}>
-                    <p className="profile-Count-content">팔로잉</p>
+                  <div style={{ display: 'flex', cursor: 'pointer' }}>
+                    <p className="profile-Count-content" onClick={gotoFollow}>
+                      팔로잉
+                    </p>
                     <b>{followingCnt}</b>
                   </div>
                 </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import AccountListItem from '../../components/account/AccountListItem'
-import '../../styles/searchview.css'
+import './searchview.css'
 import StationListItem from '../../components/station/StationListItem'
 import axios from 'axios'
 import { useLocation } from 'react-router-dom'
@@ -24,9 +24,6 @@ function SearchView() {
       .then((res) => {
         setStationList(res.data.stationList)
         setAccountList(res.data.memberList)
-        console.log('[스테이션]', res.data.stationList)
-        console.log('[계정]', res.data.memberList)
-        console.log('받아온 검색결과들', res.data)
       })
       .catch((err) => console.log(err))
   }
@@ -34,11 +31,6 @@ function SearchView() {
   useEffect(() => {
     searchList()
   }, [keyword])
-
-  // useEffect(() => {
-  //   setStationList(search.stationList)
-  //   setAccountList(search.memberList)
-  // }, [search])
 
   const [currentTab, clickTab] = useState(0)
 

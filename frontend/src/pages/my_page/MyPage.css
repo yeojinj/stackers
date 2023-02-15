@@ -38,7 +38,6 @@
 .div-text-container {
   width: 600px;
   margin-left: 50px;
-  /* background: yellow; */
 }
 
 /* 상단 프로필 이미지(오른쪽) */
@@ -64,7 +63,6 @@
   align-items: center;
 }
 .div-profile-Count {
-  /* background: black; */
   display: flex;
   justify-content: flex-start;
   width: 100%;

@@ -34,7 +34,6 @@
 .non-ranks:hover {
   transition: 0.3s ease-in-out;
   box-shadow: rgba(42, 32, 150, 0.6) 5px 5px, rgba(42, 32, 150, 0.3) 10px 10px;
-  /* box-shadow: rgba(136, 38, 136, 0.217) 0px 25px 20px -20px; */
 }
 
 .station-info {
@@ -51,7 +50,6 @@
 .station-tag {
   margin: 0 1%;
   width: 261px;
-  /* height: 20px; */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -162,21 +160,6 @@
 }
 
 @keyframes shake {
-  /* 0% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  25% {
-    transform: translate(2px, 2px) rotate(2deg);
-  }
-  50% {
-    transform: translate(0, 0) rotate(0eg);
-  }
-  75% {
-    transform: translate(-2px, 2px) rotate(-2deg);
-  }
-  100% {
-    transform: translate(0, 0) rotate(0deg);
-  } */
   0% {
     transform: translate(1px, 1px) rotate(0deg);
   }

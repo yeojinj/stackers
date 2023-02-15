@@ -13,6 +13,7 @@ function StationRoom() {
   const dispatch = useDispatch()
   const stationId = Number(params.id)
   const [info, setInfo] = useState(null)
+
   const backNumber = useSelector((state) => {
     return state.url.backNumber
   })
@@ -26,8 +27,16 @@ function StationRoom() {
       .then((response) => {
         setInfo(response.data)
       })
-      .catch(() => {
-        navigate('/NotFound')
+      .catch((error) => {
+        // console.log(error.response.status)
+        if (error.response.status === 500 || error.response.status === '500') {
+          navigate('/Forbidden')
+        } else if (
+          error.response.status === 404 ||
+          error.response.status === '404'
+        ) {
+          navigate('/NotFound')
+        }
       })
   }, [stationId])
 
