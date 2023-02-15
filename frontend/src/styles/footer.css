@@ -1,12 +1,7 @@
 .footer {
-  /* display: flex;
-  justify-content: center; */
   width: 100%;
   height: 150px;
   margin-top: auto;
-  /* padding-top: 41px;
-  padding-left: 67px;
-  padding-right: 67px; */
   background-color: rgba(251, 251, 251, 1);
 }
 
@@ -14,8 +9,6 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  /* margin-left: 67px; */
-  /* margin-right: 67px; */
 }
 
 .footer-logo {
