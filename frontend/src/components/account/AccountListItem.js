@@ -7,7 +7,6 @@ function AccountListItem({ account }) {
   const accountInfo = account
 
   const IsBand = () => {
-    console.log('소속', accountInfo.teamName)
     if (accountInfo.teamName) {
       return ` · ${accountInfo.teamName}`
     }

@@ -7,7 +7,6 @@
   top: 30px;
   left: 50%;
   transform: translate(-50%, 0%);
-  /* height: 800px; */
   border-radius: 20px;
   overflow: scroll;
 }
@@ -19,7 +18,6 @@
 .ProfileEdit-head {
   margin-top: 21px;
   text-align: center;
-  /* border-bottom: solid 1px black; */
 }
 
 .ProfileEdit-profilePicture {
@@ -87,7 +85,6 @@
 }
 
 .HashWrap {
-  /* margin-top: 24px; */
   color: rgb(52, 58, 64);
   font-size: 1.125rem;
   display: flex;
@@ -104,7 +101,6 @@
 }
 
 .HashWrapInner {
-  /* margin-top: 20px; */
   background: #ffe9fa;
   border-radius: 20px;
   padding: 8px 8px;
@@ -127,7 +123,6 @@
   align-self: flex-end;
   outline: none;
   cursor: text;
-  /* line-height: 2rem; */
   border: none;
 }
 

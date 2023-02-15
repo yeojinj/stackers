@@ -9,7 +9,6 @@ function MyDropzone({ onChangeImage, handleClose, profileImg }) {
   const [imgblob, setImageBlob] = useState('')
 
   const onDrop = useCallback((acceptedFiles) => {
-    // Do something with the files
     onChangeImage(acceptedFiles[0])
 
     const blob = new Blob([acceptedFiles[0]], {
@@ -22,7 +21,6 @@ function MyDropzone({ onChangeImage, handleClose, profileImg }) {
   }, onChangeImage)
 
   const uploadImg = () => {
-    console.log('[업로드 버튼 누른 후]', imgblob)
     onChangeImage(imgblob)
     handleClose()
   }
@@ -57,7 +55,6 @@ function MyDropzone({ onChangeImage, handleClose, profileImg }) {
             ></img>
           </div>
           <div className="drag-drop-box">
-            {/* {!img && <p>이곳에 파일을 끌어 업로드하세요</p>} */}
             {isDragActive
               ? '여기에 파일을 올려주세요'
               : '파일을 드래그하거나 여기를 클릭하세요'}

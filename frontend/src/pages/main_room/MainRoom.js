@@ -10,112 +10,6 @@ import LogIn from '../sign_folder/LogIn/LogIn'
 import '../../styles/mainroom.css'
 import './carousel-style.css'
 
-const dummy = [
-  {
-    id: 5,
-    content: 'xptms',
-    tags: ['happy', 'mood'],
-    video: {
-      id: 5,
-      videoPath:
-        'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
-      videoName: null,
-      videoOriName: '테스트용 비디',
-      thumbnailPath: null
-    },
-    username: 'boyoung',
-    imgPath: 'path'
-  },
-  {
-    id: 6,
-    content: '향기로운 음악의 세계~',
-    tags: ['smell_so_good', 'umm'],
-    video: {
-      id: 6,
-      videoPath:
-        'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
-      videoName: null,
-      videoOriName: '2023_02_07_11:08',
-      thumbnailPath: null
-    },
-    username: 'boyoung',
-    imgPath: 'path'
-  },
-  {
-    id: 7,
-    content: '향기로운 음악의 세계~',
-    tags: ['smell_so_good', 'umm'],
-    video: {
-      id: 7,
-      videoPath:
-        'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
-      videoName: null,
-      videoOriName: '2023_02_07_11:08',
-      thumbnailPath: null
-    },
-    username: 'boyoung',
-    imgPath: 'path'
-  },
-  {
-    id: 8,
-    content: '향기로운 음악의 세계~',
-    tags: ['smell_so_good', 'umm'],
-    video: {
-      id: 8,
-      videoPath:
-        'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
-      videoName: null,
-      videoOriName: '2023_02_07_11:08',
-      thumbnailPath: null
-    },
-    username: 'boyoung',
-    imgPath: 'path'
-  },
-  {
-    id: 9,
-    content: '향기로운 음악의 세계~ 같이 들어요',
-    tags: ['smell_so_good', 'umm', 'yahoo'],
-    video: {
-      id: 9,
-      videoPath:
-        'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
-      videoName: null,
-      videoOriName: '2023_02_07_11:08',
-      thumbnailPath: null
-    },
-    username: 'boyoung',
-    imgPath: 'path'
-  },
-  {
-    id: 9,
-    content: '향기로운 음악의 세계~ 같이 들어요',
-    tags: ['smell_so_good', 'umm', 'yahoo'],
-    video: {
-      id: 9,
-      videoPath:
-        'https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/videos/b0d97d87-f059-4b96-95a7-72cad63afd5f_E_C.mp4',
-      videoName: null,
-      videoOriName: '2023_02_07_11:08',
-      thumbnailPath: null
-    },
-    username: 'boyoung',
-    imgPath: 'path'
-  },
-  {
-    id: 9,
-    content: '향기로운 음악의 세계~ 같이 들어요',
-    tags: ['smell_so_good', 'umm', 'yahoo'],
-    video: {
-      id: 9,
-      videoPath: 'https://webrtc.github.io/samples/src/video/chrome.webm',
-      videoName: null,
-      videoOriName: '2023_02_07_11:08',
-      thumbnailPath: null
-    },
-    username: 'boyoung',
-    imgPath: 'path'
-  }
-]
 function MainRoom() {
   const token = localStorage.getItem('accessToken')
   const [isloggin, setLogin] = useState('')
@@ -158,7 +52,6 @@ function MainRoom() {
 
   // 완성된 스테이션 조회
   async function completeStationList() {
-    console.log('[완성 스테이션]', username)
     await axios({
       method: 'get',
       url: '/api/station/completed/stackers',
@@ -167,8 +60,7 @@ function MainRoom() {
       }
     })
       .then((res) => {
-        // setCompletedStation(res.data)
-        setCompletedStation(dummy)
+        setCompletedStation(res.data)
       })
       .catch((err) => {
         console.log(err)
@@ -177,7 +69,6 @@ function MainRoom() {
 
   // 미완성된 스테이션 조회
   async function uncompleteStationList() {
-    console.log('[미완성 스테이션]', username)
     await axios({
       method: 'get',
       url: '/api/station/uncompleted/stackers',
@@ -186,8 +77,7 @@ function MainRoom() {
       }
     })
       .then((res) => {
-        // setUncompletedStation(res.data)
-        setUncompletedStation(dummy)
+        setUncompletedStation(res.data)
       })
       .catch((err) => console.log(err))
   }
@@ -218,7 +108,6 @@ function MainRoom() {
     })
       .then((res) => {
         setFollwerStation(res.data)
-        // setFollwerStation(dummy)
       })
       .catch((err) => console.log(err))
   }
@@ -230,33 +119,13 @@ function MainRoom() {
     uncompleteStationList()
     rankingStationList()
     followerStationList()
-    // 더미데이터 실행 함수
-    // stationList()
   }, [username])
-
-  // Station 값 변경시 재 렌더링
-  useEffect(
-    () => {},
-    [completedStation],
-    [uncompletedStation],
-    [rankingStation],
-    [followerStation]
-  )
 
   return (
     <div className="main-room">
       <div className="main">
         <div className="station-center">
-          <div
-            className="chip top"
-            style={
-              {
-                // marginLeft: '81%'
-              }
-            }
-          >
-            당신을 기다리는 스테이션 🪐
-          </div>
+          <div className="chip top">당신을 기다리는 스테이션 🪐</div>
           <div className="parent">
             <Carousel>
               {uncompletedStation.map((station, i) => {
@@ -449,9 +318,7 @@ const FadeContent = ({ children }) => {
     const fadeOnScrollObserver = new IntersectionObserver(
       (entries, observer) => {
         entries.forEach((entry) => {
-          if (!entry.isIntersecting) {
-            console.log('isinteresting')
-          } else {
+          if (entry.isIntersecting) {
             entry.target.classList.add('appear')
             observer.unobserve(entry.target)
           }
