@@ -47,11 +47,6 @@ const urlSlice = createSlice({
   name: 'urlSlice',
   initialState: { preUrl: '/', backNumber: 0, keyword: '' },
   reducers: {
-    ChangeUrl: (state, action) => {
-      console.log(action.payload)
-      state.keyword = action.payload.state.keyword
-      state.preUrl = `${action.payload.pathname}`
-    },
     CountBackNum: (state, action) => {
       state.backNumber = action.payload
     }
