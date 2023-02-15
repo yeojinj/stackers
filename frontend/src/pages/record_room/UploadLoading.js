@@ -10,11 +10,7 @@ function UpladLoading() {
   const username = useSelector((state) => {
     return state.user.username
   })
-  // const navigateToMain = () => {
-  //   if (page) {
-  //     navigate('/Mainroom')
-  //   }
-  // }
+
   const navigateToProfile = () => {
     if (page) {
       navigate('/MyPage/' + { username })
@@ -31,6 +27,7 @@ function UpladLoading() {
       <Header />
       <div className="loading-conatiner">
         <p className="stacking">스택을 쌓고 있어요</p>
+
         <div className="stack-box" id="stack-box1"></div>
         <div className="stack-box" id="stack-box2"></div>
         <div className="stack-box" id="stack-box3"></div>

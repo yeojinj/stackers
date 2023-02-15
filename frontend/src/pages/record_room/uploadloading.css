@@ -2,10 +2,11 @@
   display: flex;
   flex-direction: column;
   margin-top: 300px;
+  font-family: Pretendard;
 }
 
 .stacking {
-  font-size: 35px;
+  font-size: 1em;
   text-align: center;
 }
 
@@ -16,8 +17,8 @@
   margin: 0 auto 8px auto;
   background: linear-gradient(
     to right,
-    rgba(42, 32, 150, 1),
-    rgba(91, 32, 150, 1),
+    rgba(42, 32, 150, 0.9),
+    rgba(91, 32, 150, 0.8),
     rgba(172, 0, 143, 1),
     rgba(227, 95, 173, 1)
   );
@@ -39,51 +40,3 @@
     transform: translateZ(0);
   }
 }
-
-/* #stack-box1 {
-  animation-duration: 3s;
-  animation-name: stack1;
-}
-
-#stack-box2 {
-  animation-duration: 2s;
-  animation-name: stack2;
-}
-
-#stack-box3 {
-  animation-duration: 1s;
-  animation-name: stack3;
-}
-
-@keyframes stack1 {
-  0% {
-    opacity: 1;
-    transform: translate3d(0, -150%, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translateZ(0);
-  }
-}
-
-@keyframes stack2 {
-  0% {
-    opacity: 1;
-    transform: translate3d(0, -150%, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translateZ(0);
-  }
-}
-
-@keyframes stack3 {
-  0% {
-    opacity: 1;
-    transform: translate3d(0, -150%, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translateZ(0);
-  }
-} */
