@@ -7,7 +7,14 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { SaveStation, CountBackNum } from '../../store.js'
 
-function StationListItem({ isRanking, isSearch, station, index, saveList }) {
+function StationListItem({
+  isRanking,
+  isSearch,
+  station,
+  index,
+  isDark,
+  saveList
+}) {
   const videoRef = useRef(null)
   const dispatch = useDispatch()
   const backNumber = useSelector((state) => {
@@ -129,14 +136,19 @@ function StationListItem({ isRanking, isSearch, station, index, saveList }) {
           )}
           <div className="station-info">
             <p className="station-description">{station.content}</p>
-            <div className="station-tag">
+            <div
+              className={isDark ? 'station-tag dark-mode-text' : 'station-tag'}
+            >
               {station.tags &&
                 station.tags.map((tag, i) => {
                   return `#${tag} `
                 })}
             </div>
             <div className="station-account">
-              <div className="account-info" style={{ border: 'none' }}>
+              <div
+                className="account-info"
+                style={{ border: 'none', flexDirection: 'row' }}
+              >
                 <img
                   src={
                     station.imgPath !== 'path' ? station.imgPath : DefaultImg

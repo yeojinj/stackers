@@ -2,18 +2,20 @@ import React, { useState, useEffect } from 'react'
 import '../Station.css'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
-import IosShareRoundedIcon from '@mui/icons-material/IosShareRounded'
+import TextsmsIcon from '@mui/icons-material/Textsms'
 import stacking from '../assets/stacking.png'
 import IconButton from '@mui/material/IconButton'
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
+
 function StationControlButton(props) {
   const params = useParams()
   const stationId = Number(params.id)
-  // console.log(params)
   const [heartCnt, setHeartCnt] = useState(null)
+  const [commentCnt, setcommentCnt] = useState(null)
   const [isliked, setIsliked] = useState(null)
   const [isComplete, setIsComplete] = useState(null)
+
   useEffect(() => {
     axios({
       method: 'GET',
@@ -22,6 +24,7 @@ function StationControlButton(props) {
     })
       .then((response) => {
         setHeartCnt(response.data.stationInfo.heartCnt)
+        setcommentCnt(response.data.commentCnt)
         setIsliked(response.data.heart)
         setIsComplete(response.data.stationInfo.isComplete)
       })
@@ -37,15 +40,22 @@ function StationControlButton(props) {
     likeStation = (
       <>
         <FavoriteIcon
-          sx={{ fontSize: 30 }}
-          style={{ color: 'rgba(227, 95, 173, 1)' }}
+          className="station-control-btn"
+          style={{
+            color: 'rgba(227, 95, 173, 1)',
+            width: '25px',
+            height: '25px'
+          }}
         />
       </>
     )
   } else {
     likeStation = (
       <>
-        <FavoriteBorderIcon sx={{ fontSize: 30 }} style={{ color: 'white' }} />
+        <FavoriteBorderIcon
+          className="station-control-btn"
+          style={{ color: 'white', width: '25px', height: '25px' }}
+        />
       </>
     )
   }
@@ -55,63 +65,65 @@ function StationControlButton(props) {
   if (!isComplete) {
     recordIcon = (
       <IconButton
-        style={{
-          padding: '0px'
-        }}
         onClick={() => {
-          // handleOpen()
           navigate(`/RecordRoom/${props.stationId}`)
         }}
       >
-        <img src={stacking} alt="stacking" style={{ width: '30px' }} />
+        <div className="station-control-btn" style={{ marginBottom: '6px' }}>
+          <img src={stacking} alt="stack-icon" style={{ width: '28px' }} />
+        </div>
       </IconButton>
     )
   }
   return (
-    <div>
+    <div className="station-control-btns">
       {recordIcon}
-      <IconButton
-        style={{ padding: '0px' }}
-        onClick={() => {
-          if (!isliked) {
-            axios({
-              method: 'post',
-              url: `/api/station/${props.stationId}/heart`,
-              headers: { Authorization: localStorage.getItem('accessToken') }
-            })
-              .then((response) => {
-                // console.log(response.data)
-                setHeartCnt(heartCnt + 1)
-                setIsliked(!isliked)
+      <div className="heart-control-btn">
+        <TextsmsIcon
+          className="station-control-btn"
+          style={{ color: 'whitesmoke', width: '25px', height: '25px' }}
+        />
+        <div style={{ marginTop: '4px' }}>{commentCnt}</div>
+      </div>
+      <div className="heart-control-btn">
+        <IconButton
+          onClick={() => {
+            if (!isliked) {
+              axios({
+                method: 'post',
+                url: `/api/station/${props.stationId}/heart`,
+                headers: { Authorization: localStorage.getItem('accessToken') }
               })
-              .catch((error) => {
-                console.log(error)
+                .then((response) => {
+                  // console.log(response.data)
+                  setHeartCnt(heartCnt + 1)
+                  setIsliked(!isliked)
+                })
+                .catch((error) => {
+                  console.log(error)
+                })
+            } else {
+              axios({
+                method: 'delete',
+                url: `/api/station/${props.stationId}/heart`,
+                headers: { Authorization: localStorage.getItem('accessToken') }
               })
-          } else {
-            axios({
-              method: 'delete',
-              url: `/api/station/${props.stationId}/heart`,
-              headers: { Authorization: localStorage.getItem('accessToken') }
-            })
-              .then((response) => {
-                // console.log(response.data)
-                setHeartCnt(heartCnt - 1)
-                setIsliked(!isliked)
-              })
-              .catch((error) => {
-                console.log(error)
-              })
-          }
-          setIsliked(!isliked)
-        }}
-      >
-        {likeStation}
-      </IconButton>
-      <p style={{ color: 'white', margin: '0px', textAlign: 'center' }}>
-        {heartCnt}
-      </p>
-
-      <IosShareRoundedIcon sx={{ fontSize: 30 }} />
+                .then(() => {
+                  // console.log(response.data)
+                  setHeartCnt(heartCnt - 1)
+                  setIsliked(!isliked)
+                })
+                .catch((error) => {
+                  console.log(error)
+                })
+            }
+            setIsliked(!isliked)
+          }}
+        >
+          {likeStation}
+        </IconButton>
+        <div style={{ marginTop: '-8px' }}>{heartCnt}</div>
+      </div>
     </div>
   )
 }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import './ProfileEdit.css'
+import { useNavigate } from 'react-router'
 import NoImg from '../../assets/noImg.svg'
 import TextField from '@mui/material/TextField'
 import Box from '@mui/material/Box'
@@ -13,6 +14,8 @@ function ProfileEdit(props) {
   const [nickname, setNickname] = useState('')
   const [bio, setBio] = useState('')
   const [party, setParty] = useState('')
+
+  const navigate = useNavigate()
 
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
@@ -114,7 +117,10 @@ function ProfileEdit(props) {
           'Content-Type': 'multipart/form-data'
         }
       })
-      .then()
+      .then((res) => {
+        console.log('[성공]', res.data)
+        navigate(`/MyPage/${username}`)
+      })
       .catch((err) => console.log(err))
     props.handleClose()
   }

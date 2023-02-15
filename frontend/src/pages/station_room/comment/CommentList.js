@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-// import { useSelector } from 'react-redux'
 import { useParams, useNavigate } from 'react-router'
 import profilePicture1 from '../assets/profilePicture1.png'
 import CommentCreate from '../comment/CommentCreate'
@@ -55,13 +54,14 @@ function Comments(props) {
         // console.log(Comments[i])
         deleteButton = (
           <button
+            className="delete-btn-text-form"
             onClick={() => {
               axios({
                 method: 'delete',
                 url: `/api/station/comment/${Comments[i].commentId}`,
                 headers: { Authorization: localStorage.getItem('accessToken') }
               })
-                .then((response) => {
+                .then(() => {
                   alert('댓글이 삭제 되었습니다.')
                   dispatch(CreateComment(1))
                 })
@@ -74,32 +74,20 @@ function Comments(props) {
           </button>
         )
       }
-      // console.log(deleteButton)
+
       commentLst.push(
         // 댓글 각각 추가
-        <div key={i} style={{ margin: '10px' }}>
-          <div style={{ display: 'flex' }}>
+        <div key={i} style={{ margin: '10px', marginBottom: '10px' }}>
+          <div className="commenter-list">
             <img
-              src={profileImage} //
-              alt="profilePicture"
-              style={{
-                width: '50px',
-                heigth: '50px',
-                marginRight: '10px',
-                cursor: 'pointer'
-              }}
+              src={profileImage}
+              className="commenter-profile"
+              alt="작성자 프로필"
               onClick={() => {
                 navigate(`/MyPage/${username}`)
               }}
             />
-            <div
-              style={{
-                width: '100%',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-              }}
-            >
+            <div className="commenter-info">
               <div>
                 <h4
                   style={{ margin: '0px', cursor: 'pointer' }}
@@ -109,17 +97,12 @@ function Comments(props) {
                 >
                   {username}
                 </h4>
-                <p style={{ margin: '0px' }}>{content}</p>
-                <p
-                  style={{
-                    color: 'gray',
-                    margin: '0 0 0 10px'
-                  }}
-                >
-                  {releaseDate}
-                </p>
+                <p style={{ margin: '0px', fontSize: '0.9em' }}>{content}</p>
               </div>
-              {deleteButton}
+              <div className="commenter-date-delete">
+                <div>{releaseDate}</div>
+                {deleteButton}
+              </div>
             </div>
           </div>
         </div>
@@ -132,10 +115,8 @@ function Comments(props) {
 function CommentList() {
   return (
     <>
-      <div className="comment">
-        <div className="comment-list">
-          <Comments></Comments>
-        </div>
+      <div className="comment" style={{ margin: '10px' }}>
+        <Comments></Comments>
       </div>
       <CommentCreate></CommentCreate>
     </>
