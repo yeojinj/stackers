@@ -39,7 +39,6 @@ function profileFrame() {
 
   return (
     <div>
-      {/* 드롭다운이 켜지면 업로드버튼과 프로필사진 위치 이동되는 이슈발생 */}
       <img
         src={userImage !== 'path' ? userImage : DefaultImg}
         alt=""

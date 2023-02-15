@@ -150,26 +150,6 @@ function Header() {
     }
   }
 
-  // const handleDropDownKey = (event) => {
-  //   // input에 값이 있을때만 작동
-  //   if (isHaveInputValue) {
-  //     if (
-  //       event.key === 'ArrowDown' &&
-  //       dropDownList.length - 1 > dropDownItemIndex
-  //     ) {
-  //       setDropDownItemIndex(dropDownItemIndex + 1)
-  //     }
-
-  //     if (event.key === 'ArrowUp' && dropDownItemIndex >= 0) {
-  //       setDropDownItemIndex(dropDownItemIndex - 1)
-  //     }
-  //     if (event.key === 'Enter' && dropDownItemIndex >= 0) {
-  //       clickDropDownItem(dropDownList[dropDownItemIndex])
-  //       setDropDownItemIndex(-1)
-  //     }
-  //   }
-  // }
-
   useEffect(showDropDownList, [inputValue], [isHaveInputValue])
 
   useEffect(() => {
