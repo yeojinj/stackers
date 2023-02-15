@@ -1,6 +1,6 @@
 # Stackers
 
-로고 사진
+<img title="" src="file:///C:/Users/multicampus/AppData/Roaming/marktext/images/2023-02-15-20-43-39-image.png" alt="" data-align="center" width="379">
 
 # Ⅰ. 서비스 소개
 
@@ -9,37 +9,43 @@
 1. 진행 기간
 
 2. 개요
-
+   
    - 한줄 소개 : 온라인 합주 서비스
-
+   
    - 서비스 명 : Stackers
 
 3. 타겟
-
+   
    - 악기 혹은 합주에 관심이 있는 사람들
    - 시간, 공간의 제약이 있는 경우 취미생활하기 어려운 사람들
 
 4. 기획 배경
-
+   
    - 배경
-
+     
      > 노래 혹은 안기연주에 관심이 많은 사람들은 많다. 함께 연주를 해보고 싶기도 하고, 자신의 연주를 자랑하고 싶은 사람들도 있다. 하지만, 바쁜 현대인에게 이는 큰 제약조건이 된다.
-
+   
    - 목적
-
+     
      > `Stackers`는 각자 자유로운 공간에서, 언제든 연주 영상을 올릴 수 있는 기능을 제공합니다. 그리고, 연주 영상에 자신의 연주를 함께 녹화하는 기능을 제공합니다.
-
+   
    - 의의
 
 5. 주요 기능
-
 - 악기 연주 영상(스테이션) 녹화 및 게시
+
 - 마음에 드는 다른 사람의 스테이션에 자신의 연주 쌓기
+
 - 완성된 스테이션, 참여 가능한 스테이션 조회
+
 - 인기 영상 조회
+
 - 영상에 좋아요, 댓글 작성, SNS 공유 가능
+
 - 마음에 드는 연주자를 팔로우
+
 - 마이페이지에서 바이오 및 연주 가능 악기, 소속 그룹 관리
+
 - 게시물 설명, 곡 정보, 아이디, 닉네임 검색 기능으로 원하는 스테이션 및 계정 찾기
 
 # Ⅱ. 기술 스택
@@ -48,7 +54,7 @@
 
 ## **아키텍쳐 구조도**
 
-![](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/e2fd30b4-8304-45dc-839f-aef503229be6/%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98_%EA%B5%AC%EC%84%B1%EB%8F%84.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20230215%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230215T055417Z&X-Amz-Expires=86400&X-Amz-Signature=914753b3fd5cc486fbb882dabfb98cc2133a17d49e2bc3dae2590bc10b2246b6&X-Amz-SignedHeaders=host&response-content-disposition=filename%3D%22%25EC%2595%2584%25ED%2582%25A4%25ED%2585%258D%25EC%25B2%2598%2520%25EA%25B5%25AC%25EC%2584%25B1%25EB%258F%2584.png%22&x-id=GetObject)
+![](C:\Users\multicampus\Downloads\Frame%201.png)
 
 ### Backend
 
@@ -85,15 +91,15 @@
 - **Node.js** : v 16.18.0
 
 - **React** : v 18.2.0 (자동으로 최신버전 다운)
-
+  
   - react-media-recorder (비디오 녹화 라이브러리)
-
+  
   - react-dropzone (파일 드래그 앤 드롭 라이브러리)
-
+  
   - react-router-dom (리액트 라우트 라이브러리)
-
+  
   - react-redux (리액트 상태 관리 라이브러리)
-
+  
   - moment (파일 저장 시간 정보 세팅을 위한 라이브러리)
 
 - **VSCode** : v 1.74.3
@@ -104,7 +110,7 @@
 
 - **AWS EC2**
 
-- **Jenkins**
+- **AWS S3**
 
 - **NGINX**
 
@@ -262,7 +268,7 @@ frontend/
 
 - ##### JIRA
   
-  - 매주 월~금 동안 할 Task 등록 후 Sprint 시작
+  - 매주 월~금요일에 진행할 Task 등록 후 Sprint 시작
   
   - **Epic, Story, Task 단위**
     
@@ -317,40 +323,74 @@ frontend/
 
 ### 기능 명세서
 
-- 
+![](C:\Users\multicampus\AppData\Roaming\marktext\images\2023-02-15-20-24-54-image.png)
+
+![](C:\Users\multicampus\AppData\Roaming\marktext\images\2023-02-15-20-26-34-image.png)
+
+![](C:\Users\multicampus\AppData\Roaming\marktext\images\2023-02-15-20-27-47-image.png)
 
 ### 와이어프레임
 
-- 화면 설계도
+- 초기 화면 설계도
   
+  ![](C:\Users\multicampus\AppData\Roaming\marktext\images\2023-02-15-19-39-06-image.png)
+
+- 와이어프레임
   
+  ![](C:\Users\multicampus\AppData\Roaming\marktext\images\2023-02-15-20-05-27-image.png)
 
 ### ERD
 
-### API
+![](C:\Users\multicampus\Desktop\Stackers%20(1).png)
 
 ### 배포
+
+- 배포퀸 님 작성해주세요..
 
 # Ⅳ. 프로젝트 결과
 
 --- 
 
-1. 실제 서비스 화면 (시나리오 순서와 같게 gif 로?)
-   
-   - 회원가입, 로그인
-   
-   - 메인
-   
-   - ...
+### 실제 서비스 화면 (시나리오 순서와 같게 gif 로?)
 
-2. 협업
-   
-   - Git Flow gif
-   
-   - Jira 번다운 차트 사진
-   
-   - Notion 스크롤 gif 
+- 회원가입
+
+- 로그인
+
+- 메인
+
+- 검색(상세조회로 이동, 참여하기 버튼 클릭)
+
+- 상세조회(팔로우, 팔로잉, 댓글 달기, 마이페이지 이동)
+
+- 마이페이지(프로필 편집, 팔로잉, 팔로우 리스트 확인, 공개/비공개 영상)
+
+### 협업
+
+- ##### Git Flow
+  
+  ![](C:\Users\multicampus\Desktop\GitFlow.gif)
+
+- ##### Jira 번다운 차트 사진
+  
+  - 마지막날에...
+
+- ##### Notion
+  
+  ![](C:\Users\multicampus\Desktop\notion.gif)
 
 # Ⅴ. 소감 및 배운점
 
 ---
+
+##### 정여진
+
+##### 임세은
+
+##### 안수빈
+
+##### 이창민
+
+##### 최보영
+
+##### 백지원
