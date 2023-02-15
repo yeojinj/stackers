@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import '../../styles/stationlistitem.css'
+import './stationlistitem.css'
 import DefaultImg from '../../assets/default_profile.png'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import logo from '../../assets/image_logo.png'
