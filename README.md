@@ -30,63 +30,241 @@
 
 ---
 
-1. 주요 기술
-   
-   - 하나씩 설명~
-
 # Ⅲ. 프로젝트 진행
 
 ---
 
-1. 프로젝트 파일 구조
-   
-   - Back
-   
-   - Front
+### 프로젝트 구조
 
-2. 협업 툴
-   
-   - Git
-   
-   - Notion
-   
-   - Jira
-   
-   - MatterMost
-   
-   - Discord
+#### Back
 
-3. 협업 규칙
-   
-   - 노션 텐텐만의 규칙 적을거임
+```
+backend/
+├─ .gradle/
+├─ .idea/
+│  ├─ favicon.ico
+│  ├─ index.html
+│  ├─ manifest.json
+│  ├─ robots.txt
+├─ build/
+├─ gadle/
+├─ src/
+│  ├─ main/
+│  │  ├─ java/
+│  │  │  ├─ com.ssafy.stackers/
+│  │  │  │  ├─ auth/
+│  │  │  │  ├─ config/
+│  │  │  │  │  ├─jwt/
+│  │  │  │  ├─ controller/
+│  │  │  │  ├─ exception/
+│  │  │  │  ├─ handler/
+│  │  │  │  ├─ model/
+│  │  │  │  │  ├─dto/
+│  │  │  │  ├─ repository/
+│  │  │  │  ├─ service/
+│  │  │  │  ├─ utils/
+│  │  │  │  │  ├─error/
+│  │  │  │  │  ├─S3Uploader.java
+│  │  │  │  ├─ StackersApplication
+│  │  ├─ resources/
+│  ├─ test/
+│  │  ├─ java/
+│  │  │  ├─ com.ssafy.stackers/
+│  │  │  │  ├─ StackersApplicationTests.java
+├─ .gitignore
+├─ build.gradle
+├─ gradlew.bat
+├─settings.gradle
+```
 
-4. 역할
+#### Front
+
+```
+frontend/
+├─ node_modules/
+├─ public/
+│  ├─ favicon.ico
+│  ├─ index.html
+│  ├─ manifest.json
+│  ├─ robots.txt
+├─ src/
+│  ├─ assets/
+│  ├─ components/
+│  │  ├─ account/
+│  │  ├─ station/
+│  ├─ pages/
+│  │  ├─ main_room/
+│  │  ├─ my_page/
+│  │  ├─ profile_edit/
+│  │  ├─ record_room/
+│  │  ├─ searchview/
+│  │  ├─ sign_folder/
+│  │  │  ├─ LogIn/
+│  │  │  ├─ SignUp/
+│  │  ├─ station_room/
+│  │  │  ├─ article/
+│  │  │  ├─ assets/
+│  │  │  ├─ comment/
+│  │  │  ├─ stationview/
+│  ├─ App.js
+│  ├─ App.test.js
+│  ├─ index.css
+│  ├─ index.js
+│  ├─ logo.svg
+│  ├─ reportWebVitals.js
+│  ├─ router.js
+│  ├─ setupProxy.js
+│  ├─ setupTests.js
+│  ├─ store.js
+├─ .gitignore
+├─ package-lock.json
+├─ package.json
+├─ README.md
+```
+
+### 협업 툴, 규칙
+
+- ##### Git
+  
+  Git Branch
+  
+  ```
+  master(main)
+  
+  develop
+  
+  feature
+  ```
+  
+  feature 브랜치 작성
+  
+  `feature/back/login`
+  
+  `feature/back/settings`
+  
+  `feature/front/signup`
+  
+  `feature/front/main-list`
+  
+  브랜치 이름은 전체 영어 소문자로
+  
+  merge request 시 브랜치 삭제에 체크 (되어 있음) → 특이사항 생길 시 팀장에게 보고
+  
+  `git pull origin develop` : 다른 사람 코드 땡겨오기
+  
+  `git branch [추가할 브랜치명]`
+  
+  `git checkout [이동할 브랜치명]`
+  
+  `git add [추가할 파일명]`
+  
+  `git commit -m "[커밋 메세지]"`
+  
+  `git push origin [현재 브랜치명]`
+  
+  MR 요청시 back-end, front-end 별로 MR 요청한 본인을 제외한 다른 팀원이 코드 확인 후 MR 진행
+
+- ##### Notion
+  
+  **회의록**
+  
+  - Scrum meeting : 특이사항 있을 경우 작성
+  
+  - General meeting : 회의 주요 안건, 결과, 피드백 기록
+  
+  - Weekend meeting : 주말에 회의 시 기록
+  
+  **기능 명세 및 우선순위**
+  
+  - 우선순위가 기록되어 있는 요구사항 명세서 표
+  
+  **화면 설계**
+  
+  - 화면 설계도
+  
+  - 와이어프레임
+  
+  **레퍼런스 정리**
+  
+  **개발 공부 발자취 및 오류 로깅**
+  
+  **팀 규칙**
+  
+  **컨벤션**
+  
+  **개발 진척도 공유**
+
+- ##### JIRA
+  
+  - 매주 월~금 동안 할 Task 등록 후 Sprint 시작
+  
+  - **Epic, Story, Task 단위**
+    
+    - **Epic**
+      
+      - 기획, 설계, FE 개발, BE 개발, 배포, TEST, 발표
+    
+    - **Story**
+      
+      - 명세서 기능(사용자가 쓰는 기능 단위)을 기준으로 작성
+      - 명사형
+    
+    - **Task**
+      
+      - Task는 최대한 상세하게 쪼개어서 작성할 것
+      
+      - 이름은 [ `BE` , `FE` ] 를 앞에 붙여서 명사형으로 작성하고 설명은 선택적으로 동사형으로 작성할 것
+        
+        ex) [BE] 유저 데이터베이스 추가
+
+- ##### MatterMost
+  
+  - 
+
+- ##### Discord
+  
+  - 공지
+  
+  - 비대면 회의
+    
+    - 전체 회의
+    
+    - front-end 회의
+    
+    - back-end 회의
+  
+  - 정보 공유
+  
+  - front-end 정보 공유
+  
+  - back-end 정보 공유
+1. 역할
    
    - 사진, 이름, 역할을 넣은 이미지 또는 pdf 넣기
 
-5. 컨벤션
+2. 코딩 컨벤션
    
    - 노션 참고
 
-6. 기능 명세서
+3. 기능 명세서
    
    - 노션 요구사항 명세서 참고
 
-7. 아키텍처
+4. 아키텍처
    
    - 사진 넣기
 
-8. 와이어프레임
+5. 와이어프레임
    
    - 피그마 참고
 
-9. UI/UX
+6. UI/UX
 
-10. ERD
+7. ERD
 
-11. API
+8. API
 
-12. 배포
+9. 배포
 
 # Ⅳ. 프로젝트 결과
 
@@ -111,5 +289,3 @@
 # Ⅴ. 소감 및 배운점
 
 ---
-
-
