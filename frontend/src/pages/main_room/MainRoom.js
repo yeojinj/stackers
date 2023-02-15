@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import StationListItem from '../../components/station/StationListItem'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt'
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
 import axios from 'axios'
@@ -222,6 +223,7 @@ function MainRoom() {
                           isRanking={false}
                           station={station}
                           isSearch={true}
+                          isDark={true}
                           saveList={followerStation}
                         />
                       )
@@ -235,8 +237,22 @@ function MainRoom() {
                   )}
                   {isloggin && followerStation.length === 0 && (
                     <div className="non-login-section-div">
-                      <div style={{ fontSize: '1.8em' }}>
-                        아직 스테이션이 없네요ㅠ.ㅠ
+                      <div
+                        style={{
+                          fontSize: '1.1em',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center'
+                        }}
+                      >
+                        <PeopleAltIcon
+                          style={{
+                            color: 'whitesmoke',
+                            marginBottom: '7px',
+                            width: '30px'
+                          }}
+                        />
+                        아직 팔로잉 스태커들의 영상이 없네요
                       </div>
                     </div>
                   )}
