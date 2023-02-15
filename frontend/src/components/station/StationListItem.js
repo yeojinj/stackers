@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useRef } from 'react'
 import '../../styles/stationlistitem.css'
 import DefaultImg from '../../assets/default_profile.png'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
@@ -8,23 +8,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { SaveStation, CountBackNum } from '../../store.js'
 
 function StationListItem({ isRanking, isSearch, station, index, saveList }) {
-  // const [station, setStation] = useState()
   const videoRef = useRef(null)
   const dispatch = useDispatch()
   const backNumber = useSelector((state) => {
     return state.url.backNumber
   })
-  // const location = useLocation()
-  // console.log(location)
-  // useEffect(() => {
-  //   setStation(station)
-  //   console.log('mainroom 에서 보낸 데이터를 station 변수에 넣기', station)
-  // }, [])
-
-  useEffect(() => {
-    IsRanking()
-    IsSearch()
-  }, [])
 
   // 마우스 오버시 비디오 재생, 마우스 리브시 비디오 일시정지
   function playVideo() {
