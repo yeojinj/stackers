@@ -52,7 +52,6 @@ function MainRoom() {
 
   // 완성된 스테이션 조회
   async function completeStationList() {
-    console.log('[완성 스테이션]', username)
     await axios({
       method: 'get',
       url: '/api/station/completed/stackers',
@@ -70,7 +69,6 @@ function MainRoom() {
 
   // 미완성된 스테이션 조회
   async function uncompleteStationList() {
-    console.log('[미완성 스테이션]', username)
     await axios({
       method: 'get',
       url: '/api/station/uncompleted/stackers',
@@ -320,9 +318,7 @@ const FadeContent = ({ children }) => {
     const fadeOnScrollObserver = new IntersectionObserver(
       (entries, observer) => {
         entries.forEach((entry) => {
-          if (!entry.isIntersecting) {
-            console.log('isinteresting')
-          } else {
+          if (entry.isIntersecting) {
             entry.target.classList.add('appear')
             observer.unobserve(entry.target)
           }
