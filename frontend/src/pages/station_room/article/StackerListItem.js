@@ -10,8 +10,6 @@ import { useNavigate } from 'react-router-dom'
 function StackerListItem(props) {
   const musicians = props.musicians
   const navigate = useNavigate()
-  // console.log(musicians)
-  // console.log(musicians)
 
   // musicians.push(musicians[0])
   const lst = []
