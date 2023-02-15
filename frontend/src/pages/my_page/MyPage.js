@@ -236,18 +236,24 @@ function MyPage() {
       <>
         <div className="mystation-tap">
           <div className="popular-video">
-            {publicStation.map((result, i) => {
-              return (
-                <div key={i}>
-                  <StationListItem
-                    isRanking={false}
-                    isSearch={false}
-                    station={result}
-                    saveList={publicStation}
-                  />
-                </div>
-              )
-            })}
+            {publicStation.length === 0 && (
+              <div style={{ marginTop: '30px' }}>
+                지금 바로 스택을 쌓아보세요!
+              </div>
+            )}
+            {publicStation.length !== 0 &&
+              publicStation.map((result, i) => {
+                return (
+                  <div key={i}>
+                    <StationListItem
+                      isRanking={false}
+                      isSearch={false}
+                      station={result}
+                      saveList={publicStation}
+                    />
+                  </div>
+                )
+              })}
           </div>
         </div>
       </>

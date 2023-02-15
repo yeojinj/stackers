@@ -1,10 +1,8 @@
 import React, { useRef } from 'react'
 import StationControlButton from './StationControlButton'
-// import Video from '../../../components/Video'
-// import station from '../assets/station.png'
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined'
-import ArrowCircleUpOutlinedIcon from '@mui/icons-material/ArrowCircleUpOutlined'
-import ArrowCircleDownOutlinedIcon from '@mui/icons-material/ArrowCircleDownOutlined'
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import '../Station.css'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
@@ -24,44 +22,36 @@ function StationView(props) {
       return ele.id
     })
   })
-  console.log(stationList)
 
-  const isSave = useSelector((state) => {
-    return state.station.station
-  })
-
-  console.log('[스테이션 정보가 저장되었어요]', isSave)
   return (
-    <div className="LeftStyle">
+    <div className="left-style">
       <CloseOutlinedIcon
-        className="stationOutButton"
+        className="station-close-btn"
         onClick={() => {
           dispatch(CountBackNum(0))
           navigate(-backNumber)
         }}
       />
-      <div className="contentBox">
-        <div className="videoBox">
-          <video
-            src={Info.videoPath}
-            alt="station"
-            ref={videoRef}
-            className="videoBox"
-            muted
-            autoPlay
-            controls
-            loop
-          />
-        </div>
-        <div className="stationControlButton">
-          <StationControlButton
-            stationId={props.stationId}
-            Info={Info}
-          ></StationControlButton>
-        </div>
+      <div className="content-box">
+        <video
+          src={Info.videoPath}
+          alt="station"
+          ref={videoRef}
+          className="videoBox"
+          muted
+          width={378}
+          height={672}
+          autoPlay
+          controls
+          loop
+        />
+        <StationControlButton
+          stationId={props.stationId}
+          Info={Info}
+        ></StationControlButton>
       </div>
-      <div className="prevnextbutton">
-        <ArrowCircleUpOutlinedIcon
+      <div className="prev-next-button">
+        <KeyboardArrowUpIcon
           sx={{ fontSize: 30 }}
           style={{ cursor: 'pointer' }}
           onClick={() => {
@@ -76,7 +66,7 @@ function StationView(props) {
             )
           }}
         />
-        <ArrowCircleDownOutlinedIcon
+        <ExpandMoreIcon
           sx={{ fontSize: 30 }}
           style={{ cursor: 'pointer' }}
           onClick={() => {
