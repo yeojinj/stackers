@@ -6,7 +6,6 @@ import { CreateStack } from '../../store.js'
 function CheckComplete() {
   const dispatch = useDispatch()
   const handleChange = (e) => {
-    console.log(e.target.name, e.target.value)
     dispatch(CreateStack([e.target.name, e.target.value]))
   }
 

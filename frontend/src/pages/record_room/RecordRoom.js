@@ -35,12 +35,13 @@ function RecordRoom() {
       })
   }
   const preUrl = useSelector((state) => {
-    return state.url.preUrl
+    return '/'
   })
 
   const params = useParams()
   const stationId = params.preId
   const goBack = () => {
+    console.log(preUrl)
     navigate(preUrl)
   }
   const [open, setOpen] = useState(false)
@@ -54,7 +55,6 @@ function RecordRoom() {
     setOpen(false)
   }
   useEffect(() => {
-    console.log('useCheckToken')
     checkToken
   }, [username])
 
