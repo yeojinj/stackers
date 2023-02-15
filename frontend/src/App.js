@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import router from './router.js'
 import { RouterProvider } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { logIn, LogInState, CreateInst } from './store.js'
+import { logIn, LogInState } from './store.js'
 import axios from 'axios'
 
 function App() {
@@ -11,11 +11,6 @@ function App() {
     return state.user.isLogged
   })
 
-  const loginUser = useSelector((state) => {
-    return state.user
-  })
-  // console.log(loginUser)
-  // console.log(localStorage.getItem('refreshToken'))
   const dispatch = useDispatch()
   useEffect(() => {
     if (isLogged) {
@@ -27,7 +22,6 @@ function App() {
         }
       })
         .then((response) => {
-          // console.log(response.data)
           dispatch(LogInState(response.data))
         })
         .catch((error) => {
@@ -37,9 +31,7 @@ function App() {
   }, [isLogged])
 
   useEffect(() => {
-    // console.log(localStorage.getItem('accessToken'))
     const Token = localStorage.getItem('accessToken')
-    // console.log(Token)
     if (isLogged || Token) {
       axios({
         method: 'GET',
@@ -49,7 +41,6 @@ function App() {
         }
       })
         .then((response) => {
-          // console.log(response.data)
           dispatch(logIn())
           dispatch(LogInState(response.data))
         })

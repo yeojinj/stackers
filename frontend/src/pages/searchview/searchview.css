@@ -36,7 +36,6 @@
 }
 .submenu {
   display: flex;
-  /* width: calc(100% / 3); */
   padding: 10px;
   transition: 0.3s;
 }
@@ -95,7 +94,6 @@
 }
 
 .popular-title-style {
-  /* margin-left: 1%; */
   font-size: 1.1em;
   font-weight: bold;
 }
