@@ -13,6 +13,7 @@ function StationRoom() {
   const dispatch = useDispatch()
   const stationId = Number(params.id)
   const [info, setInfo] = useState(null)
+
   const backNumber = useSelector((state) => {
     return state.url.backNumber
   })
@@ -28,7 +29,7 @@ function StationRoom() {
         setInfo(response.data)
       })
       .catch((error) => {
-        console.log(error.response.status)
+        // console.log(error.response.status)
         if (error.response.status === 500 || error.response.status === '500') {
           navigate('/Forbidden')
         } else if (

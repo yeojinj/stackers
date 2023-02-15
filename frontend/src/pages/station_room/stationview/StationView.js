@@ -9,41 +9,28 @@ import '../Station.css'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { CountBackNum } from '../../../store'
-// import { ChangeUrl } from '../../../store'
 
 function StationView(props) {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  // const preUrl = useSelector((state) => {
-  //   console.log(state.url.preUrl)
-  //   return state.url.preUrl
-  // })
-
   const backNumber = useSelector((state) => {
     return state.url.backNumber
   })
-
-  // dispatch(ChangeUrl('/mypage/test6'))
-  // console.log(preUrl)
   const Info = props.info
   const videoRef = useRef(null)
-  // const [auto, setAuto] = useState(false)
 
-  // function playVideo() {
-  //   return videoRef.current.play()
-  // }
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     playVideo()
-  //   }, [2000])
-  // })
+  const stationList = useSelector((state) => {
+    return state.station.station.map((ele) => {
+      return ele.id
+    })
+  })
+  console.log(stationList)
 
   const isSave = useSelector((state) => {
     return state.station.station
   })
 
   console.log('[스테이션 정보가 저장되었어요]', isSave)
-  const stationLst = [1, 2]
   return (
     <div className="LeftStyle">
       <CloseOutlinedIcon
@@ -81,8 +68,9 @@ function StationView(props) {
             // 이전 페이지 이동 url
             navigate(
               `/StationRoom/${
-                stationLst[
-                  (stationLst.indexOf(props.stationId) + 1) % stationLst.length
+                stationList[
+                  (stationList.indexOf(props.stationId) - 1) %
+                    stationList.length
                 ]
               }`
             )
@@ -95,11 +83,11 @@ function StationView(props) {
             // 다음 페이지 이동 url
             navigate(
               `/StationRoom/${
-                stationLst[
-                  (stationLst.length +
-                    stationLst.indexOf(props.stationId) -
+                stationList[
+                  (stationList.length +
+                    stationList.indexOf(props.stationId) +
                     1) %
-                    stationLst.length
+                    stationList.length
                 ]
               }`
             )
