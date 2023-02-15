@@ -1,6 +1,6 @@
 # Stackers
 
-<img title="" src="file:///C:/Users/multicampus/AppData/Roaming/marktext/images/2023-02-15-20-43-39-image.png" alt="" data-align="center" width="379">
+<img title="" src="./readme_img/Stackers_logo.png" alt="" data-align="center" width="379">
 
 # Ⅰ. 서비스 소개
 
@@ -54,7 +54,7 @@
 
 ## **아키텍쳐 구조도**
 
-![](C:\Users\multicampus\Downloads\Frame%201.png)
+![](./readme_img/아키텍쳐.png)
 
 ### Backend
 
@@ -321,25 +321,25 @@ frontend/
 
 ### 기능 명세서
 
-![](C:\Users\multicampus\AppData\Roaming\marktext\images\2023-02-15-20-24-54-image.png)
+![](./readme_img/기능명세서1.png)
 
-![](C:\Users\multicampus\AppData\Roaming\marktext\images\2023-02-15-20-26-34-image.png)
+![](./readme_img/기능명세서2.png)
 
-![](C:\Users\multicampus\AppData\Roaming\marktext\images\2023-02-15-20-27-47-image.png)
+![](./readme_img/기능명세서3.png)
 
 ### 와이어프레임
 
 - 초기 화면 설계도
   
-  ![](C:\Users\multicampus\AppData\Roaming\marktext\images\2023-02-15-19-39-06-image.png)
+  ![](./readme_img/화면 설계도.png)
 
 - 와이어프레임
   
-  ![](C:\Users\multicampus\AppData\Roaming\marktext\images\2023-02-15-20-05-27-image.png)
+  ![](./readme_img/와이어프레임.png)
 
 ### ERD
 
-![](C:\Users\multicampus\Desktop\Stackers%20(1).png)
+![](./readme_img/Stackers_ERD.png)
 
 ### 배포
 
