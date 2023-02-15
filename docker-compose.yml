@@ -3,13 +3,21 @@
 version: "3.7"
 
 services:
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - 6379:6379
+    networks:
+      - stackers
+    restart: always
   mariadb:
     container_name: mariadb
     build:
       context: ./mariadb
       dockerfile: Dockerfile
     ports:
-      - 3306:3306
+      - 3308:3306
     environment:
       TZ: Asia/Seoul
     networks:
@@ -23,6 +31,7 @@ services:
     ports:
       - 5000:5000
     depends_on:
+      - redis
       - mariadb
     networks:
       - stackers
@@ -42,9 +51,25 @@ services:
       context: ./nginx
       dockerfile: Dockerfile
     ports:
-      - "80:80"
+      - 80:80
+      - 443:443
+    depends_on:
+      - frontend
+      - backend
     networks:
       - stackers
+    volumes:
+      - ../certbot/conf:/etc/letsencrypt
+      - ../certbot/www:/var/www/certbot
+    command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
+
+  certbot:
+    image: certbot/certbot
+    restart: always
+    volumes:
+      - ../certbot/conf:/etc/letsencrypt
+      - ../certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
 networks:
   stackers:

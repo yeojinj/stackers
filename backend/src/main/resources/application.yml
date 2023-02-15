@@ -10,12 +10,12 @@ spring:
       max-request-size: 50MB
   jpa:
     hibernate:
-      ddl-auto: 'update'
-    show-sql: 'true'
+      ddl-auto: "update"
+    show-sql: "true"
     properties:
       hibernate:
-        format_sql: 'true'
-    generate-ddl: 'true'
+        format_sql: "true"
+    generate-ddl: "true"
   http:
     multipart:
       maxFileSize: 500MB
@@ -39,8 +39,8 @@ spring:
   data:
     redis:
       port: 6379
-      host: 127.0.0.1
-      password: '1234'
+      host: redis
+      password: "1234"
 logging:
   level:
     org:
@@ -51,7 +51,7 @@ logging:
         util:
           EC2MetadataUtils: ERROR
 server:
-  port: '5000'
+  port: "5000"
 
 springdoc:
   api-docs:

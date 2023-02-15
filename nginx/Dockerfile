@@ -1,2 +1,4 @@
 FROM nginx
-COPY ./default.conf /etc/nginx/conf.d/default.conf
+COPY ./*.conf /etc/nginx/
+COPY	./init.sh /
+RUN bash init.sh
