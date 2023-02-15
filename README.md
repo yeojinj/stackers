@@ -367,7 +367,7 @@ frontend/
 
 - ##### Git Flow
   
-  ![](C:\Users\multicampus\Desktop\GitFlow.gif)
+  ![](./readme_img/GitFlow.gif)
 
 - ##### Jira 번다운 차트 사진
   
@@ -375,7 +375,7 @@ frontend/
 
 - ##### Notion
   
-  ![](C:\Users\multicampus\Desktop\notion.gif)
+  ![](./readme_img/notion.gif)
 
 # Ⅴ. 소감 및 배운점
 
