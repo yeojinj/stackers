@@ -1,26 +1,88 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import StationControlButton from './StationControlButton'
-// import Video from '../../../components/Video'
-import station from '../assets/station.png'
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined'
-import ArrowCircleUpOutlinedIcon from '@mui/icons-material/ArrowCircleUpOutlined'
-import ArrowCircleDownOutlinedIcon from '@mui/icons-material/ArrowCircleDownOutlined'
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import '../Station.css'
-function StationView() {
+import { useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { CountBackNum } from '../../../store'
+
+function StationView(props) {
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const backNumber = useSelector((state) => {
+    return state.url.backNumber
+  })
+  const Info = props.info
+  const videoRef = useRef(null)
+
+  const stationList = useSelector((state) => {
+    return state.station.station.map((ele) => {
+      return ele.id
+    })
+  })
+
   return (
-    <div className="LeftStyle">
-      <CloseOutlinedIcon className="stationOutButton" />
-      <div className="contentBox">
-        <div className="videoBox">
-          <img src={station} alt="station" className="videoBox" />
-        </div>
-        <div className="stationControlButton">
-          <StationControlButton></StationControlButton>
-        </div>
+    <div className="left-style">
+      <CloseOutlinedIcon
+        className="station-close-btn"
+        onClick={() => {
+          dispatch(CountBackNum(0))
+          navigate(-backNumber)
+        }}
+      />
+      <div className="content-box">
+        <video
+          src={Info.videoPath}
+          alt="station"
+          ref={videoRef}
+          className="videoBox"
+          muted
+          width={378}
+          height={672}
+          autoPlay
+          controls
+          loop
+        />
+        <StationControlButton
+          stationId={props.stationId}
+          Info={Info}
+        ></StationControlButton>
       </div>
-      <div className="prevnextbutton">
-        <ArrowCircleUpOutlinedIcon sx={{ fontSize: 30 }} />
-        <ArrowCircleDownOutlinedIcon sx={{ fontSize: 30 }} />
+      <div className="prev-next-button">
+        <KeyboardArrowUpIcon
+          sx={{ fontSize: 30 }}
+          style={{ cursor: 'pointer' }}
+          onClick={() => {
+            // 이전 페이지 이동 url
+            navigate(
+              `/StationRoom/${
+                stationList[
+                  (stationList.indexOf(props.stationId) - 1) %
+                    stationList.length
+                ]
+              }`
+            )
+          }}
+        />
+        <ExpandMoreIcon
+          sx={{ fontSize: 30 }}
+          style={{ cursor: 'pointer' }}
+          onClick={() => {
+            // 다음 페이지 이동 url
+            navigate(
+              `/StationRoom/${
+                stationList[
+                  (stationList.length +
+                    stationList.indexOf(props.stationId) +
+                    1) %
+                    stationList.length
+                ]
+              }`
+            )
+          }}
+        />
       </div>
     </div>
   )

@@ -1,0 +1,173 @@
+.upload-form-container {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+
+  font-family: Pretendard;
+}
+
+.section-right {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.stack-video {
+  border-radius: 10px;
+  box-shadow: 5px 5px rgba(172, 0, 143, 0.9);
+}
+
+/* 버튼 스타일링 */
+.button-download {
+  width: 255px;
+  height: 35px;
+  margin-top: 20px;
+
+  appearance: button;
+  background-color: rgba(42, 32, 150, 0.8);
+  border: 1px solid rgba(42, 32, 150, 0);
+  border-radius: 4px;
+  box-shadow: #fff 3px 3px 0 0, #000 3px 3px 0 1px;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 0.85em;
+  overflow: visible;
+  text-align: center;
+  text-transform: none;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.button-download:focus {
+  text-decoration: none;
+}
+
+.button-download:hover {
+  font-weight: bold;
+  transform: scale(1.01);
+  text-decoration: none;
+}
+
+.button-download:active {
+  box-shadow: rgba(0, 0, 0, 0.125) 0 3px 5px inset;
+  outline: 0;
+}
+
+.button-download:not([disabled]):active {
+  box-shadow: #fff 2px 2px 0 0, #000 2px 2px 0 1px;
+  transform: translate(2px, 2px);
+}
+
+.section-left {
+  width: 50%;
+  height: 90%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-start;
+}
+
+.input__items {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 5px;
+}
+
+.upload-label {
+  font-size: 0.95em;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+.upload-input {
+  width: 100%;
+  height: 30px;
+  border: 1px solid rgb(192, 192, 192);
+  border-radius: 5px;
+  padding-left: 10px;
+  outline: none;
+}
+.tag-upper-input {
+  width: 100%;
+}
+.tag {
+  width: 70%;
+  height: 30px;
+}
+.tag-btn {
+  margin-top: 0;
+  margin-left: 5px;
+  height: 30px;
+  width: auto;
+}
+.tag-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.tag-chips {
+  margin-top: 5px;
+}
+.checkbox-container {
+  width: 100%;
+  margin-top: 2%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.upload-btn-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.button-complete {
+  color: white;
+  background-color: rgba(227, 95, 173, 0.5);
+  border: 1px solid rgba(227, 95, 173, 0.5);
+  box-shadow: #fff 3px 3px 0 0, #00000049 3px 3px 0 1px;
+}
+
+.forbidden-style {
+  font-family: Pretendard;
+  border-radius: 50px;
+  width: 100px;
+  height: 30px;
+  margin-top: 15px;
+}
+.forbidden-style:hover {
+  cursor: pointer;
+}
+.inst-tags {
+  width: 100%;
+  height: 25px;
+
+  display: flex;
+  flex-direction: row;
+}
+.dropdown-item-index {
+  width: fit-content;
+  padding: 3px 10px;
+  border: 0.7px solid whitesmoke;
+  font-size: 0.9em;
+  border-radius: 20px;
+  list-style: none;
+}
+.dropdown-item-index:hover {
+  cursor: pointer;
+  border: 0.7px solid rgb(235, 41, 193);
+  color: rgb(235, 41, 193);
+}

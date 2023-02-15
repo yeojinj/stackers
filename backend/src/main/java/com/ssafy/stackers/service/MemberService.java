@@ -1,52 +1,47 @@
 package com.ssafy.stackers.service;
 
-import com.ssafy.stackers.config.jwt.JwtProperties;
-import com.ssafy.stackers.config.jwt.JwtTokenProvider;
 import com.ssafy.stackers.exception.CustomException;
 import com.ssafy.stackers.model.Member;
-import com.ssafy.stackers.model.RefreshToken;
 import com.ssafy.stackers.model.dto.JoinDto;
-import com.ssafy.stackers.model.dto.LoginDto;
-import com.ssafy.stackers.model.dto.TokenDto;
+import com.ssafy.stackers.model.dto.MemberModifyDto;
 import com.ssafy.stackers.repository.MemberRepository;
-import com.ssafy.stackers.repository.RefreshTokenRepository;
+import com.ssafy.stackers.utils.S3Uploader;
 import com.ssafy.stackers.utils.error.ErrorCode;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Base64;
+
+@Slf4j
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class MemberService {
 
     @Autowired
     private final MemberRepository memberRepository = null;
     @Autowired
-    private final RefreshTokenRepository refreshTokenRepository = null;
-    @Autowired
-    private final AuthenticationManagerBuilder authenticationManagerBuilder = null;
-    @Autowired
-    private final JwtTokenProvider jwtTokenProvider = null;
-    @Autowired
     private final BCryptPasswordEncoder bCryptPasswordEncoder = null;
+    private final S3Uploader s3Uploader;
 
     @Transactional
     public void userJoin(JoinDto joinDto) {
         checkUsernameDuplication(joinDto.getUsername());
 
         Member m = Member.builder().username(joinDto.getUsername())
-            .password(bCryptPasswordEncoder.encode(joinDto.getPassword()))
-            .roles("ROLE_USER")
-            .nickname(joinDto.getUsername())
-            .email(joinDto.getEmail())
-            .bio("")
-            .imgPath("path")
-            .isResign(false)
-            .build();
+                .password(bCryptPasswordEncoder.encode(joinDto.getPassword()))
+                .roles("ROLE_USER")
+                .nickname(joinDto.getUsername())
+                .email(joinDto.getEmail())
+                .bio("")
+                .imgPath("path")
+                .isResign(false)
+                .build();
         memberRepository.save(m);
     }
 
@@ -58,73 +53,63 @@ public class MemberService {
         }
     }
 
-    @Transactional
-    public TokenDto login(LoginDto loginDto) {
-        // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
-        // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
-        UsernamePasswordAuthenticationToken authenticationToken =
-            new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
-
-        // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
-        // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
-        Authentication authentication = authenticationManagerBuilder.getObject()
-            .authenticate(authenticationToken);
-
-        // 3. 인증 정보를 기반으로 JWT 토큰 생성
-        TokenDto tokenDto = new TokenDto(
-            JwtProperties.TOKEN_PREFIX + jwtTokenProvider.createAccessToken(authentication),
-            JwtProperties.TOKEN_PREFIX + jwtTokenProvider.issueRefreshToken(authentication));
-
-        // lastLogin 갱신
-        setLastLogin(loginDto.getUsername());
-
-        return tokenDto;
+    @Transactional(readOnly = true)
+    public boolean isValidUsername(String username) {
+        return !memberRepository.existsByUsername(username);
     }
 
-    @Transactional
-    public TokenDto reissueAccessToken(String token) {
-        String resolveToken = resolveToken(token);
-
-        //토큰 검증 메서드
-        //실패시 jwtTokenProvider.validateToken(resolveToken) 에서 exception을 리턴함
-        jwtTokenProvider.validateToken(resolveToken);
-
-        Authentication authentication = jwtTokenProvider.getAuthenticationWithNoAuth(resolveToken);
-        // 디비에 있는게 맞는지 확인
-        RefreshToken refreshToken = refreshTokenRepository.findByUserId(
-            authentication.getName()).get();
-
-        // 토큰이 같은지 확인
-        if (!resolveToken.equals(refreshToken.getToken())) {
-            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
+    @Transactional(readOnly = true)
+    public void checkUsernameAndEmail(String username, String email) {
+        boolean exists = memberRepository.existsByUsernameAndEmail(username, email);
+        if (!exists) {
+            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
         }
-
-        // 재발행해서 저장
-        String newToken = jwtTokenProvider.createRefreshToken(authentication);
-        refreshToken.changeToken(newToken);
-//        refreshTokenRepository.save(refreshToken);
-
-        // 3. 인증 정보를 기반으로 JWT 토큰
-        TokenDto tokenDto = new TokenDto(
-            JwtProperties.TOKEN_PREFIX + jwtTokenProvider.createAccessToken(authentication),
-            JwtProperties.TOKEN_PREFIX + newToken);
-
-        return tokenDto;
-    }
-
-    private String resolveToken(String token) {
-        if (token.startsWith(JwtProperties.TOKEN_PREFIX)) {
-            return token.substring(JwtProperties.TOKEN_PREFIX.length());
-        }
-        throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
     }
 
     public Member findByUsername(String username) {
         return memberRepository.findByUsername(username)
-            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
-    private void setLastLogin(String username) {
-        memberRepository.setLastLogin(username);
+    public Member findById(Long id) {
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
     }
+
+    public Member getLoginMember(String loginUsername) throws CustomException {
+        // 로그인 되어 있는 유저 정보 가져오기 -> 로그인 되어 있지 않다면 오류 반환
+        Member loginMember = memberRepository.findByUsername(loginUsername)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        return loginMember;
+    }
+
+    @Transactional
+    public void setNewPassword(String username, String randomCode) {
+        Member member = findByUsername(username);
+        member.updatePassword(bCryptPasswordEncoder.encode(randomCode));
+    }
+
+    @Transactional
+    public void updateMember(String username, MemberModifyDto memberModifyDto, MultipartFile file) throws Exception {
+        Member member = findByUsername(username);
+        member.updateNickname(memberModifyDto.getNickname());
+        member.updateBio(memberModifyDto.getBio());
+
+        String originImgPath = member.getImgPath();
+        log.info("[프로필 이미지 경로] : {}", originImgPath);
+
+        if(file != null){
+            member.updateImgPath(updateProfileToS3(file, username));
+            if(!originImgPath.equals("path")) s3Uploader.deleteS3(originImgPath);
+        }
+    }
+
+    public String updateProfileToS3(MultipartFile file, String username) throws Exception{
+        String name = file.getName() + username;
+        String profileImgName = Base64.getEncoder().withoutPadding().encodeToString(name.getBytes());
+        log.info(profileImgName);
+//        return  "";
+        return s3Uploader.uploadFiles(file, "static/profile", profileImgName);
+    }
+
 }

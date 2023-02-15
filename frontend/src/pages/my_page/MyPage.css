@@ -1,0 +1,203 @@
+.my-page-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: Pretendard;
+}
+
+/* 상단 프로필 */
+.div-profile {
+  width: 80%;
+  height: 40%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding-top: 6%;
+  padding-bottom: 3%;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+/* 상단 프로필 이미지(왼쪽) */
+.div-img-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mypage-profile-img {
+  width: 181.6px;
+  height: 181.6px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 0.8px solid #c4c4c4e0;
+}
+
+.div-text-container {
+  width: 600px;
+  margin-left: 50px;
+}
+
+/* 상단 프로필 이미지(오른쪽) */
+.div-profile-notPicture {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.div-items__1 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.p-nickname-bold {
+  font-weight: 700;
+  font-size: 1.3em;
+}
+.div-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.div-profile-Count {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.profile-Count-content {
+  margin: 0px 5px 0px 0px;
+}
+
+.extra-info-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+.extra-info-party {
+  background: rgba(227, 95, 173, 0.9);
+  color: white;
+  padding: 5px 8px;
+  border-radius: 5px;
+  width: fit-content;
+  margin-right: 8px;
+  font-size: 0.9em;
+}
+.profile-team {
+  background-color: rgba(227, 95, 173, 1);
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.profile-instrument {
+  background-color: rgba(245, 245, 245, 1);
+  color: rgba(80, 80, 80, 1);
+  padding: 5px;
+  border-radius: 10px;
+}
+
+.mypage-result {
+  width: 1128px;
+  margin-top: 0px;
+  margin-bottom: 271px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.station-tap {
+  cursor: default;
+  width: 1128px;
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tapmenu-ul {
+  color: rgb(232, 234, 237);
+  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+}
+
+.tab-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-left: 6%;
+}
+.mystation {
+  display: flex;
+  width: auto;
+  padding: 10px 20px 10px 20px;
+  font-size: 1.05em;
+  transition: 0.5s;
+}
+.mystation:hover {
+  cursor: pointer;
+  color: #000;
+}
+.mystation-tap {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* 추가 CSS */
+.button-profile {
+  width: fit-content;
+  height: 30px;
+
+  font-family: Pretendard;
+  margin-right: 5px;
+  padding: 0 10px;
+
+  appearance: button;
+  background-color: rgba(42, 32, 150, 0.8);
+  border: 1px solid rgba(42, 32, 150, 0);
+  border-radius: 4px;
+  box-shadow: #fff 3px 3px 0 0, #000 3px 3px 0 1px;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 0.85em;
+  overflow: visible;
+  text-align: center;
+  text-transform: none;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.button-profile:focus {
+  text-decoration: none;
+}
+
+.button-profile:hover {
+  font-weight: bold;
+  transform: scale(1.01);
+  text-decoration: none;
+}
+
+.button-profile:active {
+  box-shadow: rgba(0, 0, 0, 0.125) 0 3px 5px inset;
+  outline: 0;
+}
+
+.button-profile:not([disabled]):active {
+  box-shadow: #fff 2px 2px 0 0, #000 2px 2px 0 1px;
+  transform: translate(2px, 2px);
+}

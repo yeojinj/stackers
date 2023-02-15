@@ -1,92 +1,197 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import '../../styles/stationlistitem.css'
-import profileTest from '../../assets/profileTest.svg'
+import React, { useRef } from 'react'
+import './stationlistitem.css'
+import DefaultImg from '../../assets/default_profile.png'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
+import logo from '../../assets/image_logo.png'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { SaveStation, CountBackNum } from '../../store.js'
 
-StationListItem.propTypes = {
-  isRanking: PropTypes.bool,
-  isSearch: PropTypes.bool
-}
+function StationListItem({
+  isRanking,
+  isSearch,
+  station,
+  index,
+  isDark,
+  saveList
+}) {
+  const videoRef = useRef(null)
+  const dispatch = useDispatch()
+  const backNumber = useSelector((state) => {
+    return state.url.backNumber
+  })
 
-function StationListItem({ isRanking, isSearch }) {
-  // const [autoPlay, setPlay] = useState(false)
-
-  // 후에 stationInfo 는 useState 에서 기본 값으로 설정, 받아올 데이터 형식으로 변환하기
-  const stationInfo = {
-    video_url: 'https://webrtc.github.io/samples/src/video/chrome.webm',
-    video_description: '비디오 설명이에요 비디오 설명이에요 비디오 설명이에요',
-    video_tags: ['#disco', '#music', '#dance', '#music', '#guitar'],
-    profile_img: profileTest,
-    username: 'apricot',
-    video_likes: 12000
+  // 마우스 오버시 비디오 재생, 마우스 리브시 비디오 일시정지
+  function playVideo() {
+    return videoRef.current.play()
   }
-  // const [info, setInfo] = useState(stationInfo)
-  // const setInfo = () => {
-  //   const updateInfo = [...info, { props로 받아올 데이터 }]
-  //   setInfo(updateInfo)
-  // }
+  function pauseVideo() {
+    return videoRef.current.pause()
+  }
 
+  const navigate = useNavigate()
+  const gotoDetail = (station) => {
+    dispatch(SaveStation(saveList))
+    if (backNumber !== 0) {
+      dispatch(CountBackNum(0))
+    }
+    navigate(`/StationRoom/${station.id}`)
+  }
+
+  const gotoRecord = (id) => {
+    navigate(`/RecordRoom/${id}`)
+  }
+
+  // 메인페이지, 마이페이지 스테이션 조회
   const IsRanking = () => {
+    // 스테이션 랭킹
     if (isRanking) {
-      return null
-    } else {
       return (
-        <>
-          <p className="station-description">{stationInfo.video_description}</p>
-          <div className="station-tag">{stationInfo.video_tags}</div>
-        </>
+        <div className="station-item__ranks">
+          <video
+            ref={videoRef}
+            id="station"
+            className="video-style ranks"
+            src={station.video.videoPath}
+            autoPlay={false}
+            onMouseOver={playVideo}
+            onMouseLeave={pauseVideo}
+            onClick={() => {
+              gotoDetail(station)
+            }}
+            loop
+          ></video>
+          <p className="station-rank">{index}</p>
+        </div>
+      )
+    } else if (!isSearch) {
+      // 완성, 미완성, 마이페이지 스테이션
+      return (
+        <div className="station-item__items">
+          <video
+            ref={videoRef}
+            className="video-style non-ranks"
+            src={station.video.videoPath}
+            autoPlay={false}
+            onMouseOver={playVideo}
+            onMouseLeave={pauseVideo}
+            onClick={() => {
+              gotoDetail(station)
+            }}
+            loop
+          ></video>
+          <div className="video-text">
+            <p className="station-description">{station.content}</p>
+            <div className="station-tag">
+              {station.tags &&
+                station.tags.map((tag, i) => {
+                  return `#${tag} `
+                })}
+            </div>
+          </div>
+        </div>
       )
     }
   }
 
+  // 검색페이지 스테이션
   const IsSearch = () => {
     let likesResult = ''
-    const modifyLikes = stationInfo.video_likes
-    if (modifyLikes >= 1000) {
-      likesResult = `${Math.floor(modifyLikes / 1000)}k`
-    } else {
-      likesResult = modifyLikes
+    if (station.heartCnt >= 0) {
+      const modifyLikes = station.heartCnt
+      if (modifyLikes >= 1000) {
+        likesResult = `${Math.floor(modifyLikes / 1000)}k`
+      } else {
+        likesResult = modifyLikes
+      }
     }
     if (isSearch) {
       return (
-        <>
-          <div className="station-account">
-            <div className="profile-box">
-              <img className="profile-img" src={stationInfo.profile_img}></img>
-            </div>
-            <div className="account-name">{stationInfo.username}</div>
-            <FavoriteBorderIcon
-              style={{ width: '17px', height: '17px', marginTop: '3px' }}
+        <div className="station-item__items">
+          <video
+            ref={videoRef}
+            className={
+              isSearch && station.heartCnt
+                ? 'video-style-search'
+                : 'video-style non-ranks'
+            }
+            src={station.video.videoPath}
+            autoPlay={false}
+            onMouseOver={playVideo}
+            onMouseLeave={pauseVideo}
+            onClick={() => {
+              gotoDetail(station)
+            }}
+            loop
+          />
+          {!station.complete && (
+            <img
+              src={logo}
+              width={38}
+              className="icon-is-not-complete"
+              onClick={() => {
+                gotoRecord(station.id)
+              }}
             />
-            <div className="video-likes">{likesResult}</div>
+          )}
+          <div className="station-info">
+            <p className="station-description">{station.content}</p>
+            <div
+              className={isDark ? 'station-tag dark-mode-text' : 'station-tag'}
+            >
+              {station.tags &&
+                station.tags.map((tag, i) => {
+                  return `#${tag} `
+                })}
+            </div>
+            <div className="station-account">
+              <div
+                className="account-info"
+                style={{ border: 'none', flexDirection: 'row' }}
+              >
+                <img
+                  src={
+                    station.imgPath !== 'path' ? station.imgPath : DefaultImg
+                  }
+                  alt=""
+                  className="profile-img"
+                />
+                <div
+                  className={
+                    station.heartCnt >= 0 ? 'account-name' : 'account-name-main'
+                  }
+                >
+                  {station.username}
+                </div>
+              </div>
+              {station.heartCnt >= 0 && (
+                <div className="heart-info">
+                  <FavoriteBorderIcon
+                    style={{
+                      width: '17px',
+                      height: '17px',
+                      marginRight: '2px',
+                      color: '#E35FAD'
+                    }}
+                  />
+                  <div className="video-likes">{likesResult}</div>
+                </div>
+              )}
+            </div>
           </div>
-        </>
+        </div>
       )
     }
   }
 
-  // const updatePlay = (e) => {
-  //   // console.log(autoPlay)
-  //   setPlay(!autoPlay)
-  //   // console.log(autoPlay)
-  // }
-
-  // useEffect(() => {
-  //   console.log(autoPlay)
-  // }, [autoPlay])
-
   return (
-    <div className={isSearch ? 'station-item-search' : 'station-item'}>
-      {/* <img src={logo}></img> */}
-      <video
-        className={isSearch ? 'video-style-search' : 'video-style'}
-        src={stationInfo.video_url}
-        autoPlay={false}
-        // onMouseOver={updatePlay}
-        // onMouseLeave={updatePlay}
-        loop
-      ></video>
+    <div
+      className={
+        isSearch && station.heartCnt >= 0
+          ? 'station-item-search'
+          : 'station-item'
+      }
+    >
       <IsRanking />
       <IsSearch />
     </div>

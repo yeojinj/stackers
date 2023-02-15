@@ -1,0 +1,24 @@
+.profile-on {
+  position: fixed;
+  right: 0;
+  top: 53px;
+}
+.profile-dropdownbox {
+  width: 132px;
+  max-height: 175px;
+  margin-right: 20px;
+  margin-top: 11px;
+  padding: 8px 0;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 10px rgb(0, 0, 0, 0.3);
+  list-style-type: none;
+  z-index: 3;
+  font-size: 13px;
+}
+
+.profile-menu {
+  padding: 5px 19px;
+  display: flex;
+  align-items: center;
+}

@@ -1,113 +1,142 @@
 /* eslint-disable */
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './LogIn.css'
 import logo from '../../../assets/logo.svg'
-import TextField from '@mui/material/TextField'
-import Button from '@mui/material/Button'
-import naverLogo from './naverLogo.svg'
-import kakaoLogo from './kakaoLogo.png'
-import GoogleLogo from './GoogleLogo.png'
+import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import axios from 'axios'
+import { logIn } from '../../../store.js'
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined'
 
-function LogIn() {
+function LogIn(props) {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const [useButton, setUseButton] = useState(false)
+
+  useEffect(() => {
+    if (0 < username.length && 0 < password.length) {
+      setUseButton(true)
+    } else {
+      setUseButton(false)
+    }
+
+    // console.log(useButton)
+  }, [username, password])
+
+  const [loginButton, setLoginButton] = useState(
+    <button className="login-button-disabled" type="submit" disabled>
+      로그인
+    </button>
+  )
+
+  useEffect(() => {
+    if (useButton) {
+      setLoginButton(
+        <button className="login-button" type="submit">
+          로그인
+        </button>
+      )
+    } else {
+      setLoginButton(
+        <button className="login-button-disabled" type="submit" disabled>
+          로그인
+        </button>
+      )
+    }
+    // console.log(useButton)
+  }, [useButton])
+
   return (
-    <div className="LogIn">
-      <img src={logo} alt="logo" className="LogIn-logo" />
-      <div style={{ textAlign: 'center' }}>
-        <TextField
-          placeholder="아이디(닉네임) 또는 아이디"
-          size="medium"
-          className="LogIn-inputBox "
-        />
-        <TextField
-          placeholder="비밀번호 입력"
-          size="medium"
-          className="LogIn-inputBox "
-        />
-        <div className="find-password-div">
-          <a
-            href="/Login"
-            onClick={(event) => {
-              event.preventDefault()
+    <div>
+      <div className="LogIn">
+        <p style={{ margin: '21px' }}>
+          <CloseOutlinedIcon
+            onClick={() => {
+              props.handleClose()
             }}
-            style={{ marginLeft: 'auto' }}
-          >
-            비밀번호를 잊어버렸나요?
-          </a>
-        </div>
+            style={{
+              cursor: 'pointer',
+              float: 'right'
+            }}
+          />
+        </p>
+        <img src={logo} alt="logo" className="LogIn-logo" />
 
-        <Button
-          variant="contained"
-          className="LogIn-button"
-          style={{
-            width: '390px',
-            height: '55px',
-            backgroundColor: 'rgba(217, 217, 217, 1)',
-            color: 'black',
-            marginBottom: '30px'
+        <form
+          className="login-input-form"
+          onSubmit={(event) => {
+            event.preventDefault()
+            axios({
+              method: 'post',
+              url: '/api/login',
+              data: {
+                username,
+                password
+              }
+            })
+              .then((response) => {
+                localStorage.setItem(
+                  'accessToken',
+                  response.headers.authorization
+                )
+                localStorage.setItem('refreshToken', response.headers.refresh)
+                dispatch(logIn())
+                navigate('/')
+                props.handleClose()
+              })
+              .catch((error) => {
+                // console.error(error)
+                axios({
+                  method: 'get',
+                  url: `/api/member/check-username/${username}`
+                })
+                  .then((response) => {
+                    if (response.data) {
+                      alert('아이디, 비밀번호를 다시 한번 확인해주세요.')
+                    } else {
+                      alert('아이디, 비밀번호를 다시 한번 확인해주세요.')
+                    }
+                  })
+                  .catch((error) => {
+                    // console.error(error)
+                  })
+              })
           }}
         >
-          로그인
-        </Button>
-        <div className="SNS-LogIn-buttons">
-          <Button
-            variant="contained"
-            style={{
-              width: '390px',
-              height: '55px',
-              backgroundColor: '#00c73c',
-              color: 'black',
-              marginBottom: '5px'
+          <input
+            className="login-input"
+            placeholder="아이디(닉네임) 또는 아이디"
+            name="username"
+            value={username}
+            onChange={(event) => {
+              setUsername(event.target.value)
             }}
-          >
-            <div className="div-LogIn-Naver">
-              <img src={naverLogo} alt="naverLogo" className="Logo-Naver" />
-              <b style={{ color: 'white' }}>네이버</b>
-              <b style={{ color: 'white' }}>로그인</b>
-            </div>
-          </Button>
-          <Button
-            variant="contained"
-            style={{
-              width: '390px',
-              height: '55px',
-              backgroundColor: '#FEE500',
-              color: 'black',
-              marginBottom: '5px'
+          />
+          <input
+            className="login-input"
+            placeholder="비밀번호 입력"
+            name="password"
+            value={password}
+            type="password"
+            onChange={(event) => {
+              setPassword(event.target.value)
             }}
-          >
-            <div className="div-LogIn-Kakao ">
-              <img src={kakaoLogo} alt="kakaoLogo" className="Logo-Kakao" />
-              <p>카카오</p>
-              <p>로그인</p>
-            </div>
-          </Button>
-          <Button
-            variant="contained"
-            style={{
-              width: '390px',
-              height: '55px',
-              backgroundColor: '#FFFFFF',
-              color: 'black'
-            }}
-          >
-            <div className="div-LogIn-Google">
-              <img src={GoogleLogo} alt="GoogleLogo" className="Logo-Google" />
-              <p style={{ margin: '0 auto 0 auto' }}>Sign in with Google</p>
-            </div>
-          </Button>
-        </div>
-        <div className="div-LogIn-footer">
-          <p style={{ margin: '0 20px 0 0 ' }}>계정이 없으신가요?</p>
-          <a
-            href="/LogIn"
-            onClick={(event) => {
-              event.preventDefault()
-            }}
-            className="move-to-SignUp"
-          >
-            회원가입
-          </a>
-        </div>
+          />
+
+          <hr />
+          <hr />
+          {loginButton}
+
+          <div className="login-footer">
+            <p style={{ margin: '0 10px 0 0 ' }}>계정이 없으신가요?</p>
+            <Link to="/SignUp" className="signup-link-text">
+              회원가입
+            </Link>
+          </div>
+        </form>
       </div>
     </div>
   )

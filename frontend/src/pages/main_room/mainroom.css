@@ -1,0 +1,164 @@
+.main-room {
+  background-color: white;
+  position: relative;
+  font-family: Pretendard;
+}
+
+.main {
+  width: 100%;
+  padding-top: 8%;
+  margin-bottom: 10%;
+  min-height: calc(100vh - 180px);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.station-center {
+  width: 85%;
+  height: 375px;
+  margin-bottom: 10%;
+  display: flex;
+  flex-wrap: wrap;
+}
+.popular-section {
+  height: 490px;
+}
+.rank-number {
+  color: white;
+  font-size: 6em;
+  position: absolute;
+  margin-top: 15%;
+}
+
+.inherited-styles-for-exported-element {
+  color: #333;
+  font-family: Pretendard;
+  font-size: 1.2em;
+}
+
+.chip {
+  border-radius: 100px;
+  color: white;
+  font-weight: 700;
+  display: inline-block;
+  padding: 5px 20px;
+  margin-bottom: 5px;
+  text-decoration: none;
+}
+.top {
+  background-image: url('https://static.vecteezy.com/system/resources/previews/012/003/362/non_2x/night-shining-starry-sky-blue-space-background-with-stars-space-beautiful-night-sky-vector.jpg');
+  border: 0.8px solid rgba(252, 68, 225, 0.84);
+  box-shadow: rgba(227, 95, 173, 0.2) 0 -25px 18px -14px inset,
+    rgba(227, 95, 173, 0.15) 0 1px 2px, rgba(227, 95, 173, 0.15) 0 2px 4px,
+    rgba(227, 95, 173, 0.15) 0 4px 8px, rgba(227, 95, 173, 0.15) 0 8px 16px,
+    rgba(227, 95, 173, 0.15) 0 16px 32px;
+}
+
+.bottom {
+  background-color: #2a2096e0;
+  border: 0.8px solid rgba(255, 255, 255, 0.273);
+
+  box-shadow: rgba(172, 0, 143, 0.2) 0 -25px 18px -14px inset,
+    rgba(172, 0, 143, 0.15) 0 1px 2px, rgba(172, 0, 143, 0.15) 0 2px 4px,
+    rgba(172, 0, 143, 0.15) 0 4px 8px, rgba(172, 0, 143, 0.15) 0 8px 16px,
+    rgba(172, 0, 143, 0.15) 0 16px 32px;
+}
+
+@media screen and (min-width: 1024px) {
+  .bottom:hover {
+    box-shadow: rgba(172, 0, 143, 0.35) 0 -25px 18px -14px inset,
+      rgba(172, 0, 143, 0.25) 0 1px 2px, rgba(172, 0, 143, 0.25) 0 2px 4px,
+      rgba(172, 0, 143, 0.25) 0 4px 8px, rgba(172, 0, 143, 0.25) 0 8px 16px,
+      rgba(172, 0, 143, 0.25) 0 16px 32px;
+  }
+  .top:hover {
+    box-shadow: rgba(227, 95, 173, 0.35) 0 -25px 18px -14px inset,
+      rgba(227, 95, 173, 0.25) 0 1px 2px, rgba(227, 95, 173, 0.25) 0 2px 4px,
+      rgba(227, 95, 173, 0.25) 0 4px 8px, rgba(227, 95, 173, 0.25) 0 8px 16px,
+      rgba(227, 95, 173, 0.25) 0 16px 32px;
+  }
+}
+
+.wave {
+  --size: 10em;
+  --p: 22.8em;
+  --R: 25em;
+
+  width: 100%;
+  height: 1200px;
+  margin-top: -16%;
+  margin-bottom: -10%;
+  padding-top: 13%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+
+  -webkit-mask: radial-gradient(
+        var(--R) at left 50% var(--d, top) calc(var(--size) + var(--p)),
+        #000 99%,
+        #0000 101%
+      )
+      calc(50% - 2 * var(--size)) 0 / calc(4 * var(--size)) 100%,
+    radial-gradient(
+        var(--R) at left 50% var(--d, top) calc(-1 * var(--p)),
+        #0000 99%,
+        #000 101%
+      )
+      left 50% var(--d, top) var(--size) / calc(4 * var(--size)) 100% repeat-x;
+  background-image: url('https://wallpapercrafter.com/sizes/2048x1152/4964-starry-sky-stars-space-dark-4k.jpg');
+  border: none;
+}
+
+.fade-in {
+  opacity: 0;
+  -webkit-transform: translate(0, 50px);
+  -moz-transform: translate(0, 50px);
+  -ms-transform: translate(0, 50px);
+  transform: translate(0, 50px);
+  -webkit-transition: opacity 0.3s 0.1s, transform 0.3s ease;
+  transition: opacity 0.3s 0.1s, transform 0.3s ease;
+  transition-delay: 0ms;
+}
+
+.fade-in.appear {
+  opacity: 1 !important;
+  -webkit-transform: translate(0, 0) !important;
+  -moz-transform: translate(0, 0) !important;
+  -ms-transform: translate(0, 0) !important;
+  transform: translate(0, 0) !important;
+
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.non-login-section-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1280px;
+  height: 363px;
+}
+.login-btn-main {
+  padding: 8px 14px;
+  font-size: 1.1rem;
+  font-family: Pretendard;
+
+  color: whitesmoke;
+  background: rgba(225, 225, 225, 0.181);
+  border: 1px solid rgba(255, 255, 255, 0.57);
+
+  border-radius: 25px;
+  -webkit-border-radius: 25px;
+  box-shadow: 2px 2px 2px rgba(255, 255, 255, 0.57);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+.login-btn-main:hover {
+  cursor: pointer;
+  transform: scale(1.01);
+  transition: 0.2s ease-in-out;
+}

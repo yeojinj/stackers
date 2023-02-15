@@ -1,99 +1,191 @@
 /* eslint-disable */
 
+import React, { useState, useEffect, memo } from 'react'
 import './Record'
-import React, { useState, useEffect } from 'react'
 import Tag from './ModalTag'
+import './UploadForm.css'
+import Moment from 'moment'
+import { useNavigate } from 'react-router'
+import { useSelector, useDispatch } from 'react-redux'
+import { CreateStack, ClearStack } from '../../store.js'
+import InstTag from './InstTag.js'
+import axios from 'axios'
+import CheckComplete from './CheckComplete'
 
+const blobFile = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      resolve(event.target.result)
+    }
+    reader.readAsDataURL(file)
+  })
 function UploadForm(props) {
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const data = useSelector((state) => {
+    return state.stack
+  })
+
+  const musicName = data.music
+
+  const username = useSelector((state) => {
+    return state.user.username
+  })
+  const dateNow = Moment().format('YYYYMMDDHHmm')
+  dispatch(CreateStack(['videoName', dateNow + username]))
+
   const handleClose = () => {
     props.handle()
   }
   const object = props.src.src.src
-  const [values, setValues] = useState({
-    stack: object,
-    music: '',
-    content: '',
-    scope: 'public'
-  })
+
   const filedownloadlink = window.URL.createObjectURL(object)
+  const [music, setMusic] = useState('')
   const handleChange = (e) => {
-    setValues({
-      ...values,
-      [e.target.name]: e.target.value
-    })
+    if (e.target.name === 'music') {
+      setMusic((music) => e.target.value)
+    }
+    dispatch(CreateStack([e.target.name, e.target.value]))
   }
-  const handleSubmit = (e) => {
+  const [enable, setEnable] = useState(true)
+  useEffect(() => {
+    if (data.remainDepth === 0) {
+      setEnable((enable) => false)
+    }
+  }, [data])
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!values.content || !values.music || !values.scope) {
+    if (!data.content || !data.music) {
       alert('빈칸을 입력해주세요')
     } else {
+      if (data) {
+        let testData = {
+          content: data.content,
+          music: data.music,
+          instrument: data.instrument,
+          tags: data.tags,
+          heartCnt: data.heartCnt,
+          remainDepth: data.remainDepth,
+          isPublic: data.isPublic,
+          isComplete: data.isComplete,
+          prevStationId: data.prevStationId,
+          videoName: data.videoName
+          // delete: true
+        }
+        const formData = new FormData()
+        // 기본 정보
+        formData.append(
+          'info',
+          new Blob([JSON.stringify(testData)], {
+            type: 'application/json'
+          })
+        )
+
+        // 파일 정보
+        formData.append('file', object)
+        axios
+          .post(`/api/station/upload`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Authorization: localStorage.getItem('accessToken')
+            }
+          })
+          .then(() => console.log('[스테이션 업로드] >> 성공'))
+          .catch((error) => {
+            console.error(error)
+          })
+      }
+      navigate('/UploadLoading')
+
       handleClose()
+      dispatch(ClearStack())
+      window.URL.revokeObjectUrl(filedownloadlink)
     }
   }
   return (
-    <div className="container">
-      <form className="left stack" onSubmit={handleSubmit}>
-        <video className="stackVideo" src={filedownloadlink} controls />
-        <div className="item">노래 제목</div>
-        <input
-          type="text"
-          name="music"
-          value={values.music}
-          onChange={handleChange}
-        ></input>
-        {filedownloadlink && (
-          <a href={filedownloadlink} download>
-            Download
-          </a>
-        )}
-      </form>
-      <div className="right">
-        <form onSubmit={handleSubmit}>
-          <div className="infoForm">설명</div>
+    <form className="section-left" onSubmit={handleSubmit}>
+      {musicName !== '' && music === '' ? (
+        <div className="input__items">
+          <label className="upload-label">노래 제목</label>
           <input
+            className="upload-input"
             type="text"
-            name="content"
-            value={values.content}
-            onChange={handleChange}
+            name="music"
+            disabled={true}
+            defaultValue={musicName}
           ></input>
-          <div className="thumbnailForm">썸네일</div>
-          <div className="tagForm">태그</div>
-          <Tag />
-          <div className="container">
-            <div className="left">
-              <div className="instForm">연주 악기</div>
-              <Tag />
-            </div>
-            <div className="right">
-              <div className="scopeForm">공개 범위</div>
-              <div>
-                <label>
-                  <input
-                    type="radio"
-                    name="scope"
-                    value="true"
-                    onChange={handleChange}
-                  />
-                  공개
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="scope"
-                    value="false"
-                    onChange={handleChange}
-                  />
-                  비공개
-                </label>
-              </div>
-            </div>
+        </div>
+      ) : (
+        <div className="input__items">
+          <label className="upload-label">노래 제목</label>
+          <input
+            className="upload-input"
+            type="text"
+            name="music"
+            value={music}
+            onChange={(e) => handleChange(e)}
+          />
+        </div>
+      )}
+      <div className="input__items">
+        <label className="upload-label">스테이션 설명</label>
+        <textarea
+          className="upload-input"
+          type="text"
+          name="content"
+          value={data.content}
+          onChange={(e) => handleChange(e)}
+          style={{ height: '90px', fontFamily: 'Pretendard' }}
+        />
+      </div>
+      <div className="input__items">
+        <label className="upload-label">태그</label>
+        <Tag />
+      </div>
+      <div className="input__items">
+        <InstTag />
+      </div>
+      <div className="checkbox-container">
+        <div className="input__items">
+          <label className="upload-label">공개 범위 설정</label>
+          <div>
+            <label style={{ marginRight: '10px' }}>
+              <input
+                type="radio"
+                name="isPublic"
+                value="public"
+                onChange={(e) => handleChange(e)}
+                defaultChecked
+              />
+              공개
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="isPublic"
+                value="private"
+                onChange={(e) => handleChange(e)}
+                style={{ fontSize: '0.9em' }}
+              />
+              비공개
+            </label>
           </div>
-        </form>
-        <button type="submit" className="uploadButton" onClick={handleSubmit}>
+        </div>
+        {enable && <CheckComplete />}
+      </div>
+      <div className="upload-btn-container">
+        <button
+          type="submit"
+          className="button-download button-complete"
+          style={{ width: '20%' }}
+          onClick={handleSubmit}
+        >
           업로드
         </button>
       </div>
-    </div>
+    </form>
   )
 }
-export default UploadForm
+export default UploadForm = memo(UploadForm)

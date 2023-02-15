@@ -10,19 +10,19 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Getter
-@Setter
-@ToString
-@NoArgsConstructor
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Member {
 
@@ -70,21 +70,20 @@ public class Member {
         return new ArrayList<>();
     }
 
-    @Builder
-    public Member(Long id, String password, String roles, String username, String nickname,
-        String email, String bio, LocalDateTime regDate, LocalDateTime lastLogin, String imgPath,
-        boolean isResign) {
-        this.id = id;
+    public void updatePassword(String password) {
         this.password = password;
-        this.roles = roles;
-        this.username = username;
+    }
+
+    public void updateNickname(String nickname) {
         this.nickname = nickname;
-        this.email = email;
+    }
+
+    public void updateBio(String bio) {
         this.bio = bio;
-        this.regDate = regDate;
-        this.lastLogin = lastLogin;
+    }
+
+    public void updateImgPath(String imgPath) {
         this.imgPath = imgPath;
-        this.isResign = isResign;
     }
 
 }

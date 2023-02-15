@@ -1,0 +1,173 @@
+.header {
+  position: fixed;
+  z-index: 20;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 57px;
+  display: flex;
+  justify-content: space-between;
+  background-color: rgba(251, 251, 251, 1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.22);
+  font-family: Pretendard;
+}
+
+.logo-img {
+  width: 210px;
+  margin-top: 12px;
+  margin-left: 92px;
+}
+.logo-img:hover {
+  cursor: pointer;
+}
+
+.header-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 530px;
+}
+
+.header-search {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+  width: 511px;
+  height: 39px;
+  border: 0px;
+  border-radius: 30px;
+  background-color: rgba(243, 243, 243, 1);
+  padding-left: 19px;
+}
+
+.search-input {
+  width: 458px;
+  height: 30px;
+  border-bottom: 0px;
+  border-top: 0px;
+  border-left: 0px;
+  border-right: 1px solid rgba(175, 175, 175, 1);
+  margin-top: 5px;
+  padding: 0px;
+  background-color: rgba(243, 243, 243, 1);
+  outline: none;
+}
+
+.search-icon {
+  margin-left: 12px;
+  margin-top: 10px;
+  width: 17.49px;
+  height: 17.49px;
+}
+
+.search-icon:hover {
+  cursor: pointer;
+  color: black;
+}
+.dropdownbox {
+  width: 530px;
+  max-height: 285px;
+  overflow: hidden;
+  margin-top: 11px;
+  padding: 8px 0;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 16px;
+  box-shadow: 0 10px 10px rgb(0, 0, 0, 0.3);
+  list-style-type: none;
+  z-index: 3;
+}
+
+.dropDownItemIndex {
+  padding: 5px 19px;
+  display: flex;
+  align-items: center;
+}
+.dropDownItemIndex:hover {
+  cursor: pointer;
+}
+.selected {
+  border-radius: 8px;
+  background-color: rgba(248, 248, 248, 1);
+}
+
+.accounts-title {
+  padding: 5px 16px;
+  font-size: small;
+  color: grey;
+}
+
+.dropdown-img {
+  width: 42px;
+  height: 42px;
+  margin-right: 5px;
+  border-radius: 50%;
+  border: 0.2px solid rgba(128, 128, 128, 0.318);
+}
+
+.dropdown-accounts {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 5px;
+}
+
+.dropdown-user {
+  font-weight: bold;
+}
+
+.dropdown-nick {
+  font-size: small;
+  color: gray;
+}
+
+.login-btn {
+  width: 7%;
+  height: 36px;
+  margin-top: 9px;
+  margin-right: 8%;
+  padding: 0px;
+  border: 0px;
+  border-radius: 10px;
+  font-size: 1em;
+  color: white;
+  background-color: rgba(172, 0, 143, 0.8);
+  box-shadow: 3px 3px rgba(69, 0, 57, 0.8);
+}
+
+.login-btn:hover,
+.login-btn:focus {
+  cursor: pointer;
+  box-shadow: 2px 2px rgba(69, 0, 57, 0.8);
+  font-weight: 700;
+  transition: 0.2s ease-in-out;
+}
+
+.upload-profile {
+  width: 10%;
+  display: flex;
+  flex-direction: row;
+  margin-right: 8%;
+}
+
+.upload-profile:hover {
+  cursor: pointer;
+}
+.upload-btn {
+  width: 100%;
+  height: 38px;
+  margin-right: 10px;
+  margin-top: 9px;
+  padding: 0px;
+  border: 0px;
+  border-radius: 10px;
+  font-size: 16px;
+  color: white;
+  background-color: rgba(42, 32, 150, 0.9);
+  box-shadow: 3px 3px rgba(29, 22, 106, 0.9);
+}
+.upload-btn:hover {
+  cursor: pointer;
+  box-shadow: 1.5px 1.5px rgba(29, 22, 106, 0.9);
+  font-weight: 700;
+  transition: 0.2s ease-in-out;
+}

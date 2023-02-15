@@ -1,0 +1,57 @@
+.parent {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  margin: auto;
+}
+.slider-container {
+  height: 100%;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0rem;
+  padding: 0 2%;
+  scroll-behavior: smooth;
+}
+.slider-wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+.btn {
+  position: absolute;
+  padding: 5px;
+  width: 25px;
+  height: 25px;
+  border: 1px solid rgba(219, 219, 219, 0.302);
+  text-align: center;
+  color: white;
+  border-radius: 50%;
+}
+.btn:hover {
+  cursor: pointer;
+  background-color: rgba(219, 219, 219, 0.444);
+}
+svg {
+  color: rgb(177, 177, 177);
+}
+.prev {
+  left: 2rem;
+}
+.next {
+  right: 2rem;
+}
+.disable {
+  opacity: 0.5;
+  pointer-events: none;
+}
+.child {
+  padding: 5px 10px;
+  background: #59eb97;
+  text-align: center;
+  width: 100%;
+  margin-right: 10px;
+  border-radius: 21px;
+}

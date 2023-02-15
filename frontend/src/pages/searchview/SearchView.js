@@ -1,11 +1,37 @@
-import React, { useState } from 'react'
-import Header from '../../components/Header'
-import Footer from '../../components/Footer'
+import React, { useState, useEffect } from 'react'
 import AccountListItem from '../../components/account/AccountListItem'
-import '../../styles/searchview.css'
+import './searchview.css'
 import StationListItem from '../../components/station/StationListItem'
+import axios from 'axios'
+import { useLocation } from 'react-router-dom'
+import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied'
 
 function SearchView() {
+  const token = localStorage.getItem('accessToken')
+  const location = useLocation()
+  const keyword = location.state.keyword
+  const [stationList, setStationList] = useState([])
+  const [accountList, setAccountList] = useState([])
+
+  // 검색키워드로 axios 요청하기
+  async function searchList() {
+    await axios
+      .get(`/api/search/${keyword}`, {
+        headers: {
+          Authorization: token
+        }
+      })
+      .then((res) => {
+        setStationList(res.data.stationList)
+        setAccountList(res.data.memberList)
+      })
+      .catch((err) => console.log(err))
+  }
+
+  useEffect(() => {
+    searchList()
+  }, [keyword])
+
   const [currentTab, clickTab] = useState(0)
 
   const moveStack = () => {
@@ -18,95 +44,182 @@ function SearchView() {
   }
 
   const searchResults = () => {
-    const resultsListVideo = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-    const resultsListAccount = [1, 2, 3, 4, 5, 6, 7]
-
-    const cutVideoList = resultsListVideo.slice(0, 8)
-    const cutAccountList = resultsListAccount.slice(0, 4)
-
     return (
       <>
         <div className="popular-tap">
-          <div className="popular-title-video">
-            <span className="popular-title-style">동영상</span>
-            <span className="popular-more" onClick={moveStack}>
-              더 알아보기
-            </span>
+          <div className="popular-title-account">
+            <span className="popular-title-style">스테이션</span>
+            {Array.isArray(stationList) && stationList.length !== 0 && (
+              <span className="popular-more" onClick={moveStack}>
+                더 알아보기
+              </span>
+            )}
           </div>
-          <div className="popular-video">
-            {cutVideoList.map((result, i) => {
+          <div
+            className={
+              stationList.length === 0 ? 'popular-video empty' : 'popular-video'
+            }
+          >
+            {stationList.slice(0, 8).map((result, i) => {
               return (
                 <div key={i}>
-                  <StationListItem isSearch={true} />
+                  <StationListItem
+                    isSearch={true}
+                    isRanking={false}
+                    station={result}
+                    saveList={stationList}
+                  />
                 </div>
               )
             })}
+            {Array.isArray(stationList) && stationList.length === 0 && (
+              <div className="search-not-found">
+                <SentimentSatisfiedIcon
+                  className="search-icon"
+                  style={{
+                    width: '35px',
+                    height: '35px',
+                    marginBottom: '10px',
+                    color: '#c4c4c4e0'
+                  }}
+                />
+                <div>
+                  <span style={{ fontWeight: 'bold' }}>[{keyword}]</span> 로
+                  조회된 스테이션이 없습니다.
+                </div>
+              </div>
+            )}
           </div>
         </div>
         <div className="popular-tap">
           <p className="popular-title-account">
             <span className="popular-title-style">계정</span>
-            <span className="popular-more" onClick={moveAccount}>
-              더 알아보기
-            </span>
+            {Array.isArray(accountList) && accountList.length !== 0 && (
+              <span className="popular-more" onClick={moveAccount}>
+                더 알아보기
+              </span>
+            )}
           </p>
-          {cutAccountList.map((result, i) => {
-            return (
-              <div key={i}>
-                <AccountListItem />
+          {accountList &&
+            accountList.slice(0, 8).map((result, i) => {
+              return (
+                <div key={i}>
+                  <AccountListItem account={result} />
+                </div>
+              )
+            })}
+          {Array.isArray(accountList) && accountList.length === 0 && (
+            <div className="search-not-found">
+              <SentimentSatisfiedIcon
+                className="search-icon"
+                style={{
+                  width: '35px',
+                  height: '35px',
+                  marginBottom: '5px',
+                  color: '#c4c4c4e0'
+                }}
+              />
+              <div>
+                <span style={{ fontWeight: 'bold' }}>[{keyword}]</span> 로
+                조회된 계정이 없습니다.
               </div>
-            )
-          })}
+            </div>
+          )}
         </div>
       </>
     )
   }
 
   const searchAccounts = () => {
-    const resultsListAccount = [1, 2, 3, 4, 5, 6, 7]
     return (
       <>
         <div className="popular-tap">
-          {resultsListAccount.map((result, i) => {
-            return (
-              <div key={i}>
-                <AccountListItem />
-              </div>
-            )
-          })}
-          <div className="account-result">
-            총 <b>{resultsListAccount.length}</b>건의 계정이 검색되었습니다.
-          </div>
+          {accountList &&
+            accountList.map((result, i) => {
+              return (
+                <div key={i}>
+                  <AccountListItem account={result} />
+                </div>
+              )
+            })}
         </div>
+        {accountList.length === 0 && (
+          <div className="search-not-found">
+            <SentimentSatisfiedIcon
+              className="search-icon"
+              style={{
+                width: '50px',
+                height: '50px',
+                marginBottom: '15px',
+                color: 'rgba(227, 95, 173, 0.3)'
+              }}
+            />
+            <div style={{ marginBottom: '5px' }}>
+              <span style={{ fontWeight: 'bold', fontSize: '1.1em' }}>
+                [{keyword}] 로 조회된 계정이 없습니다.
+              </span>
+            </div>
+            다른 검색어를 통해 다시 검색해보세요!
+          </div>
+        )}
+        {accountList.length !== 0 && (
+          <div className="account-result">
+            총 <b>{accountList.length}</b>건의 계정이 검색되었습니다.
+          </div>
+        )}
       </>
     )
   }
 
   const searchStacks = () => {
-    const resultsListVideo = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
     return (
       <>
-        <div className="popular-tap">
-          <div className="popular-video">
-            {resultsListVideo.map((result, i) => {
+        <div className="popular-tap horizonal">
+          {stationList &&
+            stationList.map((result, i) => {
               return (
                 <div key={i}>
-                  <StationListItem isSearch={true} />
+                  <StationListItem
+                    isSearch={true}
+                    isRanking={false}
+                    station={result}
+                    saveList={stationList}
+                  />
                 </div>
               )
             })}
+        </div>
+        {stationList.length === 0 && (
+          <div className="search-not-found">
+            <SentimentSatisfiedIcon
+              className="search-icon"
+              style={{
+                width: '50px',
+                height: '50px',
+                marginBottom: '15px',
+                color: 'rgba(227, 95, 173, 0.3)'
+              }}
+            />
+            <div style={{ marginBottom: '5px' }}>
+              <span style={{ fontWeight: 'bold', fontSize: '1.1em' }}>
+                [{keyword}] 로 조회된 스테이션이 없습니다.
+              </span>
+            </div>
+            다른 검색어를 통해 다시 검색해보세요!
           </div>
-        </div>
-        <div className="stack-result">
-          총 <b>{resultsListVideo.length}</b>건의 스택이 검색되었습니다.
-        </div>
+        )}
+        {stationList.length !== 0 && (
+          <div className="stack-result">
+            총 <b>{stationList.length}</b>건의 스테이션이 검색되었습니다.
+          </div>
+        )}
       </>
     )
   }
   const menuArr = [
     { i: 1, name: '인기', content: searchResults() },
     { i: 2, name: '계정', content: searchAccounts() },
-    { i: 3, name: '스택', content: searchStacks() }
+    { i: 3, name: '스테이션', content: searchStacks() }
   ]
 
   const selectMenuHandler = (index) => {
@@ -115,7 +228,6 @@ function SearchView() {
 
   return (
     <div className="search-page">
-      <Header />
       <div className="result">
         <div className="result-tap">
           <div className="tapmenu-ul">
@@ -130,9 +242,8 @@ function SearchView() {
             ))}
           </div>
         </div>
-        <div className="tab-content">{menuArr[currentTab].content}</div>
+        <div className="tab-content-1">{menuArr[currentTab].content}</div>
       </div>
-      <Footer />
     </div>
   )
 }

@@ -37,10 +37,10 @@ public class Station {
     private Long prevStationId;
 
     @Column(name = "is_public", nullable = false)
-    private boolean isPublic = true;
+    private boolean isPublic;
 
     @Column(name = "is_complete", nullable = false)
-    private boolean isComplete = false;
+    private boolean isComplete;
 
     @Column(name = "is_delete", nullable = false)
     private boolean isDelete = false;
@@ -75,5 +75,12 @@ public class Station {
 
     public void updateHeart(int heartCnt){
         this.heartCnt = heartCnt;
+    }
+    public void deleteHeart(int heartCnt) {this.heartCnt = heartCnt;}
+    public void updateVideo(Video video){
+        this.video = video;
+    }
+    public void deleteStation(boolean isDelete){
+        this.isDelete = isDelete;
     }
 }

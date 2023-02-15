@@ -1,27 +1,34 @@
 import React from 'react'
-import profileTest from '../../assets/profileTest.svg'
-import '../../styles/accountlistitem.css'
+import { useNavigate } from 'react-router'
+import DefaultImg from '../../assets/default_profile.png'
+import './accountlistitem.css'
 
-function AccountListItem() {
-  const accountInfo = {
-    profile_img: profileTest,
-    username: 'apricot',
-    nickname: '리콧',
-    band: '텐텐'
-  }
+function AccountListItem({ account }) {
+  const accountInfo = account
 
   const IsBand = () => {
-    if (accountInfo.band) {
-      return ` · ${accountInfo.band}`
+    if (accountInfo.teamName) {
+      return ` · ${accountInfo.teamName}`
     }
   }
+
+  const navigate = useNavigate()
+  const gotoMypage = () => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+    navigate(`/MyPage/${accountInfo.username}`)
+  }
+
   return (
     <>
       <div className="account-info">
         <img
+          src={
+            accountInfo.imgPath !== 'path' ? accountInfo.imgPath : DefaultImg
+          }
+          alt=""
           className="account-profile-img"
-          src={accountInfo.profile_img}
-        ></img>
+          onClick={gotoMypage}
+        />
         <div className="account-names">
           <div className="account-username">{accountInfo.username}</div>
           <div className="account-nickname">
