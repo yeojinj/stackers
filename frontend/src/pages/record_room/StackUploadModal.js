@@ -2,7 +2,7 @@ import UploadForm from './UploadForm'
 import './Record'
 import './UploadForm.css'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import CloseIcon from '@mui/icons-material/Close'
 import { useDispatch } from 'react-redux'
 import { ClearStack } from '../../store.js'
@@ -13,6 +13,12 @@ function StackUploadModal(props) {
   const stackUrl = props
   const filedownloadlink = window.URL.createObjectURL(props.src.src)
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (props.staitonId === -1) {
+      dispatch(ClearStack)
+    }
+  }, [])
   return (
     <div className="modal-box">
       <div className="modal-header">

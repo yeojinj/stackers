@@ -13,12 +13,12 @@ function UpladLoading() {
 
   const navigateToProfile = () => {
     if (page) {
-      navigate('/MyPage/' + { username })
+      navigate(`/MyPage/${username}`)
     }
   }
   setTimeout(() => {
     moveToMain(true)
-  }, 3000)
+  }, 4000)
 
   useEffect(navigateToProfile, [page])
 

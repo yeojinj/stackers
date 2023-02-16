@@ -98,9 +98,9 @@ function UploadForm(props) {
           })
       }
       navigate('/UploadLoading')
-
       handleClose()
       dispatch(ClearStack())
+
       window.URL.revokeObjectUrl(filedownloadlink)
     }
   }
