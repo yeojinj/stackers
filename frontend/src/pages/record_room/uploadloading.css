@@ -1,42 +1,64 @@
 .loading-conatiner {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
   margin-top: 300px;
   font-family: Pretendard;
 }
 
 .stacking {
-  font-size: 1em;
+  font-size: 1.05em;
   text-align: center;
 }
 
-.stack-box {
-  width: 129px;
-  height: 19px;
-  border-radius: 10px;
-  margin: 0 auto 8px auto;
-  background: linear-gradient(
-    to right,
-    rgba(42, 32, 150, 0.9),
-    rgba(91, 32, 150, 0.8),
-    rgba(172, 0, 143, 1),
-    rgba(227, 95, 173, 1)
+#uploading-divs {
+  display: flex;
+  flex-direction: row;
+}
+
+.uploading-div {
+  width: 2vw;
+  height: 2vw;
+  border-radius: 100%;
+  margin: 1vw;
+  background-image: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(0, 0, 0, 0) 100%
   );
+  animation: bounce 1.5s 0.5s linear infinite;
 }
 
-.stack-box {
-  animation-duration: 2s;
-  animation-name: stack;
-  animation-iteration-count: infinite;
+.yellow {
+  background-color: rgba(42, 32, 150, 0.934);
 }
 
-@keyframes stack {
-  0% {
-    opacity: 0;
-    transform: translate3d(0, -150%, 0);
+.red {
+  background-color: rgba(172, 0, 143, 0.8);
+
+  animation-delay: 0.1s;
+}
+
+.blue {
+  background-color: rgba(227, 95, 173, 0.5);
+  animation-delay: 0.3s;
+}
+
+@keyframes bounce {
+  0%,
+  50%,
+  100% {
+    transform: scale(0.8);
+    filter: blur(0px);
   }
-  to {
-    opacity: 1;
-    transform: translateZ(0);
+  25% {
+    transform: scale(0.6);
+    filter: blur(3px);
+  }
+  75% {
+    filter: blur(3px);
+    transform: scale(1.4);
   }
 }

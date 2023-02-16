@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import React, { useState, useEffect, memo } from 'react'
 import './Record'
 import Tag from './ModalTag'
@@ -12,14 +11,6 @@ import InstTag from './InstTag.js'
 import axios from 'axios'
 import CheckComplete from './CheckComplete'
 
-const blobFile = (file) =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = (event) => {
-      resolve(event.target.result)
-    }
-    reader.readAsDataURL(file)
-  })
 function UploadForm(props) {
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -48,12 +39,20 @@ function UploadForm(props) {
     }
     dispatch(CreateStack([e.target.name, e.target.value]))
   }
+
+  const [loading, setLoading] = useState(false)
+
   const [enable, setEnable] = useState(true)
   useEffect(() => {
     if (data.remainDepth === 0) {
       setEnable((enable) => false)
     }
   }, [data])
+
+  // useEffect(() => {
+  //   if (loading) navigate('/UploadLoading')
+  //   else navigate(`/MyPage/${username}`)
+  // }, [loading])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -92,11 +91,12 @@ function UploadForm(props) {
               Authorization: localStorage.getItem('accessToken')
             }
           })
-          .then(() => console.log('[스테이션 업로드] >> 성공'))
+          .then(() => setLoading(true))
           .catch((error) => {
             console.error(error)
           })
       }
+
       navigate('/UploadLoading')
       handleClose()
       dispatch(ClearStack())
