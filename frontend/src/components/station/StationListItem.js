@@ -13,7 +13,8 @@ function StationListItem({
   station,
   index,
   isDark,
-  saveList
+  saveList,
+  isIcon
 }) {
   const videoRef = useRef(null)
   const dispatch = useDispatch()
@@ -124,7 +125,7 @@ function StationListItem({
             }}
             loop
           />
-          {!station.complete && (
+          {!station.complete && isIcon && (
             <img
               src={logo}
               width={38}

@@ -65,6 +65,7 @@ function SearchView() {
                 <div key={i}>
                   <StationListItem
                     isSearch={true}
+                    isIcon={true}
                     isRanking={false}
                     station={result}
                     saveList={stationList}
@@ -182,6 +183,7 @@ function SearchView() {
                   <StationListItem
                     isSearch={true}
                     isRanking={false}
+                    isIcon={true}
                     station={result}
                     saveList={stationList}
                   />

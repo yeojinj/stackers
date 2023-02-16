@@ -9,6 +9,8 @@
   transform: translate(-50%, 0%);
   border-radius: 20px;
   overflow: scroll;
+
+  font-family: Pretendard;
 }
 
 .ProfileEdit::-webkit-scrollbar {
@@ -16,7 +18,7 @@
 }
 
 .ProfileEdit-head {
-  margin-top: 21px;
+  margin-top: 15px;
   text-align: center;
 }
 
@@ -59,7 +61,6 @@
   border-radius: 70%;
   opacity: 0.4;
 }
-
 
 .ProfileEdit-content-Bio {
   margin: auto 0;

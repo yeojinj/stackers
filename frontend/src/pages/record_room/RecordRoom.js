@@ -86,7 +86,11 @@ function RecordRoom() {
             </button>
           </div>
           <Modal open={open} onClose={handleClose}>
-            <StackUploadModal handle={handleClose} src={stack} />
+            <StackUploadModal
+              handle={handleClose}
+              src={stack}
+              preId={stationId}
+            />
           </Modal>
         </div>
       </div>

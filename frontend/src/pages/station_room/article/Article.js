@@ -1,7 +1,6 @@
 import React from 'react'
 import ArticleDetail from './ArticleDetail'
 import CommentList from '../comment/CommentList'
-// import CommentCreate from '../comment/CommentCreate'
 
 function Article(props) {
   return (
