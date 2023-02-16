@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.Collections;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
@@ -118,7 +119,9 @@ public class StationController {
             stations = stationService.findByIsPublicAndIsCompleteAndMember(true, true, member);
         }
 
-        return stationService.getMainStationList(stations);
+        List<MainStationDto> mainStationList = stationService.getMainStationList(stations);
+        Collections.shuffle(mainStationList);
+        return mainStationList;
     }
 
     /**
@@ -137,7 +140,9 @@ public class StationController {
             stations = stationService.findByIsPublicAndIsCompleteAndMember(true, false, member);
         }
 
-        return stationService.getMainStationList(stations);
+        List<MainStationDto> mainStationList = stationService.getMainStationList(stations);
+        Collections.shuffle(mainStationList);
+        return mainStationList;
     }
 
     /**
@@ -156,7 +161,9 @@ public class StationController {
     @GetMapping("/following")
     public List<FollowersStationDto> getFollowersStation(@AuthenticationPrincipal PrincipalDetails principal){
         Member member = memberService.getLoginMember(principal.getUsername());
-        return stationService.getFollowersStation(member.getId());
+        List<FollowersStationDto> followersStationList = stationService.getFollowersStation(member.getId());
+        Collections.shuffle(followersStationList);
+        return followersStationList;
     }
 
     /**
