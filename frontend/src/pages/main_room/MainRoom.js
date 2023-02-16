@@ -115,11 +115,11 @@ function MainRoom() {
 
   // 렌더링 후 한번 실행(axios)
   useEffect(() => {
-    getUser()
+    if (token !== null) getUser()
     completeStationList()
     uncompleteStationList()
     rankingStationList()
-    followerStationList()
+    if (token !== null) followerStationList()
   }, [username])
 
   return (
