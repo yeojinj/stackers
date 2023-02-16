@@ -1,13 +1,23 @@
 .ProfileEdit {
+  background-color: white;
   width: 560px;
-  /* height: 800px; */
-  border: solid 1px black;
+  /* 화면에따라 크기조정 필요 */
+  height: 97%;
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translate(-50%, 0%);
   border-radius: 20px;
+  overflow: scroll;
+}
+
+.ProfileEdit::-webkit-scrollbar {
+  display: none;
 }
 
 .ProfileEdit-head {
+  margin-top: 21px;
   text-align: center;
-  /* border-bottom: solid 1px black; */
 }
 
 .ProfileEdit-profilePicture {
@@ -37,6 +47,20 @@
   margin: auto 0;
 }
 
+.profileedit-img {
+  width: 113px;
+  height: 110px;
+  border-radius: 70%;
+}
+
+.profileedit-noimg {
+  width: 113px;
+  height: 110px;
+  border-radius: 70%;
+  opacity: 0.4;
+}
+
+
 .ProfileEdit-content-Bio {
   margin: auto 0;
   width: 50%;
@@ -61,7 +85,6 @@
 }
 
 .HashWrap {
-  /* margin-top: 24px; */
   color: rgb(52, 58, 64);
   font-size: 1.125rem;
   display: flex;
@@ -78,7 +101,6 @@
 }
 
 .HashWrapInner {
-  /* margin-top: 20px; */
   background: #ffe9fa;
   border-radius: 20px;
   padding: 8px 8px;
@@ -101,7 +123,6 @@
   align-self: flex-end;
   outline: none;
   cursor: text;
-  /* line-height: 2rem; */
   border: none;
 }
 

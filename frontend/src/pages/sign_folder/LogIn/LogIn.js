@@ -2,11 +2,6 @@
 import React, { useEffect, useState } from 'react'
 import './LogIn.css'
 import logo from '../../../assets/logo.svg'
-import TextField from '@mui/material/TextField'
-import Button from '@mui/material/Button'
-import naverLogo from './naverLogo.svg'
-import kakaoLogo from './kakaoLogo.png'
-import GoogleLogo from './GoogleLogo.png'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
@@ -18,9 +13,6 @@ function LogIn(props) {
   const [password, setPassword] = useState('')
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const isLogged = useSelector((state) => {
-    return state.user.isLogged
-  })
 
   const [useButton, setUseButton] = useState(false)
 
@@ -54,7 +46,7 @@ function LogIn(props) {
         </button>
       )
     }
-    console.log(useButton)
+    // console.log(useButton)
   }, [useButton])
 
   return (
@@ -96,7 +88,21 @@ function LogIn(props) {
                 props.handleClose()
               })
               .catch((error) => {
-                console.error(error)
+                // console.error(error)
+                axios({
+                  method: 'get',
+                  url: `/api/member/check-username/${username}`
+                })
+                  .then((response) => {
+                    if (response.data) {
+                      alert('아이디, 비밀번호를 다시 한번 확인해주세요.')
+                    } else {
+                      alert('아이디, 비밀번호를 다시 한번 확인해주세요.')
+                    }
+                  })
+                  .catch((error) => {
+                    // console.error(error)
+                  })
               })
           }}
         >
@@ -120,15 +126,8 @@ function LogIn(props) {
             }}
           />
 
-          <div className="find-password-div">
-            <Link
-              to="/SignUp"
-              style={{ marginLeft: 'auto', textDecoration: 'none' }}
-            >
-              비밀번호를 잊어버렸나요?
-            </Link>
-          </div>
-
+          <hr />
+          <hr />
           {loginButton}
 
           <div className="login-footer">

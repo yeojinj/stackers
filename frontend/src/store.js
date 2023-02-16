@@ -12,16 +12,13 @@ const userSlice = createSlice({
   },
   reducers: {
     logIn: (state, action) => {
-      // console.log(action)
       state.isLogged = true
     },
     LogInState: (state, action) => {
-      // console.log(action.payload)
       state.username = action.payload.username
       state.nickname = action.payload.nickname
       state.email = action.payload.email
       state.imgPath = action.payload.imgPath
-      // state.bio = state.payload.bio
     },
     LogOutState: (state, action) => {
       state.isLogged = false
@@ -41,17 +38,29 @@ const CreateCommentSlice = createSlice({
   initialState: { value: 0 },
   reducers: {
     CreateComment: (state, action) => {
-      console.log(action)
+      state.value = state.value + action.payload
     }
   }
 })
 
 const urlSlice = createSlice({
   name: 'urlSlice',
-  initialState: { preUrl: '/' },
+  initialState: { preUrl: '/', backNumber: 0, keyword: '' },
   reducers: {
-    ChangeUrl: (state, action) => {
-      console.log(action)
+    CountBackNum: (state, action) => {
+      state.backNumber = action.payload
+    }
+  }
+})
+
+const CreateStationSlice = createSlice({
+  name: 'CreateStationSlice',
+  initialState: {
+    station: []
+  },
+  reducers: {
+    SaveStation: (state, action) => {
+      state.station = action.payload
     }
   }
 })
@@ -64,7 +73,7 @@ const stackSlice = createSlice({
     instrument: '',
     heartCnt: 0,
     remainDepth: 3,
-    isPublic: 0,
+    isPublic: 1,
     isComplete: 0,
     tags: [],
     prevStationId: -1,
@@ -73,7 +82,6 @@ const stackSlice = createSlice({
   },
   reducers: {
     CreateStack: (state, action) => {
-      console.log(action.payload[0], action.payload[1])
       const val = action.payload[1]
       switch (action.payload[0]) {
         case 'remainDepth':
@@ -123,7 +131,7 @@ const stackSlice = createSlice({
       state.instrument = ''
       state.heartCnt = 0
       state.remainDepth = 3
-      state.isPublic = 0
+      state.isPublic = 1
       state.isComplete = 0
       state.tags = []
       state.prevStationId = -1
@@ -144,8 +152,6 @@ const CreateInstSlice = createSlice({
       const instt = state.inst
       const tmp = [...instt, ...asdf]
       state.inst = _.uniqBy(tmp, 'id')
-      console.log(state.inst)
-      // console.log(action)
     }
   }
 })
@@ -185,7 +191,8 @@ const store = configureStore({
     CreateInst: CreateInstSlice.reducer,
     SearchKeyword: SearchSlice.reducer,
     TagList: TagSlice.reducer,
-    url: urlSlice.reducer
+    url: urlSlice.reducer,
+    station: CreateStationSlice.reducer
   }
 })
 
@@ -196,4 +203,5 @@ export const { CreateStack, ClearStack } = stackSlice.actions
 export const { CreateInst } = CreateInstSlice.actions
 export const { SearchKeyword } = SearchSlice.actions
 export const { TagList } = TagSlice.actions
-export const { ChangeUrl } = urlSlice.actions
+export const { ChangeUrl, CountBackNum } = urlSlice.actions
+export const { SaveStation } = CreateStationSlice.actions

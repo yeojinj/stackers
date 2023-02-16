@@ -1,32 +1,33 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import { useDropzone } from 'react-dropzone'
 import profileEdit from '../../assets/profileEdit.svg'
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined'
 import './mydropzone.css'
 
-function MyDropzone({ onChangeImage, handleClose }) {
-  const [img, setImage] = useState(false)
+function MyDropzone({ onChangeImage, handleClose, profileImg }) {
+  const [img, setImage] = useState([])
   const [imgblob, setImageBlob] = useState('')
 
   const onDrop = useCallback((acceptedFiles) => {
-    // Do something with the files
     onChangeImage(acceptedFiles[0])
 
     const blob = new Blob([acceptedFiles[0]], {
       type: 'image/png'
     })
     setImageBlob(blob)
-    const url = window.URL.createObjectURL(blob)
     const imgsrc = document.getElementById('dropimg')
-    imgsrc.src = url
+    imgsrc.src = window.URL.createObjectURL(blob)
     setImage(true)
   }, onChangeImage)
 
   const uploadImg = () => {
-    console.log('[업로드 버튼 누른 후]', imgblob)
     onChangeImage(imgblob)
     handleClose()
   }
+
+  useEffect(() => {
+    setImage(profileImg)
+  }, [profileImg])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
 
@@ -49,12 +50,11 @@ function MyDropzone({ onChangeImage, handleClose }) {
             <img
               className={!img ? 'dropzone-img-style' : 'dropzone-img'}
               id="dropimg"
-              src={profileEdit}
+              src={img || profileEdit}
               alt="프로필 사진"
             ></img>
           </div>
           <div className="drag-drop-box">
-            {/* {!img && <p>이곳에 파일을 끌어 업로드하세요</p>} */}
             {isDragActive
               ? '여기에 파일을 올려주세요'
               : '파일을 드래그하거나 여기를 클릭하세요'}

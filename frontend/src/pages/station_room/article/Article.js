@@ -4,12 +4,10 @@ import CommentList from '../comment/CommentList'
 // import CommentCreate from '../comment/CommentCreate'
 
 function Article(props) {
-  // console.log(props.Info)
   return (
-    <div className="RightStyle">
-      <ArticleDetail Info={props.Info}></ArticleDetail>
+    <div className="right-style">
+      <ArticleDetail info={props.info}></ArticleDetail>
       <CommentList></CommentList>
-      {/* <CommentCreate></CommentCreate> */}
     </div>
   )
 }

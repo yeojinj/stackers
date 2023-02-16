@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react'
-import LogoImage from './LogoImage.png'
+import LogoImage from './LogoImage.svg'
 import LogoText from './LogoText.svg'
 
 import './SignUp.css'
@@ -14,7 +14,7 @@ function SignUp() {
   const [mailConfirm, setMailConfirm] = useState('') // 입력하는 인증번호
   const [authentication, setAuthentication] = useState(null) // 받아온 인증번호
   const navigate = useNavigate()
-  const [pwType, setPwType] = useState('text')
+  const [pwType, setPwType] = useState('password')
 
   const [isSend, setIsSend] = useState(false) // 메일 전송했는지
   const [isUsername, setIsUsername] = useState(null)
@@ -38,12 +38,12 @@ function SignUp() {
     ) {
       if (isUsername && isPassword && isEmail) {
         setMembership(false)
-        console.log('버튼활성화 됨')
+        // console.log('버튼활성화 됨')
       } else {
-        console.log('버튼활성화 안됨.')
+        // console.log('버튼활성화 안됨.')
       }
     } else {
-      console.log('버튼활성화 안됨.')
+      // console.log('버튼활성화 안됨.')
     }
   }, [isUsername, isPassword, isEmail])
 
@@ -119,6 +119,8 @@ function SignUp() {
         className="email-check-button"
         type="button"
         onClick={() => {
+          alert(`전송중입니다.
+확인 후 입력해주세요.`)
           axios({
             method: 'post',
             url: '/api/mail/mail-confirm',
@@ -132,6 +134,7 @@ function SignUp() {
               setIsSend(true)
             })
             .catch((error) => {
+              alert('이메일 주소를 다시 입력해주세요.')
               console.log('[인증번호 전송 실패] : ', error.response)
               console.log('올바른 이메일 양식으로 적어주세요.')
             })
@@ -148,10 +151,11 @@ function SignUp() {
         onClick={() => {
           if (mailConfirm === authentication) {
             setIsEmail(true)
-            console.log('인증번호 통과')
+            // console.log('인증번호 통과')
           } else {
             setIsEmail(false)
-            console.log('인증번호 탈락')
+            // console.log('인증번호 탈락')
+            alert('인증번호를 다시 입력해주세요.')
           }
         }}
       >
@@ -176,6 +180,8 @@ function SignUp() {
     )
   }
 
+  const [idMessage, setIdMessage] = useState(null)
+  const [pwMessage, setPwMessage] = useState(null)
   return (
     <div>
       <div className="signup-container">
@@ -208,73 +214,106 @@ function SignUp() {
               })
           }}
         >
-          <input
-            className={usernameCSS}
-            placeholder="아이디(5~20자 영어 소문자, 숫자로 구성)"
-            name="username"
-            value={username}
-            onChange={(event) => {
-              setUsername(event.target.value)
-            }}
-            // usernameCSS 값 변경 조건
-            onBlur={() => {
-              if (5 <= username.length && username.length <= 20) {
-                console.log('username 아이디 길이 통과')
-                if (!test_spc.test(username)) {
-                  // 특수문자, 공백 미포함시
-                  console.log('username 특수문자, 공백 없어요 통과')
-                  if (username === username.toLowerCase()) {
-                    // 소문자만 있는지.
-                    setIsUsername(true)
-                    console.log('username 최종통과')
+          <div className="input-and-messages">
+            <input
+              className={usernameCSS}
+              placeholder="아이디(5~20자 영어 소문자, 숫자로 구성)"
+              name="username"
+              value={username}
+              onChange={(event) => {
+                setUsername(event.target.value)
+              }}
+              // usernameCSS 값 변경 조건
+              onBlur={() => {
+                if (5 <= username.length && username.length <= 20) {
+                  // console.log('username 아이디 길이 통과')
+                  if (!test_spc.test(username)) {
+                    // 특수문자, 공백 미포함시
+                    // console.log('username 특수문자, 공백 없어요 통과')
+                    if (username === username.toLowerCase()) {
+                      // 소문자만 있는지.
+                      // console.log('username 조건 최종통과')
+                      axios({
+                        method: 'get',
+                        url: `/api/member/check-username/${username}`
+                      })
+                        .then((response) => {
+                          // console.log(response.data)
+                          if (response.data) {
+                            setIdMessage('사용가능한 아이디입니다.')
+                            setIsUsername(true)
+                          } else {
+                            setIdMessage('이미 존재하는 아이디입니다.')
+                            setIsUsername(false)
+                          }
+                        })
+                        .catch((error) => {
+                          // console.log(error)
+                        })
+                    } else {
+                      setIsUsername(false)
+                      setIdMessage(
+                        '아이디는 5~20자 영어 소문자, 숫자로 구성해야 합니다.'
+                      )
+                    }
                   } else {
+                    setIdMessage('아이디에 특수문자, 공백, 한글이 있어요.')
                     setIsUsername(false)
-                    console.log('username 대문자 빼세요')
                   }
                 } else {
-                  console.log('username 특수문자, 공백, 한글이 있어요.')
+                  // console.log('username 길이 탈락')
+                  setIdMessage(
+                    '아이디는 5~20자 영어 소문자, 숫자로 구성해야 합니다.'
+                  )
                   setIsUsername(false)
                 }
-              } else {
-                console.log('username 길이 탈락')
-                setIsUsername(false)
-              }
-            }}
-          />
-          <input
-            className={passwordCSS}
-            placeholder="비밀번호(알파벳, 숫자, 특수문자를 포함한 8~16자로 구성)"
-            name="password"
-            type={pwType}
-            value={password}
-            onChange={(event) => {
-              setPassword(event.target.value)
-            }}
-            // password 값 변경 조건
-            onBlur={() => {
-              if (8 <= password.length && password.length <= 16) {
-                console.log('비밀번호 길이 통과')
+              }}
+            />
+            <span className="small-message">{idMessage}</span>
+          </div>
+          <div className="input-and-messages">
+            <input
+              className={passwordCSS}
+              placeholder="비밀번호(알파벳, 숫자, 특수문자를 포함한 8~16자로 구성)"
+              name="password"
+              type={pwType}
+              value={password}
+              onChange={(event) => {
+                setPassword(event.target.value)
+              }}
+              // password 값 변경 조건
+              onBlur={() => {
                 if (
-                  password_spc1.test(password) &&
-                  password_spc2.test(password) &&
-                  password_spc3.test(password) &&
-                  !password_spc4.test(password) &&
-                  password_spc5.test(password)
+                  8 <= password.length &&
+                  password.length <= 16 &&
+                  password.length !== 0
                 ) {
-                  setIsPassword(true)
-                  console.log('비밀번호 통화')
+                  // console.log('비밀번호 길이 통과')
+                  if (
+                    password_spc1.test(password) &&
+                    password_spc2.test(password) &&
+                    password_spc3.test(password) &&
+                    !password_spc4.test(password) &&
+                    password_spc5.test(password)
+                  ) {
+                    setIsPassword(true)
+                    // console.log('비밀번호 통과')
+                  } else {
+                    setPwMessage(
+                      '비밀번호는 영어소문자, 영어대문자, 숫자, 특수문자를 포함시켜주세요. 공백은 제외!'
+                    )
+                    setIsPassword(false)
+                  }
                 } else {
-                  console.log(
-                    'password에 영어소문자, 영어대문자, 숫자, 특수문자를 포함시켜주세요. 공백은 제외!'
+                  setPwMessage(
+                    '비밀번호는 소문자, 대문자, 숫자, 특수문자를 포함시켜주세요. 공백은 제외!'
                   )
                   setIsPassword(false)
                 }
-              } else {
-                console.log('비밀번호 탈락')
-                setIsPassword(false)
-              }
-            }}
-          />
+              }}
+            />
+            <span className="small-message">{pwMessage}</span>
+          </div>
           <input
             className={emailCSS}
             placeholder="이메일"

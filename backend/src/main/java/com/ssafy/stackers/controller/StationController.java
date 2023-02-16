@@ -245,14 +245,21 @@ public class StationController {
 
     /**
      * 스테이션 상세 조회 정보
-     * @param stationId : 조회할 스테이션 아이디
-     * @return
      */
     @Operation(summary = "스테이션 상세 조회")
     @GetMapping("/{stationid}")
-    public ResponseEntity<StationDetailDto> getStationDetail(@PathVariable("stationid") int stationId){
-        StationDetailDto station = stationService.getStationDetail((long) stationId);
+    public ResponseEntity<StationDetailDto> getStationDetail(@AuthenticationPrincipal PrincipalDetails principal,
+                                                             @PathVariable("stationid") int stationId){
+        Long loginMemberId = memberService.getLoginMember(principal.getUsername()).getId();
+        StationDetailDto station = stationService.getStationDetail((long) stationId, loginMemberId);
         return new ResponseEntity<>(station, HttpStatus.OK);
+    }
+
+    @GetMapping("/{username}/public")
+    public List<MainStationDto> getOtherPeoplePublic(@PathVariable("username") String username){
+        Member member = memberService.findByUsername(username);
+        List<Station> stations = stationService.findByMemberAndIsPublic(member, true);
+        return stationService.getMainStationList(stations);
     }
 
     /**

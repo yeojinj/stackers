@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import DefaultImg from '../assets/default_profile.png'
-import '../styles/profileframe.css'
+import './profileframe.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { LogOutState } from '../store'
 
@@ -27,29 +27,20 @@ function profileFrame() {
     const page = e.target.textContent
     if (page === '내 프로필') {
       navigate(`/MyPage/${loginUser.username}`)
-    } else if (page === '비밀번호 변경') {
-      // 비밀번호 변경 페이지로 이동시키기
-      // navigate('')
-      console.log(page)
+    } else if (page === '의견 보내기') {
+      window.location.href = 'mailto:www.stackers.site@gmail.com'
     } else if (page === '로그아웃') {
       // 로그아웃 시키기
       dispatch(LogOutState())
       navigate('/')
     }
   }
-  const profileList = [
-    '내 프로필',
-    '비밀번호 변경',
-    '도움말',
-    '관리자 연결',
-    '로그아웃'
-  ]
+  const profileList = ['내 프로필', '의견 보내기', '로그아웃']
 
   return (
     <div>
-      {/* 드롭다운이 켜지면 업로드버튼과 프로필사진 위치 이동되는 이슈발생 */}
       <img
-        src={userImage || DefaultImg}
+        src={userImage !== 'path' ? userImage : DefaultImg}
         alt=""
         style={{
           width: '42px',

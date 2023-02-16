@@ -3,6 +3,7 @@ package com.ssafy.stackers.service;
 import com.ssafy.stackers.exception.CustomException;
 import com.ssafy.stackers.model.*;
 import com.ssafy.stackers.model.dto.*;
+import com.ssafy.stackers.repository.HeartRespository;
 import com.ssafy.stackers.repository.StationRepository;
 import com.ssafy.stackers.utils.error.ErrorCode;
 
@@ -35,6 +36,8 @@ public class StationService {
     private VideoService videoService;
     @Autowired
     private FollowService followService;
+    @Autowired
+    private HeartRespository heartRespository;
 
     public Station findById(Long id) {
         stationRepository.findById(id)
@@ -99,7 +102,7 @@ public class StationService {
     /**
      * 스테이션 상세 조회
      */
-    public StationDetailDto getStationDetail(Long id) {
+    public StationDetailDto getStationDetail(Long id, Long loginMemberId) {
 
         Station s = findById(id);
         StationDto stationInfo = getStationDto(id);
@@ -111,7 +114,12 @@ public class StationService {
         List<CommentDetailDto> comments = commentService.getComments(s);
         List<MusicianDto> musicians = getMusicians(s);
 
-        return new StationDetailDto(id, stationInfo, s.getRegTime(), s.getVideo().getVideoPath(), comments.size(), comments, musicians, writer);
+        boolean isFollowing = followService.isFollowing(loginMemberId, w.getId());
+        boolean isHeart = heartRespository.existsByStation_IdAndMember_Id(s.getId(), loginMemberId);
+
+        return new StationDetailDto(id, stationInfo, s.getRegTime(), s.getVideo().getVideoPath(),
+                writer, comments.size(), comments,
+                musicians, isFollowing, isHeart);
     }
 
     /**
@@ -153,6 +161,10 @@ public class StationService {
      */
     public List<Station> findMyStation(boolean isPublic, Member member) {
         return stationRepository.findByIsPublicAndMember(isPublic, member);
+    }
+
+    public List<Station> findByMemberAndIsPublic(Member member, boolean isPublic){
+        return stationRepository.findByMemberAndIsPublic(member, isPublic);
     }
 
     /**

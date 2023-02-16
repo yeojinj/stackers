@@ -1,131 +1,53 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import StationView from './StationView'
 import Article from '../article/Article'
 import '../Station.css'
-import { useParams } from 'react-router'
+import { useParams, useNavigate } from 'react-router'
+import axios from 'axios'
+import { useSelector, useDispatch } from 'react-redux'
+import { CountBackNum } from '../../../store'
 
 function StationRoom() {
   const params = useParams()
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
   const stationId = Number(params.id)
-  const totalInfo = [
-    {
-      id: 1,
-      stationInfo: {
-        content: 'xptms',
-        music: '테스트용 음악입니다',
-        instrumentId: null,
-        heartCnt: 0,
-        remainDepth: 1,
-        isPublic: 1,
-        isComplete: 0,
-        tags: [],
-        prevStationId: 12,
-        videoName: null,
-        delete: false
-      },
-      regTime: '2023-02-07T13:34:41',
-      writer: {
-        id: 2,
-        username: 'subin2',
-        nickname: 'subin2',
-        email: null,
-        bio: null,
-        imgPath: 'path',
-        instruments: null,
-        parties: null
-      },
-      commentCnt: 0,
-      comments: [],
-      musicians: [
-        {
-          instrumentId: 4,
-          instrumentName: '자연의 소리',
-          musicianUsername: 'subin3',
-          musicianImgPath: 'path',
-          musicianImgName: null
-        },
-        {
-          instrumentId: 5,
-          instrumentName: '루프 스테이션',
-          musicianUsername: 'subin3',
-          musicianImgPath: 'path',
-          musicianImgName: null
-        },
-        {
-          instrumentId: 1,
-          instrumentName: '캐스터네츠',
-          musicianUsername: 'subin3',
-          musicianImgPath: 'path',
-          musicianImgName: null
-        }
-      ]
-    },
-    {
-      id: 1,
-      stationInfo: {
-        content: 'xptms',
-        music: '테스트용 음악입니다',
-        instrumentId: null,
-        heartCnt: 0,
-        remainDepth: 1,
-        isPublic: 1,
-        isComplete: 0,
-        tags: [],
-        prevStationId: 12,
-        videoName: null,
-        delete: false
-      },
-      regTime: '2023-02-07T13:34:41',
-      writer: {
-        id: 2,
-        username: 'subin3',
-        nickname: 'subin3',
-        email: null,
-        bio: null,
-        imgPath: 'path',
-        instruments: null,
-        parties: null
-      },
-      commentCnt: 0,
-      comments: [],
-      musicians: [
-        {
-          instrumentId: 4,
-          instrumentName: '자연의 소리',
-          musicianUsername: 'subin3',
-          musicianImgPath: 'path',
-          musicianImgName: null
-        },
-        {
-          instrumentId: 5,
-          instrumentName: '루프 스테이션',
-          musicianUsername: 'subin3',
-          musicianImgPath: 'path',
-          musicianImgName: null
-        },
-        {
-          instrumentId: 1,
-          instrumentName: '캐스터네츠',
-          musicianUsername: 'subin3',
-          musicianImgPath: 'path',
-          musicianImgName: null
-        }
-      ]
-    }
-  ]
-  let Info = null
-  if (stationId === 1) {
-    Info = totalInfo[0]
-  } else if (stationId === 2) {
-    Info = totalInfo[1]
-  }
+  const [info, setInfo] = useState(null)
 
-  return (
-    <div className="total">
-      <StationView station={Info.stationInfo} stationId={stationId} />
-      <Article Info={Info} />
-    </div>
-  )
+  const backNumber = useSelector((state) => {
+    return state.url.backNumber
+  })
+  useEffect(() => {
+    dispatch(CountBackNum(backNumber + 1))
+    axios({
+      method: 'GET',
+      url: `/api/station/${stationId}`,
+      headers: { Authorization: localStorage.getItem('accessToken') }
+    })
+      .then((response) => {
+        setInfo(response.data)
+      })
+      .catch((error) => {
+        // console.log(error.response.status)
+        if (error.response.status === 500 || error.response.status === '500') {
+          navigate('/Forbidden')
+        } else if (
+          error.response.status === 404 ||
+          error.response.status === '404'
+        ) {
+          navigate('/NotFound')
+        }
+      })
+  }, [stationId])
+
+  if (info !== null) {
+    return (
+      <div className="total">
+        <StationView info={info} stationId={stationId} />
+        <Article info={info} />
+      </div>
+    )
+  }
 }
 
 export default StationRoom

@@ -1,0 +1,132 @@
+.search-page {
+  width: 100%;
+  height: 100%;
+  font-family: Pretendard;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.result {
+  width: 90%;
+  height: 100%;
+  padding-top: 6%;
+  margin-bottom: 4%;
+  min-height: calc(100vh - 180px);
+}
+
+.result-tap {
+  cursor: default;
+  width: 100%;
+  height: 10%;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.tapmenu-ul {
+  color: rgb(232, 234, 237);
+  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+  font-size: 1.15em;
+}
+.submenu {
+  display: flex;
+  padding: 10px;
+  transition: 0.3s;
+}
+.submenu:hover {
+  cursor: pointer;
+  color: gray;
+}
+.focused {
+  background-color: rgb(255, 255, 255);
+  color: rgb(21, 20, 20);
+}
+
+.tab-content-1 {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+  margin-top: 2%;
+}
+
+.popular-tap {
+  width: 90%;
+  margin-bottom: 12%;
+}
+.popular-tap.horizonal {
+  display: flex;
+  flex-direction: row;
+}
+.popular-video {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  flex-wrap: wrap;
+}
+.empty {
+  height: 50px;
+}
+.popular-title-video {
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.popular-title-account {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 60px;
+  margin-bottom: 30px;
+}
+
+.popular-title-style {
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+.popular-more {
+  cursor: default;
+  color: rgba(38, 38, 38, 0.53);
+  font-style: italic;
+  font-size: 0.9em;
+}
+.popular-more:hover {
+  cursor: pointer;
+  color: black;
+  transition: 0.2s ease-in-out;
+}
+.account-result {
+  width: 100%;
+  margin-top: 5%;
+  font-size: 0.9em;
+  text-align: center;
+}
+
+.stack-result {
+  width: 100%;
+  margin-top: 5%;
+  font-size: 0.9em;
+  text-align: center;
+}
+.search-not-found {
+  width: 100%;
+  font-size: 0.95em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

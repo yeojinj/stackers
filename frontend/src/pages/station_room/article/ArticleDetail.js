@@ -1,43 +1,124 @@
-import React, { useState } from 'react'
-import Button from '@mui/material/Button'
+import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+
 import StackerListItem from './StackerListItem'
-// import profile from '../assets/profile.png'
 import '../Station.css'
-import profile from '../assets/profile.png'
 
 function ArticleDetail(props) {
+  const navigate = useNavigate()
   const [isfollowing, setIsfollow] = useState(true)
-  const writer = props.Info.writer
+  const writer = props.info.writer
+
+  console.log(writer)
+
+  useEffect(() => {
+    axios({
+      method: 'get',
+      url: `/api/follow/isfollowing/${writer.username}`,
+      headers: {
+        Authorization: localStorage.getItem('accessToken')
+      }
+    })
+      .then((response) => {
+        setIsfollow(response.data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [writer.username])
   let followbutton = null
   if (!isfollowing) {
     followbutton = (
-      <Button variant="outlined" size="small" color="secondary">
+      <button
+        className="article-follow-button"
+        onClick={() => {
+          axios({
+            method: 'post',
+            url: '/api/follow',
+            data: {
+              username: writer.username
+            },
+            headers: {
+              Authorization: localStorage.getItem('accessToken')
+            }
+          })
+            .then(() => {
+              setIsfollow(true)
+            })
+            .catch((err) => {
+              console.log(err)
+            })
+        }}
+      >
         팔로우
-      </Button>
+      </button>
     )
   } else if (isfollowing) {
     followbutton = (
-      <Button variant="contained" size="small" color="secondary">
+      <button
+        className="article-follow-button"
+        onClick={() => {
+          axios({
+            method: 'delete',
+            url: '/api/follow',
+            data: {
+              username: writer.username
+            },
+            headers: {
+              Authorization: localStorage.getItem('accessToken')
+            }
+          })
+            .then((res) => {
+              setIsfollow(false)
+            })
+            .catch((err) => {
+              console.log(err)
+            })
+        }}
+      >
         팔로잉
-      </Button>
+      </button>
     )
   }
-  const stationInformation = `안녕하세요. 이것은 나의 첫 비디오입니다.
-만나서 반갑습니다~~ #첫인사 #새해복많이받으세요`
+  const stationInformation = props.info.stationInfo.content
+  const tags = []
+  for (let i = 0; i < props.info.stationInfo.tags.length; i++) {
+    tags.push(
+      <span
+        key={i}
+        style={{
+          fontWeight: 'bold',
+          marginRight: '3px',
+          fontSize: '0.88em',
+          color: 'rgba(42, 32, 150, 0.9)'
+        }}
+      >
+        #{props.info.stationInfo.tags[i]}
+      </span>
+    )
+  }
   const createDate =
-    props.Info.regTime.substr(0, 4) +
+    props.info.regTime.substr(0, 4) +
     '.' +
-    props.Info.regTime.substr(5, 2) +
+    props.info.regTime.substr(5, 2) +
     '.' +
-    props.Info.regTime.substr(8, 2)
+    props.info.regTime.substr(8, 2)
   return (
     <div className="information">
       <div className="station-information">
         <div className="station-profile">
-          <img src={profile} alt="profile" />
+          <img
+            src={writer.imgPath}
+            className="station-profile-picture"
+            alt="스태커 프로필 사진"
+            onClick={() => {
+              navigate(`/MyPage/${writer.username}`)
+            }}
+          />
           <div className="station-profile-name_nickname">
-            <p className="station-profile-id">{writer.username}</p>
-            <p className="station-profile-nickname">{writer.nickname}</p>
+            <div className="station-profile-id">{writer.username}</div>
+            <div className="station-profile-nickname">{writer.nickname}</div>
           </div>
           <div
             className="station-follow"
@@ -49,10 +130,13 @@ function ArticleDetail(props) {
             {followbutton}
           </div>
         </div>
-        <p className="station-usercontent">{stationInformation}</p>
-        <p style={{ color: 'gray' }}>{createDate}</p>
+        <p className="station-usercontent">
+          {stationInformation}
+          <span style={{ marginLeft: '8px' }}>{tags}</span>
+        </p>
+        <p style={{ color: 'gray', fontSize: '0.85em' }}>{createDate}</p>
       </div>
-      <StackerListItem musicians={props.Info.musicians}></StackerListItem>
+      <StackerListItem musicians={props.info.musicians}></StackerListItem>
     </div>
   )
 }

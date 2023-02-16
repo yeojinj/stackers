@@ -1,10 +1,11 @@
+/* eslint-disable */
 import Record from './Record.js'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 import StackUploadModal from './StackUploadModal'
-import LightIcon from '@mui/icons-material/Light'
-import PhotoCameraFrontIcon from '@mui/icons-material/PhotoCameraFront'
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import Modal from '@mui/material/Modal'
+import './Record.css'
+import { useSelector } from 'react-redux'
 
 function isEmptyObj(obj) {
   if (obj.constructor === Object && Object.keys(obj).length === 0) {
@@ -15,52 +16,66 @@ function isEmptyObj(obj) {
 }
 
 function RecordRoom() {
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
+  const token = localStorage.getItem('accessToken')
+  const [username, setName] = useState('')
+  const checkToken = async () => {
+    await axios({
+      method: 'get',
+      url: `/api/member/user`,
+      headers: { Authorization: token }
+    })
+      .then((response) => {
+        console.log(response)
+      })
+      .catch((error) => {
+        console.error(error)
+        alert('로그인이 필요한 서비스입니다.')
+        navigate('/')
+      })
+  }
+  const preUrl = useSelector((state) => {
+    return '/'
+  })
 
+  const params = useParams()
+  const stationId = params.preId
   const goBack = () => {
-    // // 이전 페이지로 이동
-    // navigate(-1)
+    console.log(preUrl)
+    navigate(preUrl)
   }
   const [open, setOpen] = useState(false)
   const [stack, setStack] = useState({})
 
   const handleOpen = () => {
-    setOpen(true)
+    return setOpen(true)
   }
 
   const handleClose = () => {
     setOpen(false)
   }
-  const setNoneStack = () => {}
-  const showToolTip = () => {}
+  useEffect(() => {
+    checkToken
+  }, [username])
+
   async function getVideo(src) {
     await setStack((preSrc) => {
       return { ...preSrc, src }
     })
   }
   return (
-    <div className="recordRoom">
-      <LightIcon></LightIcon>
-      <div className="container">
-        <div className="stack">
-          <p className="box"></p>
-          <PhotoCameraFrontIcon
-            className="box"
-            onClick={setNoneStack}
-          ></PhotoCameraFrontIcon>
-          <InfoOutlinedIcon className="box" onClick={showToolTip} />
-        </div>
-        <div className="box">
-          <Record stack={getVideo} />
-        </div>
-        <div className="stack">
-          <p></p>
-          <p></p>
-          <div className="box">
-            <button className="box" onClick={goBack}>
+    <div className="record-room">
+      <div className="stars"></div>
+      <div className="twinkling"></div>
+      <div className="wrapper">
+        <div className="inside-container">
+          <Record stack={getVideo} preId={stationId} />
+          <div className="upload-btns">
+            <button className="upload-btn-station" onClick={goBack}>
               취소
             </button>
             <button
+              className="upload-btn-station"
               onClick={() => {
                 if (!isEmptyObj(stack)) {
                   handleOpen()
@@ -69,10 +84,10 @@ function RecordRoom() {
             >
               업로드
             </button>
-            <Modal open={open} onClose={handleClose}>
-              <StackUploadModal handle={handleClose} src={stack} />
-            </Modal>
           </div>
+          <Modal open={open} onClose={handleClose}>
+            <StackUploadModal handle={handleClose} src={stack} />
+          </Modal>
         </div>
       </div>
     </div>

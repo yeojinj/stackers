@@ -1,23 +1,25 @@
-import React, { useEffect, useRef } from 'react'
-import '../../styles/stationlistitem.css'
+import React, { useRef } from 'react'
+import './stationlistitem.css'
 import DefaultImg from '../../assets/default_profile.png'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
-// import { useNavigate } from 'react-router-dom'
+import logo from '../../assets/image_logo.png'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { SaveStation, CountBackNum } from '../../store.js'
 
-function StationListItem({ isRanking, isSearch, station, index }) {
-  // const [station, setStation] = useState()
-
+function StationListItem({
+  isRanking,
+  isSearch,
+  station,
+  index,
+  isDark,
+  saveList
+}) {
   const videoRef = useRef(null)
-
-  // useEffect(() => {
-  //   setStation(station)
-  //   console.log('mainroom 에서 보낸 데이터를 station 변수에 넣기', station)
-  // }, [])
-
-  useEffect(() => {
-    IsRanking()
-    IsSearch()
-  }, [])
+  const dispatch = useDispatch()
+  const backNumber = useSelector((state) => {
+    return state.url.backNumber
+  })
 
   // 마우스 오버시 비디오 재생, 마우스 리브시 비디오 일시정지
   function playVideo() {
@@ -27,10 +29,18 @@ function StationListItem({ isRanking, isSearch, station, index }) {
     return videoRef.current.pause()
   }
 
-  // const navigate = useNavigate()
-  // const gotoDetail = (id) => {
-  //   navigate(`/StationRoom/${id}`)
-  // }
+  const navigate = useNavigate()
+  const gotoDetail = (station) => {
+    dispatch(SaveStation(saveList))
+    if (backNumber !== 0) {
+      dispatch(CountBackNum(0))
+    }
+    navigate(`/StationRoom/${station.id}`)
+  }
+
+  const gotoRecord = (id) => {
+    navigate(`/RecordRoom/${id}`)
+  }
 
   // 메인페이지, 마이페이지 스테이션 조회
   const IsRanking = () => {
@@ -46,7 +56,9 @@ function StationListItem({ isRanking, isSearch, station, index }) {
             autoPlay={false}
             onMouseOver={playVideo}
             onMouseLeave={pauseVideo}
-            // onClick={gotoDetail(station.id)}
+            onClick={() => {
+              gotoDetail(station)
+            }}
             loop
           ></video>
           <p className="station-rank">{index}</p>
@@ -63,7 +75,9 @@ function StationListItem({ isRanking, isSearch, station, index }) {
             autoPlay={false}
             onMouseOver={playVideo}
             onMouseLeave={pauseVideo}
-            // onClick={gotoDetail(station.id)}
+            onClick={() => {
+              gotoDetail(station)
+            }}
             loop
           ></video>
           <div className="video-text">
@@ -80,10 +94,10 @@ function StationListItem({ isRanking, isSearch, station, index }) {
     }
   }
 
-  // 검색페이지에서 데이터 받을 때 다시 해보기
+  // 검색페이지 스테이션
   const IsSearch = () => {
     let likesResult = ''
-    if (station.heartCnt) {
+    if (station.heartCnt >= 0) {
       const modifyLikes = station.heartCnt
       if (modifyLikes >= 1000) {
         likesResult = `${Math.floor(modifyLikes / 1000)}k`
@@ -93,47 +107,91 @@ function StationListItem({ isRanking, isSearch, station, index }) {
     }
     if (isSearch) {
       return (
-        <>
+        <div className="station-item__items">
           <video
             ref={videoRef}
-            className={isSearch ? 'video-style-search' : 'video-style'}
+            className={
+              isSearch && station.heartCnt
+                ? 'video-style-search'
+                : 'video-style non-ranks'
+            }
             src={station.video.videoPath}
             autoPlay={false}
             onMouseOver={playVideo}
             onMouseLeave={pauseVideo}
-            // onClick={gotoDetail(station.id)}
+            onClick={() => {
+              gotoDetail(station)
+            }}
             loop
-          ></video>
+          />
+          {!station.complete && (
+            <img
+              src={logo}
+              width={38}
+              className="icon-is-not-complete"
+              onClick={() => {
+                gotoRecord(station.id)
+              }}
+            />
+          )}
           <div className="station-info">
             <p className="station-description">{station.content}</p>
-            <div className="station-tag">
+            <div
+              className={isDark ? 'station-tag dark-mode-text' : 'station-tag'}
+            >
               {station.tags &&
                 station.tags.map((tag, i) => {
                   return `#${tag} `
                 })}
             </div>
             <div className="station-account">
-              <div className="profile-box">
+              <div
+                className="account-info"
+                style={{ border: 'none', flexDirection: 'row' }}
+              >
                 <img
-                  src={station.imgPath ? station.imgPath : DefaultImg}
+                  src={
+                    station.imgPath !== 'path' ? station.imgPath : DefaultImg
+                  }
                   alt=""
                   className="profile-img"
                 />
+                <div
+                  className={
+                    station.heartCnt >= 0 ? 'account-name' : 'account-name-main'
+                  }
+                >
+                  {station.username}
+                </div>
               </div>
-              <div className="account-name">{station.username}</div>
-              <FavoriteBorderIcon
-                style={{ width: '17px', height: '17px', marginTop: '3px' }}
-              />
-              <div className="video-likes">{likesResult}</div>
+              {station.heartCnt >= 0 && (
+                <div className="heart-info">
+                  <FavoriteBorderIcon
+                    style={{
+                      width: '17px',
+                      height: '17px',
+                      marginRight: '2px',
+                      color: '#E35FAD'
+                    }}
+                  />
+                  <div className="video-likes">{likesResult}</div>
+                </div>
+              )}
             </div>
           </div>
-        </>
+        </div>
       )
     }
   }
 
   return (
-    <div className={isSearch ? 'station-item-search' : 'station-item'}>
+    <div
+      className={
+        isSearch && station.heartCnt >= 0
+          ? 'station-item-search'
+          : 'station-item'
+      }
+    >
       <IsRanking />
       <IsSearch />
     </div>

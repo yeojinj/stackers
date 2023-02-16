@@ -1,50 +1,86 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import StationControlButton from './StationControlButton'
-// import Video from '../../../components/Video'
-import station from '../assets/station.png'
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined'
-import ArrowCircleUpOutlinedIcon from '@mui/icons-material/ArrowCircleUpOutlined'
-import ArrowCircleDownOutlinedIcon from '@mui/icons-material/ArrowCircleDownOutlined'
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import '../Station.css'
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { CountBackNum } from '../../../store'
+
 function StationView(props) {
   const navigate = useNavigate()
-  const preUrl = useSelector((state) => {
-    return state.url.preUrl
+  const dispatch = useDispatch()
+  const backNumber = useSelector((state) => {
+    return state.url.backNumber
+  })
+  const Info = props.info
+  const videoRef = useRef(null)
+
+  const stationList = useSelector((state) => {
+    return state.station.station.map((ele) => {
+      return ele.id
+    })
   })
 
   return (
-    <div className="LeftStyle">
+    <div className="left-style">
       <CloseOutlinedIcon
-        className="stationOutButton"
+        className="station-close-btn"
         onClick={() => {
-          navigate(preUrl)
+          dispatch(CountBackNum(0))
+          navigate(-backNumber)
         }}
       />
-      <div className="contentBox">
-        <div className="videoBox">
-          <img src={station} alt="station" className="videoBox" />
-        </div>
-        <div className="stationControlButton">
-          <StationControlButton></StationControlButton>
-        </div>
+      <div className="content-box">
+        <video
+          src={Info.videoPath}
+          alt="station"
+          ref={videoRef}
+          className="videoBox"
+          muted
+          width={378}
+          height={672}
+          autoPlay
+          controls
+          loop
+        />
+        <StationControlButton
+          stationId={props.stationId}
+          Info={Info}
+        ></StationControlButton>
       </div>
-      <div className="prevnextbutton">
-        <ArrowCircleUpOutlinedIcon
+      <div className="prev-next-button">
+        <KeyboardArrowUpIcon
           sx={{ fontSize: 30 }}
           style={{ cursor: 'pointer' }}
           onClick={() => {
             // 이전 페이지 이동 url
-            navigate(`/StationRoom/${(props.stationId % 2) + 1}`)
+            navigate(
+              `/StationRoom/${
+                stationList[
+                  (stationList.indexOf(props.stationId) - 1) %
+                    stationList.length
+                ]
+              }`
+            )
           }}
         />
-        <ArrowCircleDownOutlinedIcon
+        <ExpandMoreIcon
           sx={{ fontSize: 30 }}
           style={{ cursor: 'pointer' }}
           onClick={() => {
             // 다음 페이지 이동 url
-            navigate(`/StationRoom/${(props.stationId % 2) + 1}`)
+            navigate(
+              `/StationRoom/${
+                stationList[
+                  (stationList.length +
+                    stationList.indexOf(props.stationId) +
+                    1) %
+                    stationList.length
+                ]
+              }`
+            )
           }}
         />
       </div>

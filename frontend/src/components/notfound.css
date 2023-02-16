@@ -1,0 +1,355 @@
+.not-found {
+  font: 18px Tenada;
+  background: #000;
+  color: #fff;
+  margin: 0;
+}
+
+.wrapper {
+  width: 100%;
+  height: 100vh;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+}
+
+.scene {
+  padding: 0;
+  margin: 0;
+}
+/*================================================================
+Starry Sky
+Trick created by Andrey https://www.script-tutorials.com/night-sky-with-twinkling-stars/
+================================================================*/
+@keyframes move-twink-back {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -10000px 5000px;
+  }
+}
+
+@-webkit-keyframes move-twink-back {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -10000px 5000px;
+  }
+}
+
+@-moz-keyframes move-twink-back {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -10000px 5000px;
+  }
+}
+
+@-ms-keyframes move-twink-back {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -10000px 5000px;
+  }
+}
+
+.stars,
+.twinkling {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.stars {
+  background: #000
+    url(https://www.land-of-web.com/wp-content/uploads/2016/08/stars.png) repeat
+    top center;
+  z-index: 0;
+}
+
+.twinkling {
+  background: transparent
+    url(https://www.land-of-web.com/wp-content/uploads/2016/08/twinkling.png)
+    repeat top center;
+  z-index: 1;
+  -moz-animation: move-twink-back 200s linear infinite;
+  -ms-animation: move-twink-back 200s linear infinite;
+  -o-animation: move-twink-back 200s linear infinite;
+  -webkit-animation: move-twink-back 200s linear infinite;
+  animation: move-twink-back 200s linear infinite;
+}
+
+/*================================================================
+Animation - Move Up and Move Down Letters
+================================================================*/
+/*================================================================
+Move Up
+================================================================*/
+@keyframes moveUp {
+  0% {
+    transform: translate3d(0px, 0px, 0px);
+    animation-timing-function: ease-in;
+  }
+
+  50% {
+    transform: translate3d(0px, 10px, 0px);
+    animation-timing-function: ease-out;
+  }
+
+  100% {
+    transform: translate3d(0px, 0px, 0px);
+    animation-timing-function: ease-in;
+  }
+}
+@-webkit-keyframes moveUp {
+  0% {
+    transform: translate3d(0px, 0px, 0px);
+    animation-timing-function: ease-in;
+  }
+
+  50% {
+    transform: translate3d(0px, 10px, 0px);
+    animation-timing-function: ease-out;
+  }
+
+  100% {
+    transform: translate3d(0px, 0px, 0px);
+    animation-timing-function: ease-in;
+  }
+}
+@-moz-keyframes moveUp {
+  0% {
+    transform: translate3d(0px, 0px, 0px);
+    animation-timing-function: ease-in;
+  }
+
+  50% {
+    transform: translate3d(0px, 10px, 0px);
+    animation-timing-function: ease-out;
+  }
+
+  100% {
+    transform: translate3d(0px, 0px, 0px);
+    animation-timing-function: ease-in;
+  }
+}
+@-ms-keyframes moveUp {
+  0% {
+    transform: translate3d(0px, 0px, 0px);
+    animation-timing-function: ease-in;
+  }
+
+  50% {
+    transform: translate3d(0px, 10px, 0px);
+    animation-timing-function: ease-out;
+  }
+
+  100% {
+    transform: translate3d(0px, 0px, 0px);
+    animation-timing-function: ease-in;
+  }
+}
+
+.moveUp {
+  animation: moveUp 2s infinite;
+}
+/*================================================================
+Move Down
+================================================================*/
+@keyframes moveDown {
+  0% {
+    transform: translate3d(0px, 0px, 0px);
+    animation-timing-function: ease-in;
+  }
+
+  50% {
+    transform: translate3d(0px, -10px, 0px);
+    animation-timing-function: ease-out;
+  }
+
+  100% {
+    transform: translate3d(0px, 0px, 0px);
+    animation-timing-function: ease-in;
+  }
+}
+@-webkit-keyframes moveDown {
+  0% {
+    transform: translate3d(0px, 0px, 0px);
+    animation-timing-function: ease-in;
+  }
+
+  50% {
+    transform: translate3d(0px, -10px, 0px);
+    animation-timing-function: ease-out;
+  }
+
+  100% {
+    transform: translate3d(0px, 0px, 0px);
+    animation-timing-function: ease-in;
+  }
+}
+@-moz-keyframes moveDown {
+  0% {
+    transform: translate3d(0px, 0px, 0px);
+    animation-timing-function: ease-in;
+  }
+
+  50% {
+    transform: translate3d(0px, -10px, 0px);
+    animation-timing-function: ease-out;
+  }
+
+  100% {
+    transform: translate3d(0px, 0px, 0px);
+    animation-timing-function: ease-in;
+  }
+}
+@-ms-keyframes moveDown {
+  0% {
+    transform: translate3d(0px, 0px, 0px);
+    animation-timing-function: ease-in;
+  }
+
+  50% {
+    transform: translate3d(0px, -10px, 0px);
+    animation-timing-function: ease-out;
+  }
+
+  100% {
+    transform: translate3d(0px, 0px, 0px);
+    animation-timing-function: ease-in;
+  }
+}
+
+.moveDown {
+  animation: moveDown 2s infinite;
+}
+/*================================================================
+PARALLAX
+================================================================*/
+ul#scene {
+  list-style-type: none;
+}
+
+.layer {
+  display: block;
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+}
+
+li.layer a {
+  color: white;
+  text-decoration: none;
+  text-shadow: 3px 3px 3px #ccc;
+  display: block;
+}
+li.layer:nth-child(1) {
+} /*1 item*/
+
+/*-----Logotype----------------*/
+li.layer:nth-child(2) a {
+  font-size: 3.5vw;
+  color: white;
+  text-shadow: 2px 2px 2px #ccc;
+  padding: 7px;
+  /* border: 2px solid white; */
+  border-radius: 5px;
+  /* box-shadow: 2px 2px 2px #ccc; */
+  position: absolute;
+  top: 40vh;
+  left: 40vw;
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  -ms-transition: all 1s ease;
+  transition: all 1s ease;
+}
+
+li.layer:nth-child(2) a:hover {
+  font-size: 4.5vw;
+}
+
+/*-----P----------------------*/
+li.layer:nth-child(3) a {
+  font-size: 5vw;
+  position: absolute;
+  top: 15vh;
+  left: 15vw;
+}
+
+/*-----O---------------------*/
+li.layer:nth-child(4) a {
+  font-size: 8vw;
+  position: absolute;
+  top: 40vh;
+  left: 22vw;
+}
+
+/*-----R---------------------*/
+li.layer:nth-child(5) a {
+  font-size: 6vw;
+  position: absolute;
+  top: 70vh;
+  left: 35vw;
+}
+
+/*-----T---------------------*/
+li.layer:nth-child(6) a {
+  font-size: 3.5vw;
+  position: absolute;
+  top: 60vh;
+  left: 47vw;
+}
+
+/*-----F---------------------*/
+li.layer:nth-child(7) a {
+  font-size: 3.5vw;
+  position: absolute;
+  top: 18vh;
+  left: 40vw;
+}
+
+/*-----O---------------------*/
+li.layer:nth-child(8) a {
+  font-size: 3.5vw;
+  position: absolute;
+  top: 18vh;
+  left: 55vw;
+}
+
+/*-----L---------------------*/
+li.layer:nth-child(9) a {
+  font-size: 5vw;
+  position: absolute;
+  top: 15vh;
+  right: 20vw;
+}
+
+/*-----I---------------------*/
+li.layer:nth-child(10) a {
+  font-size: 6vw;
+  position: absolute;
+  top: 35vh;
+  right: 30vw;
+}
+/*-----O---------------------*/
+li.layer:nth-child(11) a {
+  font-size: 6.5vw;
+  position: absolute;
+  top: 65vh;
+  right: 37vw;
+}
