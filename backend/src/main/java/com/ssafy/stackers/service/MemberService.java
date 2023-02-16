@@ -39,7 +39,7 @@ public class MemberService {
                 .nickname(joinDto.getUsername())
                 .email(joinDto.getEmail())
                 .bio("")
-                .imgPath("path")
+                .imgPath("https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/profile/basic.jpg")
                 .isResign(false)
                 .build();
         memberRepository.save(m);
@@ -100,7 +100,7 @@ public class MemberService {
 
         if(file != null){
             member.updateImgPath(updateProfileToS3(file, username));
-            if(!originImgPath.equals("path")) s3Uploader.deleteS3(originImgPath);
+            if(!originImgPath.equals("https://s3.ap-northeast-2.amazonaws.com/stackers.bucket/static/profile/basic.jpg")) s3Uploader.deleteS3(originImgPath);
         }
     }
 
