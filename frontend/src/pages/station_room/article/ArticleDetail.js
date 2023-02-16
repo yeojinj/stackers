@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { useSelector } from 'react-redux'
 
 import StackerListItem from './StackerListItem'
 import '../Station.css'
@@ -10,7 +11,10 @@ function ArticleDetail(props) {
   const [isfollowing, setIsfollow] = useState(true)
   const writer = props.info.writer
 
-  console.log(writer)
+  // console.log(writer)
+  const LoginUser = useSelector((state) => {
+    return state.user
+  })
 
   useEffect(() => {
     axios({
@@ -28,56 +32,72 @@ function ArticleDetail(props) {
       })
   }, [writer.username])
   let followbutton = null
-  if (!isfollowing) {
+
+  if (LoginUser.username !== writer.username) {
+    // 다른사람의 게시물을 볼 경우
+    if (!isfollowing) {
+      followbutton = (
+        <button
+          className="article-follow-button"
+          onClick={() => {
+            axios({
+              method: 'post',
+              url: '/api/follow',
+              data: {
+                username: writer.username
+              },
+              headers: {
+                Authorization: localStorage.getItem('accessToken')
+              }
+            })
+              .then(() => {
+                setIsfollow(true)
+              })
+              .catch((err) => {
+                console.log(err)
+              })
+          }}
+        >
+          팔로우
+        </button>
+      )
+    } else if (isfollowing) {
+      followbutton = (
+        <button
+          className="article-follow-button"
+          onClick={() => {
+            axios({
+              method: 'delete',
+              url: '/api/follow',
+              data: {
+                username: writer.username
+              },
+              headers: {
+                Authorization: localStorage.getItem('accessToken')
+              }
+            })
+              .then((res) => {
+                setIsfollow(false)
+              })
+              .catch((err) => {
+                console.log(err)
+              })
+          }}
+        >
+          팔로잉
+        </button>
+      )
+    }
+  } else {
+    // 자기 자신의 게시물을 볼 경우.
     followbutton = (
       <button
         className="article-follow-button"
         onClick={() => {
-          axios({
-            method: 'post',
-            url: '/api/follow',
-            data: {
-              username: writer.username
-            },
-            headers: {
-              Authorization: localStorage.getItem('accessToken')
-            }
-          })
-            .then(() => {
-              setIsfollow(true)
-            })
-            .catch((err) => {
-              console.log(err)
-            })
+          alert('나는 나 자신의 영원한 팔로워입니다 ><')
         }}
       >
         팔로우
-      </button>
-    )
-  } else if (isfollowing) {
-    followbutton = (
-      <button
-        className="article-follow-button"
-        onClick={() => {
-          axios({
-            method: 'delete',
-            url: '/api/follow',
-            data: {
-              username: writer.username
-            },
-            headers: {
-              Authorization: localStorage.getItem('accessToken')
-            }
-          })
-            .then((res) => {
-              setIsfollow(false)
-            })
-            .catch((err) => {
-              console.log(err)
-            })
-        }}
-      >
-        팔로잉
       </button>
     )
   }
