@@ -235,7 +235,7 @@ function MyPage() {
     return (
       <>
         <div className="mystation-tap">
-          <div className="popular-video">
+          <div className="popular-video" style={{ marginRight: '10px' }}>
             {publicStation.length === 0 && (
               <div style={{ marginTop: '30px' }}>
                 지금 바로 스택을 쌓아보세요!
@@ -244,7 +244,7 @@ function MyPage() {
             {publicStation.length !== 0 &&
               publicStation.map((result, i) => {
                 return (
-                  <div key={i}>
+                  <div key={i} style={{ marginRight: '10px' }}>
                     <StationListItem
                       isRanking={false}
                       isSearch={false}
@@ -324,7 +324,7 @@ function MyPage() {
     } else if (isfollowing) {
       followbutton = (
         <button
-          className="button-profile"
+          className="button-profile following-btn"
           onClick={() => {
             if (isLogin) {
               setIsFollowwing(false)
@@ -333,7 +333,7 @@ function MyPage() {
             }
           }}
         >
-          팔로우 취소
+          팔로잉
         </button>
       )
     }

@@ -64,7 +64,7 @@ function ArticleDetail(props) {
     } else if (isfollowing) {
       followbutton = (
         <button
-          className="article-follow-button"
+          className="article-follow-button following-btn"
           onClick={() => {
             axios({
               method: 'delete',
