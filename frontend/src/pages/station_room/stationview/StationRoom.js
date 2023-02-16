@@ -17,6 +17,25 @@ function StationRoom() {
   const backNumber = useSelector((state) => {
     return state.url.backNumber
   })
+
+  // 새로고침 막기 변수
+  const preventClose = (e: BeforeUnloadEvent) => {
+    console.log('tofhrhcla')
+    e.preventDefault()
+    e.returnValue = '' // chrome에서는 설정이 필요해서 넣은 코드
+  }
+
+  // 브라우저에 렌더링 시 한 번만 실행하는 코드
+  useEffect(() => {
+    ;(() => {
+      window.addEventListener('beforeunload', preventClose)
+    })()
+
+    return () => {
+      window.removeEventListener('beforeunload', preventClose)
+    }
+  }, [])
+
   useEffect(() => {
     dispatch(CountBackNum(backNumber + 1))
     axios({

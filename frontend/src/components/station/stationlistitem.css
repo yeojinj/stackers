@@ -40,6 +40,11 @@
 .station-info {
   margin-top: 10px;
 }
+.video-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .station-description {
   margin: 0 1%;
   white-space: nowrap;
