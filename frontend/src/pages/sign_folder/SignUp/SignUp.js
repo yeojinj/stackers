@@ -276,7 +276,7 @@ function SignUp() {
               className={passwordCSS}
               placeholder="비밀번호(알파벳, 숫자, 특수문자를 포함한 8~16자로 구성)"
               name="password"
-              type={pwType}
+              type="password"
               value={password}
               onChange={(event) => {
                 setPassword(event.target.value)
