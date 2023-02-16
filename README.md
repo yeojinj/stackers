@@ -56,11 +56,13 @@
   
   - 공간의 제약을 극복한 싱크룸
     
-    
-    <img title="" src="file:///C:/Users/multicampus/Desktop/Stackers/S08P12C210/readme_img/싱크룸.png" alt="">
+    ![](./readme_img/싱크룸.png)
   
   - 시간의 제약을 극복한 자뮬러스
-    <img src="./readme_img/자뮬러스.png" title="" alt="" data-align="left">하지만 결국 상당한 시간과 공간을 공유해야 하기도 하고, 사용하기 위해 장비가 
+
+    ![](./readme_img/자뮬러스.png)
+    
+    하지만 결국 상당한 시간과 공간을 공유해야 하기도 하고, 사용하기 위해 장비가 
     
     필요하는 등의 전문성을 요구해 진입장벽이 높다는 단점이 존재했다. 또한 일정 수준
     
@@ -429,7 +431,7 @@ frontend/
 
 ### 역할
 
-<img title="" src="file:///C:/Users/multicampus/Desktop/Stackers/S08P12C210/readme_img/팀역할.png" alt="">
+![](./readme_img/팀역할.png)
 
 
 
