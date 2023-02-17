@@ -18,6 +18,8 @@
 
 - **서비스 명** : Stackers
 
+- **배포 사이트** : https://www.stackers.site
+
 
 <br/><br/>
 ### 타겟층
@@ -453,12 +455,14 @@ frontend/
 - #### 와이어프레임
   
   ![](./readme_img/와이어프레임.png)
+  https://www.figma.com/file/wtqO0vKJn3ErP4MrNboH5D/SSAFY--%EA%B3%B5%ED%86%B5%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8?node-id=0%3A1&t=YKJovMbV8aYgmd2U-0
 
 
 <br/><br/>
 ### ERD
 
 ![](./readme_img/Stackers_ERD.png)
+https://www.erdcloud.com/d/sRQQBLFuiSdbzekRN
 
 
 <br/><br/>
@@ -504,11 +508,12 @@ frontend/
   ![](./readme_img/4주차.png)
   ![](./readme_img/5주차.png)
   ![](./readme_img/6주차.png)
+  https://ssafy.atlassian.net/jira/software/c/projects/S08P12C210/boards/1424
 
 - #### Notion
   
   ![](./readme_img/notion.gif)
-
+  https://www.notion.so/20150924/7c581dcf01044128bca06a39b6856cd0
 
 
 <br/><br/><br/><br/>
