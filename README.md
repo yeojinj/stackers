@@ -497,7 +497,11 @@ frontend/
 
 - #### Jira 번다운 차트 사진
   
-  - 마지막날에...
+  ![](./readme_img/2주차.png)
+  ![](./readme_img/3주차.png)
+  ![](./readme_img/4주차.png)
+  ![](./readme_img/5주차.png)
+  ![](./readme_img/6주차.png)
 
 - #### Notion
   
