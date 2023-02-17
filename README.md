@@ -449,7 +449,7 @@ frontend/
 
 - #### 초기 화면 설계도
 
-  ![](./readme_img/화면 설계도.png)
+  ![](./readme_img/화면설계도.png)
 
 - #### 와이어프레임
 
@@ -480,18 +480,18 @@ https://www.erdcloud.com/d/sRQQBLFuiSdbzekRN
 
 - 메인 룸
 
-![](./readme_img/메인룸.png)
-![](./readme_img/메인룸2.png)
+![](./readme_img/메인룸.gif)
+![](./readme_img/메인룸2.gif)
 
 - 레코드 룸
 
-![](./readme_img/레코드룸.png)
+![](./readme_img/레코드룸.gif)
 
 - 검색
 
 - 스테이션 룸
 
-![](./readme_img/스테이션룸.png)
+![](./readme_img/스테이션룸.gif)
 
 - 마이 룸
 
