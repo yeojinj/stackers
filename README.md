@@ -477,17 +477,21 @@ https://www.erdcloud.com/d/sRQQBLFuiSdbzekRN
 
 ### 실제 서비스 화면
 
-- 회원가입
-
-- 로그인
 
 - 메인 룸
 
+![](./readme_img/메인룸.png)
+![](./readme_img/메인룸2.png)
+
 - 레코드 룸
+
+![](./readme_img/레코드룸.png)
 
 - 검색
 
 - 스테이션 룸
+
+![](./readme_img/스테이션룸.png)
 
 - 마이 룸
 
