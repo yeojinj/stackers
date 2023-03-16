@@ -1,4 +1,4 @@
-# 🪐Stackers - 숏폼 합주 영상 SNS🪐
+# 🥉 🪐Stackers - 숏폼 합주 영상 SNS🪐
 
 <img title="" src="./readme_img/Stackers_logo.png" alt="" data-align="center" width="379">
 
